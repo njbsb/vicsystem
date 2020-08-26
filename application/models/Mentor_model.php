@@ -6,7 +6,12 @@
         }
 
         public function get_allmentors() {
-            $query = $this->db->get('tbl_mentor');
+            $this->db->select('tbl_mentor.name, tbl_mentor.email, tbl_mentor.photo_path, tbl_sig.code');
+            $this->db->from('tbl_mentor');
+            $this->db->join('tbl_sig', 'tbl_sig.id = tbl_mentor.sig_fk_id', 'left');
+
+            $query = $this->db->get();
+            // $query = $this->db->get('tbl_mentor');
             return $query->result_array();
         }
 
