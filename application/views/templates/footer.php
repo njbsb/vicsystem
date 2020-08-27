@@ -1,8 +1,9 @@
 </div>
+<br>
 <footer id="footer" class="container bg-light">
     <div class="row">
         <div class="col-lg-12">
-            <p>Made by <a href="https://github.com/njbsb">njbsb</a>.</p>
+            <p>Developed by <a href="https://github.com/njbsb">njbsb</a>.</p>
         </div>
     </div>
 </footer>

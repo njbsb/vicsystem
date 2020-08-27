@@ -10,7 +10,15 @@
 
         }
 
-        public function student() {
-            
+        public function register() {
+            $data['title'] = 'Register Student';
+            $data['programs'] = $this->program_model->get_programs();
+            $data['sigs'] = $this->sig_model->get_sig();
+            $data['mentors'] = $this->mentor_model->get_allmentors();
+
+
+            $this->load->view('templates/header');
+            $this->load->view('students/register', $data);
+            $this->load->view('templates/footer');
         }
     }

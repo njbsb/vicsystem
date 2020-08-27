@@ -16,22 +16,22 @@
                 <img style="max-width:100%; max-height:max-width; display: block; object-fit:cover;  padding:10px;"
                     src="<?php echo base_url('assets/images/'.$mentor['photo_path']); ?>" alt="Card image">
 
-                <div class="card-body"></div>
-                <h5 class="card-title">
-                    <a href="#">
-                        <?php echo $mentor['name']; ?>
-                    </a>
-                </h5>
-                <h6 class="card-subtitle text-muted">Club Advisor (dummy)</h6>
-            </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="#">
+                            <?php echo $mentor['name']; ?>
+                        </a>
+                    </h5>
+                    <h6 class="card-subtitle text-muted"><?php echo $mentor['role_name']; ?></h6>
+                </div>
 
-            <div class="card-footer text-muted">
-                <?php echo $mentor['email']; ?>
+                <div class="card-footer text-muted">
+                    <?php echo $mentor['email']; ?>
+                </div>
             </div>
         </div>
-    </div>
 
-    <?php endforeach ?>
-</div>
+        <?php endforeach ?>
+    </div>
 
 </div>

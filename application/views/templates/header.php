@@ -42,24 +42,24 @@
                                 class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="mentors">My Mentors</a>
+                        <a class="nav-link" href="<?php echo base_url(); ?>mentors">My Mentors</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">My SIG</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="activity">Activity</a>
+                        <a class="nav-link" href="<?php echo base_url(); ?>activity">Activity</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="citra">Citra</a>
+                        <a class="nav-link" href="<?php echo base_url(); ?>citra">Citra</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                             aria-haspopup="true" aria-expanded="false">Register</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="students">Student</a>
-                            <a class="dropdown-item" href="#">Mentor</a>
-                            <a class="dropdown-item" href="#">Activity</a>
+                            <a class="dropdown-item" href="<?php echo base_url(); ?>students/register">Student</a>
+                            <a class="dropdown-item" href="<?php echo base_url(); ?>mentors/register">Mentor</a>
+                            <a class="dropdown-item" href="<?php echo base_url(); ?>activity/create">Activity</a>
                             <a class="dropdown-item" href="#">Score</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Separated link</a>
@@ -91,3 +91,4 @@
     </nav>
 
     <div class="container">
+        <br>
