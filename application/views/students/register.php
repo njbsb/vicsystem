@@ -31,7 +31,7 @@
     <label>Select Program</label>
     <select class="form-control" id="">
         <?php foreach($programs as $program): ?>
-        <option>
+        <option value="<?php echo $program['code']; ?>">
             <?php echo $program['name']; ?>
         </option>
         <?php endforeach ?>
@@ -42,7 +42,7 @@
     <label>Select SIG</label>
     <select class="form-control" id="">
         <?php foreach($sigs as $sig): ?>
-        <option>
+        <option value="<?php echo $sig['id']; ?>">
             <?php echo $sig['signame'].' ('.$sig['code'].')'; ?>
         </option>
         <?php endforeach ?>
@@ -54,7 +54,7 @@
     <label>Select Mentor</label>
     <select class="form-control" id="">
         <?php foreach($mentors as $mentor): ?>
-        <option>
+        <option value="<?php echo $mentor['matric']; ?>">
             <?php echo $mentor['name']; ?>
         </option>
         <?php endforeach ?>

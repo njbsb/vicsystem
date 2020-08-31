@@ -31,7 +31,7 @@
     <label>Select SIG</label>
     <select class="form-control" id="">
         <?php foreach($sigs as $sig): ?>
-        <option>
+        <option value="<?php echo $sig['code']; ?>">
             <?php echo $sig['signame'].' ('.$sig['code'].')'; ?>
         </option>
         <?php endforeach ?>
@@ -42,7 +42,7 @@
     <label>Select Role</label>
     <select class="form-control" id="">
         <?php foreach($mentor_roles as $role): ?>
-        <option>
+        <option value="<?php echo $role['id']; ?>">
             <?php echo $role['role_name']; ?>
         </option>
         <?php endforeach ?>

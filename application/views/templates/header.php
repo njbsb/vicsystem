@@ -3,7 +3,7 @@
 <head>
     <title>SIG System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/litera.bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/flatly.bootstrap.min.css">
     <style>
     /* body {
         font: 20px Montserrat, sans-serif;

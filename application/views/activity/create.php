@@ -36,7 +36,7 @@
         <select class="form-control" id="exampleSelect1">
 
             <?php foreach($academicsessions as $academicsession): ?>
-            <option>
+            <option value="<?php echo $academicsession['id']; ?>">
                 <?php echo $academicsession['session']; ?>
             </option>
             <?php endforeach ?>
@@ -46,8 +46,8 @@
     <div class="form-group">
         <label>Select semester</label>
         <select class="form-control" id="exampleSelect1">
-            <option>1</option>
-            <option>2</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
         </select>
     </div>
 
@@ -56,7 +56,7 @@
         <label>Select involved SIG</label>
         <select class="form-control" id="exampleSelect1">
             <?php foreach($sigs as $sig): ?>
-            <option>
+            <option value="<?php $sig['code']; ?>">
                 <?php echo $sig['signame'].' ('.$sig['code'].')'; ?>
             </option>
             <?php endforeach ?>
@@ -68,7 +68,7 @@
         <label>Select activity advisor</label>
         <select class="form-control">
             <?php foreach($mentors as $mentor): ?>
-            <option>
+            <option value="<?php echo $mentor['matric']; ?>">
                 <?php echo $mentor['name'].' ('.$mentor['matric'].')'; ?>
             </option>
             <?php endforeach ?>
@@ -79,8 +79,7 @@
     <div class="form-group">
         <label>Choose an image</label>
         <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
-        <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the
-            above input. It's a bit lighter and easily wraps to a new line.</small>
+        <small id="fileHelp" class="form-text text-muted">Insert an image of the activity.</small>
     </div>
 
     <!-- Start and end date -->
