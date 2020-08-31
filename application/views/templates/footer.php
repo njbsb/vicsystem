@@ -12,10 +12,10 @@
         <span class="text-muted">Footer kat sini.</span>
       </div>
     </footer> -->
-<script src="https://bootswatch.com/_vendor/jquery/dist/jquery.min.js"></script>
-<script src="https://bootswatch.com/_vendor/popper.js/dist/umd/popper.min.js"></script>
-<script src="https://bootswatch.com/_vendor/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="https://bootswatch.com/_assets/js/custom.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/popper.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/custom.js"></script>
 </body>
 
 </html>
