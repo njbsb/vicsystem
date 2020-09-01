@@ -4,7 +4,7 @@
             
             $data['title'] = 'Mentors';
             $data['mentors'] = $this->mentor_model->get_summary_mentors();
-            print_r($data['mentors']);
+            // print_r($data['mentors']);
             $this->load->view('templates/header');
             $this->load->view('mentors/index', $data);
             $this->load->view('templates/footer');

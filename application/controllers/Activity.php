@@ -16,7 +16,7 @@
             $data['academicsessions'] = $this->academicsession_model->get_academicsessions();
             $data['sigs'] = $this->sig_model->get_sig();
             $data['mentors'] = $this->mentor_model->get_allmentors();
-            print_r($data['mentors']);
+            // print_r($data['mentors']);
             $this->form_validation->set_rules('activityname', 'activity name', 'required');
             $this->form_validation->set_rules('activitydesc', 'activity description', 'required');
             
