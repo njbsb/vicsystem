@@ -45,7 +45,7 @@
                         <a class="nav-link" href="<?php echo base_url(); ?>mentors">My Mentors</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">My SIG</a>
+                        <a class="nav-link" href="<?php echo base_url(); ?>organization">My SIG</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo base_url(); ?>activity">Activity</a>
