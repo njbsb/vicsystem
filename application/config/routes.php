@@ -1,7 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+
 $route['activity'] = 'activity/index';
+$route['activity/create'] = 'activity/create';
 $route['students'] = 'students/index';
 $route['organization'] = 'organization/index';
 $route['mentors'] = 'mentors/index';

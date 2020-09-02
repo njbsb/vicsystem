@@ -27,6 +27,7 @@
             $data['academicsessions'] = $this->academicsession_model->get_academicsessions();
             $data['sigs'] = $this->sig_model->get_sig();
             $data['mentors'] = $this->mentor_model->get_allmentors();
+            $data['semesters'] = $this->semester_model->get_semesters();
             // print_r($data['mentors']);
             $this->form_validation->set_rules('activityname', 'Activity Name', 'required');
             $this->form_validation->set_rules('activitydesc', 'Activity Description', 'required');
@@ -37,7 +38,6 @@
             $this->form_validation->set_rules('photo_path', 'Activity Image');
             $this->form_validation->set_rules('datetime_start', 'Datetime Start');
             $this->form_validation->set_rules('datetime_end', 'Datetime End');
-            $this->form_validation->set_rules('fieldname', 'fieldlabel', 'trim|required|min_length[5]|max_length[12]');
             
             if($this->form_validation->run() == FALSE) {
                 $this->load->view('templates/header');
@@ -48,8 +48,28 @@
                 $this->activity_model->create_activity();
                 redirect('activity');
             }
+            
+            
+        }
 
-            
-            
+        public function delete($id) {
+            $this->activity_model->delete_activity($id);
+            redirect('activity');
+        }
+        public function edit($slug) {
+            $data['activity'] = $this->activity_model->get_activity($slug);
+            print_r($data['activity']);
+            $data['academicsessions'] = $this->academicsession_model->get_academicsessions();
+            $data['sigs'] = $this->sig_model->get_sig();
+            $data['mentors'] = $this->mentor_model->get_allmentors();
+            $data['semesters'] = $this->semester_model->get_semesters();
+            if(empty($data['activity'])) {
+                show_404();
+            }
+            $data['title'] = 'Edit activity';
+
+            $this->load->view('templates/header');
+            $this->load->view('activity/edit', $data);
+            $this->load->view('templates/footer');
         }
     }
