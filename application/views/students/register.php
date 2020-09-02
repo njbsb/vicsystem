@@ -1,4 +1,4 @@
-<h2><?php echo $title; ?></h2>
+<h2><?= $title ?></h2>
 <?php echo validation_errors(); ?>
 
 <?php echo form_open('students/register'); ?>
@@ -29,7 +29,7 @@
 <!-- select program -->
 <div class="form-group">
     <label>Select Program</label>
-    <select class="form-control" id="">
+    <select name="program_code" class="form-control" id="">
         <?php foreach($programs as $program): ?>
         <option value="<?php echo $program['code']; ?>">
             <?php echo $program['name']; ?>
@@ -40,7 +40,7 @@
 <!-- select sig -->
 <div class="form-group">
     <label>Select SIG</label>
-    <select class="form-control" id="">
+    <select name="sig_id" class="form-control" id="">
         <?php foreach($sigs as $sig): ?>
         <option value="<?php echo $sig['id']; ?>">
             <?php echo $sig['signame'].' ('.$sig['code'].')'; ?>
@@ -52,7 +52,7 @@
 <!-- select mentor -->
 <div class="form-group">
     <label>Select Mentor</label>
-    <select class="form-control" id="">
+    <select name="sig_mentor_matric" class="form-control" id="">
         <?php foreach($mentors as $mentor): ?>
         <option value="<?php echo $mentor['matric']; ?>">
             <?php echo $mentor['name']; ?>
@@ -64,7 +64,7 @@
 <!-- Profile Image -->
 <div class="form-group">
     <label>Choose profile image</label>
-    <input type="file" class="form-control-file" id="" aria-describedby="fileHelp">
+    <input name="photo_path" type="file" class="form-control-file" id="" aria-describedby="fileHelp">
     <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the
         above input. It's a bit lighter and easily wraps to a new line.</small>
 </div>

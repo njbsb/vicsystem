@@ -38,11 +38,14 @@
             <div class="collapse navbar-collapse" id="navbarColor03">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="<?php echo base_url(); ?>profile">Profile <span
+                        <a class="nav-link" href="<?php echo base_url(); ?>profile">My Profile <span
                                 class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo base_url(); ?>mentors">My Mentors</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo base_url(); ?>students">My Students</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo base_url(); ?>organization">My SIG</a>
@@ -60,9 +63,9 @@
                             <a class="dropdown-item" href="<?php echo base_url(); ?>students/register">Student</a>
                             <a class="dropdown-item" href="<?php echo base_url(); ?>mentors/register">Mentor</a>
                             <a class="dropdown-item" href="<?php echo base_url(); ?>activity/create">Activity</a>
-                            <a class="dropdown-item" href="#">Score</a>
+                            <!-- <a class="dropdown-item" href="#">Score</a> -->
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Separated link</a>
+                            <a class="dropdown-item" href="<?php echo base_url(); ?>score">Score</a>
                         </div>
                     </li>
                 </ul>
