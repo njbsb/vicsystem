@@ -18,7 +18,7 @@
     <!-- Activity Name -->
     <div class="form-group">
         <label>Activity Name</label>
-        <input type="text" class="form-control" name="activityname" aria-describedby="emailHelp"
+        <input name="activityname" type="text" class="form-control" aria-describedby="emailHelp"
             placeholder="Enter activity name">
         <small id="emailHelp" class="form-text text-muted">Please include unique activity name</small>
     </div>
@@ -26,15 +26,14 @@
     <!-- Activity Description -->
     <div class="form-group">
         <label>Activity Description</label>
-        <textarea class="form-control" name="activitydesc" rows="3"></textarea>
+        <textarea name="activitydesc" class="form-control" rows="3"></textarea>
         <small id="emailHelp" class="form-text text-muted">Please include summary report of the activity</small>
     </div>
 
     <!-- Academic Session -->
     <div class="form-group">
         <label>Select academic session</label>
-        <select class="form-control" id="exampleSelect1">
-
+        <select name="academicsession_id" class="form-control">
             <?php foreach($academicsessions as $academicsession): ?>
             <option value="<?php echo $academicsession['id']; ?>">
                 <?php echo $academicsession['session']; ?>
@@ -45,7 +44,7 @@
 
     <div class="form-group">
         <label>Select semester</label>
-        <select class="form-control" id="exampleSelect1">
+        <select name="semester" class="form-control" id="exampleSelect1">
             <option value="1">1</option>
             <option value="2">2</option>
         </select>
@@ -54,9 +53,9 @@
     <!-- Semester -->
     <div class="form-group">
         <label>Select involved SIG</label>
-        <select class="form-control" id="exampleSelect1">
+        <select name="sig_id" class="form-control" id="exampleSelect1">
             <?php foreach($sigs as $sig): ?>
-            <option value="<?php $sig['code']; ?>">
+            <option value="<?= $sig['id'] ?>">
                 <?php echo $sig['signame'].' ('.$sig['code'].')'; ?>
             </option>
             <?php endforeach ?>
@@ -66,7 +65,7 @@
     <!-- Activity Advisor (Mentor) -->
     <div class="form-group">
         <label>Select activity advisor</label>
-        <select class="form-control">
+        <select name="advisor_matric" class="form-control">
             <?php foreach($mentors as $mentor): ?>
             <option value="<?php echo $mentor['matric']; ?>">
                 <?php echo $mentor['name'].' ('.$mentor['matric'].')'; ?>
@@ -78,7 +77,8 @@
     <!-- Activity Image -->
     <div class="form-group">
         <label>Choose an image</label>
-        <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+        <input name="photo_path" type="file" class="form-control-file" id="exampleInputFile"
+            aria-describedby="fileHelp">
         <small id="fileHelp" class="form-text text-muted">Insert an image of the activity.</small>
     </div>
 
@@ -86,12 +86,12 @@
     <div class="row">
         <div class="form-group col-sm-6">
             <label>Datetime start (date and time):</label>
-            <input type="datetime-local" id="datetime_start" name="datetime_start">
+            <input name="datetime_start" type="datetime-local" id="datetime_start" name="datetime_start">
         </div>
 
         <div class="form-group col-sm-6">
             <label>Datetime end (date and time):</label>
-            <input type="datetime-local" id="datatime_end" name="datetime_end">
+            <input name="datetime_end" type="datetime-local" id="datatime_end" name="datetime_end">
         </div>
     </div>
 

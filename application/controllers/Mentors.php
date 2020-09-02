@@ -28,13 +28,18 @@
             $this->form_validation->set_rules('password', 'Password', 'required');
             $this->form_validation->set_rules('passwordconfirm', 'PasswordConfirm', 'required');
             $this->form_validation->set_rules('position', 'Position', 'required');
+            $this->form_validation->set_rules('sig_id', 'SIG', 'required');
+            $this->form_validation->set_rules('role_id', 'Role in SIG', 'required');
+            $this->form_validation->set_rules('photo_path', 'Profile photo', 'required');
+            
 
             if ($this->form_validation->run() === FALSE) {
                 $this->load->view('templates/header');
                 $this->load->view('mentors/register', $data);
                 $this->load->view('templates/footer');
             } else {
-                die('Continue');
+                $this->mentor_model->register_mentor();
+                redirect('mentors');
             }
             
         }
