@@ -14,7 +14,7 @@
         <?php foreach($students as $student): ?>
         <tr>
             <th scope="row"><?= $student['matric'] ?></th>
-            <td><?= $student['name'] ?></td>
+            <td><a href="#"><?= $student['name'] ?></a></td>
             <td><?= $student['phonenum'] ?></td>
             <td><?= $student['email'] ?></td>
         </tr>

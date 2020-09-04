@@ -22,5 +22,6 @@
                 'photo_path' => $this->input->post('photo_path')
             );
             return $this->db->insert('tbl_student', $data);
+            
         }
     }

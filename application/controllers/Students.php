@@ -35,8 +35,12 @@
             }
             else {
                 $this->student_model->register_student();
+                $this->user_model->register_user(3);
                 redirect('students');
             }
+        }
 
+        public function update_profile() {
+            
         }
     }
