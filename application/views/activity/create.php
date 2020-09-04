@@ -26,7 +26,7 @@
     <!-- Activity Description -->
     <div class="form-group">
         <label>Activity Description</label>
-        <textarea name="activitydesc" class="form-control" rows="3"></textarea>
+        <textarea name="activitydesc" class="form-control ckeditor" rows="3"></textarea>
         <small class="form-text text-muted">Please include summary report of the activity</small>
     </div>
 
@@ -77,10 +77,10 @@
 
     <!-- Activity Image -->
     <div class="form-group">
-        <label>Choose an image</label>
+        <label>Choose a photo/file (Paperwork)</label>
         <input name="photo_path" type="file" class="form-control-file" id="exampleInputFile"
             aria-describedby="fileHelp">
-        <small id="fileHelp" class="form-text text-muted">Insert an image of the activity.</small>
+        <small id="fileHelp" class="form-text text-muted">Insert the paperwork of the activity.</small>
     </div>
 
     <!-- Start and end date -->

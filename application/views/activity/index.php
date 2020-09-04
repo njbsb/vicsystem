@@ -4,12 +4,13 @@
 <?php foreach($activities as $activity): ?>
 <h3><?php echo $activity['activity_name']; ?></h3>
 <small>Date: <?php echo $activity['datetime_start'] ?></small>
+
 <br>
 <p>
-    <?php echo $activity['activity_desc'] ?>
+    <?php echo word_limiter($activity['activity_desc'], 10) ?>
 </p>
 
-<a href="<?php echo site_url('/activity/'.$activity['slug']); ?>">Read more...</a>
+<a class="btn btn-primary" href="<?php echo site_url('/activity/'.$activity['slug']); ?>">Read more...</a>
 <br><br>
 <?php endforeach ?>
 <!-- </div> -->

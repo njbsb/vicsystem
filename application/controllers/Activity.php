@@ -3,7 +3,7 @@
         public function index() {
             
             $data['title'] = 'Activity';
-            $data['activities'] = $this->activity_model->get_activities();
+            $data['activities'] = $this->activity_model->get_activity();
 
             $this->load->view('templates/header');
             $this->load->view('activity/index', $data);
@@ -12,6 +12,9 @@
 
         public function view($slug = NULL) {
             $data['activity'] = $this->activity_model->get_activity($slug);
+            $activity_id = $data['activity']['id'];
+            $data['comments'] = $this->comment_model->get_comments($activity_id);
+
             if(empty($data['activity'])) {
                 show_404();
             }
@@ -48,8 +51,6 @@
                 $this->activity_model->create_activity();
                 redirect('activity');
             }
-            
-            
         }
 
         public function delete($id) {
@@ -71,5 +72,10 @@
             $this->load->view('templates/header');
             $this->load->view('activity/edit', $data);
             $this->load->view('templates/footer');
+        }
+
+        public function update() {
+            $this->activity_model->update_activity();
+            redirect('activity');
         }
     }

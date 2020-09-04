@@ -5,14 +5,9 @@
             $this->load->database();
         }
 
-        public function get_activities() {
-            $this->db->order_by('id', 'DESC');
-            $query = $this->db->get('tbl_activity');
-            return $query->result_array();
-        }
-
         public function get_activity($slug = FALSE) {
             if($slug === FALSE) {
+                $this->db->order_by('id', 'DESC');
                 $query = $this->db->get('tbl_activity');
                 return $query->result_array();
             }

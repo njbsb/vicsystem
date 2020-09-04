@@ -3,6 +3,7 @@
 <?php echo validation_errors();?>
 
 <?php echo form_open('activity/update'); ?>
+<input type="hidden" name="id" value="<?php echo $activity['id']; ?>">
 <fieldset>
     <legend>Author</legend>
 
@@ -26,7 +27,8 @@
     <!-- Activity Description -->
     <div class="form-group">
         <label>Activity Description</label>
-        <textarea name="activitydesc" class="form-control" rows="3"><?php echo $activity['activity_desc']; ?></textarea>
+        <textarea name="activitydesc" class="form-control ckeditor"
+            rows="3"><?php echo $activity['activity_desc']; ?></textarea>
         <small class="form-text text-muted">Please include summary report of the activity</small>
     </div>
 
