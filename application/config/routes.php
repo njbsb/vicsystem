@@ -7,12 +7,19 @@ $route['activity/update'] = 'activity/update';
 $route['activity/create'] = 'activity/create';
 $route['activity/(:any)'] = 'activity/view/$1';
 
-$route['profile'] = 'profile/index';
-$route['profile/update'] = 'profile/update';
+$route['profile'] = 'user/index';
+$route['profile/update'] = 'user/edit';
 
-$route['students'] = 'students/index';
+$route['student'] = 'student/index';
+$route['student/register'] = 'student/register';
+$route['student/(:any)'] = 'student/view/$1';
+
 $route['organization'] = 'organization/index';
-$route['mentors'] = 'mentors/index';
+
+$route['mentor'] = 'mentor/index';
+$route['mentor/register'] = 'mentor/register';
+$route['mentor/update'] = 'mentor/update';
+$route['mentor/(:any)'] = 'mentor/view/$1';
 
 $route['citra'] = 'citra/index';
 $route['citra/(:any)'] = 'citra/view/$1';
