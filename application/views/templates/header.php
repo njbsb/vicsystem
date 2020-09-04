@@ -43,10 +43,10 @@
                                 class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo base_url(); ?>mentors">My Mentors</a>
+                        <a class="nav-link" href="<?php echo base_url(); ?>mentor">My Mentors</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo base_url(); ?>students">My Students</a>
+                        <a class="nav-link" href="<?php echo base_url(); ?>student">My Students</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo base_url(); ?>organization">My SIG</a>
@@ -61,8 +61,8 @@
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                             aria-haspopup="true" aria-expanded="false">Register</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="<?php echo base_url(); ?>students/register">Student</a>
-                            <a class="dropdown-item" href="<?php echo base_url(); ?>mentors/register">Mentor</a>
+                            <a class="dropdown-item" href="<?php echo base_url(); ?>student/register">Student</a>
+                            <a class="dropdown-item" href="<?php echo base_url(); ?>mentor/register">Mentor</a>
                             <a class="dropdown-item" href="<?php echo base_url(); ?>activity/create">Activity</a>
                             <!-- <a class="dropdown-item" href="#">Score</a> -->
                             <div class="dropdown-divider"></div>
@@ -74,7 +74,6 @@
                     <input class="form-control mr-sm-2" type="text" placeholder="Search">
                     <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
                 </form>
-
             </div>
         </div>
 
@@ -83,7 +82,7 @@
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                     aria-expanded="false">Account</a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Update Profile</a>
+                    <a class="dropdown-item" href="<?php echo base_url(); ?>profile/update">Update Profile</a>
                     <a class="dropdown-item" href="#">Log Out</a>
 
                     <div class="dropdown-divider"></div>
