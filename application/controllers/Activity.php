@@ -29,7 +29,7 @@
             $data['title'] = 'Create Activity';
             $data['academicsessions'] = $this->academicsession_model->get_academicsessions();
             $data['sigs'] = $this->sig_model->get_sig();
-            $data['mentors'] = $this->mentor_model->get_allmentors();
+            $data['mentors'] = $this->mentor_model->get_mentor();
             $data['semesters'] = $this->semester_model->get_semesters();
             // print_r($data['mentors']);
             $this->form_validation->set_rules('activityname', 'Activity Name', 'required');
@@ -62,7 +62,7 @@
             print_r($data['activity']);
             $data['academicsessions'] = $this->academicsession_model->get_academicsessions();
             $data['sigs'] = $this->sig_model->get_sig();
-            $data['mentors'] = $this->mentor_model->get_allmentors();
+            $data['mentors'] = $this->mentor_model->get_mentor();
             $data['semesters'] = $this->semester_model->get_semesters();
             if(empty($data['activity'])) {
                 show_404();
