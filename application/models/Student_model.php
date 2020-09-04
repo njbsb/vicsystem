@@ -4,9 +4,13 @@
             $this->load->database();
         }
 
-        public function get_students() {
-            $query = $this->db->get('tbl_student');
+        public function get_student($matric = FALSE) {
+            if($matric === FALSE) {
+                $query = $this->db->get('tbl_student');
             return $query->result_array();
+            }
+            $query = $this->db->get_where('tbl_student', array('matric' => $matric));
+            return $query->row_array();
         }
 
         public function register_student() {
