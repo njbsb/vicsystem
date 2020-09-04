@@ -14,7 +14,8 @@
                 <!-- object-fit:cover for square crop
                     border-radius:50%; for circle crop -->
                 <img style="max-width:100%; max-height:max-width; display: block; object-fit:cover;  padding:10px;"
-                    src="<?php echo base_url('assets/images/profile/'.$mentor['photo_path']); ?>" alt="Card image">
+                    src="<?php echo base_url('assets/images/profile/'.$mentor['photo_path']); ?>"
+                    alt="<?php echo $mentor['photo_path']; ?>">
 
                 <div class="card-body">
                     <h5 class="card-title">
