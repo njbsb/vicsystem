@@ -39,6 +39,7 @@
                 $this->load->view('templates/footer');
             } else {
                 $this->mentor_model->register_mentor();
+                $this->user_model->register_user(2);
                 redirect('mentors');
             }
             
