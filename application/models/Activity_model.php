@@ -5,14 +5,37 @@
             $this->load->database();
         }
 
-        public function get_activity($slug = FALSE) {
-            if($slug === FALSE) {
-                $this->db->order_by('id', 'DESC');
-                $query = $this->db->get('tbl_activity');
+        public function get_activity($slug = FALSE, $id = FALSE) {
+            if($slug === FALSE && $id === FALSE) {
+                // this code will get all activities
+                $this->db->select('act.*, acs.session as acadsession, mtr.name as advisorname');
+                $this->db->from('tbl_activity as act');
+                $this->db->join('tbl_academic_session as acs', 'act.acad_session_fk = acs.id', 'left');
+                $this->db->join('tbl_mentor as mtr', 'act.advisor_matric_fk = mtr.matric', 'left');
+                $this->db->order_by('act.id', 'DESC');
+                $query = $this->db->get();
+                
+                // $this->db->order_by('id', 'DESC');
+                // $query = $this->db->get('tbl_activity');
                 return $query->result_array();
             }
-            $query = $this->db->get_where('tbl_activity', array('slug' => $slug));
-            return $query->row_array();
+            else {
+                // this will get specific activity
+                if(!$slug === FALSE) {
+                    $query = $this->db->get_where('tbl_activity', array('slug' => $slug));
+                }
+                else if(!$id === FALSE) {
+                    $query = $this->db->get_where('tbl_activity', array('id' => $id));
+                }
+                else {
+                    // both are not null
+                    $query = $this->db->get_where('tbl_activity', array('id' => $id, 'slug' => $slug));
+                }
+                return $query->row_array();
+            }
+            // this will get specific activity
+            // $query = $this->db->get_where('tbl_activity', array('slug' => $slug));
+            // return $query->row_array();
         }
 
         public function create_activity() {
