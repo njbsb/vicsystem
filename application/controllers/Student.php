@@ -2,7 +2,7 @@
     class Student extends CI_Controller {
 
         public function index() {
-            $data['title'] = 'Students';
+            $data['title'] = 'My Students';
             $data['students'] = $this->student_model->get_student();
 
             $this->load->view('templates/header');
@@ -12,6 +12,11 @@
 
         public function view($matric) {
             
+            $data['student'] = $this->student_model->get_student($matric);
+            // print_r($data['student']);
+            $this->load->view('templates/header');
+            $this->load->view('student/view', $data);
+            $this->load->view('templates/footer');
         }
 
         public function register() {
@@ -43,7 +48,23 @@
             }
         }
 
-        public function update_profile() {
-            
+        public function edit($matric) {
+            $data['student'] = $this->student_model->get_student($matric);
+            $data['programs'] = $this->program_model->get_programs();
+            $data['sigs'] = $this->sig_model->get_sig();
+            $data['mentors'] = $this->mentor_model->get_mentor();
+
+            if(empty($data['student'])) {
+                show_404();
+            }
+            $data['title'] = 'Edit Student';
+            $this->load->view('templates/header');
+            $this->load->view('student/edit', $data);
+            $this->load->view('templates/footer');
+        }
+
+        public function update($matric) {
+            $this->student_model->update_student();
+            redirect('student/'.$matric);
         }
     }
