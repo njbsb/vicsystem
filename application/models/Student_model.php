@@ -45,7 +45,6 @@
 
         public function update_student() {
             $data = array(
-                'matric' => $this->input->post('matric'),
                 'name' => $this->input->post('studentname'),
                 'phonenum' => $this->input->post('phonenum'),
                 'email' => $this->input->post('email'),
