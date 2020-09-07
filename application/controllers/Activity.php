@@ -4,7 +4,7 @@
             
             $data['title'] = 'Activity';
             $data['activities'] = $this->activity_model->get_activity();
-
+            // print_r($data['activities']);
             $this->load->view('templates/header');
             $this->load->view('activity/index', $data);
             $this->load->view('templates/footer');
@@ -77,5 +77,17 @@
         public function update() {
             $this->activity_model->update_activity();
             redirect('activity');
+        }
+
+        public function committee($id) {
+            $data['activity'] = $this->activity_model->get_activity($id);
+            $data['title'] = "Committee";
+            $this->load->view('templates/header');
+            $this->load->view('activity/committee/index', $data);
+            $this->load->view('templates/footer');
+        }
+
+        public function addcommittee($id) {
+
         }
     }

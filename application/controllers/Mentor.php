@@ -2,7 +2,7 @@
     class Mentor extends CI_Controller {
         public function index() {
             
-            $data['title'] = 'Mentor';
+            $data['title'] = 'My Mentor';
             $data['mentors'] = $this->mentor_model->get_summary_mentors();
             // print_r($data['mentors']);
             $this->load->view('templates/header');

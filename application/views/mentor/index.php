@@ -1,5 +1,5 @@
 <div class="container-fluid text-center">
-    <h2 class="margin"><?= $title ?> Index Page</h2>
+    <h2 class="margin"><?= $title ?></h2>
 
 
     <div class="row">
@@ -12,7 +12,7 @@
                 </h3>
                 <!-- object-fit:cover for square crop
                     border-radius:50%; for circle crop -->
-                <img style="max-width:100%; max-height:max-width; display: block; object-fit:cover;  padding:10px;"
+                <img style="max-height:300px; display: block; object-fit:cover;  padding:10px;"
                     src="<?php echo base_url('assets/images/profile/'.$mentor['photo_path']); ?>"
                     alt="<?php echo $mentor['photo_path']; ?>">
 
