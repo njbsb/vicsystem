@@ -4,6 +4,7 @@
     <title>SIG System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/flatly.bootstrap.min.css">
+    <!-- <script src="<?php echo base_url(); ?>assets/js/ckeditor.js"></script> -->
     <script src="http://cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
     <style>
     /* body {
