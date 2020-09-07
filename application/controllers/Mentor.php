@@ -44,8 +44,24 @@
             }
             
         }
-        // public function edit($matric) {
-        //     $data['title'] = 'Update Mentor';
-        //     $data['activity'] = $this->mentor_model-->get_mentor($matric);
-        // }
+        public function edit($matric) {
+            $data['title'] = 'Edit Mentor';
+            $data['mentor'] = $this->mentor_model->get_mentor($matric);
+            $data['sigs'] = $this->sig_model->get_sig();
+            $data['roles'] = $this->role_model->get_mentor_roles();
+            
+            if(empty($data['mentor'])) {
+                show_404();
+            }
+
+            $data['title'] = 'Edit Mentor';
+            $this->load->view('templates/header');
+            $this->load->view('mentor/edit', $data);
+            $this->load->view('templates/footer');
+        }
+
+        public function update($matric) {
+            $this->mentor_model->update_mentor();
+            redirect('mentor/'.$matric);
+        }
     }
