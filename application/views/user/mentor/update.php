@@ -10,12 +10,12 @@
                     Header
                 </h3> -->
                 <img style="max-height:300px; display: block; object-fit:cover; padding:10px;"
-                    src="<?php echo base_url('assets/images/profile/default.png'); ?>" alt="Card image">
+                    src="<?php echo base_url('assets/images/profile/').$mentor['photo_path']; ?>" alt="Card image">
                 <!-- <div class="card-body">
 
                 </div> -->
                 <div class="card-footer text-muted">
-                    K1234
+                    <?= $mentor['matric'] ?>
                 </div>
             </div>
 
@@ -31,23 +31,26 @@
             </div> -->
             <div class="form-group">
                 <label>Name</label>
-                <input class="form-control" name="name" value="Khairul Anuar" readonly>
+                <input class="form-control" name="name" value="<?= $mentor['name'] ?>" readonly>
             </div>
             <div class="form-group">
                 <label>Position</label>
-                <input class="form-control" name="name" value="Dr Psychology" readonly>
+                <input class="form-control" name="name" value="<?= $mentor['position'] ?>" readonly>
             </div>
             <div class="form-group">
                 <label>Email</label>
-                <input class="form-control" name="name" value="mentor@mail.com" readonly>
+                <input class="form-control" name="name" value="<?= $mentor['email'] ?>" readonly>
             </div>
 
             <div class="form-group">
                 <label>SIG</label>
                 <select name="sig_id" class="form-control" id="" disabled>
-                    <option value="">
-                        Video Innovation Club
+                    <?php foreach($sigs as $sig): ?>
+                    <option value="<?= $sig['id'] ?>"
+                        <?php if($sig['id'] == $mentor['sig_id_fk']) { echo 'selected'; } ?>>
+                        <?= $sig['signame'] ?>
                     </option>
+                    <?php endforeach ?>
                 </select>
             </div>
 

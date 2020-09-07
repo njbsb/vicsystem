@@ -5,9 +5,13 @@
             $this->load->database();
         }
         
-        public function get_user($id) {
-            $query = $this->db->get_where('tbl_user', array('user_matric' => $id));
-            return $query->result_array(); 
+        public function get_user($id = FALSE) {
+            if($id === FALSE) {
+                $query = $this->db->get('tbl_user');
+                return $query->result_array();
+            }
+            $query = $this->db->get_where('tbl_user', array('id' => $id));
+            return $query->row_array(); 
         }
 
         public function register_user($usertype_id) {

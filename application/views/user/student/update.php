@@ -10,12 +10,12 @@
                     Header
                 </h3> -->
                 <img style="max-height:300px; display: block; object-fit:cover; padding:10px;"
-                    src="<?php echo base_url('assets/images/profile/justin.jpg'); ?>" alt="Card image">
+                    src="<?php echo base_url('assets/images/profile/').$student['photo_path']; ?>" alt="Card image">
                 <!-- <div class="card-body">
 
                 </div> -->
                 <div class="card-footer text-muted">
-                    A161616
+                    <?= $student['matric'] ?>
                 </div>
             </div>
 
@@ -31,23 +31,29 @@
             </div> -->
             <div class="form-group">
                 <label>Name</label>
-                <input class="form-control" name="name" value="Khairul Timberlake" readonly>
+                <input class="form-control" name="name" value="<?= $student['name'] ?>" readonly>
             </div>
             <div class="form-group">
                 <label>Select Program</label>
                 <select name="sig_id" class="form-control" id="" disabled>
-                    <option value="">
-                        Video Innovation Club
+                    <?php foreach($sigs as $sig): ?>
+                    <option value="<?= $sig['id'] ?>"
+                        <?php if($sig['id'] == $student['sig_id_fk']) {echo 'selected';} ?>>
+                        <?= $sig['signame'] ?>
                     </option>
+                    <?php endforeach ?>
                 </select>
             </div>
 
             <div class="form-group">
                 <label>Program</label>
                 <select name="program_code" class="form-control" id="" disabled>
-                    <option value="">
-                        Software Engineering
+                    <?php foreach($programs as $program): ?>
+                    <option value="<?= $program['code'] ?>"
+                        <?php if($program['code'] == $student['program_code_fk']) {echo 'selected';} ?>>
+                        <?= $program['name'] ?>
                     </option>
+                    <?php endforeach ?>
                 </select>
             </div>
             <div class="form-group">
@@ -56,18 +62,21 @@
             </div>
             <div class="form-group">
                 <label>Phone Number</label>
-                <input class="form-control" name="phonenum" value="013-8877343" readonly>
+                <input class="form-control" name="phonenum" value="<?= $student['phonenum'] ?>" readonly>
             </div>
             <div class="form-group">
                 <label>Email</label>
-                <input class="form-control" name="email" value="a166666@siswa.ukm.edu.my" readonly>
+                <input class="form-control" name="email" value="<?= $student['email'] ?>" readonly>
             </div>
             <div class="form-group">
                 <label>Mentor</label>
-                <select name="mentor_matric" class="form-control" id="" readonly>
-                    <option value="">
-                        Pn Masura Rahmat
+                <select name="mentor_matric" class="form-control" id="" disabled>
+                    <?php foreach($mentors as $mentor): ?>
+                    <option value="<?= $mentor['matric']?>"
+                        <?php if($mentor['matric'] == $student['mentor_id_fk']) { echo 'selected';} ?>>
+                        <?= $mentor['name']?>
                     </option>
+                    <?php endforeach ?>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Update profile</button>

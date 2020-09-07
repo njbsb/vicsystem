@@ -10,25 +10,25 @@
                     Header
                 </h3> -->
                 <img style="max-height:300px; display: block; object-fit:cover; padding:10px;"
-                    src="<?php echo base_url('assets/images/profile/justin.jpg'); ?>" alt="Card image">
+                    src="<?php echo base_url('assets/images/profile/').$student['photo_path']; ?>" alt="Card image">
                 <!-- <div class="card-body">
 
                 </div> -->
                 <div class="card-footer text-muted">
-                    Joined VIC: 2016
+                    <?= $student['matric'] ?>
                 </div>
             </div>
         </div>
         <div class="col-lg-8 text-left">
             <!-- <div class="bs-component">
             </div> -->
-            <h3>Khairul Timberlake</h3>
-            <h6>Club name: Video Innovation Club</h6>
-            <h6>Program: Software Engineering (Multimedia)</h6>
-            <h6>Year: 3</h6>
-            <h6>Phone Num: <a href="#">013-8877343</a></h6>
-            <h6>Email: <a href="mailto:google.com">a166666@siswa.ukm.edu.my</a></h6>
-            <h6>Mentor: Pn Masura Rahmat</h6>
+            <h3><b><?= $student['name'] ?></b></h3>
+            <h6><b>Club name:</b> <?= $student['signame'] ?></h6>
+            <h6><b>Program:</b> <?= $student['program_name'] ?></h6>
+            <h6><b>Year:</b> 3</h6>
+            <h6><b>Phone Num:</b> <a href="#"><?= $student['phonenum'] ?></a></h6>
+            <h6><b>Email:</b> <a href="mailto:<?= $student['email'] ?>"><?= $student['email'] ?></a></h6>
+            <h6><b>Mentor:</b> <?= $student['mentor_name'] ?></h6>
 
         </div>
     </div> <br>
