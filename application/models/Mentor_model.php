@@ -19,7 +19,7 @@
 
         public function get_mentor($matric = FALSE) {
             if($matric === FALSE) {
-                $this->db->select('mtr.*, sig.signame as signame, role.role_name as rolename');
+                $this->db->select('mtr.*, sig.signame as signame, sig.code as sigcode, role.role_name as rolename');
                 $this->db->from('tbl_mentor as mtr');
                 $this->db->join('tbl_sig as sig', 'mtr.sig_id_fk = sig.id', 'left');
                 $this->db->join('tbl_role as role', 'mtr.org_role_id_fk = role.id', 'left');
@@ -51,7 +51,6 @@
                 'org_role_id_fk' => $this->input->post('role_id'),
                 'photo_path' => $this->input->post('photo_path')
             );
-
             return $this->db->insert('tbl_mentor', $data);
         }
 
