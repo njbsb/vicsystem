@@ -24,12 +24,17 @@
                         } ?></td>
                     <td><?= $user['usertype'] ?></td>
                     <td>
+                        <a class="btn btn-primary btn-sm" data-toggle="modal" data-userid="<?= $user['id'] ?>" onclick="$('#confirmDelete #formDelete').attr('action', '<?= site_url('user/delete/' . $user['id']) ?>')" href="#confirmDelete">
+                            Delete
+                        </a>
                         <!-- <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#confirmDelete">
                             Delete
                         </button> -->
-                        <?php echo form_open('/user/delete/' . $user['id']); ?>
+                        <!-- <?php // echo form_open('/user/delete/' . $user['id']); 
+                                ?>
                         <input type="submit" value="Delete" class="btn btn-primary" data-toggle="modal" data-target=" #confirmDelete">
-                        <?php echo form_close(); ?>
+                        <?php // echo form_close(); 
+                        ?> -->
                     </td>
                 </tr>
             <?php endforeach ?>
@@ -47,14 +52,15 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Are you sure to delete this user?</p>
+                <p id="confirmtext">Are you sure to delete this user?</p>
+                <!-- <p id="confirmtext"></p> -->
             </div>
             <div class="modal-footer">
-                <!-- <button type="button" class="btn btn-primary">Delete</button> -->
-                <?php echo form_open('/user/delete/' . $user['id']); ?>
-                <input type="submit" value="Delete" class="btn btn-primary">
-                <?php echo form_close(); ?>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <form id="formDelete" action="" method="post">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </form>
+
             </div>
         </div>
     </div>
@@ -63,5 +69,15 @@
 <script>
     $(document).ready(function() {
         $('#usertable').DataTable();
+    });
+    var confirmtext = document.getElementById('confirmtext');
+    $('#confirmDelete').on('show.bs.modal', function(e) {
+        var userid = $(e.relatedTarget).data('userid');
+        // data('userid) is passed from a button
+        confirmtext.innerHTML += ' <b>(' + userid + ')</b>';
+    });
+    $('#confirmDelete').on('hide.bs.modal', function(e) {
+        // var confirmtext = document.getElementById('confirmtext');
+        confirmtext.innerHTML = 'Are you sure to delete this user?';
     });
 </script>
