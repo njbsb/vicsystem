@@ -1,68 +1,76 @@
 <?php
-    class Mentor_model extends CI_Model {
+class Mentor_model extends CI_Model
+{
 
-        public function __construct() {
-            $this->load->database();
-        }
-        
-        public function get_summary_mentors() {
-            // $this->db->select('mtr.matric, mtr.name, mtr.email, mtr.photo_path, sig.code, role.role_name');
-            $this->db->select('mtr.*, sig.code as sigcode, role.role_name');
-            $this->db->from('tbl_mentor as mtr');
-            $this->db->join('tbl_sig as sig', 'sig.id = mtr.sig_id_fk', 'left');
-            $this->db->join('tbl_role as role', 'mtr.org_role_id_fk = role.id', 'left');
-            $this->db->order_by('role.role_name', 'DESC');
+    public function __construct()
+    {
+        $this->load->database();
+    }
 
+    public function get_mentor($matric = FALSE)
+    {
+        if ($matric === FALSE) {
+            $this->db->select('user.id, user.name, user.email, user.profile_image, mtr.position, sig.code as sigcode, sig.signame, role.rolename')
+                ->from('tbl_user as user')
+                ->where(array('usertype_id' => '2', 'userstatus_id' => '2'))
+                ->join('tbl_mentor as mtr', 'mtr.matric = user.id', 'left')
+                ->join('tbl_sig as sig', 'sig.id = user.sig_id', 'left')
+                ->join('tbl_role as role', 'role.id = mtr.orgrole_id', 'left');
             $query = $this->db->get();
             return $query->result_array();
         }
-
-        public function get_mentor($matric = FALSE) {
-            if($matric === FALSE) {
-                $this->db->select('mtr.*, sig.signame as signame, sig.code as sigcode, role.role_name as rolename');
-                $this->db->from('tbl_mentor as mtr');
-                $this->db->join('tbl_sig as sig', 'mtr.sig_id_fk = sig.id', 'left');
-                $this->db->join('tbl_role as role', 'mtr.org_role_id_fk = role.id', 'left');
-                $query = $this->db->get();
-                return $query->result_array();
-            }
-            $this->db->select('mtr.*, sig.signame as signame, role.role_name as rolename');
-            $this->db->from('tbl_mentor as mtr');
-            $this->db->where(array('mtr.matric' => $matric));
-            $this->db->join('tbl_sig as sig', 'mtr.sig_id_fk = sig.id', 'left');
-            $this->db->join('tbl_role as role', 'mtr.org_role_id_fk = role.id', 'left');
-            $query = $this->db->get();
-            return $query->row_array();
-        }
-
-        public function getMyMentor($sig_id) {
-            $query = $this->db->get_where('tbl_mentor', array('sig_fk_id' => $sig_id));
-            return $query->result();
-        }
-
-        public function register_mentor() {
-            $data = array(
-                'matric' => $this->input->post('matric'),
-                'name' => $this->input->post('name'),
-                'email' => $this->input->post('email'),
-                'password' => $this->input->post('password'),
-                'position' => $this->input->post('position'),
-                'sig_id_fk' => $this->input->post('sig_id'),
-                'org_role_id_fk' => $this->input->post('role_id'),
-                'photo_path' => $this->input->post('photo_path')
+        $this->db->select('user.id, user.name, user.email, user.sig_id, user.profile_image, mtr.position, mtr.roomnum, sig.code as sigcode, sig.signame, role.rolename')
+            ->from('tbl_user as user')
+            ->where(array('user.id' => $matric, 'usertype_id' => '2', 'userstatus_id' => '2'))
+            ->join('tbl_mentor as mtr', 'mtr.matric = user.id', 'left')
+            ->join('tbl_sig as sig', 'sig.id = user.sig_id', 'left')
+            ->join('tbl_role as role', 'role.id = mtr.orgrole_id', 'left');
+        $query = $this->db->get();
+        if (!$query->num_rows()) {
+            $default = array(
+                'position' => '',
+                'roomnum' => '',
+                'orgrole_id' => ''
             );
-            return $this->db->insert('tbl_mentor', $data);
+            return $default;
         }
+        return $query->row_array();
+    }
 
-        public function update_mentor() {
-            $data = array(
-                'name' => $this->input->post('mentorname'),
-                'email' => $this->input->post('email'),
-                'position' => $this->input->post('position'),
-                'sig_id_fk' => $this->input->post('sig_id'),
-                'org_role_id_fk' => $this->input->post('role_id')
-            );
-            $this->db->where('matric', $this->input->post('matric'));
-            return $this->db->update('tbl_mentor', $data);
+    public function get_sigmentors($sig_id)
+    {
+        $this->db->select('user.id, user.name')
+            ->from('tbl_user as user')
+            ->where(array('usertype_id' => '2', 'sig_id' => $sig_id));
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function register_mentor($mentordata)
+    {
+        return $this->db->insert('tbl_mentor', $mentordata);
+    }
+
+    public function update_mentor($id, $mentordata)
+    {
+        $this->db->where('matric', $id);
+        return $this->db->update('tbl_mentor', $mentordata);
+    }
+
+    public function delete_mentor($matric)
+    {
+        $this->db->where('matric', $matric);
+        $this->db->delete('tbl_mentor');
+        return true;
+    }
+
+    public function mentor_exist($matric)
+    {
+        $query = $this->db->get_where('tbl_mentor', array('matric' => $matric));
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
         }
     }
+}

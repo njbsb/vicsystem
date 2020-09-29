@@ -1,62 +1,60 @@
 <h2><?php echo $title; ?></h2>
 
-<?php echo validation_errors();?>
+<?php echo validation_errors(); ?>
 
 <?php echo form_open('activity/update'); ?>
 <input type="hidden" name="id" value="<?php echo $activity['id']; ?>">
-<fieldset>
-    <legend>Author</legend>
+<fieldset class="col-md-auto">
 
     <!-- load current user data here -->
-    <!-- <div class="form-group row">
-        <label class="col-sm-2 col-form-label">User name</label>
-        <div class="col-sm-10">
-            <input type="text" readonly="" class="form-control-plaintext" id="staticEmail" value="user@example.com">
-        </div>
-    </div> -->
+    <div class="form-group">
+        <label>User name</label>
+        <input name="author_id" type="text" readonly="" class="form-control" id="author_id" value="A161010/K001" readonly>
+    </div>
     <!-- Form fields start here -->
 
     <!-- Activity Name -->
     <div class="form-group">
         <label>Activity Name</label>
-        <input name="activityname" type="text" class="form-control" aria-describedby="emailHelp"
-            placeholder="Enter activity name" value="<?php echo $activity['activity_name']; ?>">
+        <input name="activityname" type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter activity name" value="<?php echo $activity['activity_name']; ?>">
         <small id="emailHelp" class="form-text text-muted">Please include unique activity name</small>
     </div>
 
     <!-- Activity Description -->
     <div class="form-group">
         <label>Activity Description</label>
-        <textarea name="activitydesc" class="form-control ckeditor"
-            rows="3"><?php echo $activity['activity_desc']; ?></textarea>
+        <textarea name="activitydesc" class="form-control ckeditor" rows="3"><?php echo $activity['activity_desc']; ?></textarea>
         <small class="form-text text-muted">Please include summary report of the activity</small>
     </div>
 
+    <!-- Venue -->
+    <div class="form-group">
+        <label>Venue</label>
+        <input name="venue" type="text" class="form-control" placeholder="Enter venue name" value="<?= $activity['venue'] ?>">
+        <!-- <small class="form-text text-muted">Venue of the activity</small> -->
+    </div>
+    <!-- Theme -->
+    <div class="form-group">
+        <label>Theme</label>
+        <input name="theme" type="text" class="form-control" placeholder="Enter activity theme" value="<?= $activity['theme'] ?>">
+        <!-- <small class="form-text text-muted">Theme</small> -->
+    </div>
+
     <!-- Academic Session -->
+    <div class="row">
+
+    </div>
     <div class="form-group">
         <label>Select academic session</label>
         <select name="academicsession_id" class="form-control">
-            <?php foreach($academicsessions as $academicsession): ?>
-            <option value="<?php echo $academicsession['id']; ?>" <?php
-            if($academicsession['id'] == $activity['acad_session_fk']) {
-                echo 'selected'; 
-            }
-            ?>>
-                <?php echo $academicsession['session']; ?>
-            </option>
-            <?php endforeach ?>
-        </select>
-    </div>
-
-    <!-- Semester -->
-    <div class="form-group">
-        <label>Select semester</label>
-        <select name="semester" class="form-control">
-            <?php foreach($semesters as $sem): ?>
-            <option value="<?php echo $sem['id']; ?>" <?php 
-                if($sem['id'] == $activity['semester_fk']) {
-                    echo 'selected';
-                } ?>><?php echo $sem['semester']; ?></option>
+            <?php foreach ($academicsessions as $academicsession) : ?>
+                <option value="<?php echo $academicsession['id']; ?>" <?php
+                                                                        if ($academicsession['id'] == $activity['acadsession_id']) {
+                                                                            echo 'selected';
+                                                                        }
+                                                                        ?>>
+                    <?php echo $academicsession['acadyear'] . ' Sem ' . $academicsession['semester_id']; ?>
+                </option>
             <?php endforeach ?>
         </select>
     </div>
@@ -65,13 +63,14 @@
     <div class="form-group">
         <label>Select SIG</label>
         <select name="sig_id" class="form-control">
-            <?php foreach($sigs as $sig): ?>
-            <option value="<?php echo $sig['id']; ?>" <?php 
-                if($sig['id'] == $activity['sig_id_fk']) { 
-                    echo 'selected'; 
-                } ?>>
-                <?php echo $sig['signame'].' ('.$sig['code'].')'; ?>
-            </option>
+            <option value="" selected disabled hidden>Choose SIG</option>
+            <?php foreach ($sigs as $sig) : ?>
+                <option value="<?php echo $sig['id']; ?>" <?php
+                                                            if ($sig['id'] == $activity['sig_id']) {
+                                                                echo 'selected';
+                                                            } ?>>
+                    <?php echo $sig['signame'] . ' (' . $sig['code'] . ')'; ?>
+                </option>
             <?php endforeach ?>
         </select>
     </div>
@@ -80,41 +79,88 @@
     <div class="form-group">
         <label>Select activity advisor</label>
         <select name="advisor_matric" class="form-control">
-            <?php foreach($mentors as $mentor): ?>
-            <option value="<?php echo $mentor['matric']; ?>" <?php 
-            if($mentor['matric'] == $activity['advisor_matric_fk']) {
-                echo 'selected';
-            }
-            ?>>
-                <?php echo $mentor['name'].' ('.$mentor['matric'].')'; ?>
-            </option>
+            <option value="" selected disabled hidden>Choose Advisor</option>
+            <?php foreach ($mentors as $mentor) : ?>
+                <option value="<?php echo $mentor['id']; ?>" <?php
+                                                                if ($mentor['id'] == $activity['advisor_matric']) {
+                                                                    echo 'selected';
+                                                                }
+                                                                ?>>
+                    <?php echo $mentor['name'] . ' (' . $mentor['id'] . ')'; ?>
+                </option>
             <?php endforeach ?>
         </select>
     </div>
 
-    <!-- Activity Image -->
-    <div class="form-group">
-        <label>Change activity image</label>
-        <input name="photo_path" type="file" class="form-control-file" aria-describedby="fileHelp">
-        <small id="fileHelp" class="form-text text-muted">Insert an image of the activity.</small>
+    <!-- HIGHCOM -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="director">Project Director</label>
+                <select name="projectdirector" id="projectdirector" class="form-control">
+                    <option value="" selected disabled hidden>Choose Project Director</option>
+                    <?php foreach ($sigstudents as $ss) : ?>
+                        <option value="<?= $ss['id'] ?>">
+                            <?= $ss['id'] . ' ' . $ss['name'] ?>
+                        </option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="deputydirector">Deputy Project Director</label>
+                <select name="deputydirector" id="deputydirector" class="form-control">
+                    <option value="" selected disabled hidden>Choose Deputy Director</option>
+                    <?php foreach ($sigstudents as $ss) : ?>
+                        <option value="<?= $ss['id'] ?>">
+                            <?= $ss['id'] . ' ' . $ss['name'] ?>
+                        </option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="secretary">Secretary</label>
+                <select name="secretary" id="secretary" class="form-control">
+                    <option value="" selected disabled hidden>Choose Secretary</option>
+                    <?php foreach ($sigstudents as $ss) : ?>
+                        <option value="<?= $ss['id'] ?>">
+                            <?= $ss['id'] . ' ' . $ss['name'] ?>
+                        </option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity File and Image -->
+    <div class="row">
+        <div class="form-group col-sm-4">
+            <label>Choose a file (Paperwork)</label>
+            <input name="paperwork_file" type="file" class="form-control-file" id="paperwork_file" aria-describedby="fileHelp">
+            <small id="fileHelp" class="form-text text-muted"><?= $activity['paperwork_file'] ?></small>
+        </div>
+        <div class="form-group col-sm-4">
+            <label>Choose a photo (Activity Image)</label>
+            <input name="photo_path" type="file" class="form-control-file" id="photo_path" aria-describedby="fileHelp">
+            <small id="fileHelp" class="form-text text-muted"><?= $activity['photo_path'] ?></small>
+        </div>
     </div>
 
     <!-- Start and end date -->
     <div class="row">
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-4">
             <label>Datetime start (DT):</label>
-            <input name="datetime_start" value="<?php echo str_replace(' ', 'T', $activity['datetime_start']); ?>"
-                type="datetime-local" id="datetime_start">
+            <input name="datetime_start" value="<?php echo str_replace(' ', 'T', $activity['datetime_start']); ?>" type="datetime-local" id="datetime_start">
         </div>
 
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-4">
             <label>Datetime end (DT):</label>
-            <input name="datetime_end" value="<?php echo str_replace(' ', 'T', $activity['datetime_end']); ?>"
-                type="datetime-local" id="datatime_end">
+            <input name="datetime_end" value="<?php echo str_replace(' ', 'T', $activity['datetime_end']); ?>" type="datetime-local" id="datatime_end">
         </div>
     </div>
-
-
     <br>
     <button type="submit" class="btn btn-primary btn-block">Update</button>
 </fieldset>

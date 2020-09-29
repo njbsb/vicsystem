@@ -1,67 +1,101 @@
 <?php
-    class Mentor extends CI_Controller {
-        public function index() {
-            
-            $data['title'] = 'My Mentor';
-            $data['mentors'] = $this->mentor_model->get_summary_mentors();
-            // print_r($data['mentors']);
-            $this->load->view('templates/header');
-            $this->load->view('mentor/index', $data);
-            $this->load->view('templates/footer');
+class Mentor extends CI_Controller
+{
+    public function index()
+    {
+        $data['title'] = 'My Mentor';
+        $data['mentors'] = $this->mentor_model->get_mentor();
+        $this->load->view('templates/header');
+        $this->load->view('mentor/index', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function view($matric)
+    {
+        $data['mentor'] = $this->mentor_model->get_mentor($matric);
+        if (!$data['mentor']['profile_image']) {
+            $data['mentor']['profile_image'] = 'default.jpg';
         }
+        $this->load->view('templates/header');
+        $this->load->view('mentor/view', $data);
+        $this->load->view('templates/footer');
+    }
 
-        public function view($matric) {
-            $data['mentor'] = $this->mentor_model->get_mentor($matric);
+    public function register()
+    {
+        $data['title'] = 'Register Mentor';
+        $data['sigs'] = $this->sig_model->get_sig();
+        $data['mentor_roles'] = $this->role_model->get_mentor_roles();
+
+        $this->form_validation->set_rules('matric', 'Matric', 'required');
+        $this->form_validation->set_rules('name', 'Name', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'required');
+        $this->form_validation->set_rules('passwordconfirm', 'PasswordConfirm', 'required');
+        $this->form_validation->set_rules('position', 'Position', 'required');
+        $this->form_validation->set_rules('sig_id', 'SIG', 'required');
+        $this->form_validation->set_rules('role_id', 'Role in SIG', 'required');
+
+
+        if ($this->form_validation->run() === FALSE) {
             $this->load->view('templates/header');
-            $this->load->view('mentor/view', $data);
+            $this->load->view('mentor/register', $data);
             $this->load->view('templates/footer');
-        }
+        } else {
+            $config['upload_path'] = '.assets/images/profile';
+            $config['allowed_types'] = 'gif|jpg|png';
+            $config['max_size'] = '2048';
+            $config['max_width'] = '2000';
+            $config['max_height'] = '2000';
 
-        public function register() {
-            $data['title'] = 'Register Mentor';
-            $data['sigs'] = $this->sig_model->get_sig();
-            $data['mentor_roles'] = $this->role_model->get_mentor_roles();
-            
-            $this->form_validation->set_rules('matric', 'Matric', 'required');
-            $this->form_validation->set_rules('name', 'Name', 'required');
-            $this->form_validation->set_rules('email', 'Email', 'required');
-            $this->form_validation->set_rules('password', 'Password', 'required');
-            $this->form_validation->set_rules('passwordconfirm', 'PasswordConfirm', 'required');
-            $this->form_validation->set_rules('position', 'Position', 'required');
-            $this->form_validation->set_rules('sig_id', 'SIG', 'required');
-            $this->form_validation->set_rules('role_id', 'Role in SIG', 'required');
-            $this->form_validation->set_rules('photo_path', 'Profile photo', 'required');
-            
+            $this->load->library('upload', $config);
 
-            if ($this->form_validation->run() === FALSE) {
-                $this->load->view('templates/header');
-                $this->load->view('mentor/register', $data);
-                $this->load->view('templates/footer');
+            if (!$this->upload->do_upload()) {
+                $errors = array('error', $this->upload->display_errors());
+                print_r($errors);
+                $profile_image = 'default.png';
             } else {
-                $this->mentor_model->register_mentor();
-                $this->user_model->register_user(2);
-                redirect('mentor');
-            }
-            
-        }
-        public function edit($matric) {
-            $data['title'] = 'Edit Mentor';
-            $data['mentor'] = $this->mentor_model->get_mentor($matric);
-            $data['sigs'] = $this->sig_model->get_sig();
-            $data['roles'] = $this->role_model->get_mentor_roles();
-            
-            if(empty($data['mentor'])) {
-                show_404();
+                $data = array('upload_data' => $this->upload->data());
+                $profile_image = $_FILES['profile_image']['name'];
             }
 
-            $data['title'] = 'Edit Mentor';
-            $this->load->view('templates/header');
-            $this->load->view('mentor/edit', $data);
-            $this->load->view('templates/footer');
-        }
+            $this->mentor_model->register_mentor($profile_image);
+            $this->user_model->register_user(2);
 
-        public function update($matric) {
-            $this->mentor_model->update_mentor();
-            redirect('mentor/'.$matric);
+            redirect('mentor');
         }
     }
+    public function edit($matric)
+    {
+        $data['mentor'] = $this->mentor_model->get_mentor($matric);
+        if (empty($data['mentor'])) {
+            show_404();
+        }
+        if (!$data['mentor']['profile_image']) {
+            $data['mentor']['profile_image'] = 'default.jpg';
+        }
+        $data['title'] = 'Edit Mentor';
+        $data['sigs'] = $this->sig_model->get_sig();
+        $data['roles'] = $this->role_model->get_mentor_roles();
+        $this->load->view('templates/header');
+        $this->load->view('mentor/edit', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function update($id)
+    {
+        $mentordata = array(
+            'position' => $this->input->post('position'),
+            'roomnum' => $this->input->post('roomnum'),
+            'orgrole_id' => $this->input->post('orgrole_id')
+        );
+        $userdata = array(
+            'name' => $this->input->post('name'),
+            'email' => $this->input->post('email'),
+            'sig_id' => $this->input->post('sig_id')
+        );
+        $this->mentor_model->update_mentor($id, $mentordata);
+        $this->user_model->update_user($id, $userdata);
+        redirect('mentor/' . $id);
+    }
+}

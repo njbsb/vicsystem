@@ -9,8 +9,7 @@
                 <!-- <h3 class="card-header">
                     Header
                 </h3> -->
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;"
-                    src="<?php echo base_url('assets/images/profile/justin.jpg'); ?>" alt="Card image">
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php echo base_url('assets/images/profile/justin.jpg'); ?>" alt="Card image">
                 <!-- <div class="card-body">
 
                 </div> -->
@@ -34,7 +33,7 @@
     </div> <br>
 
     <h2>Previous Activity and Roles</h2> <br>
-    <div class="card bg-light mb-3" style="">
+    <div class="card bg-light mb-3">
         <div class="card-header">Treasurer</div>
         <div class="card-body">
             <h4 class="card-title">Short Film Competition 2019</h4>

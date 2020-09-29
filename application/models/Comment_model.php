@@ -1,26 +1,40 @@
 <?php
-    class Comment_model extends CI_Model {
-        public function __construct() {
-            $this->load->database();
-        }
-
-        // public function get_comments($activityid) {
-        //     $query = $this->db->get('tbl_activity_comment');
-        //     return $query->result_array();
-        // }
-
-        public function create_comment($activity_id) {
-            $data = array(
-                'activity_id_fk' => $activity_id,
-                'student_matric_fk' => $this->input->post('matric'),
-                'role_id_fk' => '12',
-                'comment' => $this->input->post('comment')
-            );
-
-            return $this->db->insert('tbl_activity_comment', $data);
-        }
-        public function get_comments($activity_id) {
-            $query = $this->db->get_where('tbl_activity_comment', array('activity_id_fk' => $activity_id));
-            return $query->result_array();
-        }
+class Comment_model extends CI_Model
+{
+    public function __construct()
+    {
+        $this->load->database();
     }
+
+    // public function get_comments($activityid) {
+    //     $query = $this->db->get('tbl_comment');
+    //     return $query->result_array();
+    // }
+
+    public function create_comment($commentdata)
+    {
+        return $this->db->insert('tbl_comment', $commentdata);
+    }
+    public function get_comments($activity_id)
+    {
+        $this->db->select('*')
+            ->from('tbl_comment as cmt')
+            // ->where('cmt.student_matric is NOT NULL', NULL, FALSE)
+
+            // ->where(array('cmt.student_matric IS NOT NULL' => NULL))
+            ->where(array('cmt.activity_id' => $activity_id))
+            ->join('tbl_comment_category as cmtcat', 'cmt.category_id = cmtcat.id');
+        $query = $this->db->get();
+        // $query = $this->db->get_where('tbl_comment', array('activity_id' => $activity_id));
+        return $query->result_array();
+    }
+    public function get_comments_bycategory($category_id)
+    {
+        $this->db->select('cmt.*, act.activity_name')
+            ->from('tbl_comment as cmt')
+            ->where('category_id', $category_id)
+            ->join('tbl_activity as act', 'cmt.activity_id = act.id');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+}

@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('database', 'form_validation', 'session', 'javascript');
+$autoload['libraries'] = array('database', 'form_validation', 'session', 'javascript', 'pagination');
 
 /*
 | -------------------------------------------------------------------
@@ -132,4 +132,19 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('user_model', 'mentor_model', 'activity_model', 'academicsession_model', 'sig_model', 'role_model', 'program_model', 'citra_model', 'student_model', 'semester_model', 'comment_model', 'score_model');
+$autoload['model'] = array(
+    'user_model',
+    'mentor_model',
+    'activity_model',
+    'academic_model',
+    'sig_model',
+    'role_model',
+    'program_model',
+    'citra_model',
+    'student_model',
+    'semester_model',
+    'comment_model',
+    'score_model',
+    'category_model',
+    'committee_model'
+);

@@ -9,19 +9,18 @@
                 <!-- <h3 class="card-header">
                     Header
                 </h3> -->
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;"
-                    src="<?php echo base_url('assets/images/profile/').$student['photo_path']; ?>" alt="Card image">
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php echo base_url('assets/images/profile/') . $student['profile_image']; ?>" alt="Card image">
                 <!-- <div class="card-body">
 
                 </div> -->
                 <div class="card-footer text-muted">
-                    <?= $student['matric'] ?>
+                    <?= $student['id'] ?>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Select profile photo</label>
-                <input name="photo_path" type="file" class="form-control-file" aria-describedby="fileHelp">
+                <input name="profile_image" type="file" class="form-control-file" aria-describedby="fileHelp">
                 <small id="fileHelp" class="form-text text-muted">Choose a proper profile photo.</small>
             </div>
 
@@ -35,24 +34,26 @@
             </div>
             <div class="form-group">
                 <label>Select Program</label>
-                <select name="sig_id" class="form-control" id="" disabled>
-                    <?php foreach($sigs as $sig): ?>
-                    <option value="<?= $sig['id'] ?>"
-                        <?php if($sig['id'] == $student['sig_id_fk']) {echo 'selected';} ?>>
-                        <?= $sig['signame'] ?>
-                    </option>
+                <select name="sig_id" class="form-control" id="" readonly>
+                    <?php foreach ($sigs as $sig) : ?>
+                        <option value="<?= $sig['id'] ?>" <?php if ($sig['id'] == $student['sig_id']) {
+                                                                echo 'selected';
+                                                            } ?>>
+                            <?= $sig['signame'] ?>
+                        </option>
                     <?php endforeach ?>
                 </select>
             </div>
 
             <div class="form-group">
                 <label>Program</label>
-                <select name="program_code" class="form-control" id="" disabled>
-                    <?php foreach($programs as $program): ?>
-                    <option value="<?= $program['code'] ?>"
-                        <?php if($program['code'] == $student['program_code_fk']) {echo 'selected';} ?>>
-                        <?= $program['name'] ?>
-                    </option>
+                <select name="program_code" class="form-control" id="" readonly>
+                    <?php foreach ($programs as $program) : ?>
+                        <option value="<?= $program['code'] ?>" <?php if ($program['code'] == $student['program_code']) {
+                                                                    echo 'selected';
+                                                                } ?>>
+                            <?= $program['name'] ?>
+                        </option>
                     <?php endforeach ?>
                 </select>
             </div>
@@ -70,12 +71,13 @@
             </div>
             <div class="form-group">
                 <label>Mentor</label>
-                <select name="mentor_matric" class="form-control" id="" disabled>
-                    <?php foreach($mentors as $mentor): ?>
-                    <option value="<?= $mentor['matric']?>"
-                        <?php if($mentor['matric'] == $student['mentor_id_fk']) { echo 'selected';} ?>>
-                        <?= $mentor['name']?>
-                    </option>
+                <select name="mentor_matric" class="form-control" id="" readonly>
+                    <?php foreach ($mentors as $mentor) : ?>
+                        <option value="<?= $mentor['id'] ?>" <?php if ($mentor['id'] == $student['mentor_matric']) {
+                                                                    echo 'selected';
+                                                                } ?>>
+                            <?= $mentor['name'] ?>
+                        </option>
                     <?php endforeach ?>
                 </select>
             </div>

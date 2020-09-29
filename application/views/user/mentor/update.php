@@ -9,8 +9,7 @@
                 <!-- <h3 class="card-header">
                     Header
                 </h3> -->
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;"
-                    src="<?php echo base_url('assets/images/profile/').$mentor['photo_path']; ?>" alt="Card image">
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php echo base_url('assets/images/profile/') . $mentor['profile_image']; ?>" alt="Card image">
                 <!-- <div class="card-body">
 
                 </div> -->
@@ -45,11 +44,12 @@
             <div class="form-group">
                 <label>SIG</label>
                 <select name="sig_id" class="form-control" id="" disabled>
-                    <?php foreach($sigs as $sig): ?>
-                    <option value="<?= $sig['id'] ?>"
-                        <?php if($sig['id'] == $mentor['sig_id_fk']) { echo 'selected'; } ?>>
-                        <?= $sig['signame'] ?>
-                    </option>
+                    <?php foreach ($sigs as $sig) : ?>
+                        <option value="<?= $sig['id'] ?>" <?php if ($sig['id'] == $mentor['sig_id']) {
+                                                                echo 'selected';
+                                                            } ?>>
+                            <?= $sig['signame'] ?>
+                        </option>
                     <?php endforeach ?>
                 </select>
             </div>

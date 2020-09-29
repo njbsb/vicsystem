@@ -1,86 +1,91 @@
 <?php
-    class Activity_model extends CI_Model {
+class Activity_model extends CI_Model
+{
 
-        public function __construct() {
-            $this->load->database();
-        }
-
-        public function get_activity($slug = FALSE, $id = FALSE) {
-            if($slug === FALSE && $id === FALSE) {
-                // this code will get all activities
-                $this->db->select('act.*, acs.session as acadsession, mtr.name as advisorname');
-                $this->db->from('tbl_activity as act');
-                $this->db->join('tbl_academic_session as acs', 'act.acad_session_fk = acs.id', 'left');
-                $this->db->join('tbl_mentor as mtr', 'act.advisor_matric_fk = mtr.matric', 'left');
-                $this->db->order_by('act.id', 'DESC');
-                $query = $this->db->get();
-                
-                // $this->db->order_by('id', 'DESC');
-                // $query = $this->db->get('tbl_activity');
-                return $query->result_array();
-            }
-            else {
-                // this will get specific activity
-                if(!$slug === FALSE) {
-                    $query = $this->db->get_where('tbl_activity', array('slug' => $slug));
-                }
-                else if(!$id === FALSE) {
-                    $query = $this->db->get_where('tbl_activity', array('id' => $id));
-                }
-                else {
-                    // both are not null
-                    $query = $this->db->get_where('tbl_activity', array('id' => $id, 'slug' => $slug));
-                }
-                return $query->row_array();
-            }
-            // this will get specific activity
-            // $query = $this->db->get_where('tbl_activity', array('slug' => $slug));
-            // return $query->row_array();
-        }
-
-        public function create_activity() {
-            $slug = url_title($this->input->post('activityname'));
-            $data = array(
-                'activity_name' => $this->input->post('activityname'),
-                'activity_desc' => $this->input->post('activitydesc'),
-                'acad_session_fk' => $this->input->post('academicsession_id'),
-                'semester_fk' => $this->input->post('semester'),
-                'sig_id_fk' => $this->input->post('sig_id'),
-                'advisor_matric_fk' => $this->input->post('advisor_matric'),
-                'datetime_start' => $this->input->post('datetime_start'),
-                'datetime_end' => $this->input->post('datetime_end'),
-                'slug' => $slug,
-                'photo_path' => $this->input->post('photo_path')
-            );
-
-            return $this->db->insert('tbl_activity', $data);
-        }
-
-        public function delete_activity($id) {
-            $this->db->where('id', $id);
-            $this->db->delete('tbl_activity');
-            return true;
-        }
-
-        public function update_activity() {
-            
-            $slug = url_title($this->input->post('activityname'));
-            $data = array(
-                'activity_name' => $this->input->post('activityname'),
-                'activity_desc' => $this->input->post('activitydesc'),
-                'acad_session_fk' => $this->input->post('academicsession_id'),
-                'semester_fk' => $this->input->post('semester'),
-                'sig_id_fk' => $this->input->post('sig_id'),
-                'advisor_matric_fk' => $this->input->post('advisor_matric'),
-                'datetime_start' => $this->input->post('datetime_start'),
-                'datetime_end' => $this->input->post('datetime_end'),
-                'slug' => $slug,
-                'photo_path' => $this->input->post('photo_path')
-            );
-            $this->db->where('id', $this->input->post('id'));
-            return $this->db->update('tbl_activity', $data);
-        }
-
+    public function __construct()
+    {
+        $this->load->database();
     }
 
-    
+    public function get_activity($slug = FALSE, $id = FALSE)
+    {
+        if ($slug === FALSE && $id === FALSE) {
+            // this code will get all activities
+            $this->db->select('act.*, acs.*, acy.*, sig.*, mtr.name as advisorname')
+                ->from('tbl_activity as act')
+                ->join('tbl_academicsession as acs', 'act.acadsession_id = acs.id', 'left')
+                ->join('tbl_academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
+                ->join('tbl_user as mtr', 'act.advisor_matric = mtr.id', 'left')
+                ->join('tbl_sig as sig', 'act.sig_id = sig.id')
+                ->order_by('act.id', 'DESC');
+            $query = $this->db->get();
+            return $query->result_array();
+        } else {
+            // this will get specific activity
+            if (!$slug === FALSE) {
+                $this->db->select('act.*, mtr.name as advisorname, sig.signame')
+                    ->from('tbl_activity as act')
+                    ->where(array('slug' => $slug))
+                    ->join('tbl_user as mtr', 'mtr.id = act.advisor_matric')
+                    ->join('tbl_sig as sig', 'sig.id = act.sig_id');
+                $query = $this->db->get();
+            } else if (!$id === FALSE) {
+                $this->db->select('act.*, mtr.name as advisorname')
+                    ->from('tbl_activity as act')
+                    ->where(array('id' => $id))
+                    ->join('tbl_user as mtr', 'mtr.id = act.advisor_matric');
+                $query = $this->db->get();
+            } else {
+                // both are not null
+                $this->db->select('act.*, mtr.name as advisorname')
+                    ->from('tbl_activity as act')
+                    ->where(array('id' => $id, 'slug' => $slug))
+                    ->join('tbl_user as mtr', 'mtr.id = act.advisor_matric');
+                $query = $this->db->get();
+            }
+            return $query->row_array();
+        }
+    }
+
+    public function create_activity()
+    {
+        $slug = url_title($this->input->post('activityname'));
+        $data = array(
+            'activity_name' => $this->input->post('activityname'),
+            'activity_desc' => $this->input->post('activitydesc'),
+            'acadsession_id' => $this->input->post('academicsession_id'),
+            'sig_id' => $this->input->post('sig_id'),
+            'advisor_matric' => $this->input->post('advisor_matric'),
+            'datetime_start' => $this->input->post('datetime_start'),
+            'datetime_end' => $this->input->post('datetime_end'),
+            'slug' => $slug,
+            'photo_path' => $this->input->post('photo_path')
+        );
+
+        return $this->db->insert('tbl_activity', $data);
+    }
+
+    public function delete_activity($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('tbl_activity');
+        return true;
+    }
+
+    public function update_activity($id, $activitydata)
+    {
+        $this->db->where('id', $id);
+        return $this->db->update('tbl_activity', $activitydata);
+    }
+
+    public function get_committees($id)
+    {
+        $this->db->select('actcom.*, std.name, role.rolename')
+            ->from('tbl_activity_committee as actcom')
+            ->where('activity_id', $id)
+            ->join('tbl_user as std', 'actcom.student_matric = std.id')
+            ->join('tbl_role as role', 'actcom.role_id = role.id');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+}

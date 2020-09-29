@@ -1,37 +1,37 @@
-<div class="container-fluid text-center">
-    <h2 class="margin"><?php echo $title; ?></h2>
+<h2 class=""><?= $title ?></h2>
 
-
-    <div class="row">
-        <?php foreach($citras as $citra): ?>
-
-        <div class="col-sm-4">
-            <div class="card mb-3">
-
-                <h3 class="card-header">
-                    <?php echo $citra['code']; ?>
-                </h3>
-                <!-- object-fit:cover for square crop or max-width:100%;
-                    border-radius:50%; for circle crop -->
-                <img style="max-height:300px; display: block; object-fit:cover;  padding:10px;"
-                    src="<?php echo base_url('assets/images/citra/'.$citra['code'].'.jpg'); ?>" alt="Card image">
-
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a href="#">
-                            <?php echo $citra['name_bm']; ?>
-                        </a>
-                    </h5>
-                    <h6 class="card-subtitle text-muted"><?php echo $citra['name_en']; ?></h6>
-                </div>
-
-                <div class="card-footer text-muted">
-                    <?php echo $citra['citra_level']; ?>
-                </div>
-            </div>
-        </div>
-
+<table id="scoretable" class="table table-hover" style="text-align:left;">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col" class="Matric">Matric</th>
+            <!-- <th scope="col" class="sort" data-sort="Matric">Matric</th> -->
+            <th scope="col" class="sort" data-sort="Citra">Citra taken</th>
+            <th scope="col" class="sort" data-sort="AcadYear">Academic Year</th>
+            <th scope="col" class="sort" data-sort="Semester">Semester</th>
+            <th scope="col" class="sort" data-sort="Status">Status</th>
+            <th scope="">Details</th>
+        </tr>
+    </thead>
+    <tbody class="list">
+        <?php foreach ($citra_registered as $citreg) : ?>
+            <tr>
+                <td class="Matric"><?= $citreg['student_matric'] ?></td>
+                <td class="Citra"><?= $citreg['citra_code'] ?></td>
+                <td class="AcadYear"><?= $citreg['acadyear'] ?></td>
+                <td class="Semester"><?= $citreg['semester_id'] ?></td>
+                <td class="Status">
+                    <?php // check if  
+                    ?>
+                </td>
+                <td><a class="badge badge-primary" href="<?php echo site_url('/score/addscore'); ?>">Edit score</a></td>
+            </tr>
         <?php endforeach ?>
-    </div>
 
-</div>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#scoretable').DataTable();
+    });
+</script>

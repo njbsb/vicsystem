@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 04, 2020 at 07:09 PM
+-- Generation Time: Sep 29, 2020 at 03:09 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -24,36 +24,67 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_academic_plan`
+-- Table structure for table `tbl_academicplan`
 --
 
-CREATE TABLE `tbl_academic_plan` (
+CREATE TABLE `tbl_academicplan` (
   `student_matric` varchar(8) NOT NULL,
-  `semester_id` int(11) NOT NULL,
-  `session_id` int(11) NOT NULL,
-  `cgpa_target` decimal(3,2) NOT NULL,
-  `cgpa_achieved` decimal(3,2) NOT NULL
+  `acadsession_id` int(11) NOT NULL,
+  `cgpa_target` decimal(3,2) DEFAULT NULL,
+  `cgpa_achieved` decimal(3,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_academicplan`
+--
+
+INSERT INTO `tbl_academicplan` (`student_matric`, `acadsession_id`, `cgpa_target`, `cgpa_achieved`) VALUES
+('A160000', 1, '3.67', '0.00'),
+('A160000', 2, '3.85', '0.00'),
+('A160001', 1, '3.89', '4.00');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_academic_session`
+-- Table structure for table `tbl_academicsession`
 --
 
-CREATE TABLE `tbl_academic_session` (
-  `id` int(2) NOT NULL,
-  `session` varchar(9) NOT NULL
+CREATE TABLE `tbl_academicsession` (
+  `id` int(11) NOT NULL,
+  `acadyear_id` int(11) NOT NULL,
+  `semester_id` int(11) NOT NULL,
+  `status` varchar(255) NOT NULL DEFAULT 'inactive'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `tbl_academic_session`
+-- Dumping data for table `tbl_academicsession`
 --
 
-INSERT INTO `tbl_academic_session` (`id`, `session`) VALUES
-(1, '2016/2017'),
-(2, '2017/2018'),
-(3, '2018/2019');
+INSERT INTO `tbl_academicsession` (`id`, `acadyear_id`, `semester_id`, `status`) VALUES
+(1, 1, 1, 'active'),
+(2, 1, 2, 'active'),
+(3, 1, 3, 'inactive');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_academicyear`
+--
+
+CREATE TABLE `tbl_academicyear` (
+  `id` int(2) NOT NULL,
+  `acadyear` varchar(9) NOT NULL,
+  `status` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_academicyear`
+--
+
+INSERT INTO `tbl_academicyear` (`id`, `acadyear`, `status`) VALUES
+(1, '2016/2017', 'active'),
+(2, '2017/2018', 'inactive'),
+(3, '2018/2019', 'inactive');
 
 -- --------------------------------------------------------
 
@@ -65,15 +96,19 @@ CREATE TABLE `tbl_activity` (
   `id` int(11) NOT NULL,
   `activity_name` varchar(255) NOT NULL,
   `activity_desc` text NOT NULL,
-  `acad_session_fk` int(2) DEFAULT NULL,
-  `semester_fk` int(1) NOT NULL,
-  `sig_id_fk` int(2) DEFAULT NULL,
-  `advisor_matric_fk` varchar(8) DEFAULT NULL,
+  `acadsession_id` int(11) DEFAULT NULL,
+  `sig_id` int(11) DEFAULT NULL,
+  `advisor_matric` varchar(8) DEFAULT NULL,
   `datetime_start` datetime DEFAULT NULL,
   `datetime_end` datetime DEFAULT NULL,
-  `author_matric_fk` varchar(8) DEFAULT NULL,
+  `venue` varchar(255) DEFAULT NULL,
+  `theme` varchar(255) NOT NULL,
+  `actbudget_id` int(11) DEFAULT NULL,
+  `author_matric` varchar(8) DEFAULT NULL,
   `slug` varchar(255) NOT NULL,
   `photo_path` varchar(255) DEFAULT NULL,
+  `paperwork_file` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -81,59 +116,66 @@ CREATE TABLE `tbl_activity` (
 -- Dumping data for table `tbl_activity`
 --
 
-INSERT INTO `tbl_activity` (`id`, `activity_name`, `activity_desc`, `acad_session_fk`, `semester_fk`, `sig_id_fk`, `advisor_matric_fk`, `datetime_start`, `datetime_end`, `author_matric_fk`, `slug`, `photo_path`, `updated_at`) VALUES
-(1, 'VIC Bonding 2016', 'Bonding session with the member of the club at Port Dickson, Negeri Sembilan', 2, 2, 2, 'K0213', '2020-08-01 08:26:28', '2020-08-01 16:26:28', '', 'vic-bonding-2016', NULL, '2020-09-04 08:47:39'),
-(3, 'meeting 1', 'hehe', 3, 3, 4, 'K0213', '2020-09-02 22:45:00', '2020-09-10 22:45:00', NULL, 'meeting-1', '', '2020-09-04 08:47:39'),
-(4, 'Onboarding with HRM', '<p>Invite new intern</p>\r\n', 3, 2, 6, 'K1111', '2020-09-10 00:01:00', '2020-09-19 00:01:00', NULL, 'Onboarding-with-HRM', '', '2020-09-04 08:47:39'),
-(5, 'Meeting 4', '<p>meettttt bersama tunku taufiq</p>\r\n', 1, 2, 10, 'K0213', '2020-09-04 00:17:00', '2020-09-05 00:17:00', NULL, 'Meeting-4', '', '2020-09-04 08:47:39'),
-(6, 'Berita Harian', '<p>PUTRAJAYA: Seramai 48 individu yang ingkar arahan Perintah Kawalan Pergerakan (PKP) ditahan pihak berkuasa, semalam.</p>\r\n\r\n<p>Daripada jumlah itu, Menteri Kanan (Keselamatan), Datuk Seri Ismail Sabri Yaakob, berkata seramai 47 individu dikompaun dan seorang dijamin.</p>\r\n\r\n<p>&quot;Antara kesalahan ingkar arahan PKP termasuk 12 individu yang gagal menyediakan peralatan dan catatan keluar masuk, 17 individu yang tidak memakai pelitup muka, premis beroperasi lebih masa (13), langgar perintah kuarantin (seorang), dan aktiviti membabitkan kehadiran orang ramai yang menyukarkan penjarakan fizikal (lima).</p>\r\n\r\n<p>&quot;Task Force Operasi Pematuhan yang diketuai Polis Diraja Malaysia (PDRM) membuat 58,050 pemeriksaan semalam bagi memantau dan menguat kuasa pematuhan prosedur operasi standard (SOP) Perintah Kawalan Pergerakan Pemulihan (PKPP).</p>\r\n\r\n<p>&quot;Sebanyak 3,059 pasukan pematuhan dengan 13,042 anggota membuat pemantauan di 3,703 pasar raya, 4,955 restoran serta 1,255 penjaja, 1,137 kilang, 3,863 bank dan 1,039 pejabat kerajaan,&quot; katanya dalam kenyataan media, hari ini.</p>\r\n', 2, 3, 9, 'K1111', '2020-09-03 11:37:00', '2020-09-04 11:37:00', NULL, 'Berita-Harian', '', '2020-09-04 08:47:39');
+INSERT INTO `tbl_activity` (`id`, `activity_name`, `activity_desc`, `acadsession_id`, `sig_id`, `advisor_matric`, `datetime_start`, `datetime_end`, `venue`, `theme`, `actbudget_id`, `author_matric`, `slug`, `photo_path`, `paperwork_file`, `created_at`, `updated_at`) VALUES
+(1, 'VIC Bonding 2016', '<p>Bonding session with the member of the club at Port Dickson, Negeri Sembilan</p>\r\n', 1, 1, 'K003', '2020-08-01 08:26:28', '2020-08-01 16:26:28', NULL, '', NULL, NULL, 'VIC-Bonding-2016', '', '', '2020-09-02 07:06:21', '2020-09-04 08:47:39'),
+(3, 'Meeting 1234', '<p>hehe</p>\r\n', 1, 4, 'K003', '2020-09-02 22:45:00', '2020-09-10 22:45:00', '', '', NULL, NULL, 'Meeting-1234', '', '', '2020-09-06 07:05:46', '2020-09-04 08:47:39'),
+(4, 'Onboarding with HRM', '<p>Invite new intern</p>\r\n', 2, 6, 'K001', '2020-09-10 00:01:00', '2020-09-19 00:01:00', NULL, '', NULL, NULL, 'Onboarding-with-HRM', '', '', '2020-09-06 07:05:46', '2020-09-04 08:47:39'),
+(5, 'Meeting 4', '<p>meettttt bersama tunku taufiq</p>\r\n', 1, 10, 'K003', '2020-09-04 00:17:00', '2020-09-05 00:17:00', NULL, '', NULL, NULL, 'Meeting-4', '', '', '2020-09-06 07:05:46', '2020-09-04 08:47:39'),
+(6, 'Lawatan to Media Prima', '<p>This visit to media prima is to enhance our club member on how media production is conducted within the real world</p>\r\n', 1, 1, 'K001', '2020-09-03 11:37:00', '2020-09-04 11:37:00', 'Media Prima', 'Biar orang buat kita, kita buat website', NULL, NULL, 'Lawatan-to-Media-Prima', '', '', '2020-09-06 07:05:46', '2020-09-04 08:47:39'),
+(8, 'Sample Activity', '<p>In a small group, you will create a raft from an 8-inch-by-8-inch piece of aluminum foil and four plastic straws; the goal for the raft is to hold as many pennies as possible. All materials will be provided for you, and you cannot use any outside materials.</p>\r\n', 1, 1, 'K004', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL, '', NULL, NULL, 'Sample-Activity', '', '', '2020-09-06 08:01:39', '2020-09-06 08:01:39');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_activity_comment`
+-- Table structure for table `tbl_activity_budget`
 --
 
-CREATE TABLE `tbl_activity_comment` (
-  `activity_id_fk` int(11) NOT NULL,
-  `student_matric_fk` varchar(8) NOT NULL,
-  `role_id_fk` int(11) NOT NULL,
-  `comment` varchar(255) NOT NULL,
-  `commented_at` timestamp NOT NULL DEFAULT current_timestamp()
+CREATE TABLE `tbl_activity_budget` (
+  `id` int(11) NOT NULL,
+  `activity_id` int(11) NOT NULL,
+  `sponsor_amount` int(11) NOT NULL,
+  `expense_amount` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tbl_activity_comment`
---
-
-INSERT INTO `tbl_activity_comment` (`activity_id_fk`, `student_matric_fk`, `role_id_fk`, `comment`, `commented_at`) VALUES
-(1, 'A160000', 5, 'Best', '2020-09-03 05:39:46'),
-(1, 'A166666', 9, 'HUHUHU', '2020-09-03 05:39:46'),
-(6, 'A166666', 12, '<p>komenkomen</p>\r\n', '2020-09-03 06:37:03'),
-(6, 'A166666', 12, 'try', '2020-09-03 09:24:29'),
-(6, 'A166666', 12, 'try', '2020-09-03 09:24:32'),
-(4, 'A166666', 12, 'test onboarding', '2020-09-03 09:31:45');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_activity_role`
+-- Table structure for table `tbl_activity_committee`
 --
 
-CREATE TABLE `tbl_activity_role` (
-  `activity_id_fk` int(11) DEFAULT NULL,
-  `student_id_fk` varchar(8) DEFAULT NULL,
-  `role_id_fk` int(11) DEFAULT NULL,
-  `role_desc` varchar(50) DEFAULT NULL
+CREATE TABLE `tbl_activity_committee` (
+  `activity_id` int(11) DEFAULT NULL,
+  `student_matric` varchar(8) DEFAULT NULL,
+  `role_id` int(11) DEFAULT NULL,
+  `role_desc` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `tbl_activity_role`
+-- Dumping data for table `tbl_activity_committee`
 --
 
-INSERT INTO `tbl_activity_role` (`activity_id_fk`, `student_id_fk`, `role_id_fk`, `role_desc`) VALUES
+INSERT INTO `tbl_activity_committee` (`activity_id`, `student_matric`, `role_id`, `role_desc`) VALUES
 (1, 'A160000', 11, 'Makanan'),
-(6, 'A166666', 9, NULL);
+(6, NULL, 9, ''),
+(1, 'A160001', 5, '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_admin`
+--
+
+CREATE TABLE `tbl_admin` (
+  `id` varchar(11) NOT NULL,
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_admin`
+--
+
+INSERT INTO `tbl_admin` (`id`, `name`) VALUES
+('admin', 'najibsuib');
 
 -- --------------------------------------------------------
 
@@ -163,16 +205,86 @@ INSERT INTO `tbl_citra` (`code`, `name_bm`, `name_en`, `citra_level`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_citra_student`
+-- Table structure for table `tbl_citra_registration`
 --
 
-CREATE TABLE `tbl_citra_student` (
+CREATE TABLE `tbl_citra_registration` (
   `student_matric` varchar(8) NOT NULL,
-  `session_id` int(11) NOT NULL,
-  `semester_id` int(1) NOT NULL,
+  `acadsession_id` int(11) NOT NULL,
   `citra_code` varchar(8) NOT NULL,
   `grade_id` int(2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_citra_registration`
+--
+
+INSERT INTO `tbl_citra_registration` (`student_matric`, `acadsession_id`, `citra_code`, `grade_id`) VALUES
+('A160000', 1, 'LMCK1331', NULL),
+('A160000', 1, 'LMCK1421', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_collaborator`
+--
+
+CREATE TABLE `tbl_collaborator` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `background` varchar(255) NOT NULL,
+  `activity_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_comment`
+--
+
+CREATE TABLE `tbl_comment` (
+  `activity_id` int(11) NOT NULL,
+  `student_matric` varchar(8) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  `comment` varchar(255) NOT NULL,
+  `commented_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `category_id` int(11) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_comment`
+--
+
+INSERT INTO `tbl_comment` (`activity_id`, `student_matric`, `role_id`, `comment`, `commented_at`, `category_id`) VALUES
+(1, 'A160000', 5, 'Best', '2020-09-03 05:39:46', 1),
+(1, '', 9, 'HUHUHU', '2020-09-03 05:39:46', 1),
+(6, '', 12, '<p>komenkomen</p>\r\n', '2020-09-03 06:37:03', 1),
+(6, '', 12, 'try', '2020-09-03 09:24:29', 1),
+(6, '', 12, 'try', '2020-09-03 09:24:32', 1),
+(4, '', 12, 'test onboarding', '2020-09-03 09:31:45', 1),
+(8, '', 12, 'Sample comment', '2020-09-06 08:02:18', 1),
+(6, '', 12, 'pass', '2020-09-23 08:16:13', 1),
+(6, '', 12, 'helo', '2020-09-23 08:21:15', 1),
+(3, 'A160000', 12, 'No food dowan come', '2020-09-28 16:31:47', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_comment_category`
+--
+
+CREATE TABLE `tbl_comment_category` (
+  `id` int(11) NOT NULL,
+  `category` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_comment_category`
+--
+
+INSERT INTO `tbl_comment_category` (`id`, `category`) VALUES
+(1, 'General'),
+(2, 'Venue');
 
 -- --------------------------------------------------------
 
@@ -206,22 +318,37 @@ INSERT INTO `tbl_grade` (`id`, `grade`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_mark_level`
+-- Table structure for table `tbl_lecturer`
 --
 
-CREATE TABLE `tbl_mark_level` (
-  `level_code` varchar(3) NOT NULL,
-  `mark_percentage` int(11) NOT NULL
+CREATE TABLE `tbl_lecturer` (
+  `matric` varchar(8) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `position` varchar(255) NOT NULL,
+  `room` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_levelscore`
+--
+
+CREATE TABLE `tbl_levelscore` (
+  `id` int(11) NOT NULL,
+  `level` varchar(50) NOT NULL,
+  `percentage` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `tbl_mark_level`
+-- Dumping data for table `tbl_levelscore`
 --
 
-INSERT INTO `tbl_mark_level` (`level_code`, `mark_percentage`) VALUES
-('A1', 15),
-('A2', 15),
-('B', 10);
+INSERT INTO `tbl_levelscore` (`id`, `level`, `percentage`) VALUES
+(1, 'A1', 15),
+(2, 'A2', 15),
+(3, 'B', 10),
+(4, 'COMP', 15);
 
 -- --------------------------------------------------------
 
@@ -231,46 +358,43 @@ INSERT INTO `tbl_mark_level` (`level_code`, `mark_percentage`) VALUES
 
 CREATE TABLE `tbl_mentor` (
   `matric` varchar(8) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
   `position` varchar(60) NOT NULL,
-  `sig_id_fk` int(2) DEFAULT NULL,
-  `org_role_id_fk` int(11) DEFAULT NULL,
-  `photo_path` varchar(255) NOT NULL
+  `roomnum` varchar(50) NOT NULL,
+  `orgrole_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_mentor`
 --
 
-INSERT INTO `tbl_mentor` (`matric`, `name`, `email`, `password`, `position`, `sig_id_fk`, `org_role_id_fk`, `photo_path`) VALUES
-('K0000', 'Test_user_mentor', 'usermentor1@mail.com', 'password', 'Head', 3, 1, 'affendi.jpg'),
-('K0011', 'Dr. Syahanim bt Mohd Salleh', 'syahanim@ukm.edu.my', 'password', 'Programming Language Technology', 1, 2, 'anim.png'),
-('K0213', 'Masura bt Rahmat', 'masura@ukm.edu.my', 'password', 'Teaching Instructor', 1, 1, 'masura.png'),
-('K1111', 'Afendy', 'fendy@mail.com', 'yes', 'Dr', 1, 1, 'affendi.jpg'),
-('K1234', 'Dr. Tengku Meriam bt Tengku Wook', 'tsmeriam@ukm.edu.my', 'password', 'Head of Masters Programme', 1, 2, 'tengku.png');
+INSERT INTO `tbl_mentor` (`matric`, `position`, `roomnum`, `orgrole_id`) VALUES
+('K001', 'Head of CAIT', '', 1),
+('K002', 'Head of Masters Programme', 'E-1-2', 2),
+('K003', 'Teaching Instructor', '', 1),
+('K004', 'Dr Astronomy', '', 1),
+('L001', 'Dr of Mobile App', '', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_organisation_role`
+-- Table structure for table `tbl_org_committee`
 --
 
-CREATE TABLE `tbl_organisation_role` (
-  `sig_id_fk` int(2) DEFAULT NULL,
-  `member_matric_fk` varchar(8) DEFAULT NULL,
-  `acad_session_id_fk` int(2) DEFAULT NULL,
-  `role_id_fk` int(11) DEFAULT NULL,
+CREATE TABLE `tbl_org_committee` (
+  `sig_id` int(2) DEFAULT NULL,
+  `student_matric` varchar(8) DEFAULT NULL,
+  `acadyear_id` int(2) DEFAULT NULL,
+  `role_id` int(11) DEFAULT NULL,
   `role_desc` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `tbl_organisation_role`
+-- Dumping data for table `tbl_org_committee`
 --
 
-INSERT INTO `tbl_organisation_role` (`sig_id_fk`, `member_matric_fk`, `acad_session_id_fk`, `role_id_fk`, `role_desc`) VALUES
-(1, 'A160000', 1, 3, '');
+INSERT INTO `tbl_org_committee` (`sig_id`, `student_matric`, `acadyear_id`, `role_id`, `role_desc`) VALUES
+(1, 'A160000', 1, 3, ''),
+(1, 'A160001', 1, 3, '');
 
 -- --------------------------------------------------------
 
@@ -301,14 +425,14 @@ INSERT INTO `tbl_program` (`code`, `name`) VALUES
 
 CREATE TABLE `tbl_role` (
   `id` int(11) NOT NULL,
-  `role_name` varchar(50) NOT NULL
+  `rolename` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_role`
 --
 
-INSERT INTO `tbl_role` (`id`, `role_name`) VALUES
+INSERT INTO `tbl_role` (`id`, `rolename`) VALUES
 (1, 'Club Manager'),
 (2, 'Club Advisor'),
 (3, 'President'),
@@ -321,6 +445,129 @@ INSERT INTO `tbl_role` (`id`, `role_name`) VALUES
 (10, 'Assistant Secretary'),
 (11, 'Committee Member (AJK)'),
 (12, 'Member');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_scattendance`
+--
+
+CREATE TABLE `tbl_scattendance` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `score` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_scattendance`
+--
+
+INSERT INTO `tbl_scattendance` (`id`, `name`, `score`) VALUES
+(1, 'Present', 5),
+(2, 'Absent - MC', 1),
+(3, 'Total Absent', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_scinvolvement`
+--
+
+CREATE TABLE `tbl_scinvolvement` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `score` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_scinvolvement`
+--
+
+INSERT INTO `tbl_scinvolvement` (`id`, `name`, `score`) VALUES
+(1, 'Fully Active', 7),
+(2, 'Moderately Active', 5),
+(3, 'Less Active', 3),
+(4, 'Not Active', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_scmeeting`
+--
+
+CREATE TABLE `tbl_scmeeting` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `score` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_scmeeting`
+--
+
+INSERT INTO `tbl_scmeeting` (`id`, `name`, `score`) VALUES
+(1, 'Full', 3),
+(2, 'Partially full', 2),
+(3, 'Seldom', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_scorecomp`
+--
+
+CREATE TABLE `tbl_scorecomp` (
+  `id` int(11) NOT NULL,
+  `acadsession_id` int(11) NOT NULL,
+  `student_matric` varchar(8) NOT NULL,
+  `marker_matric` varchar(8) NOT NULL,
+  `levelscore_id` int(11) NOT NULL,
+  `sc_digitalcv` int(11) NOT NULL,
+  `sc_leadership` int(11) NOT NULL,
+  `sc_volunteer` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_scorelevel`
+--
+
+CREATE TABLE `tbl_scorelevel` (
+  `id` int(11) NOT NULL,
+  `acadsession_id` int(11) NOT NULL,
+  `student_matric` varchar(8) NOT NULL,
+  `marker_matric` varchar(8) NOT NULL,
+  `activity_id` int(11) NOT NULL,
+  `levelscore_id` int(11) NOT NULL,
+  `sc_position` int(11) NOT NULL,
+  `sc_meeting` int(11) NOT NULL,
+  `sc_attendance` int(11) NOT NULL,
+  `sc_involvement` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_scposition`
+--
+
+CREATE TABLE `tbl_scposition` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `score` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_scposition`
+--
+
+INSERT INTO `tbl_scposition` (`id`, `name`, `score`) VALUES
+(1, 'Project Director', 5),
+(2, 'Deputy Project Director', 4),
+(3, 'Secretary', 3),
+(4, 'Treasurer', 3),
+(5, 'Others', 2);
 
 -- --------------------------------------------------------
 
@@ -351,26 +598,28 @@ INSERT INTO `tbl_semester` (`id`, `semester`) VALUES
 CREATE TABLE `tbl_sig` (
   `id` int(2) NOT NULL,
   `code` varchar(6) NOT NULL,
-  `signame` varchar(100) NOT NULL
+  `signame` varchar(100) NOT NULL,
+  `logo_path` varchar(255) NOT NULL DEFAULT 'default_logo.png',
+  `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_sig`
 --
 
-INSERT INTO `tbl_sig` (`id`, `code`, `signame`) VALUES
-(1, 'VIC', 'Video Innovation Club'),
-(2, 'CE', 'Cyber Ethics'),
-(3, 'IC', 'Imagine Cup'),
-(4, 'IMC', 'Intelligence Machines Club'),
-(5, 'IMEC', 'Interactive Multimedia Club'),
-(6, 'PCC', 'Programming Challenge Club'),
-(7, 'LI', 'Lensa Informatics'),
-(8, 'MAD', 'Mobile Application Development Club'),
-(9, 'NUMOSS', 'National University of Malaysia Open Source Society'),
-(10, 'RC', 'Robotics Club'),
-(11, 'ARVIS', 'Autonomous Robot and Vision Systems Lab'),
-(12, 'IBC', 'i-BISNES Club');
+INSERT INTO `tbl_sig` (`id`, `code`, `signame`, `logo_path`, `description`) VALUES
+(1, 'VIC', 'Video Innovation Club', 'default_logo.png', ''),
+(2, 'CE', 'Cyber Ethics', 'default_logo.png', ''),
+(3, 'IC', 'Imagine Cup', 'default_logo.png', ''),
+(4, 'IMC', 'Intelligence Machines Club', 'default_logo.png', ''),
+(5, 'IMEC', 'Interactive Multimedia Club', 'default_logo.png', ''),
+(6, 'PCC', 'Programming Challenge Club', 'default_logo.png', ''),
+(7, 'LI', 'Lensa Informatics', 'default_logo.png', ''),
+(8, 'MAD', 'Mobile Application Development Club', 'default_logo.png', ''),
+(9, 'NUMOSS', 'National University of Malaysia Open Source Society', 'default_logo.png', ''),
+(10, 'RC', 'Robotics Club', 'default_logo.png', ''),
+(11, 'ARVIS', 'Autonomous Robot and Vision Systems Lab', 'default_logo.png', ''),
+(12, 'IBC', 'i-BISNES Club', 'default_logo.png', '');
 
 -- --------------------------------------------------------
 
@@ -380,25 +629,20 @@ INSERT INTO `tbl_sig` (`id`, `code`, `signame`) VALUES
 
 CREATE TABLE `tbl_student` (
   `matric` varchar(8) NOT NULL,
-  `name` varchar(50) NOT NULL,
   `phonenum` varchar(12) NOT NULL,
-  `email` varchar(30) NOT NULL,
-  `password` varchar(30) DEFAULT NULL,
-  `program_code_fk` varchar(4) DEFAULT NULL,
-  `sig_id_fk` int(2) DEFAULT NULL,
-  `mentor_id_fk` varchar(8) DEFAULT NULL,
-  `photo_path` varchar(30) NOT NULL
+  `program_code` varchar(4) DEFAULT NULL,
+  `joined_sig` year(4) DEFAULT NULL,
+  `mentor_matric` varchar(8) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_student`
 --
 
-INSERT INTO `tbl_student` (`matric`, `name`, `phonenum`, `email`, `password`, `program_code_fk`, `sig_id_fk`, `mentor_id_fk`, `photo_path`) VALUES
-('A000000', 'User_student', '0130030003', 'user_student@mail.com', 'password', 'CS', 1, 'K0011', 'affendi.jpg'),
-('A160000', 'Amin Ariff', '0123456789', 'a1600000@siswa.ukm.edu.my', 'password', 'SEMM', 1, 'K1234', ''),
-('A160001', 'Khairul Anuar', '0123334444', 'a160001@siswa.ukm.edu.my', 'password', 'SEMM', 1, 'K0213', ''),
-('A166666', 'Yin', '0112223333', 'yin@ukm.my', 'password', 'CS', 1, 'K0011', 'facebook.png');
+INSERT INTO `tbl_student` (`matric`, `phonenum`, `program_code`, `joined_sig`, `mentor_matric`) VALUES
+('A123', '0011', 'SEIS', NULL, NULL),
+('A160000', '0123456789', 'SEMM', NULL, 'K004'),
+('A160001', '0123334444', 'IT', NULL, 'K003');
 
 -- --------------------------------------------------------
 
@@ -407,20 +651,53 @@ INSERT INTO `tbl_student` (`matric`, `name`, `phonenum`, `email`, `password`, `p
 --
 
 CREATE TABLE `tbl_user` (
-  `user_matric` varchar(8) NOT NULL,
+  `id` varchar(8) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `usertype_id` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `sig_id` int(11) DEFAULT NULL,
+  `profile_image` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `userstatus_id` int(11) DEFAULT NULL,
+  `dob` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_user`
 --
 
-INSERT INTO `tbl_user` (`user_matric`, `password`, `usertype_id`, `created_at`) VALUES
-('A000000', 'password', 3, '2020-09-04 08:14:26'),
-('A160000', 'password', 3, '2020-09-04 08:14:26'),
-('K0000', 'password', 2, '2020-09-04 08:17:25');
+INSERT INTO `tbl_user` (`id`, `name`, `email`, `password`, `usertype_id`, `sig_id`, `profile_image`, `created_at`, `userstatus_id`, `dob`) VALUES
+('A160000', 'Khairul Anu AR', 'a160000@siswa.my', 'password', 3, 1, '', '2020-09-04 08:14:26', 2, NULL),
+('A160001', 'Farhan Kamal', 'A160001@mail.com', '5f4dcc3b5aa765d61d8327deb882cf99', 3, 1, '', '2020-09-26 10:42:51', 2, '1992-06-06'),
+('A160002', 'A160002', 'A160002@mail.com', '5f4dcc3b5aa765d61d8327deb882cf99', 3, 1, '', '2020-09-26 11:03:24', 1, NULL),
+('A160003', 'A160003', 'A160003@mail.com', '5f4dcc3b5aa765d61d8327deb882cf99', 3, 1, '', '2020-09-26 11:05:18', 1, NULL),
+('admin', 'Admin1', 'admin@gmail.com', 'admin123', 1, NULL, '', '2020-09-07 07:39:53', 2, NULL),
+('K001', 'Dr Syahanim bt', 'K001@ukm.my', '5f4dcc3b5aa765d61d8327deb882cf99', 2, 1, 'anim.png', '2020-09-26 11:06:40', 2, NULL),
+('K002', 'Assoc Prof. Dr. Tengku Meriam', 'tsmeriam@ukm.edu.my', 'password', 2, 1, 'tengku.png', '2020-09-26 19:15:31', 2, NULL),
+('K003', 'Masura bt Rahmat', 'masura@ukm.edu.my', 'password', 2, 1, 'masura.png', '2020-09-26 19:14:23', 2, NULL),
+('K004', 'Dr AffenD', 'k004@mail.com', '5f4dcc3b5aa765d61d8327deb882cf99', 2, 1, '', '2020-09-27 05:17:13', 2, '1996-05-05'),
+('L001', 'Extra VIC Mentor', 'mrloo1@mail.com', '5f4dcc3b5aa765d61d8327deb882cf99', 2, 1, '', '2020-09-26 20:38:24', 2, '1990-12-05');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_userstatus`
+--
+
+CREATE TABLE `tbl_userstatus` (
+  `id` int(11) NOT NULL,
+  `userstatus` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_userstatus`
+--
+
+INSERT INTO `tbl_userstatus` (`id`, `userstatus`) VALUES
+(1, 'pending'),
+(2, 'active'),
+(3, 'inactive');
 
 -- --------------------------------------------------------
 
@@ -447,17 +724,24 @@ INSERT INTO `tbl_usertype` (`id`, `usertype`) VALUES
 --
 
 --
--- Indexes for table `tbl_academic_plan`
+-- Indexes for table `tbl_academicplan`
 --
-ALTER TABLE `tbl_academic_plan`
-  ADD KEY `student_matric` (`student_matric`),
-  ADD KEY `session_id` (`session_id`),
+ALTER TABLE `tbl_academicplan`
+  ADD KEY `tbl_academicplan_ibfk_1` (`student_matric`),
+  ADD KEY `acadsession_id` (`acadsession_id`);
+
+--
+-- Indexes for table `tbl_academicsession`
+--
+ALTER TABLE `tbl_academicsession`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `acadyear_id` (`acadyear_id`),
   ADD KEY `semester_id` (`semester_id`);
 
 --
--- Indexes for table `tbl_academic_session`
+-- Indexes for table `tbl_academicyear`
 --
-ALTER TABLE `tbl_academic_session`
+ALTER TABLE `tbl_academicyear`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -465,26 +749,30 @@ ALTER TABLE `tbl_academic_session`
 --
 ALTER TABLE `tbl_activity`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `acad_session_fk` (`acad_session_fk`),
-  ADD KEY `advisor_mentor_fk` (`advisor_matric_fk`),
-  ADD KEY `sig_id_fk` (`sig_id_fk`),
-  ADD KEY `semester_fk` (`semester_fk`);
+  ADD KEY `sig_id` (`sig_id`),
+  ADD KEY `acadsession_id` (`acadsession_id`),
+  ADD KEY `author_matric` (`author_matric`),
+  ADD KEY `advisor_matric` (`advisor_matric`);
 
 --
--- Indexes for table `tbl_activity_comment`
+-- Indexes for table `tbl_activity_budget`
 --
-ALTER TABLE `tbl_activity_comment`
-  ADD KEY `activity_id_fk` (`activity_id_fk`),
-  ADD KEY `student_matric_fk` (`student_matric_fk`),
-  ADD KEY `role_id_fk` (`role_id_fk`);
+ALTER TABLE `tbl_activity_budget`
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `tbl_activity_role`
+-- Indexes for table `tbl_activity_committee`
 --
-ALTER TABLE `tbl_activity_role`
-  ADD KEY `activity_id_fk` (`activity_id_fk`),
-  ADD KEY `student_id_fk` (`student_id_fk`),
-  ADD KEY `role_id_fk` (`role_id_fk`);
+ALTER TABLE `tbl_activity_committee`
+  ADD KEY `tbl_activity_committee_ibfk_1` (`activity_id`),
+  ADD KEY `student_matric` (`student_matric`),
+  ADD KEY `role_id` (`role_id`);
+
+--
+-- Indexes for table `tbl_admin`
+--
+ALTER TABLE `tbl_admin`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_citra`
@@ -493,14 +781,34 @@ ALTER TABLE `tbl_citra`
   ADD PRIMARY KEY (`code`);
 
 --
--- Indexes for table `tbl_citra_student`
+-- Indexes for table `tbl_citra_registration`
 --
-ALTER TABLE `tbl_citra_student`
+ALTER TABLE `tbl_citra_registration`
   ADD KEY `student_matric` (`student_matric`),
   ADD KEY `citra_code` (`citra_code`),
   ADD KEY `grade_id` (`grade_id`),
-  ADD KEY `session_id` (`session_id`),
-  ADD KEY `semester_id` (`semester_id`);
+  ADD KEY `tbl_citra_registration_ibfk_7` (`acadsession_id`);
+
+--
+-- Indexes for table `tbl_collaborator`
+--
+ALTER TABLE `tbl_collaborator`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_comment`
+--
+ALTER TABLE `tbl_comment`
+  ADD KEY `activity_id` (`activity_id`),
+  ADD KEY `role_id` (`role_id`),
+  ADD KEY `category_id` (`category_id`),
+  ADD KEY `tbl_comment_ibfk_2` (`student_matric`);
+
+--
+-- Indexes for table `tbl_comment_category`
+--
+ALTER TABLE `tbl_comment_category`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_grade`
@@ -509,27 +817,32 @@ ALTER TABLE `tbl_grade`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `tbl_mark_level`
+-- Indexes for table `tbl_lecturer`
 --
-ALTER TABLE `tbl_mark_level`
-  ADD PRIMARY KEY (`level_code`);
+ALTER TABLE `tbl_lecturer`
+  ADD PRIMARY KEY (`matric`);
+
+--
+-- Indexes for table `tbl_levelscore`
+--
+ALTER TABLE `tbl_levelscore`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_mentor`
 --
 ALTER TABLE `tbl_mentor`
   ADD PRIMARY KEY (`matric`),
-  ADD KEY `org_role_id_fk` (`org_role_id_fk`),
-  ADD KEY `sig_id_fk` (`sig_id_fk`);
+  ADD KEY `orgrole_id` (`orgrole_id`);
 
 --
--- Indexes for table `tbl_organisation_role`
+-- Indexes for table `tbl_org_committee`
 --
-ALTER TABLE `tbl_organisation_role`
-  ADD KEY `acad_session_id_fk` (`acad_session_id_fk`),
-  ADD KEY `member_matric_fk` (`member_matric_fk`),
-  ADD KEY `sig_id_fk` (`sig_id_fk`),
-  ADD KEY `role_id_fk` (`role_id_fk`);
+ALTER TABLE `tbl_org_committee`
+  ADD KEY `sig_id` (`sig_id`),
+  ADD KEY `student_matric` (`student_matric`),
+  ADD KEY `acadyear_id` (`acadyear_id`),
+  ADD KEY `role_id` (`role_id`);
 
 --
 -- Indexes for table `tbl_program`
@@ -541,6 +854,51 @@ ALTER TABLE `tbl_program`
 -- Indexes for table `tbl_role`
 --
 ALTER TABLE `tbl_role`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_scattendance`
+--
+ALTER TABLE `tbl_scattendance`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_scinvolvement`
+--
+ALTER TABLE `tbl_scinvolvement`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_scmeeting`
+--
+ALTER TABLE `tbl_scmeeting`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_scorecomp`
+--
+ALTER TABLE `tbl_scorecomp`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `levelscore_id` (`levelscore_id`),
+  ADD KEY `student_matric` (`student_matric`),
+  ADD KEY `marker_matric` (`marker_matric`),
+  ADD KEY `tbl_scorecomp_ibfk_1` (`acadsession_id`);
+
+--
+-- Indexes for table `tbl_scorelevel`
+--
+ALTER TABLE `tbl_scorelevel`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `activity_id` (`activity_id`),
+  ADD KEY `student_matric` (`student_matric`),
+  ADD KEY `marker_matric` (`marker_matric`),
+  ADD KEY `levelscore_id` (`levelscore_id`),
+  ADD KEY `tbl_scorelevel_ibfk_1` (`acadsession_id`);
+
+--
+-- Indexes for table `tbl_scposition`
+--
+ALTER TABLE `tbl_scposition`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -560,16 +918,23 @@ ALTER TABLE `tbl_sig`
 --
 ALTER TABLE `tbl_student`
   ADD PRIMARY KEY (`matric`),
-  ADD KEY `mentor_id_fk` (`mentor_id_fk`),
-  ADD KEY `program_code_fk` (`program_code_fk`),
-  ADD KEY `sig_id_fk` (`sig_id_fk`);
+  ADD KEY `program_code` (`program_code`),
+  ADD KEY `mentor_matric` (`mentor_matric`);
 
 --
 -- Indexes for table `tbl_user`
 --
 ALTER TABLE `tbl_user`
-  ADD PRIMARY KEY (`user_matric`),
-  ADD KEY `usertype_id` (`usertype_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `usertype_id` (`usertype_id`),
+  ADD KEY `userstatus_id` (`userstatus_id`),
+  ADD KEY `sig_id` (`sig_id`);
+
+--
+-- Indexes for table `tbl_userstatus`
+--
+ALTER TABLE `tbl_userstatus`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_usertype`
@@ -582,16 +947,40 @@ ALTER TABLE `tbl_usertype`
 --
 
 --
--- AUTO_INCREMENT for table `tbl_academic_session`
+-- AUTO_INCREMENT for table `tbl_academicsession`
 --
-ALTER TABLE `tbl_academic_session`
+ALTER TABLE `tbl_academicsession`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `tbl_academicyear`
+--
+ALTER TABLE `tbl_academicyear`
   MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tbl_activity`
 --
 ALTER TABLE `tbl_activity`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `tbl_activity_budget`
+--
+ALTER TABLE `tbl_activity_budget`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tbl_collaborator`
+--
+ALTER TABLE `tbl_collaborator`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tbl_comment_category`
+--
+ALTER TABLE `tbl_comment_category`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tbl_grade`
@@ -600,10 +989,52 @@ ALTER TABLE `tbl_grade`
   MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
+-- AUTO_INCREMENT for table `tbl_levelscore`
+--
+ALTER TABLE `tbl_levelscore`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `tbl_role`
 --
 ALTER TABLE `tbl_role`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `tbl_scattendance`
+--
+ALTER TABLE `tbl_scattendance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `tbl_scinvolvement`
+--
+ALTER TABLE `tbl_scinvolvement`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `tbl_scmeeting`
+--
+ALTER TABLE `tbl_scmeeting`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `tbl_scorecomp`
+--
+ALTER TABLE `tbl_scorecomp`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tbl_scorelevel`
+--
+ALTER TABLE `tbl_scorelevel`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tbl_scposition`
+--
+ALTER TABLE `tbl_scposition`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbl_semester`
@@ -618,6 +1049,12 @@ ALTER TABLE `tbl_sig`
   MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
+-- AUTO_INCREMENT for table `tbl_userstatus`
+--
+ALTER TABLE `tbl_userstatus`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `tbl_usertype`
 --
 ALTER TABLE `tbl_usertype`
@@ -628,77 +1065,103 @@ ALTER TABLE `tbl_usertype`
 --
 
 --
--- Constraints for table `tbl_academic_plan`
+-- Constraints for table `tbl_academicplan`
 --
-ALTER TABLE `tbl_academic_plan`
-  ADD CONSTRAINT `tbl_academic_plan_ibfk_1` FOREIGN KEY (`student_matric`) REFERENCES `tbl_student` (`matric`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_academic_plan_ibfk_2` FOREIGN KEY (`session_id`) REFERENCES `tbl_academic_session` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_academic_plan_ibfk_3` FOREIGN KEY (`semester_id`) REFERENCES `tbl_semester` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `tbl_academicplan`
+  ADD CONSTRAINT `tbl_academicplan_ibfk_1` FOREIGN KEY (`student_matric`) REFERENCES `tbl_student` (`matric`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_academicplan_ibfk_2` FOREIGN KEY (`acadsession_id`) REFERENCES `tbl_academicsession` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `tbl_academicsession`
+--
+ALTER TABLE `tbl_academicsession`
+  ADD CONSTRAINT `tbl_academicsession_ibfk_1` FOREIGN KEY (`acadyear_id`) REFERENCES `tbl_academicyear` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_academicsession_ibfk_2` FOREIGN KEY (`semester_id`) REFERENCES `tbl_semester` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tbl_activity`
 --
 ALTER TABLE `tbl_activity`
-  ADD CONSTRAINT `tbl_activity_ibfk_1` FOREIGN KEY (`acad_session_fk`) REFERENCES `tbl_academic_session` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_activity_ibfk_2` FOREIGN KEY (`advisor_matric_fk`) REFERENCES `tbl_mentor` (`matric`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_activity_ibfk_3` FOREIGN KEY (`sig_id_fk`) REFERENCES `tbl_sig` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_activity_ibfk_4` FOREIGN KEY (`semester_fk`) REFERENCES `tbl_semester` (`id`);
+  ADD CONSTRAINT `tbl_activity_ibfk_1` FOREIGN KEY (`sig_id`) REFERENCES `tbl_sig` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_activity_ibfk_2` FOREIGN KEY (`acadsession_id`) REFERENCES `tbl_academicsession` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_activity_ibfk_3` FOREIGN KEY (`author_matric`) REFERENCES `tbl_student` (`matric`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_activity_ibfk_4` FOREIGN KEY (`advisor_matric`) REFERENCES `tbl_mentor` (`matric`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Constraints for table `tbl_activity_comment`
+-- Constraints for table `tbl_activity_committee`
 --
-ALTER TABLE `tbl_activity_comment`
-  ADD CONSTRAINT `tbl_activity_comment_ibfk_1` FOREIGN KEY (`activity_id_fk`) REFERENCES `tbl_activity` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_activity_comment_ibfk_2` FOREIGN KEY (`student_matric_fk`) REFERENCES `tbl_student` (`matric`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_activity_comment_ibfk_3` FOREIGN KEY (`role_id_fk`) REFERENCES `tbl_role` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `tbl_activity_committee`
+  ADD CONSTRAINT `tbl_activity_committee_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `tbl_activity` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_activity_committee_ibfk_2` FOREIGN KEY (`student_matric`) REFERENCES `tbl_student` (`matric`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_activity_committee_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `tbl_role` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Constraints for table `tbl_activity_role`
+-- Constraints for table `tbl_citra_registration`
 --
-ALTER TABLE `tbl_activity_role`
-  ADD CONSTRAINT `tbl_activity_role_ibfk_1` FOREIGN KEY (`activity_id_fk`) REFERENCES `tbl_activity` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_activity_role_ibfk_2` FOREIGN KEY (`student_id_fk`) REFERENCES `tbl_student` (`matric`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_activity_role_ibfk_3` FOREIGN KEY (`role_id_fk`) REFERENCES `tbl_role` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `tbl_citra_registration`
+  ADD CONSTRAINT `tbl_citra_registration_ibfk_1` FOREIGN KEY (`student_matric`) REFERENCES `tbl_student` (`matric`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_citra_registration_ibfk_3` FOREIGN KEY (`citra_code`) REFERENCES `tbl_citra` (`code`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_citra_registration_ibfk_4` FOREIGN KEY (`grade_id`) REFERENCES `tbl_grade` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_citra_registration_ibfk_7` FOREIGN KEY (`acadsession_id`) REFERENCES `tbl_academicsession` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Constraints for table `tbl_citra_student`
+-- Constraints for table `tbl_comment`
 --
-ALTER TABLE `tbl_citra_student`
-  ADD CONSTRAINT `tbl_citra_student_ibfk_1` FOREIGN KEY (`student_matric`) REFERENCES `tbl_student` (`matric`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_citra_student_ibfk_3` FOREIGN KEY (`citra_code`) REFERENCES `tbl_citra` (`code`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_citra_student_ibfk_4` FOREIGN KEY (`grade_id`) REFERENCES `tbl_grade` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_citra_student_ibfk_5` FOREIGN KEY (`session_id`) REFERENCES `tbl_academic_session` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_citra_student_ibfk_6` FOREIGN KEY (`semester_id`) REFERENCES `tbl_semester` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `tbl_comment`
+  ADD CONSTRAINT `tbl_comment_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `tbl_activity` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_comment_ibfk_2` FOREIGN KEY (`student_matric`) REFERENCES `tbl_student` (`matric`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_comment_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `tbl_role` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_comment_ibfk_4` FOREIGN KEY (`category_id`) REFERENCES `tbl_comment_category` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tbl_mentor`
 --
 ALTER TABLE `tbl_mentor`
-  ADD CONSTRAINT `tbl_mentor_ibfk_2` FOREIGN KEY (`org_role_id_fk`) REFERENCES `tbl_role` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_mentor_ibfk_3` FOREIGN KEY (`sig_id_fk`) REFERENCES `tbl_sig` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `tbl_mentor_ibfk_2` FOREIGN KEY (`orgrole_id`) REFERENCES `tbl_role` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_mentor_ibfk_3` FOREIGN KEY (`matric`) REFERENCES `tbl_user` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Constraints for table `tbl_organisation_role`
+-- Constraints for table `tbl_org_committee`
 --
-ALTER TABLE `tbl_organisation_role`
-  ADD CONSTRAINT `tbl_organisation_role_ibfk_1` FOREIGN KEY (`acad_session_id_fk`) REFERENCES `tbl_academic_session` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_organisation_role_ibfk_2` FOREIGN KEY (`member_matric_fk`) REFERENCES `tbl_student` (`matric`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_organisation_role_ibfk_3` FOREIGN KEY (`sig_id_fk`) REFERENCES `tbl_sig` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_organisation_role_ibfk_4` FOREIGN KEY (`role_id_fk`) REFERENCES `tbl_role` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `tbl_org_committee`
+  ADD CONSTRAINT `tbl_org_committee_ibfk_1` FOREIGN KEY (`sig_id`) REFERENCES `tbl_sig` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_org_committee_ibfk_2` FOREIGN KEY (`student_matric`) REFERENCES `tbl_student` (`matric`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_org_committee_ibfk_3` FOREIGN KEY (`acadyear_id`) REFERENCES `tbl_academicyear` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_org_committee_ibfk_4` FOREIGN KEY (`role_id`) REFERENCES `tbl_role` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `tbl_scorecomp`
+--
+ALTER TABLE `tbl_scorecomp`
+  ADD CONSTRAINT `tbl_scorecomp_ibfk_1` FOREIGN KEY (`acadsession_id`) REFERENCES `tbl_academicsession` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_scorecomp_ibfk_2` FOREIGN KEY (`levelscore_id`) REFERENCES `tbl_levelscore` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_scorecomp_ibfk_4` FOREIGN KEY (`student_matric`) REFERENCES `tbl_student` (`matric`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_scorecomp_ibfk_5` FOREIGN KEY (`marker_matric`) REFERENCES `tbl_mentor` (`matric`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `tbl_scorelevel`
+--
+ALTER TABLE `tbl_scorelevel`
+  ADD CONSTRAINT `tbl_scorelevel_ibfk_1` FOREIGN KEY (`acadsession_id`) REFERENCES `tbl_academicsession` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_scorelevel_ibfk_3` FOREIGN KEY (`activity_id`) REFERENCES `tbl_activity` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_scorelevel_ibfk_4` FOREIGN KEY (`student_matric`) REFERENCES `tbl_student` (`matric`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_scorelevel_ibfk_5` FOREIGN KEY (`marker_matric`) REFERENCES `tbl_mentor` (`matric`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_scorelevel_ibfk_6` FOREIGN KEY (`levelscore_id`) REFERENCES `tbl_levelscore` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tbl_student`
 --
 ALTER TABLE `tbl_student`
-  ADD CONSTRAINT `tbl_student_ibfk_1` FOREIGN KEY (`mentor_id_fk`) REFERENCES `tbl_mentor` (`matric`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_student_ibfk_2` FOREIGN KEY (`program_code_fk`) REFERENCES `tbl_program` (`code`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_student_ibfk_3` FOREIGN KEY (`sig_id_fk`) REFERENCES `tbl_sig` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `tbl_student_ibfk_1` FOREIGN KEY (`program_code`) REFERENCES `tbl_program` (`code`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_student_ibfk_3` FOREIGN KEY (`mentor_matric`) REFERENCES `tbl_mentor` (`matric`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tbl_user`
 --
 ALTER TABLE `tbl_user`
-  ADD CONSTRAINT `tbl_user_ibfk_1` FOREIGN KEY (`usertype_id`) REFERENCES `tbl_usertype` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `tbl_user_ibfk_1` FOREIGN KEY (`usertype_id`) REFERENCES `tbl_usertype` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_user_ibfk_2` FOREIGN KEY (`userstatus_id`) REFERENCES `tbl_userstatus` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_user_ibfk_3` FOREIGN KEY (`sig_id`) REFERENCES `tbl_sig` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

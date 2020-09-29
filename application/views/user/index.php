@@ -1,40 +1,33 @@
 <h4><?= $title ?></h4>
 
 <div>
-    <table id="usertable" class="table">
+    <table id="usertable" class="table table-hover">
         <thead class="table-dark">
             <tr>
                 <td>ID</td>
                 <td>Name</td>
-                <td>Usertype</td>
-                <td>Action</td>
+                <td>User type</td>
+                <td>Status</td>
+                <td></td>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($users as $user) : ?>
                 <tr>
                     <td><?= $user['id'] ?></td>
-                    <td><?php
-                        if ($user['mtrname']) {
-                            echo $user['mtrname'];
-                        } elseif ($user['stdname']) {
-                            echo $user['stdname'];
-                        } else {
-                            echo $user['admname'];
-                        } ?></td>
+                    <td><?= $user['name'] ?></td>
                     <td><?= $user['usertype'] ?></td>
+                    <?php if ($user['userstatus'] == 'pending') : ?>
+                        <td><span class="badge badge-warning"><?= $user['userstatus'] ?></span></td>
+                    <?php elseif ($user['userstatus'] == 'active') : ?>
+                        <td><span class="badge badge-success"><?= $user['userstatus'] ?></span></td>
+                    <?php else : ?>
+                        <td><span class="badge badge-light"><?= $user['userstatus'] ?></span></td>
+                    <?php endif ?>
+
                     <td>
-                        <a class="btn btn-primary btn-sm" data-toggle="modal" data-userid="<?= $user['id'] ?>" onclick="$('#confirmDelete #formDelete').attr('action', '<?= site_url('user/delete/' . $user['id']) ?>')" href="#confirmDelete">
-                            Delete
-                        </a>
-                        <!-- <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#confirmDelete">
-                            Delete
-                        </button> -->
-                        <!-- <?php // echo form_open('/user/delete/' . $user['id']); 
-                                ?>
-                        <input type="submit" value="Delete" class="btn btn-primary" data-toggle="modal" data-target=" #confirmDelete">
-                        <?php // echo form_close(); 
-                        ?> -->
+                        <a class="badge badge-info" href="<?= site_url('validate/') . $user['id'] ?>">Review</a>
+                        <a class="badge badge-danger" data-toggle="modal" data-userid="<?= $user['id'] ?>" onclick="$('#confirmDelete #formDelete').attr('action', '<?= site_url('user/delete/' . $user['id']) ?>')" href="#confirmDelete">Delete</a>
                     </td>
                 </tr>
             <?php endforeach ?>
@@ -53,7 +46,6 @@
             </div>
             <div class="modal-body">
                 <p id="confirmtext">Are you sure to delete this user?</p>
-                <!-- <p id="confirmtext"></p> -->
             </div>
             <div class="modal-footer">
                 <form id="formDelete" action="" method="post">
@@ -77,7 +69,6 @@
         confirmtext.innerHTML += ' <b>(' + userid + ')</b>';
     });
     $('#confirmDelete').on('hide.bs.modal', function(e) {
-        // var confirmtext = document.getElementById('confirmtext');
         confirmtext.innerHTML = 'Are you sure to delete this user?';
     });
 </script>

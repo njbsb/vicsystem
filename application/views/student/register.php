@@ -4,7 +4,8 @@
 <?php echo form_open('student/register'); ?>
 <div class="form-group">
     <label>Matric</label>
-    <input type="text" class="form-control" name="matric" placeholder="Matric/Staff No" required>
+    <input type="text" class="form-control" id='matric' name="matric" placeholder="Matric/Staff No" required>
+    <span id='matric_result'></span>
 </div>
 <div class="form-group">
     <label>Name</label>
@@ -29,22 +30,22 @@
 <!-- select program -->
 <div class="form-group">
     <label>Select Program</label>
-    <select name="program_code" class="form-control" id="">
-        <?php foreach($programs as $program): ?>
-        <option value="<?php echo $program['code']; ?>">
-            <?php echo $program['name']; ?>
-        </option>
+    <select name="program_code" class="form-control" id="program_code">
+        <?php foreach ($programs as $program) : ?>
+            <option value="<?php echo $program['code']; ?>">
+                <?php echo $program['name']; ?>
+            </option>
         <?php endforeach ?>
     </select>
 </div>
 <!-- select sig -->
 <div class="form-group">
     <label>Select SIG</label>
-    <select name="sig_id" class="form-control" id="">
-        <?php foreach($sigs as $sig): ?>
-        <option value="<?php echo $sig['id']; ?>">
-            <?php echo $sig['signame'].' ('.$sig['code'].')'; ?>
-        </option>
+    <select name="sig_id" class="form-control" id="sig_id">
+        <?php foreach ($sigs as $sig) : ?>
+            <option value="<?php echo $sig['id']; ?>">
+                <?php echo $sig['signame'] . ' (' . $sig['code'] . ')'; ?>
+            </option>
         <?php endforeach ?>
     </select>
 </div>
@@ -52,11 +53,11 @@
 <!-- select mentor -->
 <div class="form-group">
     <label>Select Mentor</label>
-    <select name="sig_mentor_matric" class="form-control" id="">
-        <?php foreach($mentors as $mentor): ?>
-        <option value="<?php echo $mentor['matric']; ?>">
-            <?php echo $mentor['name']; ?>
-        </option>
+    <select name="sig_mentor_matric" class="form-control" id="sig_mentor">
+        <?php foreach ($mentors as $mentor) : ?>
+            <option value="<?php echo $mentor['matric']; ?>">
+                <?php echo $mentor['name']; ?>
+            </option>
         <?php endforeach ?>
     </select>
 </div>
@@ -71,3 +72,6 @@
 <button type="submit" class="btn btn-primary btn-block">Register</button>
 
 <?php echo form_close(); ?>
+
+<script type="text/javascript">
+</script>
