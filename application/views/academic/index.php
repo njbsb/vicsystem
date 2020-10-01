@@ -39,7 +39,7 @@
         <h3>Academic Year</h3>
     </div>
     <div class="col-4">
-        <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#acadyearmodal" style="float: right;">Add Academic Year</button>
+        <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacadyear" style="float: right;">Add Academic Year</button>
     </div>
 </div>
 <table id="acy_table" class="table">
@@ -69,7 +69,7 @@
         <h3>Academic Plan</h3>
     </div>
     <div class="col-4">
-        <button class="btn btn-outline-primary margin" disabled data-toggle="modal" data-target="#addacademicyear" style="float: right;">Add Academic Plan</button>
+        <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacademicplan" style="float: right;">Add Academic Plan</button>
     </div>
 </div>
 
@@ -155,7 +155,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- <button type="submit" class="btn btn-primary">Add</button> -->
-                    <input type="submit" class="btn btn-outline-primary" value="add">
+                    <input type="submit" class="btn btn-primary" value="add">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
                 </div>
             </div>
@@ -164,7 +164,7 @@
     </div>
 </div>
 
-<div id="acadyearmodal" class="modal fade">
+<div id="addacadyear" class="modal fade">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -184,8 +184,28 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary">Add</button>
+                <button type="button" class="btn btn-primary">Add</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addacademicplan" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

@@ -17,14 +17,53 @@ class Citra_model extends CI_Model
         return $query->row_array();
     }
 
-    public function get_citra_registered()
+    public function get_citra_registered($id = NULL, $acadsession_id = NULL)
     {
-        $this->db->select('citreg.*, acadsess.semester_id, acadyear.acadyear')
+        if ($id == FALSE && $acadsession_id == FALSE) {
+            $this->db->select('citreg.*, acadsess.semester_id, acadyear.acadyear')
+                ->from('tbl_citra_registration as citreg')
+                ->join('tbl_academicsession as acadsess', 'citreg.acadsession_id = acadsess.id')
+                ->join('tbl_academicyear as acadyear', 'acadsess.acadyear_id = acadyear.id');
+            $query = $this->db->get();
+            return $query->result_array();
+        } else {
+            if ($id) {
+                if ($acadsession_id) {
+                    // both id and acadsession_id
+                    $this->db->select('citreg.*, acadsess.semester_id, acadyear.acadyear')
+                        ->from('tbl_citra_registration as citreg')
+                        ->where(array('citreg.student_matric' => $id, 'acadsession_id' => $acadsession_id))
+                        ->join('tbl_academicsession as acadsess', 'citreg.acadsession_id = acadsess.id')
+                        ->join('tbl_academicyear as acadyear', 'acadsess.acadyear_id = acadyear.id');
+                    $query = $this->db->get();
+                    return $query->result_array();
+                } else {
+                    $this->db->select('citreg.*, acadsess.semester_id, acadyear.acadyear')
+                        ->from('tbl_citra_registration as citreg')
+                        ->where(array('citreg.student_matric' => $id))
+                        ->join('tbl_academicsession as acadsess', 'citreg.acadsession_id = acadsess.id')
+                        ->join('tbl_academicyear as acadyear', 'acadsess.acadyear_id = acadyear.id');
+                    $query = $this->db->get();
+                    return $query->result_array();
+                }
+            } else {
+                $this->db->select('citreg.*, acadsess.semester_id, acadyear.acadyear')
+                    ->from('tbl_citra_registration as citreg')
+                    ->where(array('citreg.acadsession_id' => $acadsession_id))
+                    ->join('tbl_academicsession as acadsess', 'citreg.acadsession_id = acadsess.id')
+                    ->join('tbl_academicyear as acadyear', 'acadsess.acadyear_id = acadyear.id');
+                $query = $this->db->get();
+                return $query->result_array();
+            }
+        }
+    }
+
+    public function get_citrarow($id, $acadsession_id)
+    {
+        $this->db->select('citreg.citra_code')
             ->from('tbl_citra_registration as citreg')
-            ->join('tbl_academicsession as acadsess', 'citreg.acadsession_id = acadsess.id')
-            ->join('tbl_academicyear as acadyear', 'acadsess.acadyear_id = acadyear.id');
+            ->where(array('student_matric' => $id, 'acadsession_id' => $acadsession_id));
         $query = $this->db->get();
         return $query->result_array();
-        // print_r($query->row_array());
     }
 }
