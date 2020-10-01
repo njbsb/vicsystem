@@ -9,7 +9,12 @@
                 <!-- <h3 class="card-header">
                     Header
                 </h3> -->
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php echo base_url('assets/images/profile/') . $mentor['profile_image']; ?>" alt="<?= $mentor['profile_image'] ?>">
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php if ($mentor['profile_image']) {
+                                                                                                        echo base_url('assets/images/profile/') . $mentor['profile_image'];
+                                                                                                    } else {
+                                                                                                        echo base_url('assets/images/profile/') . 'default.jpg';
+                                                                                                    }
+                                                                                                    ?>">
                 <!-- <div class="card-body">
 
                 </div> -->
@@ -20,8 +25,8 @@
         </div>
         <div class="col-lg-8 text-left">
             <?php echo validation_errors(); ?>
-            <?php echo form_open('mentor/update/' . $mentor['matric']); ?>
-            <input type="hidden" name="id" value="<?php echo $mentor['matric']; ?>" readonly>
+            <?php echo form_open('mentor/update/' . $mentor['id']); ?>
+            <input type="hidden" name="id" value="<?php echo $mentor['id']; ?>" readonly>
             <fieldset>
                 <!-- Mentor Name -->
                 <div class="form-group">
@@ -69,7 +74,7 @@
                 <!-- Room -->
                 <div class="form-group">
                     <label>Room</label>
-                    <input name="room" type="text" class="form-control form-control-sm" aria-describedby="" placeholder="Enter room" value="<?php echo $mentor['roomnum']; ?>">
+                    <input name="roomnum" type="text" class="form-control form-control-sm" aria-describedby="" placeholder="Enter room" value="<?php echo $mentor['roomnum']; ?>">
                 </div>
                 <button type="submit" class="btn btn-primary">Update</button>
             </fieldset>

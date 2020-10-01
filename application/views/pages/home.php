@@ -16,5 +16,5 @@
 </blockquote> -->
 <blockquote class="blockquote text-center">
     <p class="mb-0">Biar orang buat kita, kita buat coding.</p>
-    <footer class="blockquote-footer">NajibS in <cite title="Source Title">Kata2 Bijaksana</cite></footer>
+    <footer class="blockquote-footer">NajibS</footer>
 </blockquote>

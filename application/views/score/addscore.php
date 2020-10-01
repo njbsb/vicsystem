@@ -1,4 +1,25 @@
-<h2><?= $title ?></h2>
+<h2><?= $title ?>: <?= $matric ?></h2>
+
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <td>Session</td>
+            <td>A1</td>
+            <td>A2</td>
+            <td>B</td>
+            <td>COMP</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>20162017 Sem 1</td>
+            <td>15</td>
+            <td>15</td>
+            <td>15</td>
+            <td>15</td>
+        </tr>
+    </tbody>
+</table>
 
 <ul class="nav nav-tabs">
     <?php foreach ($levelscores as $ls) : ?>
@@ -11,12 +32,15 @@
 <div id="myTabContent" class="tab-content">
     <?php foreach ($levelscores as $ls) : ?>
         <div class="tab-pane fade" id="<?= $ls['level'] ?>">
-            <?php echo form_open('student/register'); ?>
-
+            <?php echo form_open('score/addscore/' . $matric); ?>
+            <div class="form-group">
+                <!-- <label for="">Level ID</label> -->
+                <input name="level_id" type="hidden" value="<?= $ls['id'] ?>" class="form-control form-control-sm" readonly>
+            </div>
             <div class="form-group">
                 <fieldset>
-                    <label class="control-label" for="readOnlyInput">Readonly input</label>
-                    <input value="<?php  ?>" class="form-control" id="student_matric" type="text" placeholder="Readonly input here…" readonly="">
+                    <label class="control-label">Student</label>
+                    <input value="<?= $matric  ?>" class="form-control" id="student_matric" type="text" placeholder="Readonly input here…" readonly="">
                 </fieldset>
             </div>
 

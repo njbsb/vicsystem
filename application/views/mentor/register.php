@@ -1,6 +1,7 @@
 <h2><?php echo $title; ?></h2>
-
-<?php echo validation_errors(); ?>
+<?php if (validation_errors()) : ?>
+    <?php echo validation_errors(); ?>
+<?php endif ?>
 
 <?php echo form_open_multipart('mentor/register'); ?>
 <div class="form-group">
@@ -32,8 +33,8 @@
     <label>Select SIG</label>
     <select class="form-control" name="sig_id" id="sig_id" required>
         <?php foreach ($sigs as $sig) : ?>
-            <option value="<?php echo $sig['id']; ?>">
-                <?php echo $sig['signame'] . ' (' . $sig['code'] . ')'; ?>
+            <option value="<?= $sig['id'] ?>">
+                <?= $sig['signame'] . ' (' . $sig['code'] . ')' ?>
             </option>
         <?php endforeach ?>
     </select>
@@ -43,8 +44,8 @@
     <label>Select Role</label>
     <select class="form-control" name="role_id" id="role_id">
         <?php foreach ($mentor_roles as $role) : ?>
-            <option value="<?php echo $role['id']; ?>">
-                <?php echo $role['role_name']; ?>
+            <option value="<?= $role['id'] ?>">
+                <?= $role['rolename'] ?>
             </option>
         <?php endforeach ?>
     </select>

@@ -46,7 +46,7 @@
         <select name="academicsession_id" class="form-control">
             <?php foreach ($academicsessions as $academicsession) : ?>
                 <option value="<?php echo $academicsession['id']; ?>">
-                    <?php echo $academicsession['acadyear'] . ' Sem ' . $academicsession['semester_id']; ?>
+                    <?= $academicsession['academicyear'] . ' Sem ' . $academicsession['semester_id']; ?>
                 </option>
             <?php endforeach ?>
         </select>
@@ -116,6 +116,7 @@
             </div>
         </div>
     </div>
+    <hr>
 
     <!-- Activity File and Image -->
     <div class="row">

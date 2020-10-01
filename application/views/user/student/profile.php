@@ -9,7 +9,12 @@
                 <!-- <h3 class="card-header">
                     Header
                 </h3> -->
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php echo base_url('assets/images/profile/') . $student['profile_image']; ?>" alt="<?= $student['profile_image'] ?>">
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php if ($student['profile_image']) {
+                                                                                                        echo base_url('assets/images/profile/') . $student['profile_image'];
+                                                                                                    } else {
+                                                                                                        echo base_url('assets/images/profile/') . 'default.jpg';
+                                                                                                    }
+                                                                                                    ?>">
                 <div class="card-footer text-muted">
                     <?= $student['id'] ?>
                 </div>

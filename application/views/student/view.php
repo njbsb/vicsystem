@@ -10,12 +10,17 @@
                 <!-- <h4 class="card-header">
                     <b>Header</b>
                 </h4> -->
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php echo base_url('assets/images/profile/') . $student['profile_image']; ?>" alt="<?= $student['profile_image'] ?>">
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php if ($student['profile_image']) {
+                                                                                                        echo base_url('assets/images/profile/') . $student['profile_image'];
+                                                                                                    } else {
+                                                                                                        echo base_url('assets/images/profile/') . 'default.jpg';
+                                                                                                    }
+                                                                                                    ?>">
                 <!-- <div class="card-body">
 
                 </div> -->
                 <div class="card-footer text-muted">
-                    Joined VIC: 2016
+                    Joined <?= $student['sigcode'] ?>: XXXX
                 </div>
             </div>
         </div>

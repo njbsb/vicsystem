@@ -1,9 +1,11 @@
-<h2><?php echo $title; ?></h2>
+<h2><?= $title ?></h2>
+<?php if (validation_errors()) : ?>
+    <?= validation_errors() ?>
+<?php endif ?>
 
-<?php echo validation_errors(); ?>
 
 <?php echo form_open('activity/update'); ?>
-<input type="hidden" name="id" value="<?php echo $activity['id']; ?>">
+<input type="hidden" name="id" value="<?= $activity['id'] ?>">
 <fieldset class="col-md-auto">
 
     <!-- load current user data here -->
@@ -48,12 +50,12 @@
         <label>Select academic session</label>
         <select name="academicsession_id" class="form-control">
             <?php foreach ($academicsessions as $academicsession) : ?>
-                <option value="<?php echo $academicsession['id']; ?>" <?php
-                                                                        if ($academicsession['id'] == $activity['acadsession_id']) {
-                                                                            echo 'selected';
-                                                                        }
-                                                                        ?>>
-                    <?php echo $academicsession['acadyear'] . ' Sem ' . $academicsession['semester_id']; ?>
+                <option value="<?= $academicsession['id'] ?>" <?php
+                                                                if ($academicsession['id'] == $activity['acadsession_id']) {
+                                                                    echo 'selected';
+                                                                }
+                                                                ?>>
+                    <?= $academicsession['academicyear'] . ' Sem ' . $academicsession['semester_id']; ?>
                 </option>
             <?php endforeach ?>
         </select>
@@ -69,7 +71,7 @@
                                                             if ($sig['id'] == $activity['sig_id']) {
                                                                 echo 'selected';
                                                             } ?>>
-                    <?php echo $sig['signame'] . ' (' . $sig['code'] . ')'; ?>
+                    <?= $sig['signame'] . ' (' . $sig['code'] . ')'; ?>
                 </option>
             <?php endforeach ?>
         </select>
@@ -81,12 +83,12 @@
         <select name="advisor_matric" class="form-control">
             <option value="" selected disabled hidden>Choose Advisor</option>
             <?php foreach ($mentors as $mentor) : ?>
-                <option value="<?php echo $mentor['id']; ?>" <?php
-                                                                if ($mentor['id'] == $activity['advisor_matric']) {
-                                                                    echo 'selected';
-                                                                }
-                                                                ?>>
-                    <?php echo $mentor['name'] . ' (' . $mentor['id'] . ')'; ?>
+                <option value="<?= $mentor['id'] ?>" <?php
+                                                        if ($mentor['id'] == $activity['advisor_matric']) {
+                                                            echo 'selected';
+                                                        }
+                                                        ?>>
+                    <?= $mentor['name'] . ' (' . $mentor['id'] . ')' ?>
                 </option>
             <?php endforeach ?>
         </select>

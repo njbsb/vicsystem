@@ -10,20 +10,27 @@
                 <!-- <h3 class="card-header">
                     Header
                 </h3> -->
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php echo base_url('assets/images/profile/') . $student['profile_image']; ?>" alt="<?= $student['profile_image'] ?>">
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php if ($student['profile_image']) {
+                                                                                                        echo base_url('assets/images/profile/') . $student['profile_image'];
+                                                                                                    } else {
+                                                                                                        echo base_url('assets/images/profile/') . 'default.jpg';
+                                                                                                    }
+                                                                                                    ?>">
                 <!-- <div class="card-body">
 
                 </div> -->
                 <div class="card-footer text-muted">
-                    Joined VIC: 2016
+                    Joined <?= $student['sigcode'] ?>: XXXX
                 </div>
             </div>
         </div>
         <div class="col-lg-4 text-left">
             <!-- <div class="bs-component">
             </div> -->
-            <?php echo validation_errors(); ?>
-            <?php echo form_open('student/update/' . $student['id']); ?>
+            <?php if (validation_errors()) : ?>
+                <?= validation_errors(); ?>
+            <?php endif ?>
+            <?= form_open('student/update/' . $student['id']); ?>
             <input type="hidden" name="id" value="<?php echo $student['id']; ?>">
 
             <fieldset>
@@ -37,11 +44,11 @@
                     <label>Select SIG</label>
                     <select name="sig_id" class="form-control form-control-sm">
                         <?php foreach ($sigs as $sig) : ?>
-                            <option value="<?php echo $sig['id']; ?>" <?php
-                                                                        if ($sig['id'] == $student['sig_id']) {
-                                                                            echo 'selected';
-                                                                        } ?>>
-                                <?php echo $sig['signame'] . ' (' . $sig['code'] . ')'; ?>
+                            <option value="<?= $sig['id'] ?>" <?php
+                                                                if ($sig['id'] == $student['sig_id']) {
+                                                                    echo 'selected';
+                                                                } ?>>
+                                <?= $sig['signame'] . ' (' . $sig['code'] . ')'; ?>
                             </option>
                         <?php endforeach ?>
                     </select>
@@ -86,7 +93,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Update</button>
             </fieldset>
-            </form>
+            <?= form_close() ?>
 
             <!-- <button type="submit" class="btn btn-primary">Update profiles</button> -->
         </div>

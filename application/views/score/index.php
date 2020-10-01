@@ -23,7 +23,7 @@
                     <?php // check if  
                     ?>
                 </td>
-                <td><a class="badge badge-primary" href="<?php echo site_url('/score/addscore'); ?>">Edit score</a></td>
+                <td><a class="badge badge-primary" href="<?= site_url('/score/' . $citreg['student_matric']) ?>">Edit score</a></td>
             </tr>
         <?php endforeach ?>
 
