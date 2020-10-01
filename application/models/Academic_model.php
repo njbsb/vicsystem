@@ -55,7 +55,7 @@ class Academic_model extends CI_Model
             $this->db->select('acp.*, std.name, acy.acadyear, acs.semester_id')
                 ->from('tbl_academicplan as acp')
                 ->join('tbl_academicsession as acs', 'acs.id = acp.acadsession_id')
-                ->where(array('acs.status' => 'active'))
+                // ->where(array('acs.status' => 'active'))
                 ->join('tbl_academicyear as acy', 'acy.id = acs.acadyear_id')
                 ->join('tbl_user as std', 'std.id = acp.student_matric');
             $query = $this->db->get();

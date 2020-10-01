@@ -19,7 +19,7 @@ class Mentor_model extends CI_Model
             $query = $this->db->get();
             return $query->result_array();
         }
-        $this->db->select('user.id, user.name, user.email, user.sig_id, user.profile_image, mtr.position, mtr.roomnum, sig.code as sigcode, sig.signame, role.rolename')
+        $this->db->select('user.id, user.name, user.email, user.sig_id, user.profile_image, mtr.position, mtr.roomnum, mtr.orgrole_id, sig.code as sigcode, sig.signame, role.rolename')
             ->from('tbl_user as user')
             ->where(array('user.id' => $matric, 'usertype_id' => '2', 'userstatus_id' => '2'))
             ->join('tbl_mentor as mtr', 'mtr.matric = user.id', 'left')

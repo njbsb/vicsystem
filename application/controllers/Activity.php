@@ -84,9 +84,6 @@ class Activity extends CI_Controller
         $data['highcoms'] = $this->student_model->get_highcoms($data['activity']['id']);
         $data['sigstudents'] = $this->student_model->get_sigstudents($data['activity']['sig_id']);
 
-        // print_r($data['highcoms']);
-        print_r($data['activity']['sig_id']);
-
         $this->load->view('templates/header');
         $this->load->view('activity/edit', $data);
         $this->load->view('templates/footer');

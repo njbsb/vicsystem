@@ -5,7 +5,6 @@ class User extends CI_Controller
     {
         $data['title'] = 'All Users';
         $data['users'] = $this->user_model->get_user();
-        // print_r($data['users']);
         $this->load->view('templates/header');
         $this->load->view('user/index', $data);
         $this->load->view('templates/footer');
@@ -14,7 +13,7 @@ class User extends CI_Controller
     public function profile()
     {
         $data['title'] = 'User profile';
-        $id = 'K001'; // get the current session user first
+        $id = 'A160000'; // get the current session user first
         $data['user'] = $this->user_model->get_user($id);
         $sig_id = $data['user']['sig_id'];
         // $id = $data['user']['id'];
@@ -24,27 +23,17 @@ class User extends CI_Controller
         switch ($usertype) {
             case '1':
                 $data['admin'] = $this->admin_model->get_admin($id);
-                if (!$data['admin']['profile_image']) {
-                    $data['admin']['profile_image'] = 'default.jpg';
-                }
                 $this->load->view('user/admin/profile', $data);
                 break;
             case '2':
                 $data['mentor'] = $this->mentor_model->get_mentor($id);
-                if (!$data['mentor']['profile_image']) {
-                    $data['mentor']['profile_image'] = 'default.jpg';
-                }
                 $data['activity_roles'] = $this->committee_model->get_activityroles($id);
                 $this->load->view('user/mentor/profile', $data);
                 break;
             case '3':
                 $data['student'] = $this->student_model->get_student($id);
-                if (!$data['student']['profile_image']) {
-                    $data['student']['profile_image'] = 'default.jpg';
-                }
                 $data['activity_roles'] = $this->committee_model->get_activityroles($id);
                 $data['org_roles'] = $this->committee_model->get_orgroles($id, $sig_id);
-                // print_r($data['org_roles']);
                 $this->load->view('user/student/profile', $data);
                 break;
         }
@@ -54,7 +43,7 @@ class User extends CI_Controller
     public function edit($id)
     {
         $data['title'] = 'Update profile';
-        // $id = 'K0001'; // get the current session user first
+        $id = 'K001'; // get the current session user first
         $data['user'] = $this->user_model->get_user($id);
         // if (!$data['user']['profile_image']) {
         //     $data['user']['profile_image'] = 'default.jpg';
@@ -205,9 +194,6 @@ class User extends CI_Controller
         if ($this->form_validation->run() === FALSE) {
 
             $data['sigs'] = $this->sig_model->get_sig();
-            if ($data['user']['profile_image'] == "") {
-                $data['user']['profile_image'] = 'default.jpg';
-            }
             $this->load->view('templates/header');
             $this->load->view('user/validate', $data);
 
@@ -245,13 +231,11 @@ class User extends CI_Controller
                 }
             } elseif ($usertype_id == '3') {
                 $studentdata = array(
+                    'matric' => $id,
                     'phonenum' => $this->input->post('phonenum'),
                     'program_code' => $this->input->post('program_code'),
                     'mentor_matric' => $this->input->post('mentor_matric')
                 );
-                // if ($studentdata['mentor_matric'] == '') {
-                //     $studentdata['mentor_matric'] == null;
-                // }
                 if ($this->student_model->student_exist($id)) {
                     $this->student_model->update_student($id, $studentdata);
                 } else {

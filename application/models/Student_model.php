@@ -19,7 +19,7 @@ class Student_model extends CI_Model
 
         $this->db->select('user.id, user.name, user.email, user.sig_id, user.profile_image, 
         std.phonenum, std.program_code, std.mentor_matric, 
-        prg.name as program_name, sig.signame, mtr.name as mentor_name')
+        prg.name as program_name, sig.signame, sig.code as sigcode, mtr.name as mentor_name')
             ->from('tbl_user as user')
             ->where(array('user.id' => $id))
             ->join('tbl_student as std', 'std.matric = user.id')

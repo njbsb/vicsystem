@@ -54,19 +54,16 @@ class Student extends CI_Controller
         }
     }
 
-    public function edit($matric)
+    public function edit($matric = NULL)
     {
         $data['student'] = $this->student_model->get_student($matric);
-        if (empty($data['student']) || !array_filter($data['student'])) {
+        if (empty($data['student']) || !array_filter($data['student']) || $matric == FALSE) {
             show_404();
         }
         $data['title'] = 'Edit Student';
         $data['programs'] = $this->program_model->get_programs();
         $data['sigs'] = $this->sig_model->get_sig();
         $data['mentors'] = $this->mentor_model->get_mentor();
-        if (!$data['student']['profile_image']) {
-            $data['student']['profile_image'] = 'default.jpg';
-        }
         $this->load->view('templates/header');
         $this->load->view('student/edit', $data);
         $this->load->view('templates/footer');

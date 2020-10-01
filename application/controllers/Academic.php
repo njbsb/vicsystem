@@ -25,10 +25,9 @@ class Academic extends CI_Controller
             $data['raw_scorecomp'] = $this->score_model->get_scorebycomp($id, $acadsession_id);
 
             $data['raw_academicplan'] = $this->academic_model->get_academicplan($id);
-            $data['citraregistered'] = $this->citra_model->get_citra_registered($id);
+
 
             $data['academicplans'] = $this->get_arraytable_academicplan($data['raw_academicplan']);
-            print_r($data['academicplans']);
             $data['score_levels'] = $this->get_arraytable_level($acadsession_id, $data['raw_scorelevels']);
             $data['score_comp'] = $this->get_arraytable_comp($acadsession_id, $data['raw_scorecomp']);
             $data['tabletotal'] = $this->get_arraytable_allscore($acadsession_id, $data['score_levels'], $data['score_comp']);

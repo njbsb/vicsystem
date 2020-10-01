@@ -13,9 +13,7 @@ class Mentor extends CI_Controller
     public function view($matric)
     {
         $data['mentor'] = $this->mentor_model->get_mentor($matric);
-        if (!$data['mentor']['profile_image']) {
-            $data['mentor']['profile_image'] = 'default.jpg';
-        }
+
         $this->load->view('templates/header');
         $this->load->view('mentor/view', $data);
         $this->load->view('templates/footer');
@@ -71,9 +69,7 @@ class Mentor extends CI_Controller
         if (empty($data['mentor'])) {
             show_404();
         }
-        if (!$data['mentor']['profile_image']) {
-            $data['mentor']['profile_image'] = 'default.jpg';
-        }
+        print_r($data['mentor']);
         $data['title'] = 'Edit Mentor';
         $data['sigs'] = $this->sig_model->get_sig();
         $data['roles'] = $this->role_model->get_mentor_roles();
