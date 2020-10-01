@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-lg-4">
             <!-- <div class="card mb-3"> -->
-            <div class="card border-light mb-3" style="max-width: 20rem;">
+            <div class="card border-dark mb-3" style="max-width: 20rem;">
                 <!-- <div class="card-header">Student</div> -->
                 <!-- <h3 class="card-header">
                     Header
@@ -14,7 +14,7 @@
 
                 </div> -->
                 <div class="card-footer text-muted">
-                    <?= $mentor['matric'] ?>
+                    <?= $mentor['id'] ?>
                 </div>
             </div>
 

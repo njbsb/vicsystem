@@ -17,7 +17,7 @@
     </div>
 </div>
 
-<div id="chooseUser" class="modal">
+<div id="chooseUser" class="modal fade">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

@@ -55,7 +55,7 @@
     <label>Select Mentor</label>
     <select name="sig_mentor_matric" class="form-control" id="sig_mentor">
         <?php foreach ($mentors as $mentor) : ?>
-            <option value="<?php echo $mentor['matric']; ?>">
+            <option value="<?php echo $mentor['id']; ?>">
                 <?php echo $mentor['name']; ?>
             </option>
         <?php endforeach ?>

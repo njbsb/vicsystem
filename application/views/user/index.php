@@ -35,7 +35,7 @@
     </table>
 </div>
 
-<div id="confirmDelete" class="modal">
+<div id="confirmDelete" class="modal fade">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
