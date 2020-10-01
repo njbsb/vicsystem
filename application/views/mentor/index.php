@@ -2,18 +2,19 @@
 <div class="container-fluid text-center">
     <div class="row">
         <?php foreach ($mentors as $mentor) : ?>
-            <?php if ($mentor['profile_image'] == '') {
-                $mentor['profile_image'] = 'default.jpg';
-            } ?>
-
-            <div class="col-sm-4">
+            <div class="col-md-4">
                 <div class="card mb-3">
                     <h4 class="card-header text-white bg-dark">
                         <?php echo $mentor['sigcode']; ?>
                     </h4>
                     <!-- object-fit:cover for square crop
                     border-radius:50%; for circle crop -->
-                    <img style="max-height:300px; display: block; object-fit:cover;  padding:10px;" src="<?php echo base_url('assets/images/profile/' . $mentor['profile_image']); ?>" alt="<?php echo $mentor['profile_image']; ?>">
+                    <?php if ($mentor['profile_image']) : ?>
+                        <img style="max-height:300px; display: block; object-fit:cover;  padding:10px;" src="<?= base_url('assets/images/profile/' . $mentor['profile_image']) ?>">
+                    <?php else : ?>
+                        <img style="max-height:300px; display: block; object-fit:cover;  padding:10px;" src="<?= base_url('assets/images/profile/') . 'default.jpg' ?>">
+                    <?php endif ?>
+
 
                     <div class="card-body">
                         <h5 class="card-title">

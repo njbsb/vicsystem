@@ -3,18 +3,15 @@
 <div class="container-fluid text-center">
     <div class="row">
         <div class="col-lg-4">
-            <!-- <div class="card mb-3"> -->
             <div class="card border-dark mb-3" style="max-width: 20rem;">
-                <!-- <div class="card-header">Student</div> -->
-                <!-- <h3 class="card-header">
-                    Header
-                </h3> -->
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/') . $mentor['profile_image'] ?>" alt="<?= $mentor['profile_image'] ?>">
-                <!-- <div class="card-body">
 
-                </div> -->
+                <?php if ($mentor['profile_image']) : ?>
+                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/') . $mentor['profile_image'] ?>">
+                <?php else : ?>
+                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/') . 'default.jpg' ?>">
+                <?php endif ?>
                 <div class="card-footer text-muted">
-                    Some text
+                    <?= $mentor['id'] ?>
                 </div>
             </div>
         </div>
@@ -28,9 +25,9 @@
 
         </div>
         <div class="col-lg-4">
-            <?php echo form_open('/mentor/edit/' . $mentor['id']); ?>
+            <?= form_open('/mentor/edit/' . $mentor['id']) ?>
             <input type="submit" value="Edit Mentor" class="btn btn-outline-secondary">
-            </form>
+            <?= form_close() ?>
         </div>
         <div class="col-lg-8 text-left">
             <!-- <button type="submit" class="btn btn-primary">Update profile 2</button> -->
