@@ -7,7 +7,7 @@ class Academic extends CI_Controller
         $data['academicsession'] = $this->academic_model->get_academicsession();
         $data['academicplan'] = $this->academic_model->get_academicplan();
         $data['semesters'] = $this->academic_model->get_semester();
-        // print_r($data['academicplan']);
+        print_r($data['academicyear']);
         $data['title'] = 'Academic Index Page';
         $this->load->view('templates/header');
         $this->load->view('academic/index', $data);
@@ -134,6 +134,7 @@ class Academic extends CI_Controller
             'status' => $this->input->post('status')
         );
         $this->academic_model->create_acs($acsdata);
+        redirect('academic');
     }
 
     public function create_academicyear()
@@ -143,13 +144,20 @@ class Academic extends CI_Controller
             'status' => $this->input->post('status')
         );
         $this->academic_model->create_acy($acydata);
+        redirect('academic');
     }
 
-    public function set_activesession($id)
+    public function set_activesession()
     {
+        $id = $this->input->post('session_id');
+        $this->academic_model->setactive_acadsession($id);
+        redirect('academic');
     }
 
-    public function set_activeyear($id)
+    public function set_activeyear()
     {
+        $id = $this->input->post('acadyear_id');
+        $this->academic_model->setactive_acadyear($id);
+        redirect('academic');
     }
 }

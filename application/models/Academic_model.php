@@ -88,4 +88,25 @@ class Academic_model extends CI_Model
     {
         return $this->db->insert('tbl_academicyear', $acydata);
     }
+
+    public function setactive_acadsession($acadsession_id)
+    {
+        $active = array('status' => 'active');
+        $inactive = array('status' => 'inactive');
+        $this->db->where('id', $acadsession_id)
+            ->update('tbl_academicsession', $active);
+        $this->db->where('id !=', $acadsession_id)
+            ->update('tbl_academicsession', $inactive);
+    }
+
+    public function setactive_acadyear($acadyear_id)
+    {
+        $active = array('status' => 'active');
+        $inactive = array('status' => 'inactive');
+        $this->db->where('id', $acadyear_id)
+            ->update('tbl_academicyear', $active);
+        $this->db->where('id !=', $acadyear_id)
+            ->update('tbl_academicyear', $inactive);
+        return true;
+    }
 }
