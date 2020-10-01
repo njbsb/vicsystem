@@ -51,7 +51,7 @@
             <p class="mb-0"><?= validation_errors() ?></p>
         </div>
     <?php endif ?>
-    <?php echo form_open('comment/create/' . $activity['id']); ?>
+    <?= form_open('comment/create/' . $activity['id']) ?>
     <input type="hidden" name="id" value="A160000" class="form-control" readonly>
     <div class="form-group">
         <!-- <label>Comment</label> -->

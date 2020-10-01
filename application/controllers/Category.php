@@ -12,10 +12,9 @@ class Category extends CI_Controller
     }
     public function create()
     {
-        $data['title'] = 'Create Category';
         $this->form_validation->set_rules('category', 'Category', 'required');
-
         if ($this->form_validation->run() === FALSE) {
+            $data['title'] = 'Create Category';
             $this->load->view('templates/header');
             $this->load->view('category/create', $data);
             $this->load->view('templates/footer');
@@ -24,11 +23,13 @@ class Category extends CI_Controller
             redirect('category');
         }
     }
-    public function comments($id)
+    public function comments($id = NULL)
     {
+        if ($id == FALSE) {
+            show_404();
+        }
         $data['title'] = $this->category_model->get_category($id)->category;
         $data['comments'] = $this->comment_model->get_comments_bycategory($id);
-
         $this->load->view('templates/header');
         $this->load->view('category/comments', $data);
         $this->load->view('templates/footer');
