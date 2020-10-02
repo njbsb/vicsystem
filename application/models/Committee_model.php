@@ -31,6 +31,7 @@ class Committee_model extends CI_Model
         $query = $this->db->get();
         return $query->row_array();
     }
+
     public function get_deputypresident($sig_id)
     {
         $this->db->select('orgcom.*, std.name, std.email, std.profile_image, role.rolename')
@@ -41,6 +42,7 @@ class Committee_model extends CI_Model
         $query = $this->db->get();
         return $query->row_array();
     }
+
     public function get_orgtreasurer($sig_id)
     {
         $this->db->select('orgcom.*, std.name, std.email, std.profile_image, role.rolename')
@@ -51,6 +53,7 @@ class Committee_model extends CI_Model
         $query = $this->db->get();
         return $query->row_array();
     }
+
     public function get_orgsecretary($sig_id)
     {
         $this->db->select('orgcom.*, std.name, std.email, std.profile_image, role.rolename')
@@ -61,6 +64,7 @@ class Committee_model extends CI_Model
         $query = $this->db->get();
         return $query->row_array();
     }
+
     public function get_ajks($sig_id)
     {
         $this->db->select('orgcom.*, std.name, std.email, std.profile_image, role.rolename')
@@ -80,6 +84,8 @@ class Committee_model extends CI_Model
 
     public function get_activityroles($id)
     {
+        // used in profile page
+        // shows specific student's role(s) in activities
         $this->db->select('act.activity_name, std.name, role.rolename, actcom.role_desc')
             ->from('tbl_activity_committee as actcom')
             ->where(array('actcom.student_matric' => $id))
@@ -92,6 +98,8 @@ class Committee_model extends CI_Model
 
     public function get_orgroles($id, $sig_id)
     {
+        // used in profile page
+        // shows specific student's role(s) in organization
         $this->db->select('acy.acadyear, role.rolename, orgcom.role_desc, sig.signame')
             ->from('tbl_org_committee as orgcom')
             ->where(array('orgcom.student_matric' => $id, 'orgcom.sig_id' => $sig_id))
@@ -106,5 +114,39 @@ class Committee_model extends CI_Model
     {
         $this->db->select('*')
             ->from('tbl');
+    }
+
+    public function delete_orgcommittee($deleteuserdata)
+    {
+        $this->db->where($deleteuserdata);
+        $this->db->delete('tbl_org_committee');
+        return true;
+    }
+
+    public function get_roles_org()
+    {
+        $roles = array('3', '4', '7', '8', '9', '10', '11', '12');
+        $this->db->select('*')
+            ->from('tbl_role')
+            ->where_in('id', $roles);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function get_roles_committee()
+    {
+        $roles = array('5', '6', '7', '8', '9', '10', '11', '12');
+        $this->db->select('*')
+            ->from('tbl_role')
+            ->where_in('id', $roles);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function register_org_committee($comdata)
+    {
+        $this->db->set($comdata);
+        $this->db->insert('tbl_org_committee');
+        return true;
     }
 }
