@@ -58,11 +58,15 @@ class Activity_model extends CI_Model
             'advisor_matric' => $this->input->post('advisor_matric'),
             'datetime_start' => $this->input->post('datetime_start'),
             'datetime_end' => $this->input->post('datetime_end'),
+            'venue' => $this->input->post('venue'),
+            'theme' => $this->input->post('theme'),
             'slug' => $slug,
             'photo_path' => $this->input->post('photo_path')
         );
 
-        return $this->db->insert('tbl_activity', $data);
+        $this->db->insert('tbl_activity', $data);
+        $insert_id = $this->db->insert_id();
+        return $insert_id;
     }
 
     public function delete_activity($id)
@@ -76,6 +80,17 @@ class Activity_model extends CI_Model
     {
         $this->db->where('id', $id);
         return $this->db->update('tbl_activity', $activitydata);
+    }
+
+    public function get_highcoms($activity_id)
+    {
+        $this->db->select('actcom.student_matric as id, user.name, actcom.role_id, role.rolename')
+            ->from('tbl_activity_committee as actcom')
+            ->where(array('activity_id' => $activity_id))
+            ->join('tbl_user as user', 'user.id = actcom.student_matric')
+            ->join('tbl_role as role', 'role.id = actcom.role_id');
+        $query = $this->db->get();
+        return $query->result_array();
     }
 
     public function get_committees($id)

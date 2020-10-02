@@ -51,25 +51,30 @@ class Student_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_highcoms($activity_id)
-    {
-        $this->db->select('actcom.student_matric as id, user.name')
-            ->from('tbl_activity_committee as actcom')
-            ->where(array('activity_id' => $activity_id))
-            ->join('tbl_user as user', 'user.id = actcom.student_matric');
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-
     public function register_student($studentdata)
     {
         return $this->db->insert('tbl_student', $studentdata);
+    }
+
+    public function register_highcoms($highcoms)
+    {
+        return $this->db->insert_batch('tbl_activity_committee', $highcoms);
     }
 
     public function update_student($id, $studentdata)
     {
         $this->db->where('matric', $id);
         return $this->db->update('tbl_student', $studentdata);
+    }
+
+    public function update_highcoms($activity_id, $highcoms)
+    {
+        foreach ($highcoms as $hc) {
+            $change = array('student_matric' => $hc['student_matric']);
+            $this->db->where(array('activity_id' => $activity_id, 'role_id' => $hc['role_id']));
+            $this->db->update('tbl_activity_committee', $change);
+        }
+        return true;
     }
 
     public function verifymatric($matric)

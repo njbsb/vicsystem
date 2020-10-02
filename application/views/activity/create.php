@@ -1,8 +1,13 @@
 <h2 class="text-center"><?= $title; ?></h2>
+<?php if (validation_errors()) : ?>
+    <div class="alert alert-dismissible alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4 class="alert-heading">Warning!</h4>
+        <p class="mb-0"><?= validation_errors() ?></p>
+    </div>
+<?php endif ?>
 
-<?php echo validation_errors(); ?>
-
-<?php echo form_open('activity/create'); ?>
+<?= form_open('activity/create'); ?>
 <fieldset class="col-md-auto">
     <!-- <legend>Author</legend> -->
 
@@ -43,7 +48,8 @@
     <!-- Academic Session -->
     <div class="form-group">
         <label>Select academic session</label>
-        <select name="academicsession_id" class="form-control">
+        <select name="academicsession_id" class="form-control" required>
+            <option value="" selected disabled hidden>Choose academic session</option>
             <?php foreach ($academicsessions as $academicsession) : ?>
                 <option value="<?php echo $academicsession['id']; ?>">
                     <?= $academicsession['academicyear'] . ' Sem ' . $academicsession['semester_id']; ?>
@@ -56,7 +62,7 @@
     <div class="form-group">
         <label>Select involved SIG</label>
         <select name="sig_id" class="form-control">
-            <option value="" selected disabled hidden>Choose sig</option>
+            <option value="" selected disabled hidden>Choose SIG</option>
             <?php foreach ($sigs as $sig) : ?>
                 <option value="<?= $sig['id'] ?>">
                     <?php echo $sig['signame'] . ' (' . $sig['code'] . ')'; ?>
@@ -68,7 +74,8 @@
     <!-- Activity Advisor (Mentor) -->
     <div class="form-group">
         <label>Select activity advisor</label>
-        <select name="advisor_matric" class="form-control">
+        <select name="advisor_matric" class="form-control" required>
+            <option value="" selected disabled hidden>Choose Advisor</option>
             <?php foreach ($mentors as $mentor) : ?>
                 <option value="<?php echo $mentor['id']; ?>">
                     <?php echo $mentor['name'] . ' (' . $mentor['id'] . ')'; ?>
@@ -83,6 +90,7 @@
             <div class="form-group">
                 <label for="director">Project Director</label>
                 <select name="projectdirector" id="projectdirector" class="form-control">
+                    <option value="" selected disabled hidden>Choose Project Director</option>
                     <?php foreach ($sigstudents as $ss) : ?>
                         <option value="<?= $ss['id'] ?>">
                             <?= $ss['id'] . ' ' . $ss['name'] ?>
@@ -95,6 +103,7 @@
             <div class="form-group">
                 <label for="deputydirector">Deputy Project Director</label>
                 <select name="deputydirector" id="deputydirector" class="form-control">
+                    <option value="" selected disabled hidden>Choose Deputy Director</option>
                     <?php foreach ($sigstudents as $ss) : ?>
                         <option value="<?= $ss['id'] ?>">
                             <?= $ss['id'] . ' ' . $ss['name'] ?>
@@ -107,6 +116,7 @@
             <div class="form-group">
                 <label for="secretary">Secretary</label>
                 <select name="secretary" id="secretary" class="form-control">
+                    <option value="" selected disabled hidden>Choose Secretary</option>
                     <?php foreach ($sigstudents as $ss) : ?>
                         <option value="<?= $ss['id'] ?>">
                             <?= $ss['id'] . ' ' . $ss['name'] ?>
@@ -147,4 +157,4 @@
     <br>
     <button type="submit" class="btn btn-primary btn-block">Submit</button>
 </fieldset>
-</form>
+<?= form_close() ?>

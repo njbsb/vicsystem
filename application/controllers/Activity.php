@@ -40,7 +40,6 @@ class Activity extends CI_Controller
         $this->form_validation->set_rules('activityname', 'Activity Name', 'required');
         $this->form_validation->set_rules('activitydesc', 'Activity Description', 'required');
         $this->form_validation->set_rules('academicsession_id', 'Academic Session', 'required');
-        $this->form_validation->set_rules('semester', 'Semester', 'required');
         $this->form_validation->set_rules('sig_id', 'SIG', 'required');
         $this->form_validation->set_rules('advisor_matric', 'Advisor', 'required');
         $this->form_validation->set_rules('photo_path', 'Activity Image');
@@ -60,7 +59,26 @@ class Activity extends CI_Controller
             $this->load->view('activity/create', $data);
             $this->load->view('templates/footer');
         } else {
-            $this->activity_model->create_activity();
+            $activity_id = $this->activity_model->create_activity();
+            // create highcoms
+            $highcoms = array(
+                array(
+                    'activity_id' => $activity_id,
+                    'student_matric' => $this->input->post('projectdirector'),
+                    'role_id' => '5'
+                ),
+                array(
+                    'activity_id' => $activity_id,
+                    'student_matric' => $this->input->post('deputydirector'),
+                    'role_id' => '6'
+                ),
+                array(
+                    'activity_id' => $activity_id,
+                    'student_matric' => $this->input->post('secretary'),
+                    'role_id' => '9'
+                ),
+            );
+            $this->student_model->register_highcoms($highcoms);
             redirect('activity');
         }
     }
@@ -76,14 +94,21 @@ class Activity extends CI_Controller
         if (empty($data['activity'])) {
             show_404();
         }
+        // print_r($data['activity']);
         $data['title'] = 'Edit activity';
         $data['academicsessions'] = $this->academic_model->get_academicsession();
         $data['sigs'] = $this->sig_model->get_sig();
         $data['mentors'] = $this->mentor_model->get_mentor();
         $data['semesters'] = $this->semester_model->get_semesters();
-        $data['highcoms'] = $this->student_model->get_highcoms($data['activity']['id']);
+        $data['highcoms'] = $this->activity_model->get_highcoms($data['activity']['id']);
         $data['sigstudents'] = $this->student_model->get_sigstudents($data['activity']['sig_id']);
-
+        // print_r($data['highcoms']);
+        $dirkey = array_search('5', array_column($data['highcoms'], 'role_id'));
+        $dptkey = array_search('6', array_column($data['highcoms'], 'role_id'));
+        $scrkey = array_search('9', array_column($data['highcoms'], 'role_id'));
+        $data['director'] = $data['highcoms'][$dirkey];
+        $data['deputy'] = $data['highcoms'][$dptkey];
+        $data['secretary'] = $data['highcoms'][$scrkey];
         $this->load->view('templates/header');
         $this->load->view('activity/edit', $data);
         $this->load->view('templates/footer');

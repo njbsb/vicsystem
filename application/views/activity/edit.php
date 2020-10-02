@@ -86,6 +86,8 @@
                 <option value="<?= $mentor['id'] ?>" <?php
                                                         if ($mentor['id'] == $activity['advisor_matric']) {
                                                             echo 'selected';
+                                                        } else {
+                                                            echo 'disabled';
                                                         }
                                                         ?>>
                     <?= $mentor['name'] . ' (' . $mentor['id'] . ')' ?>
@@ -102,7 +104,11 @@
                 <select name="projectdirector" id="projectdirector" class="form-control">
                     <option value="" selected disabled hidden>Choose Project Director</option>
                     <?php foreach ($sigstudents as $ss) : ?>
-                        <option value="<?= $ss['id'] ?>">
+                        <option value="<?= $ss['id'] ?>" <?php if ($ss['id'] == $director['id']) {
+                                                                echo 'selected';
+                                                            } else {
+                                                                echo 'disabled';
+                                                            } ?>>
                             <?= $ss['id'] . ' ' . $ss['name'] ?>
                         </option>
                     <?php endforeach ?>
@@ -115,7 +121,11 @@
                 <select name="deputydirector" id="deputydirector" class="form-control">
                     <option value="" selected disabled hidden>Choose Deputy Director</option>
                     <?php foreach ($sigstudents as $ss) : ?>
-                        <option value="<?= $ss['id'] ?>">
+                        <option value="<?= $ss['id'] ?>" <?php if ($ss['id'] == $deputy['id']) {
+                                                                echo 'selected';
+                                                            } else {
+                                                                echo 'disabled';
+                                                            } ?>>
                             <?= $ss['id'] . ' ' . $ss['name'] ?>
                         </option>
                     <?php endforeach ?>
@@ -128,7 +138,11 @@
                 <select name="secretary" id="secretary" class="form-control">
                     <option value="" selected disabled hidden>Choose Secretary</option>
                     <?php foreach ($sigstudents as $ss) : ?>
-                        <option value="<?= $ss['id'] ?>">
+                        <option value="<?= $ss['id'] ?>" <?php if ($ss['id'] == $secretary['id']) {
+                                                                echo 'selected';
+                                                            } else {
+                                                                echo 'disabled';
+                                                            } ?>>
                             <?= $ss['id'] . ' ' . $ss['name'] ?>
                         </option>
                     <?php endforeach ?>
@@ -155,12 +169,12 @@
     <div class="row">
         <div class="form-group col-sm-4">
             <label>Datetime start (DT):</label>
-            <input name="datetime_start" value="<?php echo str_replace(' ', 'T', $activity['datetime_start']); ?>" type="datetime-local" id="datetime_start">
+            <input name="datetime_start" value="<?= str_replace(' ', 'T', $activity['datetime_start']); ?>" type="datetime-local" id="datetime_start">
         </div>
 
         <div class="form-group col-sm-4">
             <label>Datetime end (DT):</label>
-            <input name="datetime_end" value="<?php echo str_replace(' ', 'T', $activity['datetime_end']); ?>" type="datetime-local" id="datatime_end">
+            <input name="datetime_end" value="<?= str_replace(' ', 'T', $activity['datetime_end']); ?>" type="datetime-local" id="datatime_end">
         </div>
     </div>
     <br>
