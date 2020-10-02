@@ -22,13 +22,13 @@
 
 <hr>
 <div class="row">
-    <?php echo form_open('/activity/edit/' . $activity['slug']); ?>
+    <?= form_open('/activity/edit/' . $activity['slug']); ?>
     <input type="submit" value="Update" class="btn btn-outline-secondary">
-    </form>
+    <?= form_close() ?>
     &nbsp;
-    <?php echo form_open('/activity/delete/' . $activity['id']); ?>
+    <?= form_open('/activity/delete/' . $activity['id']); ?>
     <input type="submit" value="Delete" class="btn btn-outline-danger" disabled>
-    </form>
+    <?= form_close() ?>
 </div>
 <hr>
 

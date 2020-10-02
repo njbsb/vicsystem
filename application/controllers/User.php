@@ -45,11 +45,6 @@ class User extends CI_Controller
         $data['title'] = 'Update profile';
         $id = 'K001'; // get the current session user first
         $data['user'] = $this->user_model->get_user($id);
-        // if (!$data['user']['profile_image']) {
-        //     $data['user']['profile_image'] = 'default.jpg';
-        // }
-        // print_r($data['user']);
-        // $id = $data['user']['id'];
         $usertype = $data['user']['usertype_id'];
 
         $data['sigs'] = $this->sig_model->get_sig();
@@ -78,7 +73,6 @@ class User extends CI_Controller
                 break;
         }
         $this->load->view('templates/footer');
-
         // NOT DONE
         // get the current session user
     }
