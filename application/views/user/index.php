@@ -32,6 +32,15 @@
                 </tr>
             <?php endforeach ?>
         </tbody>
+        <tfoot>
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>User type</td>
+                <td>Status</td>
+                <td></td>
+            </tr>
+        </tfoot>
     </table>
 </div>
 
@@ -60,7 +69,26 @@
 
 <script>
     $(document).ready(function() {
-        $('#usertable').DataTable();
+        $('#usertable').DataTable({
+            initComplete: function() {
+                this.api().columns().every(function() {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function() {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+                            column
+                                .search(val ? '^' + val + '$' : '', true, false)
+                                .draw();
+                        });
+                    column.data().unique().sort().each(function(d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>')
+                    });
+                });
+            }
+        });
     });
     var confirmtext = document.getElementById('confirmtext');
     $('#confirmDelete').on('show.bs.modal', function(e) {

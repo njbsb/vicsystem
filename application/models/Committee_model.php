@@ -149,4 +149,11 @@ class Committee_model extends CI_Model
         $this->db->insert('tbl_org_committee');
         return true;
     }
+
+    public function register_act_committee($comdata)
+    {
+        $this->db->set($comdata);
+        $this->db->insert('tbl_activity_committee');
+        return true;
+    }
 }

@@ -114,7 +114,7 @@
 <hr>
 <button data-toggle="modal" data-target="#registercommittee" class="btn btn-outline-primary margin">Add new committee</button>
 
-<table class="table table-hover">
+<table id="orgcom_table" class="table table-hover">
     <thead class="table-dark">
         <tr>
             <td>Matric</td>
@@ -220,6 +220,9 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        $('#orgcom_table').DataTable();
+    });
     var confirmtext = document.getElementById('confirmtext');
     $('#delete_orgcom').on('show.bs.modal', function(e) {
         var matric = $(e.relatedTarget).data('stdmatric');

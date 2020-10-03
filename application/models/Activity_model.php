@@ -103,4 +103,13 @@ class Activity_model extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    public function get_slug($activity_id)
+    {
+        $this->db->select('slug')
+            ->from('tbl_activity')
+            ->where('id', $activity_id);
+        $query = $this->db->get();
+        return $query->row()->slug;
+    }
 }

@@ -23,11 +23,13 @@ class Activity extends CI_Controller
         $data['comments'] = $this->comment_model->get_comments($activity_id);
         $data['committees'] = $this->activity_model->get_committees($activity_id);
         $data['categories'] = $this->category_model->get_category();
+        $data['activity_roles'] = $this->committee_model->get_roles_committee();
+        $data['sig_members'] = $this->student_model->get_sigstudents($data['activity']['sig_id']);
 
         $this->load->view('templates/header');
         $this->load->view('activity/view', $data);
         if ($data['committees']) {
-            $this->load->view('activity/committee');
+            $this->load->view('activity/committee', $data);
         }
         $this->load->view('activity/comments');
         $this->load->view('templates/footer');
@@ -145,7 +147,21 @@ class Activity extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    public function addcommittee($id)
+    public function addcommittee($activity_id)
     {
+        $slug = $this->get_slug($activity_id);
+        $comdata = array(
+            'activity_id' => $activity_id,
+            'role_id' => $this->input->post('role_id'),
+            'student_matric' => $this->input->post('student_matric'),
+            'role_desc' => $this->input->post('role_desc')
+        );
+        $this->committee_model->register_act_committee($comdata);
+        redirect('activity/' . $slug);
+    }
+
+    public function get_slug($activity_id)
+    {
+        return $this->activity_model->get_slug($activity_id);
     }
 }
