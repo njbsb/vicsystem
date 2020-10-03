@@ -9,7 +9,7 @@
                 <!-- <h3 class="card-header">
                     Header
                 </h3> -->
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php echo base_url('assets/images/profile/') . $mentor['profile_image']; ?>" alt="Card image">
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/') . $mentor['profile_image'] ?>">
                 <!-- <div class="card-body">
 
                 </div> -->

@@ -20,13 +20,13 @@
                 <!-- <td>
                     <img style="max-height:100px;" src="<?php echo site_url() ?>assets/images/profile/default.png" class="img-responsive" alt="Image">
                 </td> -->
-                <td class="Activity" scope="row"><a href="<?php echo site_url('/activity/' . $activity['slug']); ?>"><?= $activity['activity_name'] ?></a></t>
+                <td class="Activity" scope="row"><a href="<?= site_url('/activity/' . $activity['slug']) ?>"><?= $activity['activity_name'] ?></a></t>
                 <td class="Date"><?= date('d/m/Y', strtotime($activity['datetime_start'])) ?></td>
                 <td><?= $activity['acadyear'] . ' Sem ' . $activity['semester_id'] ?></td>
                 <td><?= $activity['code'] ?></td>
                 <td>Null</td>
                 <td><?= $activity['advisorname'] ?></td>
-                <!-- <td><a class="btn btn-secondary btn-sm" href="<?php echo site_url('/activity/' . $activity['slug']); ?>">Details</a></td> -->
+                <!-- <td><a class="btn btn-secondary btn-sm" href="<?= site_url('/activity/' . $activity['slug']) ?>">Details</a></td> -->
             </tr>
         <?php endforeach ?>
     </tbody>

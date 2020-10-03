@@ -20,9 +20,9 @@
             var card = `<div class="col-lg-2">
                         <div class="card mb-2">
                             <img style="max-width:auto; max-height:180px; display: block; object-fit:cover; padding:6px;"
-                                src="<?php echo base_url() . 'assets/images/profile/'; ?>${data[i].profile_image}" alt="" srcset="">
+                                src="<?= base_url() . 'assets/images/profile/' ?>${data[i].profile_image}" alt="" srcset="">
                             <div class="card-footer text-muted">
-                                <a href="<?php echo site_url('/student/'); ?>${data[i].id}">${data[i].id}</a>
+                                <a href="<?= site_url('/student/') ?>${data[i].id}">${data[i].id}</a>
                             </div>
                         </div>
                     </div>`

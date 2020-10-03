@@ -5,7 +5,7 @@
 <ul class="list-group">
     <?php foreach ($categories as $cat) : ?>
         <li class="list-group-item">
-            <a href="<?php echo site_url('category/post') ?>"><?= $cat['category'] ?></a>
+            <a href="<?= site_url('category/post') ?>"><?= $cat['category'] ?></a>
         </li>
     <?php endforeach ?>
 </ul>
