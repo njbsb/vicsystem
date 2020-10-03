@@ -4,10 +4,9 @@ class Score extends CI_Controller
     public function index()
     {
         $data['title'] = 'Score';
-        $data['citra_registered'] = $this->citra_model->get_citra_registered();
-        $data['scores'] = $this->score_model->get_allscores();
-        // print_r($data['scores']);
-        // print_r($data['citra_registered']);
+        $activesession_id = $this->academic_model->get_activeacademicsession()['id'];
+        $data['registered_student'] = $this->academic_model->get_registered_student($activesession_id);
+        $data['student_score'] = $this->get_arraytable_score($data['registered_student']);
         $this->load->view('templates/header');
         $this->load->view('score/index', $data);
         $this->load->view('templates/footer');
@@ -47,5 +46,29 @@ class Score extends CI_Controller
         $this->load->view('templates/header');
         $this->load->view('score/view', $data);
         $this->load->view('templates/footer');
+    }
+
+    public function get_arraytable_score($regstd)
+    {
+        for ($i = 0; $i < count($regstd); $i++) {
+            $id = $regstd[$i]['student_matric'];
+            $acadsession = $regstd[$i]['acadsession_id'];
+            $levelscores = $this->score_model->get_student_levelscore($id, $acadsession);
+            $compscore = $this->score_model->get_student_compscore($id, $acadsession);
+            $levelpercent = 0;
+            foreach ($levelscores as $ls) {
+                $levelpercent += $this->calculate_levelscore($ls);
+            }
+            $comppercent = $compscore['sc_digitalcv'] + $compscore['sc_leadership'] + $compscore['sc_volunteer'];
+            $regstd[$i]['totalpercent'] = $levelpercent + $comppercent;
+        }
+        return $regstd;
+    }
+
+    public function calculate_levelscore($eachlevel)
+    {
+        $levelpercentage = $this->score_model->get_levelscore($eachlevel['levelscore_id'])['percentage'];
+        $totalscore = $eachlevel['sc_position'] + $eachlevel['sc_meeting'] + $eachlevel['sc_attendance'] + $eachlevel['sc_involvement'];
+        return ($totalscore / 20) * ($levelpercentage / 100);
     }
 }

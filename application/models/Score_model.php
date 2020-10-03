@@ -6,7 +6,7 @@ class Score_model extends CI_Model
         $this->load->database();
     }
 
-    public function get_allscores()
+    public function get_students_takingcitra()
     {
         // $this->db->select('citreg.student_matric, acy.acadyear, acs.semester_id')
         //     // ->distinct()
@@ -31,6 +31,24 @@ class Score_model extends CI_Model
             return $query->result_array();
         }
         $query = $this->db->get_where('tbl_levelscore', array('id' => $id));
+        return $query->row_array();
+    }
+
+    public function get_student_levelscore($matric, $acadsession_id)
+    {
+        $this->db->select('*')
+            ->from('tbl_scorelevel as scl')
+            ->where(array('student_matric' => $matric, 'acadsession_id' => $acadsession_id));
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function get_student_compscore($matric, $acadsession_id)
+    {
+        $this->db->select('*')
+            ->from('tbl_scorecomp as scc')
+            ->where(array('student_matric' => $matric, 'acadsession_id' => $acadsession_id));
+        $query = $this->db->get();
         return $query->row_array();
     }
 

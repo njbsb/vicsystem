@@ -1,37 +1,57 @@
-<h2 class=""><?= $title ?></h2>
+<h2 class=" "><?= $title ?></h2>
 
 <table id="scoretable" class="table table-hover" style="text-align:left;">
     <thead class="table-dark">
         <tr>
             <th scope="col" class="Matric">Matric</th>
-            <!-- <th scope="col" class="sort" data-sort="Matric">Matric</th> -->
-            <th scope="col" class="sort" data-sort="Citra">Citra taken</th>
-            <th scope="col" class="sort" data-sort="AcadYear">Academic Year</th>
-            <th scope="col" class="sort" data-sort="Semester">Semester</th>
+            <th scope="col" class="sort" data-sort="AcadYear">Academic Session</th>
+            <th>Total Score (55%)</th>
             <th scope="col" class="sort" data-sort="Status">Status</th>
             <th scope="">Details</th>
         </tr>
     </thead>
     <tbody class="list">
-        <?php foreach ($citra_registered as $citreg) : ?>
+        <?php foreach ($student_score as $stdscore) : ?>
             <tr>
-                <td class="Matric"><?= $citreg['student_matric'] ?></td>
-                <td class="Citra"><?= $citreg['citra_code'] ?></td>
-                <td class="AcadYear"><?= $citreg['acadyear'] ?></td>
-                <td class="Semester"><?= $citreg['semester_id'] ?></td>
-                <td class="Status">
-                    <?php // check if  
-                    ?>
-                </td>
-                <td><a class="badge badge-primary" href="<?= site_url('/score/' . $citreg['student_matric']) ?>">Edit score</a></td>
+                <td class="Matric"><?= $stdscore['student_matric'] ?></td>
+                <td class="AcadYear"><?= $stdscore['acadsession'] ?></td>
+                <td><?= $stdscore['totalpercent'] ?></td>
+                <td class="Status">Marked/Not</td>
+                <td><a class="badge badge-primary" href="<?= site_url('/score/' . $stdscore['student_matric']) ?>">Edit score</a></td>
             </tr>
         <?php endforeach ?>
-
     </tbody>
+    <tfoot>
+        <th scope="col" class="Matric">Matric</th>
+        <!-- <th scope="col" class="sort" data-sort="Citra">ACS ID</th> -->
+        <th scope="col" class="sort" data-sort="AcadYear">Academic Session</th>
+        <th>Total Score (55%)</th>
+        <th scope="col" class="sort" data-sort="Status">Status</th>
+        <th scope="">Details</th>
+    </tfoot>
 </table>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#scoretable').DataTable();
+        $('#scoretable').DataTable({
+            initComplete: function() {
+                this.api().columns().every(function() {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function() {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+                            column
+                                .search(val ? '^' + val + '$' : '', true, false)
+                                .draw();
+                        });
+                    column.data().unique().sort().each(function(d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>')
+                    });
+                });
+            }
+        });
     });
 </script>

@@ -7,8 +7,8 @@ class Academic extends CI_Controller
         $data['academicsession'] = $this->academic_model->get_academicsession();
         $data['academicplan'] = $this->academic_model->get_academicplan();
         $data['semesters'] = $this->academic_model->get_semester();
-        print_r($data['academicyear']);
-        $data['title'] = 'Academic Index Page';
+        // print_r($data['academicyear']);
+        $data['title'] = 'Academic Control Page';
         $this->load->view('templates/header');
         $this->load->view('academic/index', $data);
         $this->load->view('templates/footer');
@@ -21,11 +21,10 @@ class Academic extends CI_Controller
 
         if ($level_id == FALSE) {
             $data['title'] = 'Register Academic Plan';
+
             $data['raw_scorelevels'] = $this->score_model->get_scorebylevels($id, $acadsession_id);
             $data['raw_scorecomp'] = $this->score_model->get_scorebycomp($id, $acadsession_id);
-
             $data['raw_academicplan'] = $this->academic_model->get_academicplan($id);
-
 
             $data['academicplans'] = $this->get_arraytable_academicplan($data['raw_academicplan']);
             $data['score_levels'] = $this->get_arraytable_level($acadsession_id, $data['raw_scorelevels']);
@@ -95,10 +94,10 @@ class Academic extends CI_Controller
         $academicsession = $this->get_academicsession($acadsession_id);
         for ($i = 0; $i < count($datalevel); $i++) {
             $datalevel[$i]['academicsession'] = $academicsession;
-            $percentage = $this->score_model->get_levelscore($datalevel[$i]['levelscore_id'])['percentage'];
+            $levelpercentage = $this->score_model->get_levelscore($datalevel[$i]['levelscore_id'])['percentage'];
             $total = $datalevel[$i]['sc_position'] + $datalevel[$i]['sc_meeting'] + $datalevel[$i]['sc_attendance'] + $datalevel[$i]['sc_involvement'];
             $datalevel[$i]['total'] = $total;
-            $datalevel[$i]['totalpercent'] = ($total / 20) * ($percentage / 100);
+            $datalevel[$i]['totalpercent'] = ($total / 20) * ($levelpercentage / 100);
         }
         return $datalevel;
     }

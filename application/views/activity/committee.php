@@ -56,6 +56,7 @@
                 <div class="form-group">
                     <label for="role_desc">Role Description</label>
                     <input name="role_desc" type="text" class="form-control">
+                    <small>Only fill this field when registering for Committee Member (AJK)</small>
                 </div>
                 <div class="form-group">
                     <label for="student_matric">Member</label>

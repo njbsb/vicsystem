@@ -77,10 +77,20 @@ class Academic_model extends CI_Model
         return $query->result_array();
     }
 
+    public function get_registered_student($acadsession_id)
+    {
+        $this->db->select("acp.*, std.name, concat(acy.acadyear, ' Sem ' , acs.semester_id) as acadsession")
+            ->from('tbl_academicplan as acp')
+            ->where('acadsession_id', $acadsession_id)
+            ->join('tbl_user as std', 'acp.student_matric = std.id')
+            ->join('tbl_academicsession as acs', 'acs.id = acp.acadsession_id')
+            ->join('tbl_academicyear as acy', 'acy.id = acs.acadyear_id');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     public function create_acs($acsdata)
     {
-        // if ($_POST["action"] == "add") {
-        // }
         return $this->db->insert('tbl_academicsession', $acsdata);
     }
 

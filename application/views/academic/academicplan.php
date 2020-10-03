@@ -1,5 +1,6 @@
 <h2 class="text-center margin"><?= $title ?></h2>
 <div class="form-group">
+    <label for="id">Student Matric</label>
     <input name="id" type="text" class="form-control" value="A160000" readonly>
 </div>
 <h2 class="text-center">Academic Plan</h2>
