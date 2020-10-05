@@ -14,8 +14,6 @@ class Role_model extends CI_Model
 
     public function get_mentor_roles()
     {
-        // $query = $this->db->get_where('tbl_role');
-
         $this->db->select('*')
             ->from('tbl_role')
             ->like('rolename', 'Club');

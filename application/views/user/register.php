@@ -33,7 +33,7 @@
         <!-- DOB -->
         <div class="form-group">
             <label for="dob">Date of Birth</label>
-            <input name="dob" class="form-control" type="date" value="" id="dob" required>
+            <input name="dob" class="form-control" type="date" value="<?= $dob ?>" id="dob" required>
         </div>
 
         <!-- EMAIL -->
@@ -57,10 +57,10 @@
             <!-- <label>Select SIG</label> -->
             <select name="sig_id" class="form-control" id="sig_id">
                 <?php foreach ($sigs as $sig) : ?>
-                    <option value="<?php echo $sig['id']; ?>" <?php if ($sig_id == $sig['id']) {
-                                                                    echo 'selected';
-                                                                } ?>>
-                        <?php echo $sig['signame'] . ' (' . $sig['code'] . ')'; ?>
+                    <option value="<?= $sig['id'] ?>" <?php if ($sig_id == $sig['id']) {
+                                                            echo 'selected';
+                                                        } ?>>
+                        <?= $sig['namecode'] ?>
                     </option>
                 <?php endforeach ?>
             </select>

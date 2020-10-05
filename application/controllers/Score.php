@@ -53,8 +53,8 @@ class Score extends CI_Controller
         for ($i = 0; $i < count($regstd); $i++) {
             $id = $regstd[$i]['student_matric'];
             $acadsession = $regstd[$i]['acadsession_id'];
-            $levelscores = $this->score_model->get_student_levelscore($id, $acadsession);
-            $compscore = $this->score_model->get_student_compscore($id, $acadsession);
+            $levelscores = $this->score_model->get_student_scorelevel($id, $acadsession);
+            $compscore = $this->score_model->get_student_scorecomp($id, $acadsession);
             $levelpercent = 0;
             foreach ($levelscores as $ls) {
                 $levelpercent += $this->calculate_levelscore($ls);

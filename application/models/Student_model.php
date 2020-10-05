@@ -6,9 +6,9 @@ class Student_model extends CI_Model
         $this->load->database();
     }
 
-    public function get_student($id = FALSE)
+    public function get_student($student_id = FALSE)
     {
-        if ($id === FALSE) {
+        if ($student_id === FALSE) {
             $this->db->select('user.id, user.profile_image')
                 ->from('tbl_user as user')
                 ->where(array('userstatus_id' => '2', 'usertype_id' => '3'))
@@ -21,7 +21,7 @@ class Student_model extends CI_Model
         std.phonenum, std.program_code, std.mentor_matric, 
         prg.name as program_name, sig.signame, sig.code as sigcode, mtr.name as mentor_name')
             ->from('tbl_user as user')
-            ->where(array('user.id' => $id))
+            ->where(array('user.id' => $student_id))
             ->join('tbl_student as std', 'std.matric = user.id')
             ->join('tbl_program as prg', 'prg.code = std.program_code')
             ->join('tbl_sig as sig', 'sig.id = user.sig_id')
@@ -67,7 +67,7 @@ class Student_model extends CI_Model
         return $this->db->update('tbl_student', $studentdata);
     }
 
-    public function update_highcoms($activity_id, $highcoms)
+    public function update_activity_highcoms($activity_id, $highcoms)
     {
         foreach ($highcoms as $hc) {
             $change = array('student_matric' => $hc['student_matric']);

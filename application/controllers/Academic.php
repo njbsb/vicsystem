@@ -22,8 +22,8 @@ class Academic extends CI_Controller
         if ($level_id == FALSE) {
             $data['title'] = 'Register Academic Plan';
 
-            $data['raw_scorelevels'] = $this->score_model->get_scorebylevels($id, $acadsession_id);
-            $data['raw_scorecomp'] = $this->score_model->get_scorebycomp($id, $acadsession_id);
+            $data['raw_scorelevels'] = $this->score_model->get_students_scorebylevels($id, $acadsession_id);
+            $data['raw_scorecomp'] = $this->score_model->get_students_scorebycomp($id, $acadsession_id);
             $data['raw_academicplan'] = $this->academic_model->get_academicplan($id);
 
             $data['academicplans'] = $this->get_arraytable_academicplan($data['raw_academicplan']);

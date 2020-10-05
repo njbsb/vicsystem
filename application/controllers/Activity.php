@@ -23,7 +23,7 @@ class Activity extends CI_Controller
         $data['comments'] = $this->comment_model->get_comments($activity_id);
         $data['committees'] = $this->activity_model->get_committees($activity_id);
         $data['categories'] = $this->category_model->get_category();
-        $data['activity_roles'] = $this->committee_model->get_roles_committee();
+        $data['activity_roles'] = $this->committee_model->get_roles_activity();
         $data['sig_members'] = $this->student_model->get_sigstudents($data['activity']['sig_id']);
 
         $this->load->view('templates/header');
@@ -90,6 +90,7 @@ class Activity extends CI_Controller
         $this->activity_model->delete_activity($id);
         redirect('activity');
     }
+
     public function edit($slug)
     {
         $data['activity'] = $this->activity_model->get_activity($slug);

@@ -63,6 +63,7 @@ class Mentor extends CI_Controller
             redirect('mentor');
         }
     }
+
     public function edit($matric)
     {
         $data['mentor'] = $this->mentor_model->get_mentor($matric);

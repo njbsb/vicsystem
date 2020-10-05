@@ -5,7 +5,7 @@ class Score_model extends CI_Model
     {
         $this->load->database();
     }
-
+    // no call
     public function get_students_takingcitra()
     {
         // $this->db->select('citreg.student_matric, acy.acadyear, acs.semester_id')
@@ -34,7 +34,7 @@ class Score_model extends CI_Model
         return $query->row_array();
     }
 
-    public function get_student_levelscore($matric, $acadsession_id)
+    public function get_student_scorelevel($matric, $acadsession_id)
     {
         $this->db->select('*')
             ->from('tbl_scorelevel as scl')
@@ -43,7 +43,7 @@ class Score_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_student_compscore($matric, $acadsession_id)
+    public function get_student_scorecomp($matric, $acadsession_id)
     {
         $this->db->select('*')
             ->from('tbl_scorecomp as scc')
@@ -52,11 +52,11 @@ class Score_model extends CI_Model
         return $query->row_array();
     }
 
-    public function get_scorebylevels($matric, $acadsession)
+    public function get_students_scorebylevels($matric, $acadsession_id)
     {
         $this->db->select('scl.*, acy.acadyear, acs.semester_id, act.activity_name, ls.level, ls.percentage')
             ->from('tbl_scorelevel as scl')
-            ->where(array('scl.student_matric' => $matric, 'scl.acadsession_id' => $acadsession))
+            ->where(array('scl.student_matric' => $matric, 'scl.acadsession_id' => $acadsession_id))
             ->join('tbl_academicsession as acs', 'acs.id = scl.acadsession_id')
             ->join('tbl_academicyear as acy', 'acy.id = acs.acadyear_id')
             ->join('tbl_activity as act', 'act.id = scl.activity_id')
@@ -65,7 +65,7 @@ class Score_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_scorebycomp($matric, $acadsession)
+    public function get_students_scorebycomp($matric, $acadsession)
     {
         $this->db->select('sc.*, acy.acadyear, acs.semester_id, ls.level')
             ->from('tbl_scorecomp as sc')

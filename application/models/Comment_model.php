@@ -19,9 +19,6 @@ class Comment_model extends CI_Model
     {
         $this->db->select('*')
             ->from('tbl_comment as cmt')
-            // ->where('cmt.student_matric is NOT NULL', NULL, FALSE)
-
-            // ->where(array('cmt.student_matric IS NOT NULL' => NULL))
             ->where(array('cmt.activity_id' => $activity_id))
             ->join('tbl_comment_category as cmtcat', 'cmt.category_id = cmtcat.id');
         $query = $this->db->get();
