@@ -109,6 +109,12 @@ class User extends CI_Controller
 
     public function register()
     {
+        $usertype_id = $this->input->post('usertype_id');
+        # this usertype_id is from login page
+
+        # VALUE RETRIEVAL
+        # this will return no value if we came from login page
+        # but will return value if we submit registration form
         $id = $this->input->post('id');
         $name = $this->input->post('name');
         $email = $this->input->post('email');
@@ -116,38 +122,102 @@ class User extends CI_Controller
         $sig_id = $this->input->post('sig_id');
         $dob = $this->input->post('dob');
 
+        if ($usertype_id == '2') {
+            $position = $this->input->post('position');
+            $roomnum = $this->input->post('roomnum');
+            $orgrole_id = $this->input->post('orgrole_id');
+        } elseif ($usertype_id = '3') {
+            $program_code = $this->input->post('program_code');
+            $phonenum = $this->input->post('phonenum');
+        }
+        # END VALUE RETRIEVAL
+
+        # VALIDATION OF REGISTRATION FORM
         if ($id && $name && $email && $password && $sig_id && $dob) {
             $this->form_validation->set_rules('id', 'ID', 'required|callback_id_exist');
             $this->form_validation->set_rules('name', 'Name', 'required');
             $this->form_validation->set_rules('email', 'Email', 'required');
             $this->form_validation->set_rules('password', 'Password', 'required');
             $this->form_validation->set_rules('confirmpassword', 'Confirm Password', 'matches[password]');
+            if ($usertype_id == '2' && $position && $roomnum && $orgrole_id) {
+                $this->form_validation->set_rules('position', 'Position', 'required');
+                $this->form_validation->set_rules('roomnum', 'Room number', 'required');
+                $this->form_validation->set_rules('orgrole_id', 'Organization role', 'required');
+            } elseif ($usertype_id == '3' && $program_code && $phonenum) {
+                $this->form_validation->set_rules('program_code', 'Program', 'required');
+                $this->form_validation->set_rules('phonenum', 'Phone Number', 'required');
+            }
         }
+        # END VALIDATION
 
         if ($this->form_validation->run() === FALSE) {
+            # ON FIRST LANDING TO REGISTRATION FORM
+            # NO REGISTRATION DATA IS SUBMITTED
 
+            if ($usertype_id) {
+                $data['usertype_name'] = ucfirst($this->user_model->get_usertypename($usertype_id));
+            } else {
+                redirect('login');
+            }
+            $data['usertype_id'] = $usertype_id; # this is to be sent as value in the registration form
+            $data['title'] = 'Register';
+            $data['sigs'] = $this->sig_model->get_sig();
+
+            # this will fetch data from previously filled registration form when validation error occurs
             $data['id'] = $id;
             $data['name'] = $name;
             $data['email'] = $email;
             $data['sig_id'] = $sig_id;
-
-            $data['usertype_id'] = $this->input->post('usertype_id');
-            if ($data['usertype_id']) {
-                $data['usertype_name'] = ucfirst($this->user_model->get_usertypename($data['usertype_id']));
-            } else {
-                redirect('login');
-            }
-            $data['usertype_name'] = ucfirst($this->user_model->get_usertypename($data['usertype_id']));
-            $data['title'] = 'Register';
-            $data['sigs'] = $this->sig_model->get_sig();
+            $data['dob'] = $dob;
 
             $this->load->view('templates/header');
-            $this->load->view('user/register', $data);
+
+            if ($usertype_id == '2') {
+                // MENTOR
+                $data['position'] = $position;
+                $data['roomnum'] = $roomnum;
+                $data['orgrole_id'] = $orgrole_id;
+                $data['mentorroles'] = $this->role_model->get_mentor_roles();
+                $this->load->view('user/mentor/register', $data);
+            } else {
+                // STUDENT
+                $data['program_code'] = $program_code;
+                $data['phonenum'] = $phonenum;
+                $data['programs'] = $this->program_model->get_programs();
+                $this->load->view('user/student/register', $data);
+            }
         } else {
-            // Encrypt password
+            # INSERT DATA TO DB
             $enc_password = md5($this->input->post('password'));
-            $usertype_id = $this->input->post('usertype_id');
-            $this->user_model->register_user($usertype_id, $enc_password);
+            $userdata = array(
+                'id' => $id,
+                'name' => $name,
+                'email' => $email,
+                'password' => $enc_password,
+                'sig_id' => $sig_id,
+                'usertype_id' => $usertype_id,
+                'dob' => $dob
+            );
+            $this->user_model->register_user($userdata);
+
+            if ($usertype_id == '2') {
+                # send data to mentor model
+                $mentordata = array(
+                    'matric' => $id,
+                    'position' => $position,
+                    'roomnum' => $roomnum,
+                    'orgrole_id' => $orgrole_id
+                );
+                $this->mentor_model->register_mentor($mentordata);
+            } elseif ($usertype_id = '3') {
+                # send data to student model
+                $studentdata = array(
+                    'matric' => $id,
+                    'phonenum' => $phonenum,
+                    'program_code' => $program_code
+                );
+                $this->student_model->register_student($studentdata);
+            }
             $data['title'] = 'Registration Successful';
             $data['content'] = 'Your registration is currently pending admin\'s approval. Your admin will contact you once your registration is approved';
             $this->load->view('templates/header');
