@@ -1,8 +1,8 @@
 <h4 class="text-center"><?= $title ?></h4>
-<h4 class="text-center"><?= $president['acadyear'] ?></h4>
+<h4 class="text-center"><?= $activeacadyear['acadyear'] ?></h4>
 
-<div class="row text-center">
-    <?php if ($president) : ?>
+<?php if ($president) : ?>
+    <div class="row text-center">
         <div class="col-md-4 offset-md-4">
             <div class="card mb-4">
                 <h4 class="card-header text-white bg-dark">
@@ -20,13 +20,14 @@
                 </div>
             </div>
         </div>
-    <?php else : ?>
-        <p>No President for the current year</p>
-    <?php endif ?>
-</div>
+    </div>
+<?php else : ?>
+    <p class="text-center">No President for the current year</p>
+<?php endif ?>
+
 <div class="row text-center">
-    <?php if ($treasurer) : ?>
-        <div class="col-md-4">
+    <div class="col-md-4">
+        <?php if ($secretary) : ?>
             <div class="card mb-4">
                 <h4 class="card-header text-white bg-dark">
                     <?= $secretary['rolename']; ?>
@@ -42,10 +43,12 @@
                     <?= $secretary['email'] ?>
                 </div>
             </div>
-        </div>
-    <?php endif ?>
-    <?php if ($deputypresident) : ?>
-        <div class="col-md-4">
+        <?php else : ?>
+            <p class="text-center">No secretary for the current year</p>
+        <?php endif ?>
+    </div>
+    <div class="col-md-4">
+        <?php if ($deputypresident) : ?>
             <div class="card mb-4">
                 <h4 class="card-header text-white bg-dark">
                     <?= $deputypresident['rolename']; ?>
@@ -61,10 +64,12 @@
                     <?= $deputypresident['email'] ?>
                 </div>
             </div>
-        </div>
-    <?php endif ?>
-    <?php if ($treasurer) : ?>
-        <div class="col-md-4">
+        <?php else : ?>
+            <p class="text-center">No deputy president for the current year</p>
+        <?php endif ?>
+    </div>
+    <div class="col-md-4">
+        <?php if ($treasurer) : ?>
             <div class="card mb-4">
                 <h4 class="card-header text-white bg-dark">
                     <?= $treasurer['rolename']; ?>
@@ -82,8 +87,10 @@
                     <?= $treasurer['email'] ?>
                 </div>
             </div>
-        </div>
-    <?php endif ?>
+        <?php else : ?>
+            <p class="text-center">No treasurer for the current year</p>
+        <?php endif ?>
+    </div>
 </div>
 <hr>
 <div class="row text-center">
@@ -109,6 +116,10 @@
                 </div>
             </div>
         <?php endforeach ?>
+    <?php else : ?>
+        <div class="col-md-4 offset-md-4">
+            <p class="text-center">No AJK for the current year</p>
+        </div>
     <?php endif ?>
 </div>
 <hr>

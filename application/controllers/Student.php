@@ -11,15 +11,14 @@ class Student extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    public function view($matric)
+    public function view($student_id)
     {
-        $data['student'] = $this->student_model->get_student($matric);
+        $data['student'] = $this->student_model->get_student($student_id);
         if (!array_filter($data['student'])) {
             show_404();
         }
-        if (!$data['student']['profile_image']) {
-            $data['student']['profile_image'] = 'default.jpg';
-        }
+        $data['activity_roles'] = $this->committee_model->get_activityroles($student_id);
+        $data['org_roles'] = $this->committee_model->get_orgroles($student_id, $data['student']['sig_id']);
         $this->load->view('templates/header');
         $this->load->view('student/view', $data);
         $this->load->view('templates/footer');
@@ -54,10 +53,10 @@ class Student extends CI_Controller
         }
     }
 
-    public function edit($matric = NULL)
+    public function edit($student_id = NULL)
     {
-        $data['student'] = $this->student_model->get_student($matric);
-        if (empty($data['student']) || !array_filter($data['student']) || $matric == FALSE) {
+        $data['student'] = $this->student_model->get_student($student_id);
+        if (empty($data['student']) || !array_filter($data['student']) || $student_id == FALSE) {
             show_404();
         }
         $data['title'] = 'Edit Student';
@@ -69,7 +68,7 @@ class Student extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    public function update($id)
+    public function update($student_id)
     {
         $userdata = array(
             'name' => $this->input->post('name'),
@@ -82,14 +81,14 @@ class Student extends CI_Controller
             'program_code' => $this->input->post('program_code'),
             'mentor_matric' => $this->input->post('mentor_matric')
         );
-        $this->student_model->update_student($id, $studentdata);
-        $this->user_model->update_user($id, $userdata);
-        redirect('student/' . $id);
+        $this->student_model->update_student($student_id, $studentdata);
+        $this->user_model->update_user($student_id, $userdata);
+        redirect('student/' . $student_id);
     }
 
-    public function matric_exist($matric)
+    public function matric_exist($student_id)
     {
-        $verifymatric = $this->student_model->verifymatric($matric);
+        $verifymatric = $this->student_model->verifymatric($student_id);
         if ($verifymatric == true) {
             $this->form_validation->set_message('matric_exist',  'User already exists. Please select another matric');
             return FALSE;

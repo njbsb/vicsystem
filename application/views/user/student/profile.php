@@ -4,12 +4,12 @@
     <div class="row">
         <div class="col-lg-4">
             <div class="card border-dark mb-3" style="max-width: 20rem;">
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php if ($student['profile_image']) {
-                                                                                                        echo base_url('assets/images/profile/') . $student['profile_image'];
-                                                                                                    } else {
-                                                                                                        echo base_url('assets/images/profile/') . 'default.jpg';
-                                                                                                    }
-                                                                                                    ?>">
+                <?php if ($student['profile_image']) : ?>
+                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $student['profile_image']) ?>">
+                <?php else : ?>
+                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/default.jpg') ?>">
+                <?php endif ?>
+
                 <div class="card-footer text-muted">
                     <?= $student['id'] ?>
                 </div>
@@ -27,29 +27,41 @@
     </div>
     <hr>
     <h2>Previous Activity and Roles</h2> <br>
+    <h4>Activities</h4>
     <?php if ($activity_roles) : ?>
-        <h4>Activities</h4>
-        <?php foreach ($activity_roles as $actrole) : ?>
-            <div class="card text-white bg-dark mb-3">
-                <div class="card-header"><?= $actrole['activity_name'] ?></div>
-                <div class="card-body">
-                    <h4 class="card-title"><?= $actrole['rolename'] ?></h4>
-                    <p class="card-text"><?= $actrole['role_desc'] ?></p>
+        <div class="row justify-content-center">
+            <?php foreach ($activity_roles as $actrole) : ?>
+                <div class="col-md-4">
+                    <div class="card text-white bg-dark mb-3">
+                        <div class="card-header"><a class="text-white" href="<?= site_url('activity/' . $actrole['slug']) ?>"><?= $actrole['activity_name'] ?></a></div>
+                        <div class="card-body">
+                            <h4 class="card-title"><?= $actrole['rolename'] ?></h4>
+                            <p class="card-text"><?= $actrole['role_desc'] ?></p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        <?php endforeach ?>
-        <hr>
+            <?php endforeach ?>
+        </div>
+    <?php else : ?>
+        <p>No data of roles in activity found</p>
     <?php endif ?>
+    <hr>
+    <h4>SIG: <?= $student['signame'] ?></h4>
     <?php if ($org_roles) : ?>
-        <h4>SIG: <?= $student['signame'] ?></h4>
-        <?php foreach ($org_roles as $orgrole) : ?>
-            <div class="card text-white bg-dark mb-3">
-                <div class="card-header"><?= $orgrole['acadyear'] ?></div>
-                <div class="card-body">
-                    <h4 class="card-title"><?= $orgrole['rolename'] ?></h4>
-                    <p class="card-text"><?= $orgrole['role_desc'] ?></p>
+        <div class="row justify-content-center">
+            <?php foreach ($org_roles as $orgrole) : ?>
+                <div class="col-md-4">
+                    <div class="card text-white bg-dark mb-3">
+                        <div class="card-header"><?= $orgrole['acadyear'] ?></div>
+                        <div class="card-body">
+                            <h4 class="card-title"><?= $orgrole['rolename'] ?></h4>
+                            <p class="card-text"><?= $orgrole['role_desc'] ?></p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        <?php endforeach ?>
+            <?php endforeach ?>
+        </div>
+    <?php else : ?>
+        <p>No data of roles in SIG found</p>
     <?php endif ?>
 </div>

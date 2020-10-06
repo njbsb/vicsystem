@@ -33,15 +33,26 @@
             <!-- <button type="submit" class="btn btn-primary">Update profile 2</button> -->
         </div>
 
-    </div> <br>
+    </div>
+    <hr>
 
     <h2>Previous Activities and Roles</h2> <br>
-    <div class="card bg-light mb-3">
-        <div class="card-header">Advisor</div>
-        <div class="card-body">
-            <h4 class="card-title">Short Film Competition 2019</h4>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-                content.</p>
+    <?php if ($activity_roles) : ?>
+        <h4>Activities</h4>
+        <div class="row justify-content-center">
+            <?php foreach ($activity_roles as $actrole) : ?>
+                <div class="col-md-4">
+                    <div class="card text-white bg-dark mb-3">
+                        <div class="card-header"><a class="text-white" href="<?= site_url('activity/' . $actrole['slug']) ?>"><?= $actrole['activity_name'] ?></a></div>
+                        <div class="card-body">
+                            <h4 class="card-title">Advisor</h4>
+                            <p class="card-text"><?= $actrole['academicsession'] ?></p>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach ?>
         </div>
-    </div>
+    <?php else : ?>
+        <p>No data of activity roles found</p>
+    <?php endif ?>
 </div>

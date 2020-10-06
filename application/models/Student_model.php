@@ -16,10 +16,10 @@ class Student_model extends CI_Model
             $query = $this->db->get();
             return $query->result_array();
         }
-        $this->db->select("user.id, user.name, user.email, user.dob, user.profile_image, 
-        std.phonenum, std.program_code, std.mentor_matric, 
+        $this->db->select("user.id, user.name, user.email, user.dob, user.profile_image, user.sig_id,
+        std.phonenum, std.program_code, std.mentor_matric, std.joined_sig,
         mtr.name as mentor_name, prg.name as program_name, 
-        sig.id as sigid, sig.signame, concat(sig.signame, ' (', sig.code, ')') as signamecode")
+        sig.id as sigid, sig.code as sigcode, sig.signame, concat(sig.signame, ' (', sig.code, ')') as signamecode")
             ->from('tbl_user as user')
             ->where(array('user.id' => $student_id))
             ->join('tbl_student as std', 'std.matric = user.id')

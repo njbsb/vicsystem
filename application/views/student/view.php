@@ -1,32 +1,18 @@
-<!-- <h2 class="text-center"><?= $student['name'] ?></h2> -->
-
-
 <div class="container-fluid text-center">
     <div class="row">
         <div class="col-lg-4">
-            <!-- <div class="card mb-3"> -->
             <div class="card border-dark mb-3" style="max-width: 20rem;">
-                <!-- <div class="card-header"><b>Student</b></div> -->
-                <!-- <h4 class="card-header">
-                    <b>Header</b>
-                </h4> -->
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php if ($student['profile_image']) {
-                                                                                                        echo base_url('assets/images/profile/') . $student['profile_image'];
-                                                                                                    } else {
-                                                                                                        echo base_url('assets/images/profile/') . 'default.jpg';
-                                                                                                    }
-                                                                                                    ?>">
-                <!-- <div class="card-body">
-
-                </div> -->
+                <?php if ($student['profile_image']) : ?>
+                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $student['profile_image']) ?>">
+                <?php else : ?>
+                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/default.jpg') ?>">
+                <?php endif ?>
                 <div class="card-footer text-muted">
-                    Joined <?= $student['sigcode'] ?>: XXXX
+                    Joined <?= $student['sigcode'] ?>: <?= $student['joined_sig'] ?>
                 </div>
             </div>
         </div>
         <div class="col-lg-4 text-left">
-            <!-- <div class="bs-component">
-            </div> -->
             <h3><b><?= $student['name'] ?></b></h3>
             <h6><b>Club name:</b> <?= $student['signame'] ?></h6>
             <h6><b>Program:</b> <?= $student['program_name'] ?></h6>
@@ -45,15 +31,44 @@
             <!-- <button type="submit" class="btn btn-primary">Update profile 2</button> -->
         </div>
 
-    </div> <br>
-
-    <h2>Previous Activity and Roles</h2> <br>
-    <div class="card bg-light mb-3">
-        <div class="card-header">Treasurer</div>
-        <div class="card-body">
-            <h4 class="card-title">Short Film Competition 2019</h4>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-                content.</p>
-        </div>
     </div>
+    <hr>
+    <h2>Previous Activity and Roles</h2> <br>
+    <h4>Activities</h4>
+    <?php if ($activity_roles) : ?>
+        <div class="row justify-content-center">
+            <?php foreach ($activity_roles as $actrole) : ?>
+                <div class="col-md-4">
+                    <div class="card text-white bg-dark mb-3">
+                        <div class="card-header"><a class="text-white" href="<?= site_url('activity/' . $actrole['slug']) ?>"><?= $actrole['activity_name'] ?></a></div>
+                        <div class="card-body">
+                            <h4 class="card-title"><?= $actrole['rolename'] ?></h4>
+                            <p class="card-text"><?= $actrole['role_desc'] ?></p>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach ?>
+        </div>
+    <?php else : ?>
+        <p>No data of roles in activity found</p>
+    <?php endif ?>
+    <hr>
+    <h4>SIG: <?= $student['signame'] ?></h4>
+    <?php if ($org_roles) : ?>
+        <div class="row justify-content-center">
+            <?php foreach ($org_roles as $orgrole) : ?>
+                <div class="col-md-4">
+                    <div class="card text-white bg-dark mb-3">
+                        <div class="card-header"><?= $orgrole['acadyear'] ?></div>
+                        <div class="card-body">
+                            <h4 class="card-title"><?= $orgrole['rolename'] ?></h4>
+                            <p class="card-text"><?= $orgrole['role_desc'] ?></p>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach ?>
+        </div>
+    <?php else : ?>
+        <p>No data of roles in SIG found</p>
+    <?php endif ?>
 </div>
