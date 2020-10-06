@@ -12,45 +12,45 @@ class Score extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    public function addscore($matric = NULL)
-    {
-        if ($matric == FALSE) {
-            show_404();
-        }
-        $this->form_validation->set_rules('activity_id', 'Activity', 'required');
-
-        if ($this->form_validation->run() ===  FALSE) {
-            $data['title'] = 'Add Score';
-            $data['levelscores'] = $this->score_model->get_levelscore();
-            $data['activities'] = $this->activity_model->get_activity();
-            $data['matric'] = $matric;
-
-            $data['guide_position'] = $this->score_model->get_guideposition();
-            $data['guide_meeting'] = $this->score_model->get_guidemeeting();
-            $data['guide_involvement'] = $this->score_model->get_guideinvolvement();
-            $data['guide_attendance'] = $this->score_model->get_guideattendance();
-
-            $this->load->view('templates/header');
-            $this->load->view('score/addscore', $data);
-            $this->load->view('score/scoreguide');
-            $this->load->view('templates/footer');
-        } else {
-            $scorelevel = '';
-            # code...
-        }
-    }
-
     public function view($student_id)
     {
-        $data['title'] = 'Score: ' . $student_id;
+        $data['title'] = 'Score Page: ' . $student_id;
         $data['levels'] = $this->score_model->get_levelscore();
         $data['student_id'] = $student_id;
+        $data['activeacadsession'] = $this->academic_model->get_activeacademicsession();
         $data['sigactivity'] = $this->activity_model->get_sig_activity($this->student_model->get_student($student_id)['sigid']);
+
+        $data['academicplans'] = $this->scoretable->get_arraytable_academicplan(
+            $this->academic_model->get_academicplan($student_id)
+        );
+        $data['score_levels'] = $this->scoretable->get_arraytable_level(
+            $this->score_model->get_students_scorebylevels($student_id)
+        );
+        $data['score_comp'] = $this->scoretable->get_arraytable_comp(
+            $this->score_model->get_students_scorebycomp($student_id)
+        );
+        $data['tabletotals'] = $this->scoretable->get_arraytable_allscore(
+            $data['academicplans'],
+            $data['score_levels'],
+            $data['score_comp']
+        );
+        $active_scorebylevels = $this->score_model->get_student_scorelevel($student_id, $data['activeacadsession']['id']);
+        $active_scorebycomps = $this->score_model->get_student_scorecomp($student_id, $data['activeacadsession']['id']);
+        $active_scorebycomps['allhasvalue'] = $active_scorebycomps['sc_digitalcv'] && $active_scorebycomps['sc_leadership'] && $active_scorebycomps['sc_volunteer'];
+        for ($i = 0; $i < count($active_scorebylevels); $i++) {
+            $as = $active_scorebylevels[$i];
+            $active_scorebylevels[$i]['allhasvalue'] = $as['sc_position'] && $as['sc_meeting'] && $as['sc_involvement'] && $as['sc_attendance'];
+        }
+        $data['active_scorebylevels'] = $active_scorebylevels;
+        $data['active_scorebycomps'] = $active_scorebycomps;
+        print_r($data['active_scorebycomps']);
 
         $data['guide_position'] = $this->score_model->get_guideposition();
         $data['guide_meeting'] = $this->score_model->get_guidemeeting();
         $data['guide_involvement'] = $this->score_model->get_guideinvolvement();
         $data['guide_attendance'] = $this->score_model->get_guideattendance();
+        $data['guide_digitalcv'] = $this->score_model->get_guidedigitalcv();
+        $data['guide_leadership'] = $this->score_model->get_guideleadership();
 
         $this->load->view('templates/header');
         $this->load->view('score/view', $data);
@@ -63,7 +63,7 @@ class Score extends CI_Controller
             $id = $regstd[$i]['student_matric'];
             $acadsession = $regstd[$i]['acadsession_id'];
             $levelscores = $this->score_model->get_student_scorelevel($id, $acadsession);
-            $compscore = $this->score_model->get_student_scorecomp($id);
+            $compscore = $this->score_model->get_student_scorecomp($id, $acadsession);
             $levelpercent = 0;
             foreach ($levelscores as $ls) {
                 $levelpercent += $this->calculate_levelscore($ls);
@@ -79,5 +79,38 @@ class Score extends CI_Controller
         $levelpercentage = $this->score_model->get_levelscore($eachlevel['levelscore_id'])['percentage'];
         $totalscore = $eachlevel['sc_position'] + $eachlevel['sc_meeting'] + $eachlevel['sc_attendance'] + $eachlevel['sc_involvement'];
         return ($totalscore / 20) * ($levelpercentage / 100);
+    }
+
+    public function setscorelevel($student_id)
+    {
+        $where = array(
+            'acadsession_id' => $this->input->post('acadsession_id'),
+            'student_matric' => $student_id,
+            'levelscore_id' => $this->input->post('levelscore_id')
+        );
+        $score_eachlevel = array(
+            'activity_id' => $this->input->post('activity_id'),
+            'sc_position' => $this->input->post('sc_position'),
+            'sc_meeting' => $this->input->post('sc_meeting'),
+            'sc_attendance' => $this->input->post('sc_attendance'),
+            'sc_involvement' => $this->input->post('sc_involvement')
+        );
+        $this->score_model->setscorelevel($where, $score_eachlevel);
+        redirect('score/' . $student_id);
+    }
+
+    public function setscorecomp($student_id)
+    {
+        $where = array(
+            'acadsession_id' => $this->input->post('acadsession_id'),
+            'student_matric' => $student_id
+        );
+        $score_comp = array(
+            'sc_digitalcv' => $this->input->post('sc_digitalcv'),
+            'sc_leadership' => $this->input->post('sc_digitalcv'),
+            'sc_volunteer' => $this->input->post('sc_volunteer')
+        );
+        $this->score_model->setscorecomp($where, $score_comp);
+        redirect('score/' . $student_id);
     }
 }

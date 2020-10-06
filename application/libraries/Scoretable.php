@@ -37,16 +37,16 @@ class Scoretable
         return $acadplans;
     }
 
-    public function get_arraytable_allscore($acadplans, $scorelevels, $scorecomps)
+    public function get_arraytable_allscore($acadplans, $datascorelevels, $datascorecomps)
     {
         $tabletotals = array();
         for ($i = 0; $i < count($acadplans); $i++) {
             $totalarray = array(
                 'academicsession' => $acadplans[$i]['academicsession']
             );
-            $levelkeys = array_keys(array_column($scorelevels, 'acadsession_id'), $acadplans[$i]['acadsession_id']);
+            $levelkeys = array_keys(array_column($datascorelevels, 'acadsession_id'), $acadplans[$i]['acadsession_id']);
             foreach ($levelkeys as $key) {
-                $dl = $scorelevels[$key];
+                $dl = $datascorelevels[$key];
                 switch ($dl['levelscore_id']) {
                     case '1':
                         $totalarray['a1'] = $dl['totalpercent'];
@@ -59,8 +59,8 @@ class Scoretable
                         break;
                 }
             }
-            $compkey = array_search($acadplans[$i]['acadsession_id'], array_column($scorecomps, 'acadsession_id'));
-            $totalarray['comp'] = $scorecomps[$compkey]['total'];
+            $compkey = array_search($acadplans[$i]['acadsession_id'], array_column($datascorecomps, 'acadsession_id'));
+            $totalarray['comp'] = $datascorecomps[$compkey]['total'];
             $totalarray['total'] = $totalarray['a1'] + $totalarray['a2'] + $totalarray['b1'] + $totalarray['comp'];
             $tabletotals[$i] = $totalarray;
         }

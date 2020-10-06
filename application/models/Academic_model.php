@@ -52,19 +52,20 @@ class Academic_model extends CI_Model
     public function get_academicplan($student_id = NULL)
     {
         if ($student_id == FALSE) {
-            $this->db->select('acp.*, std.name, acy.acadyear, acs.semester_id')
+            $this->db->select("acp.*, std.name, acy.acadyear, acs.semester_id,
+            concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
                 ->from('tbl_academicplan as acp')
                 ->join('tbl_academicsession as acs', 'acs.id = acp.acadsession_id')
-                // ->where(array('acs.status' => 'active'))
                 ->join('tbl_academicyear as acy', 'acy.id = acs.acadyear_id')
                 ->join('tbl_user as std', 'std.id = acp.student_matric');
             $query = $this->db->get();
             return $query->result_array();
         }
-        $this->db->select("acp.*, std.name, acy.acadyear, acs.semester_id, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession ")
+        $this->db->select("acp.*, std.name, acy.acadyear, acs.semester_id, 
+        concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
             ->from('tbl_academicplan as acp')
-            ->join('tbl_academicsession as acs', 'acs.id = acp.acadsession_id')
             ->where(array('acp.student_matric' => $student_id))
+            ->join('tbl_academicsession as acs', 'acs.id = acp.acadsession_id')
             ->join('tbl_academicyear as acy', 'acy.id = acs.acadyear_id')
             ->join('tbl_user as std', 'std.id = acp.student_matric');
         $query = $this->db->get();

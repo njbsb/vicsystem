@@ -62,13 +62,13 @@ class Score_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_student_scorecomp($matric)
+    public function get_student_scorecomp($matric, $acadsession_id)
     {
         $this->db->select('*')
-            ->from('tbl_scorecomp as scc')
+            ->from('tbl_scorecomp')
             ->where(array(
                 'student_matric' => $matric,
-                // 'acadsession_id' => $acadsession_id
+                'acadsession_id' => $acadsession_id
             ));
         $query = $this->db->get();
         return $query->row_array();
@@ -114,6 +114,7 @@ class Score_model extends CI_Model
         $query = $this->db->get('tbl_scposition');
         return $query->result_array();
     }
+
     public function get_guidemeeting()
     {
         $query = $this->db->get('tbl_scmeeting');
@@ -132,8 +133,32 @@ class Score_model extends CI_Model
         return $query->result_array();
     }
 
+    public function get_guidedigitalcv()
+    {
+        $query = $this->db->get('tbl_scdigitalcv');
+        return $query->result_array();
+    }
+
+    public function get_guideleadership()
+    {
+        $query = $this->db->get('tbl_scleadership');
+        return $query->result_array();
+    }
+
     public function check_scorelevelexist($level_id)
     {
         $this->db->get_where('tbl_scorelevel', array('levelscore' => $level_id));
+    }
+
+    public function setscorelevel($where, $score_eachlevel)
+    {
+        return $this->db->where($where)
+            ->update('tbl_scorelevel', $score_eachlevel);
+    }
+
+    public function setscorecomp($where, $score_comp)
+    {
+        return $this->db->where($where)
+            ->update('tbl_scorecomp', $score_comp);
     }
 }
