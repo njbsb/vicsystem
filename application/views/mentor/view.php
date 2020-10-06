@@ -45,7 +45,7 @@
                     <div class="card text-white bg-dark mb-3">
                         <div class="card-header"><a class="text-white" href="<?= site_url('activity/' . $actrole['slug']) ?>"><?= $actrole['activity_name'] ?></a></div>
                         <div class="card-body">
-                            <h4 class="card-title">Advisor</h4>
+                            <h4 class="card-title">Activity Advisor</h4>
                             <p class="card-text"><?= $actrole['academicsession'] ?></p>
                         </div>
                     </div>

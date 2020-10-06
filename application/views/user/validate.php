@@ -13,11 +13,12 @@
             <h4 class="card-header">
                 <b><?= ucfirst($user['usertype']) ?></b>
             </h4>
-            <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php if ($user['profile_image']) {
-                                                                                                    echo base_url('assets/images/profile/') . $user['profile_image'];
-                                                                                                } else {
-                                                                                                    echo base_url('assets/images/profile/') . 'default.jpg';
-                                                                                                } ?>">
+            <?php if ($user['profile_image']) : ?>
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $user['profile_image']) ?>">
+            <?php else : ?>
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . 'default.jpg') ?>">
+            <?php endif ?>
+
             <div class="card-footer text-muted">
                 Applied: <?= $user['code'] ?>
             </div>

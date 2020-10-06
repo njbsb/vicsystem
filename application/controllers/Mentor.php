@@ -14,7 +14,6 @@ class Mentor extends CI_Controller
     {
         $data['mentor'] = $this->mentor_model->get_mentor($mentor_id);
         $data['activity_roles'] = $this->committee_model->get_mentor_activityroles($mentor_id);
-        print_r($data['activity_roles']);
         $this->load->view('templates/header');
         $this->load->view('mentor/view', $data);
         $this->load->view('templates/footer');
@@ -65,13 +64,13 @@ class Mentor extends CI_Controller
         }
     }
 
-    public function edit($matric)
+    public function edit($mentor_id)
     {
-        $data['mentor'] = $this->mentor_model->get_mentor($matric);
+        $data['mentor'] = $this->mentor_model->get_mentor($mentor_id);
         if (empty($data['mentor'])) {
             show_404();
         }
-        print_r($data['mentor']);
+        // print_r($data['mentor']);
         $data['title'] = 'Edit Mentor';
         $data['sigs'] = $this->sig_model->get_sig();
         $data['roles'] = $this->role_model->get_mentor_roles();
