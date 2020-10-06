@@ -9,14 +9,10 @@
 <?= form_open('user/validate/' . $user['id']) ?>
 <div class="row">
     <div class="col-lg-4">
-        <!-- <div class="card mb-3"> -->
         <div class="card border mb-3 text-center" style="max-width: 20rem;">
             <h4 class="card-header">
                 <b><?= ucfirst($user['usertype']) ?></b>
             </h4>
-            <!-- <h4 class="card-header">
-                <?= ucfirst($user['usertype']) ?>
-            </h4> -->
             <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php if ($user['profile_image']) {
                                                                                                     echo base_url('assets/images/profile/') . $user['profile_image'];
                                                                                                 } else {
@@ -26,8 +22,8 @@
                 Applied: <?= $user['code'] ?>
             </div>
         </div>
-
     </div>
+
     <div class="col-lg-8 text-left">
         <!-- ID -->
         <div class="form-group">
@@ -48,76 +44,48 @@
         <div class="form-group">
             <label>SIG</label>
             <select name="sig_id" class="form-control" id="sig_id" readonly>
+                <option value="" selected disabled hidden>Choose SIG</option>
                 <?php foreach ($sigs as $sig) : ?>
                     <option value="<?= $sig['id'] ?>" <?php if ($user['sig_id'] == $sig['id']) {
                                                             echo 'selected';
                                                         } ?>>
-                        <?= $sig['signame'] . ' (' . $sig['code'] . ')' ?>
+                        <?= $sig['namecode'] ?>
                     </option>
                 <?php endforeach ?>
             </select>
         </div>
         <div class="row">
             <div class="col-md-4">
+                <!-- PROFILE IMAGE -->
                 <div class="form-group">
-                    <label>Profile image</label>
+                    <label for="profile_image">Profile image</label>
                     <input name="profile_image" type="file" class="form-control-file" id="" aria-describedby="fileHelp">
                     <small id="fileHelp" class="form-text text-muted">Choose a proper profile image.</small>
                 </div>
             </div>
             <div class="col-md-4">
+                <!-- DATE OF BIRTH -->
                 <div class="form-group">
                     <label for="dob">Date of Birth</label>
                     <input name="dob" class="form-control" type="date" value="<?= $user['dob'] ?>" id="dob" required>
                 </div>
             </div>
+            <div class="col-md-4">
+                <!-- USER STATUS -->
+                <div class="form-group">
+                    <label for="userstatus_id" class="text-danger">*User status</label>
+                    <select name="userstatus_id" id="" class="form-control" style="max-width: 20rem;">
+                        <option value="" selected disabled hidden>Choose user status</option>
+                        <?php foreach ($userstatuses as $us) : ?>
+                            <option value="<?= $us['id'] ?>" <?php if ($us['id'] == $user['userstatus_id']) {
+                                                                    echo 'selected';
+                                                                } ?>><?= $us['userstatus'] ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+            </div>
         </div>
-        <!-- Profile Image -->
-
+        <!-- <p class="text-danger">Please select the status of the user</p> -->
     </div>
-
-    <!-- <div class="col-lg-4">
-            <?= form_open('/user/edit/' . $user['id']); ?>
-            <input type="submit" value="Approve User" class="btn btn-secondary">
-            <?= form_close() ?>
-        </div>
-        <div class="col-lg-8 text-left">
-            <button type="submit" class="btn btn-primary">Update profile 2</button>
-        </div> -->
-
 </div>
 <hr>
-<!-- <div class="row">
-    <div class="col-md-4">
-        <h4><?= ucfirst($user['usertype']) ?> Form</h4>
-    </div>
-    <div class="col-md-8 text-left">
-
-        <div class="form-group">
-            <label>Phone Number</label>
-            <input type="tel" class="form-control" name="phonenum" placeholder="01X-XXXXXXX">
-        </div>
-        <div class="form-group">
-            <label>Select Program</label>
-            <select name="program_code" class="form-control" id="program_code">
-                <?php foreach ($programs as $program) : ?>
-                    <option value="<?= $program['code'] ?>">
-                        <?= $program['name'] ?>
-                    </option>
-                <?php endforeach ?>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Select Mentor (<?= $user['code'] ?>)</label>
-            <select name="mentor_matric" class="form-control" id="sig_mentor">
-                <?php foreach ($mentors as $mentor) : ?>
-                    <option value="<?= $mentor['matric'] ?>">
-                        <?= $mentor['name'] ?>
-                    </option>
-                <?php endforeach ?>
-            </select>
-        </div>
-        <button class="btn btn-primary">Submit</button>
-    </div>
-</div>
-<?= form_close() ?> -->

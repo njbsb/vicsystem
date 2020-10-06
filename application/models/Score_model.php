@@ -5,6 +5,25 @@ class Score_model extends CI_Model
     {
         $this->load->database();
     }
+
+    public function create_emptyscores($student_id, $acadsession_id)
+    {
+        $levelscore = $this->get_levelscore();
+        foreach ($levelscore as $levelscore) {
+            $levelarray = array(
+                'acadsession_id' => $acadsession_id,
+                'student_matric' => $student_id,
+                'levelscore_id' => $levelscore['id']
+            );
+            $this->db->insert('tbl_scorelevel', $levelarray);
+        }
+        $comparray = array(
+            'acadsession_id' => $acadsession_id,
+            'student_matric' => $student_id
+        );
+        $this->db->insert('tbl_scorecomp', $comparray);
+        return true;
+    }
     // no call
     public function get_students_takingcitra()
     {
@@ -43,38 +62,51 @@ class Score_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_student_scorecomp($matric, $acadsession_id)
+    public function get_student_scorecomp($matric)
     {
         $this->db->select('*')
             ->from('tbl_scorecomp as scc')
-            ->where(array('student_matric' => $matric, 'acadsession_id' => $acadsession_id));
+            ->where(array(
+                'student_matric' => $matric,
+                // 'acadsession_id' => $acadsession_id
+            ));
         $query = $this->db->get();
         return $query->row_array();
     }
 
-    public function get_students_scorebylevels($matric, $acadsession_id)
+    public function get_students_scorebylevels($student_id)
     {
-        $this->db->select('scl.*, acy.acadyear, acs.semester_id, act.activity_name, ls.level, ls.percentage')
+        $this->db->select("scl.*, 
+        acy.acadyear, acs.semester_id, 
+        concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, 
+        act.activity_name, 
+        ls.level, ls.percentage")
             ->from('tbl_scorelevel as scl')
-            ->where(array('scl.student_matric' => $matric, 'scl.acadsession_id' => $acadsession_id))
+            ->where(array(
+                'scl.student_matric' => $student_id
+            ))
             ->join('tbl_academicsession as acs', 'acs.id = scl.acadsession_id')
             ->join('tbl_academicyear as acy', 'acy.id = acs.acadyear_id')
-            ->join('tbl_activity as act', 'act.id = scl.activity_id')
+            ->join('tbl_activity as act', 'act.id = scl.activity_id', 'left')
             ->join('tbl_levelscore as ls', 'ls.id = scl.levelscore_id');
+        // ->join('tbl_scposition as scpos', )
+        # must include a 'left' parameter if a column data is null
         $query = $this->db->get();
         return $query->result_array();
     }
 
-    public function get_students_scorebycomp($matric, $acadsession)
+    public function get_students_scorebycomp($student_id)
     {
-        $this->db->select('sc.*, acy.acadyear, acs.semester_id, ls.level')
+        $this->db->select("sc.*, acy.acadyear, acs.semester_id, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
             ->from('tbl_scorecomp as sc')
-            ->where(array('sc.student_matric' => $matric, 'sc.acadsession_id' => $acadsession))
+            ->where(array(
+                'sc.student_matric' => $student_id
+            ))
             ->join('tbl_academicsession as acs', 'acs.id = sc.acadsession_id')
-            ->join('tbl_academicyear as acy', 'acy.id = acs.acadyear_id')
-            ->join('tbl_levelscore as ls', 'ls.id = sc.levelscore_id');
+            ->join('tbl_academicyear as acy', 'acy.id = acs.acadyear_id');
+        // ->join('tbl_levelscore as ls', 'ls.id = sc.levelscore_id');
         $query = $this->db->get();
-        return $query->row_array();
+        return $query->result_array();
     }
 
     public function get_guideposition()
@@ -87,14 +119,21 @@ class Score_model extends CI_Model
         $query = $this->db->get('tbl_scmeeting');
         return $query->result_array();
     }
+
     public function get_guideattendance()
     {
         $query = $this->db->get('tbl_scattendance');
         return $query->result_array();
     }
+
     public function get_guideinvolvement()
     {
         $query = $this->db->get('tbl_scinvolvement');
         return $query->result_array();
+    }
+
+    public function check_scorelevelexist($level_id)
+    {
+        $this->db->get_where('tbl_scorelevel', array('levelscore' => $level_id));
     }
 }

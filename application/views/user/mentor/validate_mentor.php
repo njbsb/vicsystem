@@ -8,17 +8,17 @@
         <?php endif ?>
     </div>
     <div class="col-md-8 text-left">
-        <!-- Position -->
+        <!-- POSITION -->
         <div class="form-group">
             <label>Position</label>
             <input name="position" value="<?= $mentor['position'] ?>" type="text" class="form-control" placeholder="Dr of some sorts" required>
         </div>
-        <!-- Room -->
+        <!-- ROOMNUM -->
         <div class="form-group">
             <label for="roomnum">Room No</label>
             <input name="roomnum" value="<?= $mentor['roomnum'] ?>" type="text" class="form-control" placeholder="E-0-0" required>
         </div>
-        <!-- Role -->
+        <!-- ORG ROLE -->
         <div class="form-group">
             <label>Select Role in SIG</label>
             <select name="orgrole_id" class="form-control">

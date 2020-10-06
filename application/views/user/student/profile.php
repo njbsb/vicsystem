@@ -3,12 +3,7 @@
 <div class="container-fluid text-center">
     <div class="row">
         <div class="col-lg-4">
-            <!-- <div class="card mb-3"> -->
             <div class="card border-dark mb-3" style="max-width: 20rem;">
-                <!-- <div class="card-header">Student</div> -->
-                <!-- <h3 class="card-header">
-                    Header
-                </h3> -->
                 <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?php if ($student['profile_image']) {
                                                                                                         echo base_url('assets/images/profile/') . $student['profile_image'];
                                                                                                     } else {
@@ -21,10 +16,8 @@
             </div>
         </div>
         <div class="col-lg-8 text-left">
-            <!-- <div class="bs-component">
-            </div> -->
             <h3><b><?= $student['name'] ?></b></h3>
-            <h6><b>Club name:</b> <?= $student['signame'] ?></h6>
+            <h6><b>Club name:</b> <?= $student['signamecode'] ?></h6>
             <h6><b>Program:</b> <?= $student['program_name'] ?></h6>
             <h6><b>Year:</b> 3 (hardcoded)</h6>
             <h6><b>Phone Num:</b> <a href="#"><?= $student['phonenum'] ?></a></h6>

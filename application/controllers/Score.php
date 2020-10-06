@@ -40,9 +40,18 @@ class Score extends CI_Controller
         }
     }
 
-    public function view($id)
+    public function view($student_id)
     {
-        $data['title'] = 'Score: ' . $id;
+        $data['title'] = 'Score: ' . $student_id;
+        $data['levels'] = $this->score_model->get_levelscore();
+        $data['student_id'] = $student_id;
+        $data['sigactivity'] = $this->activity_model->get_sig_activity($this->student_model->get_student($student_id)['sigid']);
+
+        $data['guide_position'] = $this->score_model->get_guideposition();
+        $data['guide_meeting'] = $this->score_model->get_guidemeeting();
+        $data['guide_involvement'] = $this->score_model->get_guideinvolvement();
+        $data['guide_attendance'] = $this->score_model->get_guideattendance();
+
         $this->load->view('templates/header');
         $this->load->view('score/view', $data);
         $this->load->view('templates/footer');
@@ -54,7 +63,7 @@ class Score extends CI_Controller
             $id = $regstd[$i]['student_matric'];
             $acadsession = $regstd[$i]['acadsession_id'];
             $levelscores = $this->score_model->get_student_scorelevel($id, $acadsession);
-            $compscore = $this->score_model->get_student_scorecomp($id, $acadsession);
+            $compscore = $this->score_model->get_student_scorecomp($id);
             $levelpercent = 0;
             foreach ($levelscores as $ls) {
                 $levelpercent += $this->calculate_levelscore($ls);

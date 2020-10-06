@@ -32,3 +32,5 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 assets/images/profile/jk.jpg
 assets/images/profile/justin.jpg
 assets/images/profile/taeh.jpg
+assets/database/test.sql
+.gitignore

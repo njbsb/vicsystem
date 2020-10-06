@@ -11,7 +11,7 @@ class User_model extends CI_Model
     {
         if ($id === FALSE) {
             // return array of users
-            $this->db->select('user.id, user.name, ust.usertype, uss.userstatus')
+            $this->db->select('user.id, user.name, user.userstatus_id, ust.usertype, uss.userstatus')
                 ->from('tbl_user as user')
                 ->join('tbl_usertype as ust', 'user.usertype_id = ust.id', 'left')
                 ->join('tbl_userstatus as uss', 'user.userstatus_id = uss.id', 'left');
@@ -58,6 +58,12 @@ class User_model extends CI_Model
     {
         $usertype_name = $this->db->select('usertype')->get_where('tbl_usertype', array('id' => $user_id))->row()->usertype;
         return $usertype_name;
+    }
+
+    public function get_userstatus()
+    {
+        $query = $this->db->get('tbl_userstatus');
+        return $query->result_array();
     }
 
     public function approve_user($user_id)

@@ -21,7 +21,7 @@ class Mentor_model extends CI_Model
         }
         $this->db->select('user.id, user.name, user.email, user.sig_id, user.profile_image, mtr.position, mtr.roomnum, mtr.orgrole_id, sig.code as sigcode, sig.signame, role.rolename')
             ->from('tbl_user as user')
-            ->where(array('user.id' => $matric, 'usertype_id' => '2', 'userstatus_id' => '2'))
+            ->where(array('user.id' => $matric))
             ->join('tbl_mentor as mtr', 'mtr.matric = user.id', 'left')
             ->join('tbl_sig as sig', 'sig.id = user.sig_id', 'left')
             ->join('tbl_role as role', 'role.id = mtr.orgrole_id', 'left');
@@ -41,7 +41,7 @@ class Mentor_model extends CI_Model
     {
         $this->db->select('user.id, user.name')
             ->from('tbl_user as user')
-            ->where(array('usertype_id' => '2', 'sig_id' => $sig_id));
+            ->where(array('usertype_id' => '2', 'sig_id' => $sig_id, 'userstatus_id' => '2'));
         $query = $this->db->get();
         return $query->result_array();
     }

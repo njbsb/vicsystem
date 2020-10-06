@@ -7,9 +7,9 @@ class Activity_model extends CI_Model
         $this->load->database();
     }
 
-    public function get_activity($slug = FALSE, $id = FALSE)
+    public function get_activity($slug = FALSE, $activity_id = FALSE)
     {
-        if ($slug === FALSE && $id === FALSE) {
+        if ($slug === FALSE && $activity_id === FALSE) {
             // this code will get all activities
             $this->db->select('act.*, acs.*, acy.*, sig.*, mtr.name as advisorname')
                 ->from('tbl_activity as act')
@@ -29,22 +29,30 @@ class Activity_model extends CI_Model
                     ->join('tbl_user as mtr', 'mtr.id = act.advisor_matric')
                     ->join('tbl_sig as sig', 'sig.id = act.sig_id');
                 $query = $this->db->get();
-            } else if (!$id === FALSE) {
+            } else if (!$activity_id === FALSE) {
                 $this->db->select('act.*, mtr.name as advisorname')
                     ->from('tbl_activity as act')
-                    ->where(array('id' => $id))
+                    ->where(array('id' => $activity_id))
                     ->join('tbl_user as mtr', 'mtr.id = act.advisor_matric');
                 $query = $this->db->get();
             } else {
                 // both are not null
                 $this->db->select('act.*, mtr.name as advisorname')
                     ->from('tbl_activity as act')
-                    ->where(array('id' => $id, 'slug' => $slug))
+                    ->where(array('id' => $activity_id, 'slug' => $slug))
                     ->join('tbl_user as mtr', 'mtr.id = act.advisor_matric');
                 $query = $this->db->get();
             }
             return $query->row_array();
         }
+    }
+
+    public function get_sig_activity($sig_id)
+    {
+        $query = $this->db->get_where('tbl_activity', array(
+            'sig_id' => $sig_id
+        ));
+        return $query->result_array();
     }
 
     public function create_activity()

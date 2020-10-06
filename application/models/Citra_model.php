@@ -58,7 +58,7 @@ class Citra_model extends CI_Model
         }
     }
 
-    public function get_citrarow($id, $acadsession_id)
+    public function get_students_registeredcitra($id, $acadsession_id)
     {
         $this->db->select('citreg.citra_code')
             ->from('tbl_citra_registration as citreg')

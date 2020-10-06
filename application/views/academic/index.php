@@ -99,10 +99,10 @@
                 <td><?= $acp['student_matric'] ?></td>
                 <td><?= $acp['name'] ?></td>
                 <td><?= $acp['acadyear'] . ' Semester ' . $acp['semester_id'] ?></td>
-                <td><?= $acp['cgpa_target'] ?></td>
-                <td><?= $acp['cgpa_achieved'] ?></td>
+                <td><?= $acp['gpa_target'] ?></td>
+                <td><?= $acp['gpa_achieved'] ?></td>
 
-                <?php if ($acp['cgpa_achieved'] > $acp['cgpa_target']) : ?>
+                <?php if ($acp['gpa_achieved'] > $acp['gpa_target']) : ?>
                     <td class="text-success">
                         Passed
                     </td>

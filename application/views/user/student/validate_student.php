@@ -30,7 +30,7 @@
         </div>
         <!-- Mentor -->
         <div class="form-group">
-            <label>Select Mentor (<?= $user['code'] ?>)</label>
+            <label class="text-danger">*Select Mentor (<?= $user['code'] ?>)</label>
             <select name="mentor_matric" class="form-control" id="sig_mentor">
                 <?php if ($sigmentors) : ?>
                     <option value="" selected disabled hidden>Choose mentor</option>

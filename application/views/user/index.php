@@ -18,13 +18,12 @@
                     <td><?= $user['name'] ?></td>
                     <td><?= $user['usertype'] ?></td>
                     <?php if ($user['userstatus'] == 'pending') : ?>
-                        <td><span class="badge badge-warning"><?= $user['userstatus'] ?></span></td>
+                        <td class="text-warning"><?= $user['userstatus'] ?></td>
                     <?php elseif ($user['userstatus'] == 'active') : ?>
-                        <td><span class="badge badge-success"><?= $user['userstatus'] ?></span></td>
+                        <td class="text-success"><?= $user['userstatus'] ?></td>
                     <?php else : ?>
-                        <td><span class="badge badge-light"><?= $user['userstatus'] ?></span></td>
+                        <td class="text-secondary"><?= $user['userstatus'] ?></td>
                     <?php endif ?>
-
                     <td>
                         <a class="badge badge-info" href="<?= site_url('validate/') . $user['id'] ?>">Review</a>
                         <a class="badge badge-danger" data-toggle="modal" data-userid="<?= $user['id'] ?>" onclick="$('#confirmDelete #formDelete').attr('action', '<?= site_url('user/delete/' . $user['id']) ?>')" href="#confirmDelete">Delete</a>

@@ -245,6 +245,7 @@ class User extends CI_Controller
         $this->form_validation->set_rules('id', 'ID', 'required');
         $this->form_validation->set_rules('name', 'Name', 'required');
         $this->form_validation->set_rules('email', 'Email', 'required');
+        $this->form_validation->set_rules('sig_id', 'SIG', 'required');
         if ($usertype_id == '2') {
             $this->form_validation->set_rules('position', 'Position', 'required');
             $this->form_validation->set_rules('roomnum', 'Room Number', 'required');
@@ -252,22 +253,24 @@ class User extends CI_Controller
         } elseif ($usertype_id == '3') {
             $this->form_validation->set_rules('phonenum', 'Phone Number', 'required');
             $this->form_validation->set_rules('program_code', 'Program Code', 'required');
-            // $this->form_validation->set_rules('mentor_matric', 'Mentor Matric', 'required');
+            $this->form_validation->set_rules('mentor_matric', 'Mentor Matric', 'required');
         }
 
         if ($this->form_validation->run() === FALSE) {
 
             $data['sigs'] = $this->sig_model->get_sig();
+            $data['userstatuses'] = $this->user_model->get_userstatus();
             $this->load->view('templates/header');
             $this->load->view('user/validate', $data);
 
-            if ($data['user']['usertype_id'] == 2) {
-                // IF MENTOR
+            if ($usertype_id == 2) {
+                # IF MENTOR
                 $data['mentorroles'] = $this->role_model->get_mentor_roles();
                 $data['mentor'] = $this->mentor_model->get_mentor($id);
+                print_r($data['mentor']);
                 $this->load->view('user/mentor/validate_mentor', $data);
-            } elseif ($data['user']['usertype_id'] == 3) {
-                // IF STUDENT
+            } elseif ($usertype_id == 3) {
+                # IF STUDENT
                 $data['sigmentors'] = $this->mentor_model->get_sigmentors($data['user']['sig_id']);
                 $data['programs'] = $this->program_model->get_programs();
                 $data['student'] = $this->student_model->get_student($id);
@@ -275,12 +278,13 @@ class User extends CI_Controller
             }
             $this->load->view('templates/footer');
         } else {
-            // FORM SUBMISSION HERE
+            # FORM SUBMISSION HERE
             $userdata = array(
                 'name' => $this->input->post('name'),
                 'email' => $this->input->post('email'),
                 'sig_id' => $this->input->post('sig_id'),
-                'dob' => $this->input->post('dob')
+                'dob' => $this->input->post('dob'),
+                'userstatus_id' => $this->input->post('userstatus_id')
             );
             if ($usertype_id == '2') {
                 $mentordata = array(
@@ -307,8 +311,12 @@ class User extends CI_Controller
                 }
             }
             $this->user_model->update_user($id, $userdata);
-            $this->user_model->approve_user($id);
+            // $this->user_model->approve_user($id);
             redirect('user');
         }
+    }
+
+    public function set_userstatus($user_id)
+    {
     }
 }
