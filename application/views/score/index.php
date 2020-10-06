@@ -14,7 +14,7 @@
         <?php foreach ($student_score as $stdscore) : ?>
             <tr>
                 <td class="Matric"><?= $stdscore['student_matric'] ?></td>
-                <td class="AcadYear"><?= $stdscore['acadsession'] ?></td>
+                <td class="AcadYear"><?= $stdscore['academicsession'] ?></td>
                 <td><?= $stdscore['totalpercent'] ?></td>
                 <td class="Status">Marked/Not</td>
                 <td><a class="badge badge-primary" href="<?= site_url('/score/' . $stdscore['student_matric']) ?>">Edit score</a></td>

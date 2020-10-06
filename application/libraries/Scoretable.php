@@ -9,11 +9,6 @@ class Scoretable
         $this->CI = &get_instance();
     }
 
-    public function show_hello_world()
-    {
-        return 'Hello World';
-    }
-
     public function get_arraytable_academicplan($academicplans)
     {
         $acadplans = array();
@@ -84,5 +79,30 @@ class Scoretable
             $datacomp[$i]['total'] = $datacomp[$i]['sc_digitalcv'] + $datacomp[$i]['sc_leadership'] + $datacomp[$i]['sc_volunteer'];
         }
         return $datacomp;
+    }
+
+    # used in score/index
+    public function get_arraytable_score($currentsession_students)
+    {
+        for ($i = 0; $i < count($currentsession_students); $i++) {
+            $student_id = $currentsession_students[$i]['student_matric'];
+            $acadsession = $currentsession_students[$i]['acadsession_id'];
+            $levelscores = $this->CI->score_model->get_student_scorelevel($student_id, $acadsession);
+            $compscore = $this->CI->score_model->get_student_scorecomp($student_id, $acadsession);
+            $levelpercent = 0;
+            foreach ($levelscores as $ls) {
+                $levelpercent += $this->calculate_levelscore($ls);
+            }
+            $comppercent = $compscore['sc_digitalcv'] + $compscore['sc_leadership'] + $compscore['sc_volunteer'];
+            $currentsession_students[$i]['totalpercent'] = $levelpercent + $comppercent;
+        }
+        return $currentsession_students;
+    }
+
+    public function calculate_levelscore($eachlevel)
+    {
+        $levelpercentage = $this->CI->score_model->get_levelscore($eachlevel['levelscore_id'])['percentage'];
+        $totalscore = $eachlevel['sc_position'] + $eachlevel['sc_meeting'] + $eachlevel['sc_attendance'] + $eachlevel['sc_involvement'];
+        return ($totalscore / 20) * $levelpercentage;
     }
 }

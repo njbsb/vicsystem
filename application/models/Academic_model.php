@@ -95,7 +95,7 @@ class Academic_model extends CI_Model
 
     public function get_registered_student($acadsession_id)
     {
-        $this->db->select("acp.*, std.name, concat(acy.acadyear, ' Sem ' , acs.semester_id) as acadsession")
+        $this->db->select("acp.*, std.name, concat(acy.acadyear, ' Sem ' , acs.semester_id) as academicsession")
             ->from('tbl_academicplan as acp')
             ->where('acadsession_id', $acadsession_id)
             ->join('tbl_user as std', 'acp.student_matric = std.id')
