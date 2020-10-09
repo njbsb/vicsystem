@@ -55,28 +55,25 @@
             <div class="collapse navbar-collapse" id="navbarColor03">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url() ?>profile">Profile <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="<?= site_url('profile') ?>">Profile <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url() ?>mentor">Mentors</a>
+                        <a class="nav-link" href="<?= site_url('mentor') ?>">Mentors</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url() ?>student">Students</a>
+                        <a class="nav-link" href="<?= site_url('student') ?>">Students</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url() ?>organization">SIG</a>
+                        <a class="nav-link" href="<?= site_url('organization') ?>">SIG</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url() ?>activity">Activity</a>
+                        <a class="nav-link" href="<?= site_url('activity') ?>">Activity</a>
                     </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url() ?>academic">Academic</a>
-                    </li> -->
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Academic</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="<?= site_url() ?>academic">Academic ControlPanel</a>
-                            <a class="dropdown-item" href="<?= site_url() ?>academicplan">Academic Plan</a>
+                            <a class="dropdown-item" href="<?= site_url('academic') ?>">Academic ControlPanel</a>
+                            <a class="dropdown-item" href="<?= site_url('academicplan') ?>">Academic Plan</a>
                         </div>
                     </li>
                     <li class="nav-item">
@@ -89,21 +86,18 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Register</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="<?= site_url() ?>student/register">Student</a>
-                            <a class="dropdown-item" href="<?= site_url() ?>mentor/register">Mentor</a>
-                            <a class="dropdown-item" href="<?= site_url() ?>activity/create">Activity</a>
+                            <a class="dropdown-item" href="<?= site_url('student/register') ?>">Student</a>
+                            <a class="dropdown-item" href="<?= site_url('mentor/register') ?>">Mentor</a>
+                            <a class="dropdown-item" href="<?= site_url('activity/create') ?>">Activity</a>
 
                             <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="<?= site_url() ?>collaborator">Collaborator</a>
                             <a class="dropdown-item" href="<?= site_url() ?>citra">Citra</a>
                             <a class="dropdown-item" href="<?= site_url() ?>category">Comment Category</a>
                         </div>
                     </li>
                 </ul>
             </div>
-            <!-- <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                </form> -->
         </div>
 
         <ul class="navbar-nav mr-auto">
@@ -113,8 +107,8 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Account</a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="<?= site_url() ?>academicplan">Academic Plan</a>
-                    <a class="dropdown-item" href="<?= site_url() ?>profile/update">Update Profile</a>
+                    <a class="dropdown-item" href="<?= site_url('academicplan') ?>">Academic Plan</a>
+                    <a class="dropdown-item" href="<?= site_url('profile/update') ?>">Update Profile</a>
                     <a class="dropdown-item" href="#">Log Out</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Switch Account</a>

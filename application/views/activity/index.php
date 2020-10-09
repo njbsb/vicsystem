@@ -1,6 +1,7 @@
 <h2><?= $title ?></h2><br>
 <!-- <div class="container"> -->
-
+<a href="<?= site_url('activity/create') ?>" class="btn btn-outline-primary btn-sm">Create activity</a>
+<hr>
 <table id="myTable" class="table table-hover" style="text-align:left;">
     <thead class="table-dark">
         <tr>
@@ -18,7 +19,7 @@
         <?php foreach ($activities as $activity) : ?>
             <tr>
                 <!-- <td>
-                    <img style="max-height:100px;" src="<?php echo site_url() ?>assets/images/profile/default.png" class="img-responsive" alt="Image">
+                    <img style="max-height:80px;" src="<?php echo site_url('assets/images/activity/' . $activity['photo_path']) ?>" class="img-responsive" alt="Activity Image">
                 </td> -->
                 <td class="Activity" scope="row"><a href="<?= site_url('/activity/' . $activity['slug']) ?>"><?= $activity['activity_name'] ?></a></t>
                 <td class="Date"><?= date('d/m/Y', strtotime($activity['datetime_start'])) ?></td>

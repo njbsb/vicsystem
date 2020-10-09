@@ -12,8 +12,8 @@
                         </button>
                     </div>
                     <div class="toast-body">
-                        <?= $com['comment'] ?> on
-                        <p><small><?= $com['activity_name'] ?></small></p>
+                        <?= $com['comment'] ?>
+                        <p><small>on <?= $com['activity_name'] ?></small></p>
                     </div>
                 </div>
             </div>

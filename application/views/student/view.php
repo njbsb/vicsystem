@@ -23,9 +23,9 @@
 
         </div>
         <div class="col-lg-4">
-            <?php echo form_open('/student/edit/' . $student['id']); ?>
+            <?= form_open('/student/edit/' . $student['id']); ?>
             <input type="submit" value="Edit Student" class="btn btn-outline-secondary">
-            </form>
+            <?= form_close() ?>
         </div>
         <div class="col-lg-8 text-left">
             <!-- <button type="submit" class="btn btn-primary">Update profile 2</button> -->

@@ -1,6 +1,7 @@
 <h2 class="text-center"><?php echo $title; ?></h2>
 
 <div class="container-fluid text-center">
+    <?= form_open_multipart('user/update/' . $mentor['id']) ?>
     <div class="row">
         <div class="col-lg-4">
             <!-- <div class="card mb-3"> -->
@@ -10,9 +11,6 @@
                     Header
                 </h3> -->
                 <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/') . $mentor['profile_image'] ?>">
-                <!-- <div class="card-body">
-
-                </div> -->
                 <div class="card-footer text-muted">
                     <?= $mentor['id'] ?>
                 </div>
@@ -73,13 +71,5 @@
         </div>
     </div> <br>
 
-    <!-- <h2>Previous Activity and Roles</h2> <br>
-    <div class="card bg-light mb-3" style="">
-        <div class="card-header">Treasurer</div>
-        <div class="card-body">
-            <h4 class="card-title">Short Film Competition 2019</h4>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-                content.</p>
-        </div>
-    </div> -->
+    <?= form_close() ?>
 </div>

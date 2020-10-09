@@ -1,18 +1,15 @@
-<h2 class="text-center"><?php echo $title; ?></h2>
+<h2 class="text-center"><?= $title ?></h2>
 
 <div class="container-fluid text-center">
+    <?= form_open_multipart('user/update/' . $student['id']) ?>
     <div class="row">
         <div class="col-lg-4">
-            <!-- <div class="card mb-3"> -->
             <div class="card border-secondary mb-3" style="max-width: 20rem;">
-                <!-- <div class="card-header">Student</div> -->
-                <!-- <h3 class="card-header">
-                    Header
-                </h3> -->
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/') . $student['profile_image'] ?>" alt="Card image">
-                <!-- <div class="card-body">
-
-                </div> -->
+                <?php if ($student['profile_image']) : ?>
+                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/') . $student['profile_image'] ?>">
+                <?php else : ?>
+                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . 'default.jpg') ?>">
+                <?php endif ?>
                 <div class="card-footer text-muted">
                     <?= $student['id'] ?>
                 </div>
@@ -23,7 +20,6 @@
                 <input name="profile_image" type="file" class="form-control-file" aria-describedby="fileHelp">
                 <small id="fileHelp" class="form-text text-muted">Choose a proper profile photo.</small>
             </div>
-
         </div>
         <div class="col-lg-8 text-left">
             <!-- <div class="bs-component">
@@ -31,6 +27,7 @@
             <div class="form-group">
                 <label>Name</label>
                 <input class="form-control" name="name" value="<?= $student['name'] ?>" readonly>
+                <input name="usertype_id" value="<?= $user['usertype_id'] ?>" type="hidden" class="form-control" readonly>
             </div>
             <div class="form-group">
                 <label>Select Program</label>
@@ -59,11 +56,11 @@
             </div>
             <div class="form-group">
                 <label>Year</label>
-                <input class="form-control" name="year" value="3" readonly>
+                <input class="form-control" name="year" value="-" readonly>
             </div>
             <div class="form-group">
                 <label>Phone Number</label>
-                <input class="form-control" name="phonenum" value="<?= $student['phonenum'] ?>" readonly>
+                <input class="form-control" name="phonenum" value="<?= $student['phonenum'] ?>" required>
             </div>
             <div class="form-group">
                 <label>Email</label>
@@ -83,15 +80,6 @@
             </div>
             <button type="submit" class="btn btn-primary">Update profile</button>
         </div>
-    </div> <br>
-
-    <!-- <h2>Previous Activity and Roles</h2> <br>
-    <div class="card bg-light mb-3" style="">
-        <div class="card-header">Treasurer</div>
-        <div class="card-body">
-            <h4 class="card-title">Short Film Competition 2019</h4>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-                content.</p>
-        </div>
-    </div> -->
+    </div>
+    <?= form_close() ?>
 </div>

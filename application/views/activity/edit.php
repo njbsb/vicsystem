@@ -1,10 +1,15 @@
 <h2><?= $title ?></h2>
 <?php if (validation_errors()) : ?>
-    <?= validation_errors() ?>
+    <div class="alert alert-dismissible alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4 class="alert-heading">Warning!</h4>
+        <p class="mb-0"><?= validation_errors() ?></p>
+    </div>
+
 <?php endif ?>
 
 
-<?php echo form_open('activity/update'); ?>
+<?= form_open_multipart('activity/update'); ?>
 <input type="hidden" name="id" value="<?= $activity['id'] ?>">
 <fieldset class="col-md-auto">
 
@@ -156,11 +161,13 @@
         <div class="form-group col-sm-4">
             <label>Choose a file (Paperwork)</label>
             <input name="paperwork_file" type="file" class="form-control-file" id="paperwork_file" aria-describedby="fileHelp">
+            <input type="hidden" name="paperwork_file_hidden" value="<?= $activity['paperwork_file'] ?>">
             <small id="fileHelp" class="form-text text-muted"><?= $activity['paperwork_file'] ?></small>
         </div>
         <div class="form-group col-sm-4">
             <label>Choose a photo (Activity Image)</label>
             <input name="photo_path" type="file" class="form-control-file" id="photo_path" aria-describedby="fileHelp">
+            <input type="hidden" name="photo_path_hidden" id="photo_path_hidden" value="<?= $activity['photo_path'] ?>">
             <small id="fileHelp" class="form-text text-muted"><?= $activity['photo_path'] ?></small>
         </div>
     </div>
@@ -180,4 +187,4 @@
     <br>
     <button type="submit" class="btn btn-primary btn-block">Update</button>
 </fieldset>
-</form>
+<?= form_close() ?>

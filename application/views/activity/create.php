@@ -7,7 +7,7 @@
     </div>
 <?php endif ?>
 
-<?= form_open('activity/create'); ?>
+<?= form_open_multipart('activity/create'); ?>
 <fieldset class="col-md-auto">
     <!-- <legend>Author</legend> -->
 
