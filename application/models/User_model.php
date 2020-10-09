@@ -7,9 +7,9 @@ class User_model extends CI_Model
         $this->load->database();
     }
 
-    public function get_user($id = FALSE)
+    public function get_user($user_id = FALSE)
     {
-        if ($id === FALSE) {
+        if ($user_id === FALSE) {
             // return array of users
             $this->db->select('user.id, user.name, user.userstatus_id, ust.usertype, uss.userstatus')
                 ->from('tbl_user as user')
@@ -22,7 +22,7 @@ class User_model extends CI_Model
         // return specific user
         $this->db->select('user.*, ust.usertype, uss.userstatus, user.dob, sig.code, sig.signame')
             ->from('tbl_user as user')
-            ->where('user.id', $id)
+            ->where('user.id', $user_id)
             ->join('tbl_usertype as ust', 'user.usertype_id = ust.id', 'left')
             ->join('tbl_userstatus as uss', 'user.userstatus_id = uss.id', 'left')
             ->join('tbl_sig as sig', 'user.sig_id = sig.id', 'left');
@@ -35,15 +35,15 @@ class User_model extends CI_Model
         return $this->db->insert('tbl_user', $userdata);
     }
 
-    public function update_user($id, $userdata)
+    public function update_user($user_id, $userdata)
     {
-        $this->db->where('id', $id);
+        $this->db->where('id', $user_id);
         return $this->db->update('tbl_user', $userdata);
     }
 
-    public function delete_user($id)
+    public function delete_user($user_id)
     {
-        $this->db->where('id', $id);
+        $this->db->where('id', $user_id);
         $this->db->delete('tbl_user');
         return true;
     }

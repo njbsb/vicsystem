@@ -22,9 +22,9 @@ class Student_model extends CI_Model
         sig.id as sigid, sig.code as sigcode, sig.signame, concat(sig.signame, ' (', sig.code, ')') as signamecode")
             ->from('tbl_user as user')
             ->where(array('user.id' => $student_id))
-            ->join('tbl_student as std', 'std.matric = user.id')
-            ->join('tbl_program as prg', 'prg.code = std.program_code')
-            ->join('tbl_sig as sig', 'sig.id = user.sig_id')
+            ->join('tbl_student as std', 'std.matric = user.id', 'left')
+            ->join('tbl_program as prg', 'prg.code = std.program_code', 'left')
+            ->join('tbl_sig as sig', 'sig.id = user.sig_id', 'left')
             ->join('tbl_user as mtr', 'mtr.id = std.mentor_matric', 'left');
         $query = $this->db->get();
         return $query->row_array();
@@ -53,9 +53,9 @@ class Student_model extends CI_Model
         return $this->db->insert_batch('tbl_activity_committee', $highcoms);
     }
 
-    public function update_student($id, $studentdata)
+    public function update_student($student_id, $studentdata)
     {
-        $this->db->where('matric', $id);
+        $this->db->where('matric', $student_id);
         return $this->db->update('tbl_student', $studentdata);
     }
 

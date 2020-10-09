@@ -6,25 +6,21 @@ class Comment_model extends CI_Model
         $this->load->database();
     }
 
-    // public function get_comments($activityid) {
-    //     $query = $this->db->get('tbl_comment');
-    //     return $query->result_array();
-    // }
-
     public function create_comment($commentdata)
     {
         return $this->db->insert('tbl_comment', $commentdata);
     }
+
     public function get_comments($activity_id)
     {
         $this->db->select('*')
             ->from('tbl_comment as cmt')
             ->where(array('cmt.activity_id' => $activity_id))
-            ->join('tbl_comment_category as cmtcat', 'cmt.category_id = cmtcat.id');
+            ->join('tbl_comment_category as cmtcat', 'cmt.category_id = cmtcat.id', 'left');
         $query = $this->db->get();
-        // $query = $this->db->get_where('tbl_comment', array('activity_id' => $activity_id));
         return $query->result_array();
     }
+
     public function get_comments_bycategory($category_id)
     {
         $this->db->select('cmt.*, act.activity_name')

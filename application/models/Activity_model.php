@@ -55,38 +55,23 @@ class Activity_model extends CI_Model
         return $query->result_array();
     }
 
-    public function create_activity()
+    public function create_activity($activity_data)
     {
-        $slug = url_title($this->input->post('activityname'));
-        $data = array(
-            'activity_name' => $this->input->post('activityname'),
-            'activity_desc' => $this->input->post('activitydesc'),
-            'acadsession_id' => $this->input->post('academicsession_id'),
-            'sig_id' => $this->input->post('sig_id'),
-            'advisor_matric' => $this->input->post('advisor_matric'),
-            'datetime_start' => $this->input->post('datetime_start'),
-            'datetime_end' => $this->input->post('datetime_end'),
-            'venue' => $this->input->post('venue'),
-            'theme' => $this->input->post('theme'),
-            'slug' => $slug,
-            'photo_path' => $this->input->post('photo_path')
-        );
-
-        $this->db->insert('tbl_activity', $data);
+        $this->db->insert('tbl_activity', $activity_data);
         $insert_id = $this->db->insert_id();
         return $insert_id;
     }
 
-    public function delete_activity($id)
+    public function delete_activity($activity_id)
     {
-        $this->db->where('id', $id);
+        $this->db->where('id', $activity_id);
         $this->db->delete('tbl_activity');
         return true;
     }
 
-    public function update_activity($id, $activitydata)
+    public function update_activity($activity_id, $activitydata)
     {
-        $this->db->where('id', $id);
+        $this->db->where('id', $activity_id);
         return $this->db->update('tbl_activity', $activitydata);
     }
 
@@ -101,11 +86,11 @@ class Activity_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_committees($id)
+    public function get_committees($activity_id)
     {
         $this->db->select('actcom.*, std.name, role.rolename')
             ->from('tbl_activity_committee as actcom')
-            ->where('activity_id', $id)
+            ->where('activity_id', $activity_id)
             ->join('tbl_user as std', 'actcom.student_matric = std.id')
             ->join('tbl_role as role', 'actcom.role_id = role.id');
         $query = $this->db->get();
