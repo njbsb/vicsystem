@@ -14,6 +14,8 @@ $route['activity/committee/(:any)'] = 'activity/committee/$1';
 $route['committee'] = 'committee/index';
 $route['committee/(:any)'] = 'committee/view/$1';
 
+$route['collaborator'] = 'collaborator/index';
+
 $route['user'] = 'user/index';
 $route['register'] = 'user/register';
 $route['login'] = 'user/login';
@@ -21,7 +23,8 @@ $route['validate/(:any)'] = 'user/validate/$1';
 // $route['user'] = 'user/index';
 
 $route['profile'] = 'user/profile';
-$route['profile/update/(:any)'] = 'user/edit/$1';
+// $route['profile/update/(:any)'] = 'user/edit/$1';
+$route['profile/update'] = 'user/edit';
 
 $route['student'] = 'student/index';
 $route['student/update'] = 'student/update';

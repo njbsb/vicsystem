@@ -146,5 +146,6 @@ $autoload['model'] = array(
     'comment_model',
     'score_model',
     'category_model',
-    'committee_model'
+    'committee_model',
+    'collaborator_model'
 );
