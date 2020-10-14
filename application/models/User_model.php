@@ -12,57 +12,57 @@ class User_model extends CI_Model
         if ($user_id === FALSE) {
             // return array of users
             $this->db->select('user.id, user.name, user.userstatus_id, ust.usertype, uss.userstatus')
-                ->from('tbl_user as user')
-                ->join('tbl_usertype as ust', 'user.usertype_id = ust.id', 'left')
-                ->join('tbl_userstatus as uss', 'user.userstatus_id = uss.id', 'left');
+                ->from('user as user')
+                ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
+                ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left');
 
             $query = $this->db->get();
             return $query->result_array();
         }
         // return specific user
         $this->db->select('user.*, ust.usertype, uss.userstatus, user.dob, sig.code, sig.signame')
-            ->from('tbl_user as user')
+            ->from('user as user')
             ->where('user.id', $user_id)
-            ->join('tbl_usertype as ust', 'user.usertype_id = ust.id', 'left')
-            ->join('tbl_userstatus as uss', 'user.userstatus_id = uss.id', 'left')
-            ->join('tbl_sig as sig', 'user.sig_id = sig.id', 'left');
+            ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
+            ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left')
+            ->join('sig as sig', 'user.sig_id = sig.id', 'left');
         $query = $this->db->get();
         return $query->row_array();
     }
 
     public function register_user($userdata)
     {
-        return $this->db->insert('tbl_user', $userdata);
+        return $this->db->insert('user', $userdata);
     }
 
     public function update_user($user_id, $userdata)
     {
         $this->db->where('id', $user_id);
-        return $this->db->update('tbl_user', $userdata);
+        return $this->db->update('user', $userdata);
     }
 
     public function delete_user($user_id)
     {
         $this->db->where('id', $user_id);
-        $this->db->delete('tbl_user');
+        $this->db->delete('user');
         return true;
     }
 
     public function get_usertype_id($user_id)
     {
-        $usertype_id = $this->db->select('usertype_id')->get_where('tbl_user', array('id' => $user_id))->row()->usertype_id;
+        $usertype_id = $this->db->select('usertype_id')->get_where('user', array('id' => $user_id))->row()->usertype_id;
         return $usertype_id;
     }
 
     public function get_usertypename($user_id)
     {
-        $usertype_name = $this->db->select('usertype')->get_where('tbl_usertype', array('id' => $user_id))->row()->usertype;
+        $usertype_name = $this->db->select('usertype')->get_where('usertype', array('id' => $user_id))->row()->usertype;
         return $usertype_name;
     }
 
     public function get_userstatus()
     {
-        $query = $this->db->get('tbl_userstatus');
+        $query = $this->db->get('userstatus');
         return $query->result_array();
     }
 
@@ -70,13 +70,13 @@ class User_model extends CI_Model
     {
         $this->db->where('id', $user_id);
         // 2 = active
-        return $this->db->update('tbl_user', array('userstatus_id' => '2'));
+        return $this->db->update('user', array('userstatus_id' => '2'));
     }
 
     public function id_exist($user_id)
     {
         $this->db->where('id', $user_id);
-        $query = $this->db->get('tbl_user');
+        $query = $this->db->get('user');
         if ($query->num_rows() > 0) {
             return true;
         } else {

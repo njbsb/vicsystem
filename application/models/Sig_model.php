@@ -9,7 +9,7 @@ class Sig_model extends CI_Model
     public function get_sig()
     {
         $this->db->select("sig.*, concat(sig.signame, ' (', sig.code, ')') as namecode")
-            ->from('tbl_sig as sig');
+            ->from('sig as sig');
         $query = $this->db->get();
         return $query->result_array();
     }
