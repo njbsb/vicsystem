@@ -5,7 +5,8 @@ class Activity extends CI_Controller
     {
         $data['title'] = 'Activity';
         $data['activities'] = $this->activity_model->get_activity();
-        // print_r($data['activities']);
+        $data['activitycategory'] = $this->activity_model->get_activitycategory();
+        // print_r($data['activitycategory']);
         $this->load->view('templates/header');
         $this->load->view('activity/index', $data);
         $this->load->view('templates/footer');
@@ -14,7 +15,6 @@ class Activity extends CI_Controller
     public function view($slug = NULL)
     {
         $data['activity'] = $this->activity_model->get_activity($slug);
-        // print_r($data['activity']);
         if (empty($data['activity'])) {
             show_404();
         }
@@ -50,6 +50,11 @@ class Activity extends CI_Controller
 
         if ($this->form_validation->run() == FALSE) {
 
+            if (!$this->input->post('activity_cat')) {
+                redirect('activity');
+            }
+            $data['activitycategory'] = $this->activity_model->get_activitycategory($this->input->post('activity_cat'));
+            $data['activitytype'] = $this->activity_model->get_activitytype($this->input->post('activity_cat'));
             $data['title'] = 'Create Activity';
             $data['academicsessions'] = $this->academic_model->get_academicsession();
             $data['sigs'] = $this->sig_model->get_sig();
@@ -61,8 +66,43 @@ class Activity extends CI_Controller
             $this->load->view('activity/create', $data);
             $this->load->view('templates/footer');
         } else {
-            $activity_id = $this->activity_model->create_activity();
-            // create highcoms
+
+            $slug = url_title($this->input->post('activityname'));
+
+            $config['upload_path'] = './assets/images/activity';
+            $config['allowed_types'] = 'gif|jpg|png';
+            $config['max_size'] = 1000;
+            $config['max_width'] = 2048;
+            $config['max_height'] = 1024;
+            $config['file_name'] = $slug . '-' . substr(md5(rand()), 0, 10);
+            $this->load->library('upload', $config);
+
+            if (@$_FILES['photo_path']['name'] != NULL) {
+                if ($this->upload->do_upload('photo_path')) {
+                    $photo_path = $this->upload->data('file_name');
+                } else {
+                    $photo_path = 'default.jpg';
+                }
+            }
+
+            $activity_data = array(
+                'activity_name' => $this->input->post('activityname'),
+                'activity_desc' => $this->input->post('activitydesc'),
+                'activitycategory_id' => $this->input->post('activitycategory_id'),
+                'activitytype_id' => $this->input->post('activitytype_id'),
+                'acadsession_id' => $this->input->post('academicsession_id'),
+                'sig_id' => $this->input->post('sig_id'),
+                'advisor_matric' => $this->input->post('advisor_matric'),
+                'datetime_start' => $this->input->post('datetime_start'),
+                'datetime_end' => $this->input->post('datetime_end'),
+                'venue' => $this->input->post('venue'),
+                'theme' => $this->input->post('theme'),
+                'slug' => $slug,
+                'photo_path' => $photo_path
+            );
+            # returns newly added activity ID
+            $activity_id = $this->activity_model->create_activity($activity_data);
+            # create highcoms
             $highcoms = array(
                 array(
                     'activity_id' => $activity_id,
@@ -121,6 +161,40 @@ class Activity extends CI_Controller
     {
         $id = $this->input->post('id');
         $slug = url_title($this->input->post('activityname'));
+
+
+        $config['allowed_types'] = 'gif|jpg|png';
+        $config['max_size'] = 1000;
+        $config['max_width'] = 2048;
+        $config['max_height'] = 1024;
+        $config['file_name'] = $slug . '-' . substr(md5(rand()), 0, 10);
+        $config['upload_path'] = './assets/images/activity';
+        $this->load->library('upload', $config);
+
+        if (@$_FILES['photo_path']['name'] != NULL) {
+            if ($this->upload->do_upload('photo_path')) {
+                $photo_path = $this->upload->data('file_name');
+            } else {
+                $photo_path = 'default.jpg';
+            }
+        } else {
+            $photo_path = $this->input->post('photo_path_hidden');
+        }
+
+        $config['allowed_types'] = 'docx|doc|pdf';
+        $config['file_name'] = $slug . '- paperwork - ' . substr(md5(rand()), 0, 10);
+        $config['upload_path'] = './assets/images/activity';
+        $this->load->library('upload', $config);
+        if (@$_FILES['paperwork_file']['name'] != NULL) {
+            if ($this->upload->do_upload('paperwork_file')) {
+                $paperwork_file = $this->upload->data('file_name');
+            } else {
+                $paperwork_file = '';
+            }
+        } else {
+            $paperwork_file = $this->input->post('paperwork_file_hidden');
+        }
+
         $activitydata = array(
             'activity_name' => $this->input->post('activityname'),
             'activity_desc' => $this->input->post('activitydesc'),
@@ -132,7 +206,8 @@ class Activity extends CI_Controller
             'datetime_start' => $this->input->post('datetime_start'),
             'datetime_end' => $this->input->post('datetime_end'),
             'slug' => $slug,
-            'photo_path' => $this->input->post('photo_path')
+            'photo_path' => $photo_path,
+            'paperwork_file' => $paperwork_file
         );
 
         $this->activity_model->update_activity($id, $activitydata);

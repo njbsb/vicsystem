@@ -11,7 +11,7 @@ class Activity_model extends CI_Model
     {
         if ($slug === FALSE && $activity_id === FALSE) {
             // this code will get all activities
-            $this->db->select('act.*, acs.*, acy.*, sig.*, mtr.name as advisorname')
+            $this->db->select("act.activity_name, act.slug, act.datetime_start, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, sig.code, mtr.name as advisorname")
                 ->from('activity as act')
                 ->join('academicsession as acs', 'act.acadsession_id = acs.id', 'left')
                 ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
@@ -104,5 +104,54 @@ class Activity_model extends CI_Model
             ->where('id', $activity_id);
         $query = $this->db->get();
         return $query->row()->slug;
+    }
+
+    public function get_activitycategory($actcat_id = NULL)
+    {
+        if ($actcat_id == FALSE) {
+            $this->db->select("actcat.*, concat(actcat.category, ' (', actcat.code, ')') as categorycode")
+                ->from('activity_category as actcat');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        // $query = $this->db->get_where('activity_category', array(
+        //     'id' => $actcat_id
+        // ));
+        $this->db->select("actcat.*, concat(actcat.category, ' (', actcat.code, ')') as categorycode")
+            ->from('activity_category as actcat')
+            ->where(array('id' => $actcat_id));
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+
+    public function get_activitytype($category_id = NULL)
+    {
+        if ($category_id == FALSE) {
+            $query = $this->db->get('activity_type');
+            return $query->result_array();
+        }
+        $query = $this->db->get_where('activity_type', array('category_id' => $category_id));
+        return $query->result_array();
+    }
+
+    public function get_categoryactivity($acadsession_id, $category_id)
+    {
+        $this->db->select("*")->from('activity')
+            ->where(array(
+                'acadsession_id' => $acadsession_id,
+                'activitycategory_id' => $category_id
+            ));
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function get_categoryactivitycount($acadsession_id, $category_id)
+    {
+        $this->db->select('count(*) as count')
+            ->from('activity')
+            ->where(array('acadsession_id' => $acadsession_id, 'activitycategory_id' => $category_id));
+
+        $query = $this->db->get();
+        return $query->row_array();
     }
 }

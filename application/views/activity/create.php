@@ -1,11 +1,11 @@
 <h2 class="text-center"><?= $title; ?></h2>
-<?php if (validation_errors()) : ?>
+<!-- <?php if (validation_errors()) : ?>
     <div class="alert alert-dismissible alert-warning">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         <h4 class="alert-heading">Warning!</h4>
         <p class="mb-0"><?= validation_errors() ?></p>
     </div>
-<?php endif ?>
+<?php endif ?> -->
 
 <?= form_open_multipart('activity/create'); ?>
 <fieldset class="col-md-auto">
@@ -17,6 +17,12 @@
         <input name="author_id" type="text" readonly="" class="form-control" id="author" value="A161010/K001" readonly>
     </div>
     <!-- Form fields start here -->
+
+    <div class="form-group">
+        <label for="activitycategory_id">Activity Category</label>
+        <input class="form-control" type="text" value="<?= $activitycategory['category'] . ' (' . $activitycategory['code'] . ')' ?>" name="activitycategory" readonly>
+        <input class="form-control" type="hidden" value="<?= $activitycategory['id'] ?>" name="activitycategory_id">
+    </div>
 
     <!-- Activity Name -->
     <div class="form-group">
@@ -30,6 +36,17 @@
         <label>Activity Description</label>
         <textarea name="activitydesc" class="form-control ckeditor" rows="3"></textarea>
         <small class="form-text text-muted">Please include summary report of the activity</small>
+    </div>
+
+    <!-- Activity Class -->
+    <div class="form-group">
+        <label for="activitytype_id">Activity type</label>
+        <select name="activitytype_id" class="form-control" required>
+            <option value="" selected disabled hidden>Select activity type</option>
+            <?php foreach ($activitytype as $acttype) : ?>
+                <option value="<?= $acttype['id'] ?>"><?= $acttype['type'] ?></option>
+            <?php endforeach ?>
+        </select>
     </div>
 
     <!-- Venue -->
@@ -61,7 +78,7 @@
     <!-- SIG -->
     <div class="form-group">
         <label>Select involved SIG</label>
-        <select name="sig_id" class="form-control">
+        <select name="sig_id" class="form-control" required>
             <option value="" selected disabled hidden>Choose SIG</option>
             <?php foreach ($sigs as $sig) : ?>
                 <option value="<?= $sig['id'] ?>">
