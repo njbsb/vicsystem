@@ -36,11 +36,13 @@
             <input name="dob" class="form-control" type="date" value="<?= $dob ?>" id="dob" required>
         </div>
 
+        <!-- POSITION -->
         <div class="form-group">
             <label for="position">Position</label>
             <input name="position" value="<?= $position ?>" placeholder="Position" type="text" class="form-control" required>
         </div>
 
+        <!-- ROOM NUMBER -->
         <div class="form-group">
             <label for="roomnum">Room Number</label>
             <input name="roomnum" value="<?= $roomnum ?>" placeholder="E-0-0" type="text" class="form-control" required>

@@ -46,6 +46,8 @@ $route['category/create'] = 'category/create';
 $route['category/comments/(:any)'] = 'category/comments/$1';
 
 $route['score'] = 'score/index';
+$route['scoreplan'] = 'score/scoreplan';
+$route['scoreplan/(:any)'] = 'score/scoreplan/$1';
 $route['score/addscore'] = 'score/addscore';
 $route['score/(:any)'] = 'score/view/$1';
 

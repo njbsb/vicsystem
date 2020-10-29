@@ -5,38 +5,54 @@
     <meta charset="UTF-8">
     <title>VIC System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?= base_url() ?>assets/css/lux.bootstrap.min.css" media="screen">
-    <link rel="stylesheet" href="<?= base_url() ?>assets/css/jquery.dataTables.css">
-    <link rel="stylesheet" href="<?= base_url() ?>assets/css/dataTables.bootstrap.css">
-    <link rel="stylesheet" href="<?= base_url() ?>assets/css/sticky-footer.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?= base_url('assets/css/lux.bootstrap.min.css') ?>" media="screen">
+    <link rel="stylesheet" href="<?= base_url('assets/css/jquery.dataTables.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/dataTables.bootstrap.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/sticky-footer.css') ?>" rel="stylesheet">
     <!-- <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.min.css"> -->
 
     <script src="http://cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
-    <script src="<?= base_url() ?>assets/js/jquery.min.js"></script>
-    <script src="<?= base_url() ?>assets/js/popper.min.js"></script>
-    <script src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
-    <script src="<?= base_url() ?>assets/js/custom.js"></script>
-    <script src="<?= base_url() ?>assets/js/dataTables.bootstrap.js"></script>
-    <script src="<?= base_url() ?>assets/js/jquery.dataTables.min.js"></script>
-    <script src="<?= base_url() ?>assets/js/list.js"></script>
+    <script src="<?= base_url('assets/js/jquery.min.js') ?>"></script>
+    <script src="<?= base_url('assets/js/popper.min.js') ?>"></script>
+    <script src="<?= base_url('assets/js/bootstrap.min.js') ?>"></script>
+    <script src="<?= base_url('assets/js/custom.js') ?>"></script>
+    <script src="<?= base_url('assets/js/dataTables.bootstrap.js') ?>"></script>
+    <script src="<?= base_url('assets/js/jquery.dataTables.min.js') ?>"></script>
+    <script src="<?= base_url('assets/js/list.js') ?>"></script>
 
     <style>
-        /* body {
-        font: 20px Montserrat, sans-serif;
-        line-height: 1.8;
-    }
+        body {
+            font: 14px Montserrat, sans-serif;
+            line-height: 1.8;
+            background-color: #cfcfc4;
+        }
 
-    p {
-        font-size: 16px;
-    } */
+        table {
+            max-width: 100%;
+        }
+
+        .btn {
+            font: 12px Montserrat, sans-serif;
+            text-transform: none;
+        }
+
+        input {
+            font: 14px Montserrat, sans-serif;
+        }
+
+        h2 {
+            font: 20px Montserrat, sans-serif;
+        }
 
         .margin {
             margin-bottom: 35px;
         }
 
         .container-fluid {
-            padding-top: 50px;
-            padding-bottom: 50px;
+            /* padding-top: 25px;
+            padding-bottom: 25px; */
+            margin-top: 25px;
+            margin-bottom: 25px;
         }
     </style>
 
@@ -79,21 +95,22 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<?= site_url() ?>user">Users</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url() ?>score">Score</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Scoring</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="<?= site_url('score') ?>">Score</a>
+                            <a class="dropdown-item" href="<?= site_url('scoreplan') ?>">Scoring Plan</a>
+                        </div>
                     </li>
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Register</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="<?= site_url('student/register') ?>">Student</a>
-                            <a class="dropdown-item" href="<?= site_url('mentor/register') ?>">Mentor</a>
                             <a class="dropdown-item" href="<?= site_url('activity/create') ?>">Activity</a>
-
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="<?= site_url() ?>collaborator">Collaborator</a>
-                            <a class="dropdown-item" href="<?= site_url() ?>citra">Citra</a>
-                            <a class="dropdown-item" href="<?= site_url() ?>category">Comment Category</a>
+                            <a class="dropdown-item" href="<?= site_url('collaborator') ?>">Collaborator</a>
+                            <a class="dropdown-item" href="<?= site_url('citra') ?>">Citra</a>
+                            <a class="dropdown-item" href="<?= site_url('category') ?>">Comment Category</a>
                         </div>
                     </li>
                 </ul>
