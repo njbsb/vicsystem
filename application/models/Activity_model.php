@@ -114,9 +114,6 @@ class Activity_model extends CI_Model
             $query = $this->db->get();
             return $query->result_array();
         }
-        // $query = $this->db->get_where('activity_category', array(
-        //     'id' => $actcat_id
-        // ));
         $this->db->select("actcat.*, concat(actcat.category, ' (', actcat.code, ')') as categorycode")
             ->from('activity_category as actcat')
             ->where(array('id' => $actcat_id));
@@ -136,11 +133,27 @@ class Activity_model extends CI_Model
 
     public function get_categoryactivity($acadsession_id, $category_id)
     {
-        $this->db->select("*")->from('activity')
+        $this->db->select("activity.id, activity.activity_name")->from('activity')
             ->where(array(
-                'acadsession_id' => $acadsession_id,
-                'activitycategory_id' => $category_id
-            ));
+                'activity.acadsession_id' => $acadsession_id,
+                'activity.activitycategory_id' => $category_id
+            ))
+            ->join('scoringplan', 'scoringplan.activity_id = activity.id');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function get_categorynotactivity($acadsession_id, $category_id, $activities)
+    {
+        $this->db->select('id, activity_name');
+        $this->db->from('activity');
+        $this->db->where(array(
+            'acadsession_id' => $acadsession_id,
+            'activitycategory_id' => $category_id
+        ));
+        foreach ($activities as $act) {
+            $this->db->where_not_in('id', array($act['id']));
+        }
         $query = $this->db->get();
         return $query->result_array();
     }

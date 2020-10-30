@@ -6,21 +6,49 @@ class Academic_model extends CI_Model
         $this->load->database();
     }
 
-    public function get_academicsession($id = NULL)
+    public function get_academicsession($id = NULL, $slug = NULL)
     {
-        if ($id == FALSE) {
-            $this->db->select('acs.*, acy.acadyear as academicyear')
+        if ($id == FALSE && $slug == FALSE) {
+            $this->db->select("acs.*, acy.acadyear as academicyear, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
                 ->from('academicsession as acs')
                 ->join('academicyear as acy', 'acs.acadyear_id = acy.id');
             $query = $this->db->get();
             return $query->result_array();
+        } else {
+            if ($id == TRUE) {
+                $this->db->select("acs.*, acy.acadyear as academicyear, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
+                    ->from('academicsession as acs')
+                    ->where(array('acs.id' => $id))
+                    ->join('academicyear as acy', 'acs.acadyear_id = acy.id');
+                $query = $this->db->get();
+                return $query->row_array();
+            }
+            if ($slug == TRUE) {
+                $this->db->select("acs.*, acy.acadyear as academicyear, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
+                    ->from('academicsession as acs')
+                    ->where(array('acs.slug' => $slug))
+                    ->join('academicyear as acy', 'acs.acadyear_id = acy.id');
+                $query = $this->db->get();
+                return $query->row_array();
+            }
         }
-        $this->db->select('acs.*, acy.acadyear as academicyear')
-            ->from('academicsession as acs')
-            ->where(array('acs.id' => $id))
-            ->join('academicyear as acy', 'acs.acadyear_id = acy.id');
-        $query = $this->db->get();
-        return $query->row_array();
+        // if ($id == FALSE) {
+        //     $this->db->select("acs.*, acy.acadyear as academicyear, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
+        //         ->from('academicsession as acs')
+        //         ->join('academicyear as acy', 'acs.acadyear_id = acy.id');
+        //     $query = $this->db->get();
+        //     return $query->result_array();
+        // }
+        // $this->db->select("acs.*, acy.acadyear as academicyear, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
+        //     ->from('academicsession as acs')
+        //     ->where(array('acs.id' => $id))
+        //     ->join('academicyear as acy', 'acs.acadyear_id = acy.id');
+        // $query = $this->db->get();
+        // return $query->row_array();
+    }
+
+    public function get_academicsession_byslug($slug)
+    {
     }
 
     public function get_activeacademicsession()
@@ -43,10 +71,14 @@ class Academic_model extends CI_Model
         return $query->num_rows();
     }
 
-    public function get_academicyear()
+    public function get_academicyear($academicyear_id = NULL)
     {
-        $query = $this->db->get('academicyear');
-        return $query->result_array();
+        if ($academicyear_id == FALSE) {
+            $query = $this->db->get('academicyear');
+            return $query->result_array();
+        }
+        $query = $this->db->get_where('academicyear', array('id' => $academicyear_id));
+        return $query->row_array();
     }
 
     public function get_academicplan($student_id = NULL)
