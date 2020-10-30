@@ -161,4 +161,37 @@ class Score_model extends CI_Model
         return $this->db->where($where)
             ->update('scorecomp', $score_comp);
     }
+
+    public function get_scoreplan($acadsession_id = NULL, $category_id = NULL)
+    {
+        if ($acadsession_id == FALSE && $category_id == FALSE) {
+            $this->db->select("scp.*, act.activity_name, acs.slug, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
+                ->from('scoringplan as scp')
+                ->join('academicsession as acs', 'scp.acadsession_id = acs.id', 'left')
+                ->join('academicyear as acy', 'acy.id = acs.acadyear_id', 'left')
+                ->join('activity as act', 'scp.activity_id = act.id', 'left');
+        } else {
+            $this->db->select('scp.*, act.activity_name')
+                ->from('scoringplan as scp')
+                ->where(array(
+                    'scp.acadsession_id' => $acadsession_id,
+                    'scp.activitycategory_id' => $category_id
+                ))
+                ->join('activity as act', 'scp.activity_id = act.id');
+            # returns group of scoreplans under the same acadsession and category
+        }
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function add_scoringplan($scoreplandata)
+    {
+        return $this->db->insert('scoringplan', $scoreplandata);
+    }
+
+    public function update_scoreplan($scoreplan_id, $scoreplandata)
+    {
+        $this->db->where('id', $scoreplan_id);
+        return $this->db->update('scoringplan', $scoreplandata);
+    }
 }

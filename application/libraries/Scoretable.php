@@ -105,4 +105,30 @@ class Scoretable
         $totalscore = $eachlevel['sc_position'] + $eachlevel['sc_meeting'] + $eachlevel['sc_attendance'] + $eachlevel['sc_involvement'];
         return ($totalscore / 20) * $levelpercentage;
     }
+
+    public function get_arraytable_scoringplan($categories, $academicsessions, $scoreplans)
+    {
+        $table = array();
+        # group by academic session
+        foreach ($academicsessions as $key => $acadsess) {
+            $table[$key]['academicsession'] = $acadsess['academicsession'];
+            $table[$key]['slug'] = $acadsess['slug'];
+            foreach ($categories as $category) {
+                $count = 0;
+                foreach ($scoreplans as $scoreplan) {
+                    if ($scoreplan['activitycategory_id'] == $category['id']) {
+                        if ($scoreplan['acadsession_id'] == $acadsess['id']) {
+                            $count += 1;
+                        }
+                    }
+                }
+                $categorysummary = array(
+                    'code' => $category['code'],
+                    'count' => $count
+                );
+                $table[$key]['category'][] = $categorysummary;
+            }
+        }
+        return $table;
+    }
 }

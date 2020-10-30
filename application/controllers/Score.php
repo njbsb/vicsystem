@@ -1,6 +1,10 @@
 <?php
 class Score extends CI_Controller
 {
+    ###
+    # Controller's page
+    ###
+
     public function index()
     {
         $data['title'] = 'Score';
@@ -56,6 +60,87 @@ class Score extends CI_Controller
         $this->load->view('templates/footer');
     }
 
+    public function scoreplan($slug = NULL)
+    {
+        if ($slug == FALSE) {
+            # index page
+            $activitycategory = $this->activity_model->get_activitycategory();
+            $academicsessions = $this->academic_model->get_academicsession();
+            $scoringplans = $this->score_model->get_scoreplan();
+
+            $data = array(
+                'title' => 'Score Plan Index',
+                'activitycategory' => $activitycategory,
+                'activeacadsession' => $this->academic_model->get_activeacademicsession(),
+                'all_scoreplan' => $this->scoretable->get_arraytable_scoringplan(
+                    $activitycategory,
+                    $academicsessions,
+                    $scoringplans
+                )
+            );
+
+            print_r($data['all_scoreplan']);
+            $this->load->view('templates/header');
+            $this->load->view('score/scoreplanindex', $data);
+            $this->load->view('templates/footer');
+        } else {
+            # specific academic session
+            $acadsession_id = $this->academic_model->get_academicsession(FALSE, $slug)['id'];
+
+            $data = array(
+                'acslug' => $slug,
+                'title' => $this->academic_model->get_academicsession($acadsession_id)['academicsession'],
+                'activitycategory' => $this->activity_model->get_activitycategory(),
+                'acadsession' => $this->academic_model->get_academicsession($acadsession_id)
+
+            );
+
+            for ($i = 0; $i < count($data['activitycategory']); $i++) {
+                $dac = $data['activitycategory'][$i]; # every category object
+                $dac['scoreplan'] = $this->score_model->get_scoreplan($acadsession_id, $dac['id']);
+                $dac['activities'] = $this->activity_model->get_categoryactivity($acadsession_id, $dac['id']);
+                $data['activitycategory'][$i]['activities'] = $dac['activities'];
+                $data['activitycategory'][$i]['notactivities'] = $this->activity_model->get_categorynotactivity(
+                    $acadsession_id,
+                    $dac['id'],
+                    $dac['activities']
+                );
+                $data['activitycategory'][$i]['scoreplan'] = $dac['scoreplan'];
+            }
+
+            // print_r($data['activitycategory'][0]['activities']);
+            print_r($data['activitycategory'][0]);
+            $this->load->view('templates/header');
+            $this->load->view('score/scoreplanview', $data);
+            $this->load->view('templates/footer');
+        }
+    }
+
+    ###
+    # Controller Functions
+    ###
+
+    public function addscoreplan()
+    {
+        $acadsession_id = $this->input->post('acadsession_id');
+        $activitycategory = $this->activity_model->get_activitycategory();
+        foreach ($activitycategory as $actcategory) {
+            # for each A, B, etc
+            $categoryactivities = $this->activity_model->get_categoryactivity($acadsession_id, $actcategory['id']);
+            foreach ($categoryactivities as $catactivity) {
+                # for each activity in each category
+                $scoreplan = array(
+                    'acadsession_id' => $acadsession_id,
+                    'activitycategory_id' => $actcategory['id'],
+                    'activity_id' => $catactivity['id'],
+                    'weightage' => '0'
+                );
+                $this->score_model->add_scoringplan($scoreplan);
+            }
+        }
+        redirect('scoreplan');
+    }
+
     public function setscorelevel($student_id)
     {
         $where = array(
@@ -87,5 +172,16 @@ class Score extends CI_Controller
         );
         $this->score_model->setscorecomp($where, $score_comp);
         redirect('score/' . $student_id);
+    }
+
+    public function updatescoreplan($scoreplan_id)
+    {
+        $scoreplandata = array(
+            'label' => $this->input->post('label'),
+            'activity_id' => $this->input->post('activity_id'),
+            'weightage' => $this->input->post('weightage')
+        );
+        $this->score_model->update_scoreplan($scoreplan_id, $scoreplandata);
+        redirect('scoreplan/' . $this->input->post('acslug'));
     }
 }
