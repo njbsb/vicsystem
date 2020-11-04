@@ -24,34 +24,34 @@ class Student extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    public function register()
-    {
-        $this->form_validation->set_rules('matric', 'Matric Number', 'required|callback_matric_exist');
-        $this->form_validation->set_rules('name', 'Name', 'required');
-        $this->form_validation->set_rules('phonenum', 'Phone Number', 'required');
-        $this->form_validation->set_rules('email', 'Email', 'required');
-        $this->form_validation->set_rules('password', 'Password', 'required');
-        $this->form_validation->set_rules('passwordconfirm', 'Confirm Password', 'required');
-        $this->form_validation->set_rules('program_code', 'Program Code', 'required');
-        $this->form_validation->set_rules('sig_id', 'SIG', 'required');
-        $this->form_validation->set_rules('sig_mentor_matric', 'Mentor', 'required');
-        // $this->form_validation->set_rules('photo_path', 'Profile Photo', 'required');
+    // public function register()
+    // {
+    //     $this->form_validation->set_rules('matric', 'Matric Number', 'required|callback_matric_exist');
+    //     $this->form_validation->set_rules('name', 'Name', 'required');
+    //     $this->form_validation->set_rules('phonenum', 'Phone Number', 'required');
+    //     $this->form_validation->set_rules('email', 'Email', 'required');
+    //     $this->form_validation->set_rules('password', 'Password', 'required');
+    //     $this->form_validation->set_rules('passwordconfirm', 'Confirm Password', 'required');
+    //     $this->form_validation->set_rules('program_code', 'Program Code', 'required');
+    //     $this->form_validation->set_rules('sig_id', 'SIG', 'required');
+    //     $this->form_validation->set_rules('sig_mentor_matric', 'Mentor', 'required');
+    //     // $this->form_validation->set_rules('photo_path', 'Profile Photo', 'required');
 
-        if ($this->form_validation->run() === FALSE) {
-            $data['title'] = 'Register Student';
-            $data['programs'] = $this->program_model->get_programs();
-            $data['sigs'] = $this->sig_model->get_sig();
-            $data['mentors'] = $this->mentor_model->get_mentor();
+    //     if ($this->form_validation->run() === FALSE) {
+    //         $data['title'] = 'Register Student';
+    //         $data['programs'] = $this->program_model->get_programs();
+    //         $data['sigs'] = $this->sig_model->get_sig();
+    //         $data['mentors'] = $this->mentor_model->get_mentor();
 
-            $this->load->view('templates/header');
-            $this->load->view('student/register', $data);
-            $this->load->view('templates/footer');
-        } else {
-            $this->student_model->register_student();
-            $this->user_model->register_user(3);
-            redirect('student');
-        }
-    }
+    //         $this->load->view('templates/header');
+    //         $this->load->view('student/register', $data);
+    //         $this->load->view('templates/footer');
+    //     } else {
+    //         $this->student_model->register_student();
+    //         $this->user_model->register_user(3);
+    //         redirect('student');
+    //     }
+    // }
 
     public function edit($student_id = NULL)
     {

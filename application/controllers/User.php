@@ -13,10 +13,9 @@ class User extends CI_Controller
     public function profile()
     {
         $data['title'] = 'User profile';
-        $id = 'A160000'; // get the current session user first
+        $id = 'A160001'; # get the current session user first
         $data['user'] = $this->user_model->get_user($id);
         $sig_id = $data['user']['sig_id'];
-        // $id = $data['user']['id'];
         $usertype = $data['user']['usertype_id'];
 
         $this->load->view('templates/header');
@@ -40,19 +39,22 @@ class User extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    public function edit($id)
+    public function edit()
     {
         $data['title'] = 'Update profile';
-        $id = 'K001'; // get the current session user first
+        $id = 'A160001'; # get the current session user 
+        if (!$id) {
+            redirect('home');
+        }
         $data['user'] = $this->user_model->get_user($id);
-        $usertype = $data['user']['usertype_id'];
+        $usertype_id = $data['user']['usertype_id'];
 
         $data['sigs'] = $this->sig_model->get_sig();
         $data['programs'] = $this->program_model->get_programs();
         $data['mentors'] = $this->mentor_model->get_mentor();
 
         $this->load->view('templates/header');
-        switch ($usertype) {
+        switch ($usertype_id) {
             case '1':
                 $data['admin'] = $this->admin_model->get_admin($id);
                 $this->load->view('user/admin/update', $data);
@@ -63,18 +65,47 @@ class User extends CI_Controller
                 break;
             case '3':
                 $data['student'] = $this->student_model->get_student($id);
-                if (!$data['student']['profile_image']) {
-                    $data['student']['profile_image'] = 'default.jpg';
-                }
-                print_r($data['student']);
-                print_r($data['programs']);
-                print_r($data['sigs']);
                 $this->load->view('user/student/update', $data);
                 break;
         }
         $this->load->view('templates/footer');
-        // NOT DONE
-        // get the current session user
+        # NOT DONE
+        # get the current session user
+    }
+
+    public function update($user_id)
+    {
+        $usertype_id = $this->input->post('usertype_id');
+        $config['upload_path'] = './assets/images/profile';
+        $config['allowed_types'] = 'gif|jpg|png';
+        $config['max_size'] = 500;
+        $config['max_width'] = 1024;
+        $config['max_height'] = 768;
+        $config['file_name'] = $user_id . '-' . substr(md5(rand()), 0, 10);
+        $this->load->library('upload', $config);
+
+        if (@$_FILES['profile_image']['name'] != NULL) {
+            if ($this->upload->do_upload('profile_image')) {
+                $profile_image = $this->upload->data('file_name');
+            } else {
+                $profile_image = 'default.jpg';
+            }
+        }
+        switch ($usertype_id) {
+            case '1':
+                //
+                break;
+            case '2':
+                //
+                break;
+            case '3':
+                $userchange = array('profile_image' => $profile_image);
+                $studentchange = array('phonenum' => $this->input->post('phonenum'));
+                $this->student_model->update_student($user_id, $studentchange);
+                $this->user_model->update_user($user_id, $userchange);
+                break;
+        }
+        redirect('profile');
     }
 
     public function delete($id)
@@ -110,6 +141,9 @@ class User extends CI_Controller
     public function register()
     {
         $usertype_id = $this->input->post('usertype_id');
+        if (!$usertype_id) {
+            redirect('home');
+        }
         # this usertype_id is from login page
 
         # VALUE RETRIEVAL
