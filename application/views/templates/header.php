@@ -40,9 +40,9 @@
             font: 14px Montserrat, sans-serif;
         }
 
-        h2 {
+        /* h2 {
             font: 20px Montserrat, sans-serif;
-        }
+        } */
 
         .margin {
             margin-bottom: 35px;
