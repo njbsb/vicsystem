@@ -1,42 +1,32 @@
 <h2 class="margin"><?= $title ?></h2>
 
-<!-- <button class="btn btn-outline-info btn-sm">Add score</button> -->
 <hr>
 <table class="table text-center">
     <thead class="table-dark">
         <tr>
             <td>Academic Session</td>
-            <?php foreach ($levels as $ls) : ?>
-                <td data-toggle="tooltip" data-placement="top" title="<?= $ls['percentage'] ?>%">Level <?= ucfirst($ls['level']) ?></td>
+            <?php foreach ($scoreplans as $scoreplan) : ?>
+                <td class="text-warning" data-toggle="tooltip" data-placement="top" title="<?= $scoreplan['percentweightage'] ?>%">Level <?= ucfirst($scoreplan['label']) ?></td>
             <?php endforeach ?>
-            <td data-toggle="tooltip" data-placement="top" title="15%">COMP</td>
+            <td class="text-info" data-toggle="tooltip" data-placement="top" title="15%">Components</td>
             <td data-toggle="tooltip" data-placement="top" title="55%">Total</td>
         </tr>
     </thead>
     <tbody>
-        <?php if ($tabletotals) : ?>
-            <?php foreach ($tabletotals as $tt) : ?>
-                <tr>
-                    <td><?= $tt['academicsession'] ?></td>
-                    <td><?= $tt['a1'] ?></td>
-                    <td><?= $tt['a2'] ?></td>
-                    <td><?= $tt['b1'] ?></td>
-                    <td><?= $tt['comp'] ?></td>
-                    <td><?= $tt['total'] ?></td>
-                </tr>
+        <tr>
+            <td><?= $academicsession['academicsession'] ?></td>
+            <?php foreach ($scoreplans as $scoreplan) : ?>
+                <td><?= $scoreplan['totalpercent'] ?> %</td>
             <?php endforeach ?>
-        <?php else : ?>
-            <tr>
-                <td>No data found</td>
-            </tr>
-        <?php endif ?>
+            <td><?= $scorecomps['totalpercent'] ?> %</td>
+            <td><?= $totalwhole ?> %</td>
+        </tr>
     </tbody>
 </table>
-
 <ul class="nav nav-tabs">
-    <?php foreach ($levels as $ls) : ?>
+    <?php foreach ($scoreplans as $scoreplan) : ?>
         <li class="nav-item">
-            <a class="nav-link btn-warning" data-toggle="tab" href="#<?= $ls['level'] ?>">Level <?= $ls['level'] ?></a>
+            <a class="nav-link btn-warning" data-toggle="tab" href="#<?= $scoreplan['label'] ?>">Level <?= $scoreplan['label'] ?></a>
         </li>
     <?php endforeach ?>
     <li class="nav-item">
@@ -44,155 +34,198 @@
     </li>
 </ul>
 <div id="myTabContent" class="tab-content">
-    <?php foreach ($levels as $ls) : ?>
-        <?php $eachlevel = $active_scorebylevels[array_search($ls['id'], array_column($active_scorebylevels, 'levelscore_id'))]; ?>
-        <div class="tab-pane fade show" id="<?= $ls['level'] ?>">
+    <?php foreach ($scoreplans as $scoreplan) : ?>
+        <div class="tab-pane fade show" id="<?= $scoreplan['label'] ?>">
             <br>
-            <?php if ($eachlevel['allhasvalue']) : ?>
-                <p>This level's score has been submitted</p>
-            <?php else : ?>
-                <?= form_open('score/setscorelevel/' . $student_id) ?>
-                <fieldset class="col-md-auto">
-                    <div class="row">
+
+            <div class="form-group">
+                <label for="activity">Activity/Workshop</label>
+                <input name="activity" value="<?= $scoreplan['activity_name'] ?>" readonly type="text" class="form-control">
+                <input type="hidden" name="activity_id" value="<?= $scoreplan['activity_id'] ?>" class="form-control">
+            </div>
+            <div class="row">
+                <?php if ($scoreplan['scores']) : ?>
+                    <?php foreach ($scoreplan['scores'] as $key => $score) : ?>
                         <div class="col-6">
+                            <label><?= ucfirst($key) ?></label>
                             <div class="form-group">
-                                <label for="acadsession_id">Academic Session</label>
-                                <input type="acadsession_name" value="<?= $activeacadsession['activeacademicsession'] ?>" class="form-control" readonly>
-                                <input name="acadsession_id" value="<?= $activeacadsession['id'] ?>" type="hidden" class="form-control" readonly>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="levelscore_id">Level</label>
-                                <input name="levelscore_code" value="<?= ucfirst($ls['level']) ?>" type="text" class="form-control" readonly>
-                                <input name="levelscore_id" type="hidden" value="<?= ucfirst($ls['id']) ?>" class="form-control" name="levelscore_id" readonly>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label for="student_id">Matric</label>
-                        <input name="student_id" value="<?= $student_id ?>" type="text" class="form-control" readonly>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="activity_id">Activity</label>
-                        <select name="activity_id" class="form-control" required>
-                            <option value="" selected disabled hidden>Choose activity</option>
-                            <?php foreach ($sigactivity as $sigact) : ?>
-                                <option value="<?= $sigact['id'] ?>"><?= $sigact['activity_name'] ?></option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
-                    <div class="row">
-                        <div class="col col-6">
-                            <div class="form-group">
-                                <label class="control-label" for="sc_iposition">Score Position</label>
-                                <select name="sc_position" class="custom-select" required>
-                                    <option value="" disabled hidden selected>Select position score</option>
-                                    <?php foreach ($guide_position as $pos) : ?>
-                                        <option value="<?= $pos['score'] ?>"><?= $pos['score'] . ' - ' . $pos['description'] ?></option>
+                                <select name="<?= $key ?>" class="custom-select">
+                                    <option value="" disabled hidden selected>Select <?= $key ?> score</option>
+                                    <?php foreach ($guide[$key] as $scoreguide) : ?>
+                                        <option disabled value="<?= $scoreguide['score'] ?>" <?php if ($scoreguide['score'] == $score) {
+                                                                                                    echo 'selected';
+                                                                                                } ?>><?= $scoreguide['concat'] ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
                         </div>
-                        <div class="col col-6">
-                            <div class="form-group">
-                                <label class="control-label" for="sc_meeting">Score Meeting</label>
-                                <select name="sc_meeting" class="custom-select" required>
-                                    <option value="" disabled hidden selected>Select meeting score</option>
-                                    <?php foreach ($guide_meeting as $met) : ?>
-                                        <option value="<?= $met['score'] ?>"><?= $met['score'] . ' - ' . $met['description'] ?></option>
-                                    <?php endforeach ?>
-                                </select>
-                            </div>
-                        </div>
+                    <?php endforeach ?>
+                    <div class="col">
+                        <button data-toggle="modal" data-target="#edit<?= $scoreplan['label'] ?>" class="btn btn-outline-primary">Edit Score</button>
                     </div>
-                    <div class="row">
-                        <div class="col col-md-6">
-                            <div class="form-group">
-                                <label class="control-label" for="sc_attendance">Score Attendance</label>
-                                <select name="sc_attendance" class="custom-select" required>
-                                    <option value="" disabled hidden selected>Select attendance score</option>
-                                    <?php foreach ($guide_attendance as $att) : ?>
-                                        <option value="<?= $att['score'] ?>"><?= $att['score'] . ' - ' . $att['description'] ?></option>
-                                    <?php endforeach ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col col-md-6">
-                            <div class="form-group">
-                                <label class="control-label" for="sc_involvement">Score Involvement</label>
-                                <select name="sc_involvement" class="custom-select" required>
-                                    <option value="" disabled hidden selected>Select involvement score</option>
-                                    <?php foreach ($guide_involvement as $inv) : ?>
-                                        <option value="<?= $inv['score'] ?>"><?= $inv['score'] . ' - ' . $inv['description'] ?></option>
-                                    <?php endforeach ?>
-                                </select>
-                            </div>
-                        </div>
+                <?php else : ?>
+                    <div class="col">
+                        <p>You have not added score for <?= $student['name'] ?> on this level</p>
+                        <button data-toggle="modal" data-target="#add<?= $scoreplan['label'] ?>" class="btn btn-outline-primary">Add Score</button>
                     </div>
+                <?php endif ?>
 
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </fieldset>
-                <?= form_close() ?>
-            <?php endif ?>
+            </div>
+        </div>
+        <!-- ADD -->
+        <div id="add<?= $scoreplan['label'] ?>" class="modal fade">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Score: Level <?= $scoreplan['label'] ?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <?php $hidden = array(
+                        'acslug' => $academicsession['slug'],
+                        'scoreplan_id' => $scoreplan['id'],
+                        'student_id' => $student_id
+                    );
+                    ?>
+                    <?= form_open('score/add_scorelevel', '', $hidden) ?>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="activity">Activity</label>
+                            <input name='activity' type="text" class="form-control" value="<?= $scoreplan['activity_name'] ?>" readonly>
+                        </div>
 
+                        <?php foreach ($levelrubrics as $key => $value) : ?>
+                            <div class="form-group">
+                                <label><?= ucfirst($key) ?></label>
+                                <select name="keys[<?= $key ?>]" id="<?= $key ?>" class="custom-select" required>
+                                    <option value="" disabled selected>Select <?= $key ?> score</option>
+                                    <?php foreach ($guide[$key] as $scoreguide) : ?>
+                                        <option value="<?= $scoreguide['score'] ?>"><?= $scoreguide['concat'] ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        <?php endforeach ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit Score</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                    </div>
+                    <?= form_close() ?>
+                </div>
+            </div>
+        </div>
+        <!-- EDIT -->
+        <div id="edit<?= $scoreplan['label'] ?>" class="modal fade">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Score: Level <?= $scoreplan['label'] ?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <?php $hidden = array(
+                        'acslug' => $academicsession['slug'],
+                        'scoreplan_id' => $scoreplan['id'],
+                        'student_id' => $student_id
+                    );
+                    ?>
+                    <?= form_open('score/edit_scorelevel', '', $hidden) ?>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="activity">Activity</label>
+                            <input type="text" class="form-control" value="<?= $scoreplan['activity_name'] ?>" readonly>
+                        </div>
+                        <?php foreach ($scoreplan['scores'] as $key => $value) : ?>
+                            <div class="form-group">
+                                <label><?= ucfirst($key) ?></label>
+                                <select name="keys[<?= $key ?>]" id="<?= $key ?>" class="custom-select" required>
+                                    <option value="" disabled selected>Select <?= $key ?> score</option>
+                                    <?php foreach ($guide[$key] as $scoreguide) : ?>
+                                        <?php $selected = ($scoreguide['score'] == $value) ? 'selected' : ''; ?>
+                                        <option value="<?= $scoreguide['score'] ?>" <?= $selected ?>><?= $scoreguide['concat'] ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        <?php endforeach ?>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit Score</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                    </div>
+                    <?= form_close() ?>
+                </div>
+            </div>
         </div>
     <?php endforeach ?>
 
     <div class="tab-pane fade" id="comp">
         <br>
-        <?php if ($active_scorebycomps['allhasvalue']) : ?>
-            <p>This components scores has been submitted</p>
-        <?php else : ?>
-            <?= form_open('score/setscorecomp/' . $student_id) ?>
-            <fieldset>
-                <div class="form-group">
-                    <input type="text" value="<?= $activeacadsession['activeacademicsession'] ?>" class="form-control" readonly>
-                    <input name="acadsession_id" value="<?= $activeacadsession['id'] ?>" type="hidden" class="form-control" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="student_id">Matric</label>
-                    <input name="student_id" value="<?= $student_id ?>" type="text" class="form-control" readonly>
-                </div>
-
-                <div class="row">
-                    <div class="col col-md-4">
-                        <div class="form-group">
-                            <label for="sc_digitalcv">Digital CV</label>
-                            <select name="sc_digitalcv" class="custom-select" required>
-                                <option value="" disabled hidden selected>Select digital CV score</option>
-                                <?php foreach ($guide_digitalcv as $cv) : ?>
-                                    <option value="<?= $cv['score'] ?>"><?= $cv['score'] . ' - ' . $cv['description'] ?></option>
+        <div class="row">
+            <?php foreach ($scorecomps['scores'] as $key => $component) : ?>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label><?= ucfirst($key) ?></label>
+                        <?php if ($key == 'volunteer') : ?>
+                            <input name="<?= $key ?>" value="<?= $component ?>" type="number" max="15" class="form-control" readonly>
+                        <?php else : ?>
+                            <select name="<?= $key ?>" class="custom-select">
+                                <?php foreach ($guide[$key] as $scoreguide) : ?>
+                                    <?php $selected = ($scoreguide['score'] == $component) ? 'selected' : ''; ?>
+                                    <option disabled value="<?php $scoreguide['score'] ?>" <?= $selected ?>><?= $scoreguide['concat'] ?></option>
                                 <?php endforeach ?>
                             </select>
-                        </div>
-                    </div>
-                    <div class="col col-md-4">
-                        <div class="form-group">
-                            <label for="sc_leadership">Leadership</label>
-                            <select name="sc_leadership" class="custom-select" required>
-                                <option value="" disabled hidden selected>Select leadership score</option>
-                                <?php foreach ($guide_leadership as $led) : ?>
-                                    <option value="<?= $led['score'] ?>"><?= $led['score'] . ' - ' . $led['description'] ?></option>
-                                <?php endforeach ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col col-md-4">
-                        <div class="form-group">
-                            <label for="sc_volunteer">Volunteerism</label>
-                            <input name="sc_volunteer" type="number" min="0" max="5" class="form-control" step="1" required>
-                        </div>
+                        <?php endif ?>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </fieldset>
-            <?= form_close() ?>
-        <?php endif ?>
-
+            <?php endforeach ?>
+            <div class="col">
+                <button data-toggle="modal" data-target="#editcomp" class="btn btn-outline-primary">Edit Score</button>
+            </div>
+            <div id="editcomp" class="modal fade">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Component Score</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <?php $hidden = array(
+                            'student_id' => $student_id,
+                            'acadsession_id' => $academicsession['id'],
+                            'acslug' => $academicsession['slug']
+                        ); ?>
+                        <?= form_open('score/edit_scorecomp', '', $hidden) ?>
+                        <div class="modal-body">
+                            <?php foreach ($scorecomps['scores'] as $key => $component) : ?>
+                                <div class="form-group">
+                                    <label><?= ucfirst($key) ?></label>
+                                    <?php if ($key == 'volunteer') : ?>
+                                        <input name="keys[<?= $key ?>]" value="<?= $component ?>" type="number" min="0" max="5" class="form-control" required>
+                                    <?php else : ?>
+                                        <select name="keys[<?= $key ?>]" class="custom-select" required>
+                                            <option value="" selected disabled>Select <?= $key ?> score</option>
+                                            <?php foreach ($guide[$key] as $scoreguide) : ?>
+                                                <?php $selected = ($scoreguide['score'] == $component) ? 'selected' : ''; ?>
+                                                <option value="<?= $scoreguide['score'] ?>" <?= $selected ?>><?= $scoreguide['concat'] ?></option>
+                                            <?php endforeach ?>
+                                        </select>
+                                    <?php endif ?>
+                                </div>
+                            <?php endforeach ?>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Submit data</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                        </div>
+                        <?= form_close() ?>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

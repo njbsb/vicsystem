@@ -5,25 +5,53 @@
         <button data-toggle="modal" data-target="#addscoreplan" class="btn btn-outline-danger" disabled>Add new scoring plan</button>
     </div>
 
-    <table class="table">
+    <table id="scoreplanindex" class="table">
         <thead class="table-dark">
             <tr>
                 <td>Academic Session</td>
+                <td>Academic Year</td>
                 <?php foreach ($activitycategory as $actcat) : ?>
-                    <td><?= $actcat['category'] ?> (<?= $actcat['code'] ?>) Count</td>
+                    <td data-toggle="tooltip" data-placement="top" title="" data-original-title="<?= $actcat['category'] ?> Count"><?= $actcat['category'] ?> (<?= $actcat['code'] ?>)</td>
+                    <td>Total Percent (<?= $actcat['code'] ?>)</td>
                 <?php endforeach ?>
+                <td>Total Percent</td>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($all_scoreplan as $asp) : ?>
+            <!-- <?php foreach ($all_scoreplan as $asp) : ?>
                 <tr>
                     <td><a href="<?= site_url('scoreplan/' . $asp['slug']) ?>"><?= $asp['academicsession'] ?></a></td>
+                    <td><?= $asp['academicyear'] ?></td>
                     <?php foreach ($asp['category'] as $cat) : ?>
                         <td><?= $cat['count'] ?></td>
+                        <td>?</td>
                     <?php endforeach ?>
+                    <td>?</td>
+                </tr>
+            <?php endforeach ?> -->
+            <?php foreach ($summarytable as $row) : ?>
+                <tr>
+                    <td><a href="<?= site_url('scoreplan/' . $row['slug']) ?>"><?= $row['academicsession'] ?></a></td>
+                    <td><?= $row['academicyear'] ?></td>
+                    <?php foreach ($row['categories'] as $category) : ?>
+                        <td><?= $category['count'] ?></td>
+                        <td><?= $category['categorytotalpercent'] ?> %</td>
+                    <?php endforeach ?>
+                    <td><?= $row['totalpercent'] ?> %</td>
                 </tr>
             <?php endforeach ?>
         </tbody>
+        <tfoot class="table-dark">
+            <tr>
+                <td>Academic Session</td>
+                <td>Academic Year</td>
+                <?php foreach ($activitycategory as $actcat) : ?>
+                    <td data-toggle="tooltip" data-placement="top" title="" data-original-title="<?= $actcat['category'] ?> Count"><?= $actcat['category'] ?> (<?= $actcat['code'] ?>)</td>
+                    <td>Total Percent (<?= $actcat['code'] ?>)</td>
+                <?php endforeach ?>
+                <td>Total Percent</td>
+            </tr>
+        </tfoot>
     </table>
 </div>
 <!-- MODAL -->
@@ -70,3 +98,10 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#scoreplanindex').DataTable();
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

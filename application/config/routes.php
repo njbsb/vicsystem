@@ -4,6 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 $route['academic'] = 'academic/index';
 $route['academicplan'] = 'academic/academicplan';
+$route['academic/records'] = 'academic/records';
 
 $route['activity'] = 'activity/index';
 $route['activity/update'] = 'activity/update';
@@ -49,7 +50,17 @@ $route['score'] = 'score/index';
 $route['scoreplan'] = 'score/scoreplan';
 $route['scoreplan/(:any)'] = 'score/scoreplan/$1';
 $route['score/addscore'] = 'score/addscore';
+
+$route['score/addscoreplan'] = 'score/addscoreplan';
+$route['score/updatescoreplan'] = 'score/updatescoreplan';
+
+$route['score/edit_scorecomp'] = 'score/edit_scorecomp';
+$route['score/add_scorelevel'] = 'score/add_scorelevel';
+$route['score/edit_scorelevel'] = 'score/edit_scorelevel';
+
 $route['score/(:any)'] = 'score/view/$1';
+$route['score/(:any)/(:any)'] = 'score/view/$1/$2';
+
 
 
 
@@ -57,4 +68,4 @@ $route['default_controller'] = 'pages/view';
 $route['(:any)'] = 'pages/view/$1';
 
 $route['404_override'] = '';
-$route['translate_uri_dashes'] = FALSE;
+$route['translate_uri_dashes'] = TRUE;

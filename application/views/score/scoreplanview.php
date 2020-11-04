@@ -20,12 +20,12 @@
                 <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addscoreplan<?= $actcat['code'] ?>">Add Score Plan</button>
             </div>
 
-            <table class="table ">
+            <table class="table">
                 <thead class="table-dark">
                     <tr>
                         <td>Label</td>
                         <td>Activity</td>
-                        <td>Weightage</td>
+                        <td>Weightage %</td>
                         <td></td>
                     </tr>
                 </thead>
@@ -35,8 +35,8 @@
                             <tr>
                                 <td><?= $scp['label'] ?></td>
                                 <td><?= $scp['activity_name'] ?></td>
-                                <td><?= $scp['weightage'] ?></td>
-                                <td><a type="button" data-toggle="modal" data-target="#editscoreplan<?= $actcat['id'] ?>" class="badge badge-dark">edit score plan</a></td>
+                                <td><?= $scp['percentweightage'] ?> %</td>
+                                <td><a type="button" data-toggle="modal" data-target="#editscoreplan<?= $scp['id'] ?>" class="btn btn-outline-primary btn-sm">edit score plan</a></td>
                             </tr>
                         <?php endforeach ?>
                     <?php else : ?>
@@ -60,19 +60,22 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <?= form_open('score/addscoreplan') ?>
+                    <?php $hidden = array(
+                        'acadsession_id' => $acadsession['id'],
+                        'activitycategory_id' => $actcat['id'],
+                        'acslug' => $acadsession['slug']
+                    ); ?>
+                    <?= form_open('score/addscoreplan', '', $hidden) ?>
                     <div class="modal-body">
                         <!-- ACADEMIC SESSION -->
                         <div class="form-group">
-                            <label for="acadsession_id">Academic Session</label>
+                            <label>Academic Session</label>
                             <input name="" type="text" value="<?= $acadsession['academicsession'] ?>" class="form-control" readonly>
-                            <input type="hidden" name="acadsession_id" value="<?= $acadsession['id'] ?>">
                         </div>
                         <!-- ACTIVITY CATEGORY -->
                         <div class="form-group">
-                            <label for="activitycategory_id">Activity Category</label>
-                            <input name="" type="text" value="<?= $actcat['categorycode'] ?>" class="form-control" readonly>
-                            <input type="hidden" name="activitycategory_id" value="<?= $actcat['id'] ?>">
+                            <label>Activity Category</label>
+                            <input type="text" value="<?= $actcat['categorycode'] ?>" class="form-control" readonly>
                         </div>
                         <!-- ACTIVITY -->
                         <div class="form-group">
@@ -90,12 +93,12 @@
                         <!-- LABEL -->
                         <div class="form-group">
                             <label for="label">Label</label>
-                            <input type="text" class="form-control" placeholder="<?= $actcat['code'] ?>" required>
+                            <input name="label" type="text" class="form-control" placeholder="<?= $actcat['code'] ?>" required>
                         </div>
                         <!-- WEIGHTAGE -->
                         <div class="form-group">
-                            <label for="weightage">Weightage</label>
-                            <input type="number" name="weightage" min="0" max="30" class="form-control" required>
+                            <label for="percentweightage">Weightage</label>
+                            <input type="number" name="percentweightage" min="0" max="30" class="form-control" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -120,9 +123,12 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <?= form_open('score/updatescoreplan/' . $scp['id']) ?>
+                        <?php $hidden = array(
+                            'scoreplan_id' => $scp['id'],
+                            'acslug' => $acslug
+                        ); ?>
+                        <?= form_open('score/updatescoreplan', '', $hidden) ?>
                         <div class="modal-body">
-                            <input name="acslug" type="hidden" value="<?= $acslug ?>">
                             <div class="form-group">
                                 <label for="label">Scoreplan Label</label>
                                 <input name="label" type="text" class="form-control" value="<?= $scp['label'] ?>">
@@ -134,8 +140,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="weightage">Weightage</label>
-                                <input name="weightage" type="text" class="form-control" value="<?= $scp['weightage'] ?>">
+                                <label for="percentweightage">Percentage Weightage</label>
+                                <input name="percentweightage" type="text" class="form-control" value="<?= $scp['percentweightage'] ?>">
                             </div>
                         </div>
                         <div class="modal-footer">

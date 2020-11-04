@@ -40,23 +40,23 @@ class Scoretable
                 'academicsession' => $acadplans[$i]['academicsession']
             );
             $levelkeys = array_keys(array_column($datascorelevels, 'acadsession_id'), $acadplans[$i]['acadsession_id']);
-            foreach ($levelkeys as $key) {
-                $dl = $datascorelevels[$key];
-                switch ($dl['levelscore_id']) {
-                    case '1':
-                        $totalarray['a1'] = $dl['totalpercent'];
-                        break;
-                    case '2':
-                        $totalarray['a2'] = $dl['totalpercent'];
-                        break;
-                    case '3':
-                        $totalarray['b1'] = $dl['totalpercent'];
-                        break;
-                }
-            }
+            // foreach ($levelkeys as $key) {
+            //     $dl = $datascorelevels[$key];
+            // switch ($dl['levelscore_id']) {
+            //     case '1':
+            //         $totalarray['a1'] = $dl['totalpercent'];
+            //         break;
+            //     case '2':
+            //         $totalarray['a2'] = $dl['totalpercent'];
+            //         break;
+            //     case '3':
+            //         $totalarray['b1'] = $dl['totalpercent'];
+            //         break;
+            // }
+            // }
             $compkey = array_search($acadplans[$i]['acadsession_id'], array_column($datascorecomps, 'acadsession_id'));
             $totalarray['comp'] = $datascorecomps[$compkey]['total'];
-            $totalarray['total'] = $totalarray['a1'] + $totalarray['a2'] + $totalarray['b1'] + $totalarray['comp'];
+            // $totalarray['total'] = $totalarray['a1'] + $totalarray['a2'] + $totalarray['b1'] + $totalarray['comp'];
             $tabletotals[$i] = $totalarray;
         }
         return $tabletotals;
@@ -66,7 +66,7 @@ class Scoretable
     {
         for ($i = 0; $i < count($datalevel); $i++) {
             $levelpercentage = $this->CI->score_model->get_levelscore($datalevel[$i]['levelscore_id'])['percentage'];
-            $total = $datalevel[$i]['sc_position'] + $datalevel[$i]['sc_meeting'] + $datalevel[$i]['sc_attendance'] + $datalevel[$i]['sc_involvement'];
+            $total = $datalevel[$i]['position'] + $datalevel[$i]['meeting'] + $datalevel[$i]['attendance'] + $datalevel[$i]['involvement'];
             $datalevel[$i]['total'] = $total;
             $datalevel[$i]['totalpercent'] = ($total / 20) * $levelpercentage;
         }
@@ -76,7 +76,7 @@ class Scoretable
     public function get_arraytable_comp($datacomp)
     {
         for ($i = 0; $i < count($datacomp); $i++) {
-            $datacomp[$i]['total'] = $datacomp[$i]['sc_digitalcv'] + $datacomp[$i]['sc_leadership'] + $datacomp[$i]['sc_volunteer'];
+            $datacomp[$i]['total'] = $datacomp[$i]['digitalcv'] + $datacomp[$i]['leadership'] + $datacomp[$i]['volunteer'];
         }
         return $datacomp;
     }
@@ -93,7 +93,7 @@ class Scoretable
             foreach ($levelscores as $ls) {
                 $levelpercent += $this->calculate_levelscore($ls);
             }
-            $comppercent = $compscore['sc_digitalcv'] + $compscore['sc_leadership'] + $compscore['sc_volunteer'];
+            $comppercent = $compscore['digitalcv'] + $compscore['leadership'] + $compscore['volunteer'];
             $currentsession_students[$i]['totalpercent'] = $levelpercent + $comppercent;
         }
         return $currentsession_students;
@@ -101,9 +101,10 @@ class Scoretable
 
     public function calculate_levelscore($eachlevel)
     {
-        $levelpercentage = $this->CI->score_model->get_levelscore($eachlevel['levelscore_id'])['percentage'];
-        $totalscore = $eachlevel['sc_position'] + $eachlevel['sc_meeting'] + $eachlevel['sc_attendance'] + $eachlevel['sc_involvement'];
-        return ($totalscore / 20) * $levelpercentage;
+        // $levelpercentage = $this->CI->score_model->get_levelscore($eachlevel['levelscore_id'])['percentweightage'];
+        // $totalscore = $eachlevel['position'] + $eachlevel['meeting'] + $eachlevel['attendance'] + $eachlevel['involvement'];
+        // return ($totalscore / 20) * $levelpercentage;
+        return 0;
     }
 
     public function get_arraytable_scoringplan($categories, $academicsessions, $scoreplans)
@@ -112,6 +113,7 @@ class Scoretable
         # group by academic session
         foreach ($academicsessions as $key => $acadsess) {
             $table[$key]['academicsession'] = $acadsess['academicsession'];
+            $table[$key]['academicyear'] = $acadsess['academicyear'];
             $table[$key]['slug'] = $acadsess['slug'];
             foreach ($categories as $category) {
                 $count = 0;
@@ -130,5 +132,40 @@ class Scoretable
             }
         }
         return $table;
+    }
+
+    public function get_table_allscore($score_levels)
+    {
+        $acs = array();
+        foreach ($score_levels as $scl) {
+            $acs[] = $scl['acadsession_id'];
+        }
+        $unique_acs = array_unique($acs);
+        foreach ($unique_acs as $uacs) {
+            # == each row
+            foreach ($score_levels as $scorelevel) {
+                if ($scorelevel['acadsession_id'] == $uacs) {
+                    # get each scoreplan in this scorelevel
+                    $row = array(
+                        'academicsession' => $scorelevel['academicsession']
+
+                    );
+                }
+            }
+        }
+
+        $table = array();
+        return $unique_acs;
+    }
+
+    public function get_level_rubrics()
+    {
+        $levelrubrics = array(
+            'position' => 0,
+            'meeting' => 0,
+            'attendance' => 0,
+            'involvement' => 0
+        );
+        return $levelrubrics;
     }
 }

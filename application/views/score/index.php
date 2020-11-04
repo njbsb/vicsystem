@@ -17,7 +17,7 @@
                 <td class="AcadYear"><?= $stdscore['academicsession'] ?></td>
                 <td><?= $stdscore['totalpercent'] ?></td>
                 <td class="Status">Marked/Not</td>
-                <td><a class="badge badge-primary" href="<?= site_url('/score/' . $stdscore['student_matric']) ?>">Edit score</a></td>
+                <td><a class="badge badge-primary" href="<?= site_url('/score/' . $stdscore['student_matric']) . '/' . $stdscore['acslug'] ?>">Edit score</a></td>
             </tr>
         <?php endforeach ?>
     </tbody>

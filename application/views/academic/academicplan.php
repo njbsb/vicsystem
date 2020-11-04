@@ -1,34 +1,69 @@
 <h2 class="text-center margin"><?= $title ?></h2>
-<!-- <div class="form-group">
-    <label for="id">Student Matric</label>
-    <input name="id" type="text" class="form-control" value="<?= $student_id ?>" readonly>
-</div> -->
 
-<?php if ($thisacademicplan) : ?>
+<?php $hidden = array(
+    'student_id' => $student['id']
+); ?>
+<?= form_open('academic/records', '', $hidden) ?>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <!-- <label for="acadyear_id">Academic Year</label> -->
+            <select name="acadyear_id" class="form-control" required>
+                <option value="" selected disabled>Select academic year</option>
+                <?php foreach ($academicyears as $acadyear) :  ?>
+                    <option value="<?= $acadyear['id'] ?>"><?= $acadyear['acadyear'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <!-- <label for="semester_id">Semester</label> -->
+            <select name="semester_id" class="form-control" required>
+                <option value="" selected disabled>Select semester</option>
+                <?php foreach ($semesters as $sem) : ?>
+                    <option value="<?= $sem['id'] ?>"><?= $sem['semester'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <button type="submit" class="btn btn-outline-primary">Get record</button>
+        </div>
+    </div>
+</div>
+
+<?= form_close() ?>
+
+
+<!-- <?php if ($thisacademicplan) : ?>
     <h6>You have registered the latest academic plan</h6>
 <?php else : ?>
-    <?= form_open('academic/create_academicplan/' . $student_id) ?>
-    <fieldset class="col-md-auto">
-        <h4>Register academic plan</h4>
-        <div class="form-group">
-            <label for="id">Student Matric</label>
-            <input name="id" type="text" class="form-control" value="<?= $student_id ?>" readonly>
-        </div>
-        <div class="form-group">
-            <label for="acadsession_id">Academic Session</label>
-            <input name="activeacademicsession" value="<?= $activeacadsession['activeacademicsession'] ?>" type="text" class="form-control">
-            <input name="activeacadsession_id" value="<?= $activeacadsession['id'] ?>" type="hidden">
-        </div>
-        <div class="row">
-            <div class="form-group col-3">
-                <label for="gpa_target">GPA Target</label>
-                <input name="gpa_target" min="1" max="4" type="number" placeholder="3.00" class="form-control" step="0.01">
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </fieldset>
-    <?= form_close() ?>
+    <h6>Please register your academic plan</h6>
 <?php endif ?>
+<?php $hidden = array(); ?>
+<?= form_open('academic/create_academicplan/' . $student_id) ?>
+<fieldset class="col-md-auto">
+    <h4>Register academic plan</h4>
+    <div class="form-group">
+        <label for="id">Student Matric</label>
+        <input name="id" type="text" class="form-control" value="<?= $student_id ?>" readonly>
+    </div>
+    <div class="form-group">
+        <label for="acadsession_id">Academic Session</label>
+        <input name="activeacademicsession" value="<?= $activeacadsession['academicsession'] ?>" type="text" class="form-control">
+        <input name="activeacadsession_id" value="<?= $activeacadsession['id'] ?>" type="hidden">
+    </div>
+    <div class="row">
+        <div class="form-group col-3">
+            <label for="gpa_target">GPA Target</label>
+            <input name="gpa_target" min="1" max="4" type="number" placeholder="3.00" class="form-control" step="0.01">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</fieldset>
+<?= form_close() ?> -->
 
 
 <br>
@@ -102,22 +137,22 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if ($tabletotals) : ?>
-                    <?php foreach ($tabletotals as $tabletotal) : ?>
-                        <tr>
-                            <td><?= $tabletotal['academicsession'] ?></td>
-                            <td><?= $tabletotal['a1'] ?>%</td>
-                            <td><?= $tabletotal['a2'] ?>%</td>
-                            <td><?= $tabletotal['b1'] ?>%</td>
-                            <td><?= $tabletotal['comp'] ?>%</td>
-                            <td><?= $tabletotal['total'] ?>%</td>
-                        </tr>
-                    <?php endforeach ?>
-                <?php else : ?>
-                    <tr>
-                        <td>No data found</td>
-                    </tr>
-                <?php endif ?>
+                <?php ?>
+                <?php  ?>
+                <tr>
+                    <td><?php ?></td>
+                    <td><?php ?>%</td>
+                    <td><?php ?>%</td>
+                    <td><?php ?>%</td>
+                    <td><?php ?>%</td>
+                    <td><?php ?>%</td>
+                </tr>
+                <?php  ?>
+                <?php ?>
+                <!-- <tr>
+                    <td>No data found</td>
+                </tr> -->
+                <?php ?>
             </tbody>
         </table>
         <hr>
@@ -126,6 +161,7 @@
         <br>
         <!-- SCORE BY LEVEL -->
         <h2 class="text-left">Score by Levels</h2>
+        <p>Note: this will be based on table scoring plan</p>
         <table id="tablescorelevel" class="table display">
             <thead class="table-dark">
                 <tr>
@@ -140,7 +176,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if ($score_levels) : ?>
+                <!-- <?php if ($score_levels) : ?>
                     <?php foreach ($score_levels as $scl) : ?>
                         <tr>
                             <td><?= $scl['academicsession'] ?></td>
@@ -153,11 +189,11 @@
                             <td><?= $scl['totalpercent'] ?>%</td>
                         </tr>
                     <?php endforeach ?>
-                <?php else : ?>
-                    <tr>
-                        <td>No data found</td>
-                    </tr>
-                <?php endif ?>
+                <?php else : ?> -->
+                <tr>
+                    <td>No data found</td>
+                </tr>
+                <!-- <?php endif ?> -->
             </tbody>
             <tfoot>
                 <tr>
@@ -193,9 +229,9 @@
                     <?php foreach ($score_comp as $scomp) : ?>
                         <tr>
                             <td><?= $scomp['academicsession'] ?></td>
-                            <td><?= $scomp['sc_leadership'] ?></td>
-                            <td><?= $scomp['sc_volunteer'] ?></td>
-                            <td><?= $scomp['sc_digitalcv'] ?></td>
+                            <td><?= $scomp['leadership'] ?></td>
+                            <td><?= $scomp['volunteer'] ?></td>
+                            <td><?= $scomp['digitalcv'] ?></td>
                             <td><?= $scomp['total'] ?>%</td>
                         </tr>
                     <?php endforeach ?>
@@ -252,10 +288,11 @@
                 });
             }
         });
-        $('#tablescorecomponent').DataTable();
-        $('#tablescoreoverall').DataTable();
-        $('#tableacademicplan').DataTable();
+
     });
+    $('#tablescorecomponent').DataTable();
+    $('#tablescoreoverall').DataTable();
+    $('#tableacademicplan').DataTable();
     $(function() {
         $('[data-toggle="tooltip"]').tooltip();
     });
