@@ -8,48 +8,52 @@
     <table id="scoreplanindex" class="table">
         <thead class="table-dark">
             <tr>
-                <td>Academic Session</td>
-                <td>Academic Year</td>
+                <td>Session</td>
+                <td>Year</td>
                 <?php foreach ($activitycategory as $actcat) : ?>
-                    <td data-toggle="tooltip" data-placement="top" title="" data-original-title="<?= $actcat['category'] ?> Count"><?= $actcat['category'] ?> (<?= $actcat['code'] ?>)</td>
-                    <td>Total Percent (<?= $actcat['code'] ?>)</td>
+                    <td data-toggle="tooltip" data-placement="top" title="" data-original-title="<?= $actcat['category'] ?> Count"><?= $actcat['category'] ?></td>
+                    <td>Total % (<?= $actcat['code'] ?>)</td>
                 <?php endforeach ?>
-                <td>Total Percent</td>
+                <td>Total %</td>
+                <td></td>
             </tr>
         </thead>
         <tbody>
-            <!-- <?php foreach ($all_scoreplan as $asp) : ?>
+            <?php foreach ($academicsessions as $acs) : ?>
                 <tr>
-                    <td><a href="<?= site_url('scoreplan/' . $asp['slug']) ?>"><?= $asp['academicsession'] ?></a></td>
-                    <td><?= $asp['academicyear'] ?></td>
-                    <?php foreach ($asp['category'] as $cat) : ?>
-                        <td><?= $cat['count'] ?></td>
-                        <td>?</td>
+                    <td><?= $acs['academicsession'] ?></td>
+                    <td><?= $acs['academicyear'] ?></td>
+                    <?php foreach ($acs['activitycategories'] as $cat) : ?>
+                        <td><?= $cat['categorycount'] ?></td>
+                        <td><?= $cat['categorytotalpercent'] ?>%</td>
                     <?php endforeach ?>
-                    <td>?</td>
+                    <td>0%</td>
+                    <td><a href="<?= site_url('scoreplan/' . $acs['slug']) ?>" class="badge badge-pill badge-dark">view</a></td>
                 </tr>
-            <?php endforeach ?> -->
-            <?php foreach ($summarytable as $row) : ?>
+            <?php endforeach ?>
+            <!-- <?php foreach ($summarytable as $row) : ?>
                 <tr>
-                    <td><a href="<?= site_url('scoreplan/' . $row['slug']) ?>"><?= $row['academicsession'] ?></a></td>
+                    <td><?= $row['academicsession'] ?></td>
                     <td><?= $row['academicyear'] ?></td>
                     <?php foreach ($row['categories'] as $category) : ?>
                         <td><?= $category['count'] ?></td>
                         <td><?= $category['categorytotalpercent'] ?> %</td>
                     <?php endforeach ?>
                     <td><?= $row['totalpercent'] ?> %</td>
+                    <td><a href="<?= site_url('scoreplan/' . $row['slug']) ?>" class="badge badge-pill badge-dark">view</a></td>
                 </tr>
-            <?php endforeach ?>
+            <?php endforeach ?> -->
         </tbody>
         <tfoot class="table-dark">
             <tr>
-                <td>Academic Session</td>
-                <td>Academic Year</td>
+                <td>Session</td>
+                <td>Year</td>
                 <?php foreach ($activitycategory as $actcat) : ?>
-                    <td data-toggle="tooltip" data-placement="top" title="" data-original-title="<?= $actcat['category'] ?> Count"><?= $actcat['category'] ?> (<?= $actcat['code'] ?>)</td>
-                    <td>Total Percent (<?= $actcat['code'] ?>)</td>
+                    <td data-toggle="tooltip" data-placement="top" title="" data-original-title="<?= $actcat['category'] ?> Count"><?= $actcat['category'] ?></td>
+                    <td>Total % (<?= $actcat['code'] ?>)</td>
                 <?php endforeach ?>
-                <td>Total Percent</td>
+                <td>Total %</td>
+                <td></td>
             </tr>
         </tfoot>
     </table>
@@ -101,7 +105,26 @@
 
 <script>
     $(document).ready(function() {
-        $('#scoreplanindex').DataTable();
+        $('#scoreplanindex').DataTable({
+            initComplete: function() {
+                this.api().columns().every(function() {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function() {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+                            column
+                                .search(val ? '^' + val + '$' : '', true, false)
+                                .draw();
+                        });
+                    column.data().unique().sort().each(function(d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>')
+                    });
+                });
+            }
+        });
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>

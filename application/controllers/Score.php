@@ -83,85 +83,41 @@ class Score extends CI_Controller
     public function scoreplan($slug = NULL)
     {
         if ($slug == FALSE) {
-            # index page
+            # scoreplan index
             $activitycategories = $this->activity_model->get_activitycategory();
             $academicsessions = $this->academic_model->get_academicsession();
-            $scoringplans = $this->score_model->get_scoreplan();
-
+            foreach ($academicsessions as $index => $acs) {
+                foreach ($activitycategories as $id => $cat) {
+                    $activitycategories[$id]['categorycount'] = $this->activity_model->get_categoryactivitycount($acs['id'], $cat['id']);
+                    $activitycategories[$id]['categorytotalpercent'] = $this->score_model->get_categorytotalpercent($acs['id'], $cat['id']);
+                }
+                $academicsessions[$index]['activitycategories'] = $activitycategories;
+            }
             $data = array(
-                'title' => 'Score Plan Index',
+                'title' => 'All Score Plans',
                 'activitycategory' => $activitycategories,
                 'activeacadsession' => $this->academic_model->get_activeacademicsession(),
-                'all_scoreplan' => $this->scoretable->get_arraytable_scoringplan(
-                    $activitycategories,
-                    $academicsessions,
-                    $scoringplans
-                )
+                'academicsessions' => $academicsessions
             );
-            $summarytable = array();
-            foreach ($academicsessions as $id => $acadsess) {
-                $slug = $acadsess['slug'];
-                $academicsession = $acadsess['academicsession'];
-                $academicyear = $acadsess['academicyear'];
-                $row = array(
-                    'slug' => $slug,
-                    'academicsession' => $academicsession,
-                    'academicyear' => $academicyear
-                );
-                $totalpercent = 0;
-                foreach ($activitycategories as $category) {
-                    $categorycount = $this->activity_model->get_categoryactivitycount(
-                        $acadsess['id'],
-                        $category['id']
-                    );
-                    $categorytotalpercent = $this->score_model->get_categorytotalpercent(
-                        $acadsess['id'],
-                        $category['id']
-                    );
-                    $totalpercent += $categorytotalpercent;
-                    $categorysummary = array(
-                        'code' => $category['code'],
-                        'count' => $categorycount,
-                        'categorytotalpercent' => $categorytotalpercent
-                    );
-                    $row['categories'][] = $categorysummary;
-                }
-                $row['totalpercent'] = $totalpercent;
-                $summarytable[] = $row;
-            }
-            $data['summarytable'] = $summarytable;
-            // print_r($summarytable);
             $this->load->view('templates/header');
             $this->load->view('score/scoreplanindex', $data);
         } else {
-            # specific academic session
-            $acadsession_id = $this->academic_model->get_academicsession(FALSE, $slug)['id'];
-
+            # scoreplan view
+            // $acadsession_id = $this->academic_model->get_academicsession(FALSE, $slug)['id'];
+            $academicsession = $this->academic_model->get_academicsession(FALSE, $slug);
+            $activitycategories = $this->activity_model->get_activitycategory();
+            foreach ($activitycategories as $i => $actcat) {
+                $activitycategories[$i]['scoreplan'] = $this->score_model->get_scoreplan($academicsession['id'], $actcat['id']);
+                $activitycategories[$i]['unregistered'] = $this->activity_model->get_category_unregisteredactivity($academicsession['id'], $actcat['id']);
+            }
             $data = array(
                 'acslug' => $slug,
-                'title' => $this->academic_model->get_academicsession($acadsession_id)['academicsession'],
-                'activitycategory' => $this->activity_model->get_activitycategory(),
-                'acadsession' => $this->academic_model->get_academicsession($acadsession_id)
-
+                'activitycategories' => $activitycategories,
+                'acadsession' => $academicsession
             );
-
-            for ($i = 0; $i < count($data['activitycategory']); $i++) {
-                $dac = $data['activitycategory'][$i]; # every category object
-                $dac['scoreplan'] = $this->score_model->get_scoreplan($acadsession_id, $dac['id']);
-                $dac['activities'] = $this->activity_model->get_categoryactivity($acadsession_id, $dac['id']);
-                $data['activitycategory'][$i]['activities'] = $dac['activities'];
-                $data['activitycategory'][$i]['notactivities'] = $this->activity_model->get_categorynotactivity(
-                    $acadsession_id,
-                    $dac['id'],
-                    $dac['activities']
-                );
-                $data['activitycategory'][$i]['scoreplan'] = $dac['scoreplan'];
-            }
-
-            // print_r($data['activitycategory'][0]);
+            print_r($data['activitycategories'][1]['unregistered']);
             $this->load->view('templates/header');
             $this->load->view('score/scoreplanview', $data);
-            // $this->load->view('templates/footer');
         }
     }
 

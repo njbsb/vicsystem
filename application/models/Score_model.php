@@ -67,17 +67,6 @@ class Score_model extends CI_Model
         # can select scl or scp first.
         return $query->result_array();
     }
-    // public function get_student_scorelevel($matric, $acadsession_id)
-    // {
-    //     $this->db->select("scl.*, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
-    //         ->from('scorelevel as scl')
-    //         ->where(array('student_matric' => $matric, 'acadsession_id' => $acadsession_id))
-    //         ->join('scoringplan as scp', 'scp.id = scl.scoreplan_id', 'left')
-    //         ->join('academicsession as acs', 'acs.id = scp.acadsession_id', 'left')
-    //         ->join('academicyear as acy', 'acy.id = acs.acadyear_id', 'left');
-    //     $query = $this->db->get();
-    //     return $query->result_array();
-    // }
 
     public function get_scoreplan_scorelevel($student_id, $scoreplan_id)
     {
@@ -307,17 +296,18 @@ class Score_model extends CI_Model
 
     public function get_categorytotalpercent($acadsession_id, $category_id)
     {
-        $this->db->select_sum('percentweightage', 'totalpercent')
-            ->from('scoringplan')
+        $this->db->select_sum('scp.percentweightage')
+            ->from('scoringplan as scp')
             ->where(array(
-                'acadsession_id' => $acadsession_id,
-                'activitycategory_id' => $category_id
+                'scp.acadsession_id' => $acadsession_id,
+                'scp.activitycategory_id' => $category_id
             ));
-        $totalpercent = $this->db->get()->row()->totalpercent;
-        if ($totalpercent) {
+        $totalpercent = $this->db->get()->row()->percentweightage;
+        if (isset($totalpercent)) {
             return $totalpercent;
         } else {
             return 0;
         }
+        return $totalpercent;
     }
 }

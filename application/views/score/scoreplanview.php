@@ -1,7 +1,7 @@
-<h2><?= $title ?></h2>
+<h2>Score Plan: <?= $acadsession['academicsession'] ?></h2>
 
 <ul class="nav nav-tabs">
-    <?php foreach ($activitycategory as $actcat) : ?>
+    <?php foreach ($activitycategories as $actcat) : ?>
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#<?= $actcat['code'] ?>"><?= $actcat['category'] . ' (' . $actcat['code'] . ')' ?></a>
         </li>
@@ -13,7 +13,7 @@
 
 </ul>
 <div id="myTabContent" class="tab-content">
-    <?php foreach ($activitycategory as $actcat) : ?>
+    <?php foreach ($activitycategories as $actcat) : ?>
         <div class="tab-pane fade show" id="<?= $actcat['code'] ?>">
             <br>
             <div class="form-group">
@@ -81,8 +81,8 @@
                         <div class="form-group">
                             <label for="activity_id">Activity</label>
                             <select name="activity_id" class="form-control" required>
-                                <?php if ($actcat['notactivities']) : ?>
-                                    <?php foreach ($actcat['notactivities'] as $notact) : ?>
+                                <?php if ($actcat['unregistered']) : ?>
+                                    <?php foreach ($actcat['unregistered'] as $notact) : ?>
                                         <option value="<?= $notact['id'] ?>"><?= $notact['activity_name'] ?></option>
                                     <?php endforeach ?>
                                 <?php else : ?>
