@@ -133,7 +133,8 @@ class Activity_model extends CI_Model
 
     public function get_categoryactivity($acadsession_id, $category_id)
     {
-        $this->db->select("activity.id, activity.activity_name")->from('activity')
+        $this->db->select("id, activity_name")
+            ->from('activity')
             ->where(array(
                 'activity.acadsession_id' => $acadsession_id,
                 'activity.activitycategory_id' => $category_id
@@ -143,13 +144,27 @@ class Activity_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_categorynotactivity($acadsession_id, $category_id, $activities)
+    public function get_category_registeredactivity($acadsession_id, $category_id)
     {
-        $this->db->select('id, activity_name');
-        $this->db->from('activity');
+        $this->db->select('act.id')
+            ->from('activity as act')
+            ->where(array(
+                'act.acadsession_id' => $acadsession_id,
+                'act.activitycategory_id' => $category_id
+            ))
+            ->join('scoringplan as scp', 'scp.activity_id = act.id');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function get_category_unregisteredactivity($acadsession_id, $category_id)
+    {
+        $activities = $this->get_category_registeredactivity($acadsession_id, $category_id);
+        $this->db->select('act.id, act.activity_name');
+        $this->db->from('activity as act');
         $this->db->where(array(
-            'acadsession_id' => $acadsession_id,
-            'activitycategory_id' => $category_id
+            'act.acadsession_id' => $acadsession_id,
+            'act.activitycategory_id' => $category_id
         ));
         foreach ($activities as $act) {
             $this->db->where_not_in('id', array($act['id']));
@@ -160,14 +175,11 @@ class Activity_model extends CI_Model
 
     public function get_categoryactivitycount($acadsession_id, $category_id)
     {
-        $this->db->select('count(*) as count')
-            ->from('activity')
-            ->where(array(
-                'acadsession_id' => $acadsession_id,
-                'activitycategory_id' => $category_id
-            ));
 
-        $score = $this->db->get()->row()->count;
-        return $score;
+        $this->db->where(array(
+            'acadsession_id' => $acadsession_id,
+            'activitycategory_id' => $category_id
+        ))->from('scoringplan');
+        return $this->db->count_all_results();
     }
 }
