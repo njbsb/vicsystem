@@ -72,33 +72,28 @@ class Academic extends CI_Controller
                 'academicplan' => $this->academic_model->get_academicplan($student_id, $selected_academicsession['id']),
                 'levelrubrics' => $this->scoretable->get_level_rubrics()
             );
-
-            $scorelevels = $this->score_model->get_student_scorelevel($student_id, $selected_academicsession['id']);
             $total_all = 0;
-            foreach ($scorelevels as $key => $scorelevel) {
-                $scoreleveltotal = $this->score_model->get_maxscore_position() + $this->score_model->get_maxscore_meeting() + $this->score_model->get_maxscore_attendance() + $this->score_model->get_maxscore_involvement();
-                $total = 0;
-                foreach ($data['levelrubrics'] as $rubric => $value) {
-                    $total += $scorelevel[$rubric];
-                }
-                $scorelevels[$key]['total'] = $total;
-                $scorelevels[$key]['totalpercent'] = ($total / $scoreleveltotal) * $scorelevel['percentweightage'];
-                $total_all  += $scorelevels[$key]['totalpercent'];
+            $scoreleveltotal = $this->score_model->get_maxscore_position() + $this->score_model->get_maxscore_meeting() + $this->score_model->get_maxscore_attendance() + $this->score_model->get_maxscore_involvement();
+            $scoreplans = $this->score_model->get_scoreplan($acadsession_id = $selected_academicsession['id'], $category_id = FALSE);
+            foreach ($scoreplans as $index => $scoreplan) {
+                $scores = $this->score_model->get_scoreplan_scorelevel($student_id = $student_id, $scoreplan['id']);
+                $total = $scores ? array_sum($scores) : 0;
+                $totalpercent = ($total / $scoreleveltotal) * $scoreplan['percentweightage'];
+                $scoreplans[$index]['scores'] = $scores ? $scores : array(0, 0, 0, 0);
+                $scoreplans[$index]['total'] = $total;
+                $scoreplans[$index]['totalpercent'] = $totalpercent;
+                $total_all += $totalpercent;
             }
-            $data['scorelevels'] = $scorelevels;
             $scorecomp = $this->score_model->get_student_scorecomp($student_id, $selected_academicsession['id']);
-            $scorecomp['total'] = $scorecomp['digitalcv'] + $scorecomp['leadership'] + $scorecomp['volunteer'];
-            $total_all += $scorecomp['total'];
+            if (!is_null($scorecomp)) {
+                $scorecomp['total'] = $scorecomp['digitalcv'] + $scorecomp['leadership'] + $scorecomp['volunteer'];
+                $total_all += $scorecomp['total'];
+            }
+            $data['scoreplans'] = $scoreplans;
             $data['scorecomp'] = $scorecomp;
-            $overall_table = array(
-                'academicsession' => $selected_academicsession['academicsession'],
-                'scorelevels' => $scorelevels,
-                'scorecomp' => $scorecomp,
-                'total_all' => $total_all
-            );
+            $data['total_all'] = $total_all;
 
-            $data['overall'] = $overall_table;
-            // print_r($scorelevels);
+            // print_r($data['citras']);
             $this->load->view('templates/header');
             $this->load->view('academic/records', $data);
         } else {

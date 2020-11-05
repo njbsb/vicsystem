@@ -31,7 +31,7 @@
 <h4>Citra Registered</h4>
 <?php if ($citras) : ?>
     <?php foreach ($citras as $citra) : ?>
-        <span class="badge badge-pill badge-primary"><?= $citra['citra_code'] ?></span>
+        <span data-toggle="tooltip" data-placement="top" title="<?= $citra['citraname'] ?>" class="badge badge-pill badge-primary"><?= $citra['citra_code'] ?></span>
     <?php endforeach ?>
 <?php else : ?>
     <p>No data of Citra course registered</p>
@@ -58,9 +58,9 @@
             <thead class="table-dark">
                 <tr>
                     <td>Academic Session</td>
-                    <?php if ($scorelevels) : ?>
-                        <?php foreach ($scorelevels as $scorelevel) : ?>
-                            <td><?= $scorelevel['label'] ?></td>
+                    <?php if ($scoreplans) : ?>
+                        <?php foreach ($scoreplans as $scoreplan) : ?>
+                            <td class="text-warning"><?= $scoreplan['label'] ?></td>
                         <?php endforeach ?>
                     <?php endif ?>
                     <td>Components</td>
@@ -70,17 +70,17 @@
             <tbody class="table-default">
                 <tr>
                     <td><?= $academicsession['academicsession'] ?></td>
-                    <?php if ($scorelevels) : ?>
-                        <?php foreach ($scorelevels as $scorelevel) : ?>
-                            <td><?= $scorelevel['totalpercent'] ?></td>
+                    <?php if ($scoreplans) : ?>
+                        <?php foreach ($scoreplans as $scoreplan) : ?>
+                            <td><?= $scoreplan['totalpercent'] ?></td>
                         <?php endforeach ?>
                     <?php endif ?>
                     <?php if ($scorecomp) : ?>
-                        <td><?= $scorecomp['total'] ?></td>
+                        <td><?= $scorecomp['total'] ?> %</td>
                     <?php else : ?>
                         <td>?</td>
                     <?php endif ?>
-                    <td><?= $overall['total_all'] ?></td>
+                    <td><?= $total_all ?> %</td>
                 </tr>
             </tbody>
         </table>
@@ -93,23 +93,23 @@
                     <td>Activity Name</td>
                     <td>Level</td>
                     <?php foreach ($levelrubrics as $rubric => $val) : ?>
-                        <td><?= ucfirst($rubric) ?></td>
+                        <td class="text-warning"><?= ucfirst($rubric) ?></td>
                     <?php endforeach ?>
                     <td>Total Score</td>
                     <td>Total Percent</td>
                 </tr>
             </thead>
             <tbody>
-                <?php if ($scorelevels) : ?>
-                    <?php foreach ($scorelevels as $scorelevel) : ?>
+                <?php if ($scoreplans) : ?>
+                    <?php foreach ($scoreplans as $scoreplan) : ?>
                         <tr>
-                            <td><?= $scorelevel['activity_name'] ?></td>
-                            <td><?= $scorelevel['label'] ?></td>
-                            <?php foreach ($levelrubrics as $rubric => $val) : ?>
-                                <td><?= $scorelevel[$rubric] ?></td>
+                            <td><?= $scoreplan['activity_name'] ?></td>
+                            <td><?= $scoreplan['label'] ?></td>
+                            <?php foreach ($scoreplan['scores'] as $rubric => $val) : ?>
+                                <td><?= $val ?></td>
                             <?php endforeach ?>
-                            <td><?= $scorelevel['total'] ?></td>
-                            <td><?= $scorelevel['totalpercent'] ?>/<?= $scorelevel['percentweightage'] ?></td>
+                            <td><?= $scoreplan['total'] ?></td>
+                            <td><?= $scoreplan['totalpercent'] ?>/<?= $scoreplan['percentweightage'] ?> %</td>
                         </tr>
                     <?php endforeach ?>
                 <?php else : ?>
@@ -123,23 +123,34 @@
     </div>
     <div class="tab-pane fade" id="comp">
         <br>
-        <table class="table">
-            <thead class="table-dark">
-                <tr>
-                    <td>Digital CV</td>
-                    <td>Leadership</td>
-                    <td>Volunteer</td>
-                    <td>Total</td>
-                </tr>
+        <table class="table"">
+            <thead class=" table-dark">
+            <tr>
+                <td>Digital CV</td>
+                <td>Leadership</td>
+                <td>Volunteer</td>
+                <td>Total</td>
+            </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><?= $scorecomp['digitalcv'] ?></td>
-                    <td><?= $scorecomp['leadership'] ?></td>
-                    <td><?= $scorecomp['volunteer'] ?></td>
-                    <td><?= $scorecomp['total'] ?></td>
+                    <?php if ($scorecomp) : ?>
+                        <td><?= $scorecomp['digitalcv'] ?> %</td>
+                        <td><?= $scorecomp['leadership'] ?> %</td>
+                        <td><?= $scorecomp['volunteer'] ?> %</td>
+                        <td><?= $scorecomp['total'] ?> %</td>
+                    <?php else : ?>
+                        <td>No data found</td>
+                    <?php endif ?>
                 </tr>
             </tbody>
         </table>
+        <p>*Total score for components is 15%</p>
     </div>
 </div>
+
+<script>
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

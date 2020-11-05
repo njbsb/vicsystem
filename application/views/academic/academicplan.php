@@ -1,5 +1,6 @@
 <h2 class="text-center margin"><?= $title ?></h2>
 
+<h3>Score Records</h3>
 <?php $hidden = array(
     'student_id' => $student['id']
 ); ?>
@@ -29,11 +30,11 @@
     </div>
     <div class="col-md-4">
         <div class="form-group">
-            <button type="submit" class="btn btn-outline-primary">Get record</button>
+            <button type="submit" class="btn btn-outline-primary">Get score record</button>
         </div>
     </div>
 </div>
-
+<hr>
 <?= form_close() ?>
 
 
@@ -90,7 +91,7 @@
             <thead class="table-dark">
                 <tr>
                     <td>Academic Session</td>
-                    <td>Citra Registered</td>
+                    <!-- <td>Citra Registered</td> -->
                     <td>GPA Target</td>
                     <td>GPA Achieved</td>
                     <td>Increment</td>
@@ -101,7 +102,7 @@
                     <?php foreach ($academicplans as $acp) : ?>
                         <tr>
                             <td><?= $acp['academicsession'] ?></td>
-                            <td><?= $acp['citra_reg'] ?></td>
+                            <!-- <td><?= $acp['citra_reg'] ?></td> -->
                             <td><?= $acp['gpa_target'] ?></td>
                             <td><?= $acp['gpa_achieved'] ?></td>
                             <?php if ($acp['difference'] > 0) : ?>
