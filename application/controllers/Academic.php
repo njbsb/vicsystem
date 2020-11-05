@@ -75,13 +75,13 @@ class Academic extends CI_Controller
             $total_all = 0;
             $scoreleveltotal = $this->score_model->get_maxscore_position() + $this->score_model->get_maxscore_meeting() + $this->score_model->get_maxscore_attendance() + $this->score_model->get_maxscore_involvement();
             $scoreplans = $this->score_model->get_scoreplan($acadsession_id = $selected_academicsession['id'], $category_id = FALSE);
-            foreach ($scoreplans as $index => $scoreplan) {
+            foreach ($scoreplans as $i => $scoreplan) {
                 $scores = $this->score_model->get_scoreplan_scorelevel($student_id = $student_id, $scoreplan['id']);
                 $total = $scores ? array_sum($scores) : 0;
                 $totalpercent = ($total / $scoreleveltotal) * $scoreplan['percentweightage'];
-                $scoreplans[$index]['scores'] = $scores ? $scores : array(0, 0, 0, 0);
-                $scoreplans[$index]['total'] = $total;
-                $scoreplans[$index]['totalpercent'] = $totalpercent;
+                $scoreplans[$i]['scores'] = $scores ? $scores : array(0, 0, 0, 0);
+                $scoreplans[$i]['total'] = $total;
+                $scoreplans[$i]['totalpercent'] = $totalpercent;
                 $total_all += $totalpercent;
             }
             $scorecomp = $this->score_model->get_student_scorecomp($student_id, $selected_academicsession['id']);
