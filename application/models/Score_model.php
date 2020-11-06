@@ -24,24 +24,6 @@ class Score_model extends CI_Model
         $this->db->insert('scorecomp', $comparray);
         return true;
     }
-    // no call
-    public function get_students_takingcitra()
-    {
-        // $this->db->select('citreg.student_matric, acy.acadyear, acs.semester_id')
-        //     // ->distinct()
-        //     ->from('citra_registration as citreg')
-        //     ->join('academicsession as acs', 'acs.id = citreg.acadsession_id')
-        //     ->join('academicyear as acy', 'acy.id = acs.acadyear_id');
-        $this->db->select('citreg.student_matric, citreg.acadsession_id, acy.acadyear, acs.semester_id, count(citreg.citra_code) as citracount')
-            ->from('citra_registration as citreg')
-            ->join('academicsession as acs', 'acs.id = citreg.acadsession_id')
-            ->join('academicyear as acy', 'acy.id = acs.acadyear_id')
-            // ->join('scorelevel as scl', 'scl.acadsession_id = citreg.acadsession_id')
-            ->group_by(array('citreg.student_matric', 'citreg.acadsession_id'));
-
-        $query = $this->db->get();
-        return $query->result_array();
-    }
 
     public function get_levelscore($id = NULL)
     {
@@ -276,7 +258,6 @@ class Score_model extends CI_Model
                     ))
                     ->join('activity as act', 'scp.activity_id = act.id');
             }
-
             # returns group of scoreplans under the same acadsession and category
         }
         $query = $this->db->get();
@@ -309,5 +290,10 @@ class Score_model extends CI_Model
             return 0;
         }
         return $totalpercent;
+    }
+
+    public function get_scoreleveltotal()
+    {
+        return $this->get_maxscore_position() + $this->get_maxscore_meeting() + $this->get_maxscore_involvement() + $this->get_maxscore_attendance();
     }
 }

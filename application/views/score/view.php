@@ -1,5 +1,4 @@
 <h2 class="margin"><?= $title ?></h2>
-
 <hr>
 <table class="table text-center">
     <thead class="table-dark">
@@ -37,11 +36,9 @@
     <?php foreach ($scoreplans as $scoreplan) : ?>
         <div class="tab-pane fade show" id="<?= $scoreplan['label'] ?>">
             <br>
-
             <div class="form-group">
                 <label for="activity">Activity/Workshop</label>
                 <input name="activity" value="<?= $scoreplan['activity_name'] ?>" readonly type="text" class="form-control">
-                <input type="hidden" name="activity_id" value="<?= $scoreplan['activity_id'] ?>" class="form-control">
             </div>
             <div class="row">
                 <?php if ($scoreplan['scores']) : ?>
@@ -52,9 +49,8 @@
                                 <select name="<?= $key ?>" class="custom-select">
                                     <option value="" disabled hidden selected>Select <?= $key ?> score</option>
                                     <?php foreach ($guide[$key] as $scoreguide) : ?>
-                                        <option disabled value="<?= $scoreguide['score'] ?>" <?php if ($scoreguide['score'] == $score) {
-                                                                                                    echo 'selected';
-                                                                                                } ?>><?= $scoreguide['concat'] ?></option>
+                                        <?php $selected = ($scoreguide['score'] == $score) ? 'selected' : '' ?>
+                                        <option disabled value="<?= $scoreguide['score'] ?>" <?= $selected ?>><?= $scoreguide['concat'] ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
@@ -143,8 +139,8 @@
                                 <select name="keys[<?= $key ?>]" id="<?= $key ?>" class="custom-select" required>
                                     <option value="" disabled selected>Select <?= $key ?> score</option>
                                     <?php foreach ($guide[$key] as $scoreguide) : ?>
-                                        <?php $selected = ($scoreguide['score'] == $value) ? 'selected' : ''; ?>
-                                        <option value="<?= $scoreguide['score'] ?>" <?= $selected ?>><?= $scoreguide['concat'] ?></option>
+                                        <?php $selected = ($scoreguide['score'] == $value) ? 'selected' : '' ?>
+                                        <option value="<?= $scoreguide['score'] ?>" <?php echo $selected ?>><?= $scoreguide['concat'] ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
@@ -164,17 +160,17 @@
     <div class="tab-pane fade" id="comp">
         <br>
         <div class="row">
-            <?php foreach ($scorecomps['scores'] as $key => $component) : ?>
+            <?php foreach ($scorecomps['scores'] as $key => $value) : ?>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label><?= ucfirst($key) ?></label>
                         <?php if ($key == 'volunteer') : ?>
-                            <input name="<?= $key ?>" value="<?= $component ?>" type="number" max="15" class="form-control" readonly>
+                            <input name="<?= $key ?>" value="<?= $value ?>" type="number" max="15" class="form-control" readonly>
                         <?php else : ?>
                             <select name="<?= $key ?>" class="custom-select">
                                 <?php foreach ($guide[$key] as $scoreguide) : ?>
-                                    <?php $selected = ($scoreguide['score'] == $component) ? 'selected' : ''; ?>
-                                    <option disabled value="<?php $scoreguide['score'] ?>" <?= $selected ?>><?= $scoreguide['concat'] ?></option>
+                                    <?php $selected = ($scoreguide['score'] == $value) ? 'selected' : ''; ?>
+                                    <option disabled value="<?= $scoreguide['score'] ?>" <?= $selected ?>><?= $scoreguide['concat'] ?></option>
                                 <?php endforeach ?>
                             </select>
                         <?php endif ?>

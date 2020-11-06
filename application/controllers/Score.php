@@ -7,22 +7,63 @@ class Score extends CI_Controller
 
     public function index()
     {
-        $data['title'] = 'Score';
-        $activesession_id = $this->academic_model->get_activeacademicsession()['id'];
-        $currentsession_students = $this->academic_model->get_registered_student($activesession_id);
-        print_r($currentsession_students);
-        $data['student_score'] = $this->scoretable->get_arraytable_score($currentsession_students);
+        $sig_id = 1; # retreive from mentor's
+        $academicsessions = $this->academic_model->get_academicsession();
+        foreach ($academicsessions as $i => $academicsession) {
+            $enrollingstudents = $this->student_model->get_enrolling_students($academicsession['id'], $sig_id);
+            $academicsessions[$i]['enrolling'] = count($enrollingstudents);
+        }
+        // print_r($academicsessions);
+        $data = array(
+            'title' => 'Score Index',
+            'academicsessions' => $academicsessions,
+            'academicyears' => $this->academic_model->get_academicyear(),
+            'semesters' => $this->semester_model->get_semesters()
+        );
         $this->load->view('templates/header');
         $this->load->view('score/index', $data);
     }
 
-    public function view($student_id, $acadsession_slug = NULL)
+    public function viewacs($acadsession_slug)
+    {
+        $sig_id = 1; #VIC
+        $academicsession = $this->academic_model->get_academicsession(FALSE, $acadsession_slug);
+        $enrolling = $this->student_model->get_enrolling_students($academicsession['id'], $sig_id);
+        foreach ($enrolling as $i => $std) {
+            $enrolling[$i]['score'] = $this->scoretable->get_student_totalscore_acs($academicsession['id'], $std['matric']);
+        }
+        $data = array(
+            'academicsession' => $academicsession,
+            'enrolling' => $enrolling
+        );
+        print_r($enrolling);
+        $this->load->view('templates/header');
+        $this->load->view('score/viewacs', $data);
+    }
+
+    public function view($acadsession_slug = NULL, $student_id)
     {
         $student = $this->student_model->get_student($student_id);
         $thisacadsession = $this->academic_model->get_academicsession(FALSE, $acadsession_slug);
+        $scoreplans = $this->score_model->get_scoreplan($thisacadsession['id'], FALSE);
+        $scorecomps = array('scores' => $this->score_model->get_scoreplan_scorecomp($student_id, $thisacadsession['id']));
+        # SCORE LEVELS
+        $scoreleveltotal = $this->score_model->get_scoreleveltotal();
+        $totalwhole = 0;
+        foreach ($scoreplans as  $i => $scoreplan) {
+            $scores = $this->score_model->get_scoreplan_scorelevel($student_id, $scoreplan['id']);
+            $scoreplans[$i]['totalpercent'] =  $scores ? (array_sum($scores) / $scoreleveltotal) * $scoreplan['percentweightage'] : 0;
+            $totalwhole += $scoreplans[$i]['totalpercent'];
+            $scoreplans[$i]['scores'] = $scores;
+        }
+        # SCORE COMPONENTS
+        if ($scorecomps['scores']) {
+            $scorecomps['totalpercent'] = array_sum($scorecomps['scores']);
+            $totalwhole += $scorecomps['totalpercent'];
+        }
         $data = array(
             'title' => 'Score: ' . $student['name'] . ' on ' . $thisacadsession['academicsession'],
-            'student_id' => $student_id,
+            'student_id' => $student['id'],
             'student' => $student,
             'academicsession' => $thisacadsession,
             'guide' => array(
@@ -33,49 +74,14 @@ class Score extends CI_Controller
                 'digitalcv' => $this->score_model->get_guidedigitalcv(),
                 'leadership' => $this->score_model->get_guideleadership()
             ),
-            'scoreplans' => $this->score_model->get_scoreplan($thisacadsession['id'], FALSE),
-            'scorecomps' => array(
-                'scores' => $this->score_model->get_scoreplan_scorecomp($student_id, $thisacadsession['id'])
-            ),
-            'levelrubrics' => $this->scoretable->get_level_rubrics()
+            'levelrubrics' => $this->scoretable->get_level_rubrics(),
+            'scoreplans' => $scoreplans,
+            'scorecomps' => $scorecomps,
+            'totalwhole' => $totalwhole
         );
+        print_r($scorecomps);
         # score by level will be contained in scoreplans
         # since each score plans will carry 1 score by level
-
-        # SCORE LEVELS
-        $scoreleveltotal = $this->score_model->get_maxscore_position() + $this->score_model->get_maxscore_meeting() + $this->score_model->get_maxscore_attendance() + $this->score_model->get_maxscore_involvement();
-        foreach ($data['scoreplans'] as $key => $scoreplan) {
-            $scores = $this->score_model->get_scoreplan_scorelevel($student_id, $scoreplan['id']);
-            if ($scores) {
-                $sum = 0;
-                foreach ($scores as $score) {
-                    $sum += $score;
-                }
-                $totalpercent = ($sum / $scoreleveltotal) * $scoreplan['percentweightage'];
-                $data['scoreplans'][$key]['totalpercent'] = $totalpercent;
-            } else {
-                $data['scoreplans'][$key]['totalpercent'] = 0;
-            }
-            $data['scoreplans'][$key]['scores'] = $scores;
-        }
-        print_r($data['academicsession']);
-
-        # SCORE COMPONENTS
-        if ($data['scorecomps']['scores']) {
-            $sumcomp = 0;
-            foreach ($data['scorecomps']['scores'] as $score) {
-                $sumcomp += $score;
-            }
-            $data['scorecomps']['totalpercent'] = $sumcomp;
-        }
-
-        # TOTAL SCORE PERCENT
-        $totalwhole = 0;
-        foreach ($data['scoreplans'] as $scoreplan) {
-            $totalwhole += $scoreplan['totalpercent'];
-        }
-        $data['totalwhole'] = $totalwhole + $data['scorecomps']['totalpercent'];
-
         $this->load->view('templates/header');
         $this->load->view('score/view', $data);
     }
@@ -100,10 +106,9 @@ class Score extends CI_Controller
                 'academicsessions' => $academicsessions
             );
             $this->load->view('templates/header');
-            $this->load->view('score/scoreplanindex', $data);
+            $this->load->view('score/scoreplan/index', $data);
         } else {
             # scoreplan view
-            // $acadsession_id = $this->academic_model->get_academicsession(FALSE, $slug)['id'];
             $academicsession = $this->academic_model->get_academicsession(FALSE, $slug);
             $activitycategories = $this->activity_model->get_activitycategory();
             foreach ($activitycategories as $i => $actcat) {
@@ -115,9 +120,8 @@ class Score extends CI_Controller
                 'activitycategories' => $activitycategories,
                 'acadsession' => $academicsession
             );
-            print_r($data['activitycategories'][1]['unregistered']);
             $this->load->view('templates/header');
-            $this->load->view('score/scoreplanview', $data);
+            $this->load->view('score/scoreplan/view', $data);
         }
     }
 
@@ -166,7 +170,7 @@ class Score extends CI_Controller
         }
         // print_r($scoreleveldata);
         $this->score_model->add_scoreleveldata($scoreleveldata);
-        redirect('score/' . $student_id . '/' . $acslug);
+        redirect('score/' . $acslug  . '/' . $student_id);
     }
 
     public function edit_scorelevel()
@@ -183,7 +187,7 @@ class Score extends CI_Controller
             $scoreleveldata[$rubricname] = $value;
         }
         $this->score_model->update_scoreleveldata($where, $scoreleveldata);
-        redirect('score/' . $student_id . '/' . $acslug);
+        redirect('score/' . $acslug  . '/' . $student_id);
     }
 
     public function edit_scorecomp()
@@ -200,7 +204,7 @@ class Score extends CI_Controller
             $scorecompdata[$key] = $value;
         }
         $this->score_model->update_scorecompdata($where, $scorecompdata);
-        redirect('score/' . $student_id . '/' . $acslug);
+        redirect('score/' . $acslug . '/' . $student_id);
     }
 
     public function setscorecomp($student_id)

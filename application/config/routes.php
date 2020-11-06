@@ -58,7 +58,7 @@ $route['score/edit_scorecomp'] = 'score/edit_scorecomp';
 $route['score/add_scorelevel'] = 'score/add_scorelevel';
 $route['score/edit_scorelevel'] = 'score/edit_scorelevel';
 
-$route['score/(:any)'] = 'score/view/$1';
+$route['score/(:any)'] = 'score/viewacs/$1';
 $route['score/(:any)/(:any)'] = 'score/view/$1/$2';
 
 

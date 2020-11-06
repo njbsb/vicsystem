@@ -1,33 +1,41 @@
-<h2 class=" "><?= $title ?></h2>
+<h2 class="margin"><?= $title ?></h2>
 
-<table id="scoretable" class="table table-hover" style="text-align:left;">
+<!-- <hr> -->
+<table class="table" id="scoretable">
     <thead class="table-dark">
         <tr>
-            <th scope="col" class="Matric">Matric</th>
-            <th scope="col" class="sort" data-sort="AcadYear">Academic Session</th>
-            <th>Total Score (55%)</th>
-            <th scope="col" class="sort" data-sort="Status">Status</th>
-            <th scope="">Details</th>
+            <td>Academic Year</td>
+            <td>Academic Session</td>
+            <td>Students Enrolling</td>
+            <td>Students Marked</td>
+            <td></td>
         </tr>
     </thead>
-    <tbody class="list">
-        <?php foreach ($student_score as $stdscore) : ?>
+    <tbody>
+        <?php if ($academicsessions) : ?>
+            <?php foreach ($academicsessions as $acs) : ?>
+                <tr>
+                    <td><?= $acs['academicyear'] ?></td>
+                    <td><?= $acs['academicsession'] ?></td>
+                    <td><?= $acs['enrolling'] ?></td>
+                    <td>0</td>
+                    <td><a class="badge badge-pill badge-primary" href="<?= site_url('score/' . $acs['slug']) ?>">view</a></td>
+                </tr>
+            <?php endforeach ?>
+        <?php else : ?>
             <tr>
-                <td class="Matric"><?= $stdscore['student_matric'] ?></td>
-                <td class="AcadYear"><?= $stdscore['academicsession'] ?></td>
-                <td><?= $stdscore['totalpercent'] ?></td>
-                <td class="Status">Marked/Not</td>
-                <td><a class="badge badge-primary" href="<?= site_url('/score/' . $stdscore['student_matric']) . '/' . $stdscore['acslug'] ?>">Edit score</a></td>
+                <td>No data</td>
             </tr>
-        <?php endforeach ?>
+        <?php endif ?>
     </tbody>
     <tfoot>
-        <th scope="col" class="Matric">Matric</th>
-        <!-- <th scope="col" class="sort" data-sort="Citra">ACS ID</th> -->
-        <th scope="col" class="sort" data-sort="AcadYear">Academic Session</th>
-        <th>Total Score (55%)</th>
-        <th scope="col" class="sort" data-sort="Status">Status</th>
-        <th scope="">Details</th>
+        <tr>
+            <td>Academic Year</td>
+            <td>Academic Session</td>
+            <td>Students Enrolling</td>
+            <td>Students Marked</td>
+            <td></td>
+        </tr>
     </tfoot>
 </table>
 
