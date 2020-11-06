@@ -60,10 +60,6 @@ class Academic_model extends CI_Model
         return $query->row_array();
     }
 
-    public function get_academicsession_byslug($slug)
-    {
-    }
-
     public function get_activeacademicsession()
     {
         $this->db->select("acs.*, acy.acadyear as academicyear, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
