@@ -43,6 +43,17 @@ class Student_model extends CI_Model
         return $query->result_array();
     }
 
+    public function get_enrolling_students($acadsession_id, $sig_id)
+    {
+        # those that has data in the academicplan
+        $this->db->select('acp.student_matric as matric, user.name')
+            ->from('academicplan as acp')
+            ->where(array('acp.acadsession_id' => $acadsession_id))
+            ->join('user', 'user.id = acp.student_matric and user.sig_id = ' . $sig_id);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     public function register_student($studentdata)
     {
         return $this->db->insert('student', $studentdata);
