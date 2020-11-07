@@ -17,7 +17,7 @@ class Student_model extends CI_Model
             return $query->result_array();
         }
         $this->db->select("user.id, user.name, user.email, user.dob, user.profile_image, user.sig_id,
-        std.phonenum, std.program_code, std.mentor_matric, std.joined_sig,
+        std.phonenum, std.program_code, std.mentor_matric, std.year_joined,
         mtr.name as mentor_name, prg.name as program_name, 
         sig.id as sigid, sig.code as sigcode, sig.signame, concat(sig.signame, ' (', sig.code, ')') as signamecode")
             ->from('user as user')
@@ -43,10 +43,25 @@ class Student_model extends CI_Model
         return $query->result_array();
     }
 
+    public function get_available_sigstudents($sig_id, $enrolledstudents)
+    {
+        $this->db->select('std.matric, user.name, std.year_joined')
+            ->from('student as std')
+            ->join('user', 'user.id = std.matric')
+            ->where(array('user.sig_id' => $sig_id));
+        if (isset($enrolledstudents)) {
+            foreach ($enrolledstudents as $std) {
+                $this->db->where_not_in('std.matric', $std['matric']);
+            }
+        }
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     public function get_enrolling_students($acadsession_id, $sig_id)
     {
         # those that has data in the academicplan
-        $this->db->select('acp.student_matric as matric, user.name')
+        $this->db->select('acp.student_matric as matric, user.name, acp.gpa_target, acp.gpa_achieved')
             ->from('academicplan as acp')
             ->where(array('acp.acadsession_id' => $acadsession_id))
             ->join('user', 'user.id = acp.student_matric and user.sig_id = ' . $sig_id);
