@@ -69,7 +69,6 @@
                 <td><a data-toggle="modal" data-target="#setactive_acy" data-string="<?= $acy['acadyear'] ?>" data-acyid="<?= $acy['id'] ?>" class="btn btn-outline-primary btn-sm" href="#setactive_acy">Toggle Active</a></td>
             </tr>
         <?php endforeach ?>
-
     </tbody>
 </table>
 <hr>

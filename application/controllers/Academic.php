@@ -12,7 +12,6 @@ class Academic extends CI_Controller
         );
         $this->load->view('templates/header');
         $this->load->view('academic/index', $data);
-        // $this->load->view('templates/footer');
     }
 
     public function academicplan()
@@ -90,6 +89,37 @@ class Academic extends CI_Controller
 
         // print_r($selected_academicsession);
     }
+
+    public function enroll()
+    {
+        $this->form_validation->set_rules('acadsession_id', 'academic session', 'required');
+        // $this->form_validation->set_rules('students', 'student', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $sig_id = 1;
+            $activesession = $this->academic_model->get_activeacademicsession();
+            $enrolledstudents = $this->student_model->get_enrolling_students($activesession['id'], $sig_id);
+            $data = array(
+                'title' => 'STUDENTS ENROLLMENT',
+                'availablestudents' => $this->student_model->get_available_sigstudents($sig_id, $enrolledstudents),
+                'enrolledstudents' => $enrolledstudents,
+                'academicsessions' => $this->academic_model->get_academicsession(),
+                'activesession' => $activesession
+            );
+            $this->load->view('templates/header');
+            $this->load->view('academic/enroll', $data);
+        } else {
+            $acadsession_id = $this->input->post('acadsession_id');
+            $students = $this->input->post('students');
+            foreach ($students as $std_id) {
+                $this->academic_model->create_academicplan($acadsession_id, $std_id);
+            }
+            redirect('enroll');
+            # code if data post
+        }
+    }
+
+
 
     public function create_academicplan($student_id)
     {

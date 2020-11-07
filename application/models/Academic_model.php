@@ -174,9 +174,13 @@ class Academic_model extends CI_Model
         return $this->db->insert('academicyear', $acydata);
     }
 
-    public function create_academicplan($acpdata)
+    public function create_academicplan($acadsession_id, $student_id)
     {
-        return $this->db->insert('academicplan', $acpdata);
+        $academicplan = array(
+            'acadsession_id' => $acadsession_id,
+            'student_matric' => $student_id
+        );
+        $this->db->insert('academicplan', $academicplan);
     }
 
     public function setactive_acadsession($acadsession_id)
