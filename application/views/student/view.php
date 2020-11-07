@@ -8,7 +8,7 @@
                     <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/default.jpg') ?>">
                 <?php endif ?>
                 <div class="card-footer text-muted">
-                    Joined <?= $student['sigcode'] ?>: <?= $student['joined_sig'] ?>
+                    Joined <?= $student['sigcode'] ?>: <?= $student['year_joined'] ?>
                 </div>
             </div>
         </div>

@@ -90,6 +90,7 @@
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="<?= site_url('academic') ?>">Academic ControlPanel</a>
                             <a class="dropdown-item" href="<?= site_url('academicplan') ?>">Academic Plan</a>
+                            <a class="dropdown-item" href="<?= site_url('enroll') ?>">Enroll Students</a>
                         </div>
                     </li>
                     <li class="nav-item">
