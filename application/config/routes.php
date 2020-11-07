@@ -5,6 +5,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $route['academic'] = 'academic/index';
 $route['academicplan'] = 'academic/academicplan';
 $route['academic/records'] = 'academic/records';
+$route['enroll'] = 'academic/enroll';
 
 $route['activity'] = 'activity/index';
 $route['activity/update'] = 'activity/update';
