@@ -160,26 +160,85 @@
     <div class="tab-pane fade" id="comp">
         <br>
         <div class="row">
-            <?php foreach ($scorecomps['scores'] as $key => $value) : ?>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label><?= ucfirst($key) ?></label>
-                        <?php if ($key == 'volunteer') : ?>
-                            <input name="<?= $key ?>" value="<?= $value ?>" type="number" max="15" class="form-control" readonly>
-                        <?php else : ?>
-                            <select name="<?= $key ?>" class="custom-select">
-                                <?php foreach ($guide[$key] as $scoreguide) : ?>
-                                    <?php $selected = ($scoreguide['score'] == $value) ? 'selected' : ''; ?>
-                                    <option disabled value="<?= $scoreguide['score'] ?>" <?= $selected ?>><?= $scoreguide['concat'] ?></option>
-                                <?php endforeach ?>
-                            </select>
-                        <?php endif ?>
+            <?php if ($scorecomps['scores']) : ?>
+                <?php foreach ($scorecomps['scores'] as $key => $value) : ?>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label><?= ucfirst($key) ?></label>
+                            <?php if ($key == 'volunteer') : ?>
+                                <input name="<?= $key ?>" value="<?= $value ?>" type="number" max="15" class="form-control" readonly>
+                            <?php else : ?>
+                                <select name="<?= $key ?>" class="custom-select">
+                                    <?php foreach ($guide[$key] as $scoreguide) : ?>
+                                        <?php $selected = ($scoreguide['score'] == $value) ? 'selected' : ''; ?>
+                                        <option disabled value="<?= $scoreguide['score'] ?>" <?= $selected ?>><?= $scoreguide['concat'] ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            <?php endif ?>
+                        </div>
+                    </div>
+                <?php endforeach ?>
+                <div class="col">
+                    <button data-toggle="modal" data-target="#editcomp" class="btn btn-outline-primary">Edit Score</button>
+                </div>
+            <?php else : ?>
+                <div class="col">
+                    <p>You have not added components score for <?= $student['name'] ?></p>
+                    <button data-toggle="modal" data-target="#addcomp" class="btn btn-outline-primary">Add Score</button>
+                </div>
+            <?php endif ?>
+
+            <div id="addcomp" class="modal fade">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Component Score</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <?php $hidden = array(
+                            'student_id' => $student_id,
+                            'acadsession_id' => $academicsession['id'],
+                            'acslug' => $academicsession['slug']
+                        ); ?>
+                        <?= form_open('score/add_scorecomp', '', $hidden) ?>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="">Digital CV</label>
+                                <select name="digitalcv" class="custom-select" required>
+                                    <option value="" selected disabled>Select digital CV score</option>
+                                    <?php foreach ($guide['digitalcv'] as $scoreguide) : ?>
+                                        <?php $selected = ($scoreguide['score'] == $component) ? 'selected' : ''; ?>
+                                        <option value="<?= $scoreguide['score'] ?>" <?= $selected ?>><?= $scoreguide['concat'] ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Leadership</label>
+                                <select name="digitalcv" class="custom-select" required>
+                                    <option value="" selected disabled>Select digital CV score</option>
+                                    <?php foreach ($guide['leadership'] as $scoreguide) : ?>
+                                        <?php $selected = ($scoreguide['score'] == $component) ? 'selected' : ''; ?>
+                                        <option value="<?= $scoreguide['score'] ?>" <?= $selected ?>><?= $scoreguide['concat'] ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Volunteer</label>
+                                <input name="volunteer" type="number" min="0" max="5" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Submit data</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                        </div>
+                        <?= form_close() ?>
                     </div>
                 </div>
-            <?php endforeach ?>
-            <div class="col">
-                <button data-toggle="modal" data-target="#editcomp" class="btn btn-outline-primary">Edit Score</button>
             </div>
+
+
             <div id="editcomp" class="modal fade">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">

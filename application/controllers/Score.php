@@ -57,10 +57,9 @@ class Score extends CI_Controller
             $scoreplans[$i]['scores'] = $scores;
         }
         # SCORE COMPONENTS
-        if ($scorecomps['scores']) {
-            $scorecomps['totalpercent'] = array_sum($scorecomps['scores']);
-            $totalwhole += $scorecomps['totalpercent'];
-        }
+        $scorecomps['totalpercent'] = (!empty($scorecomps['scores'])) ? array_sum($scorecomps['scores']) : 0;
+        $totalwhole += $scorecomps['totalpercent'];
+
         $data = array(
             'title' => 'Score: ' . $student['name'] . ' on ' . $thisacadsession['academicsession'],
             'student_id' => $student['id'],
@@ -79,7 +78,7 @@ class Score extends CI_Controller
             'scorecomps' => $scorecomps,
             'totalwhole' => $totalwhole
         );
-        print_r($scorecomps);
+
         # score by level will be contained in scoreplans
         # since each score plans will carry 1 score by level
         $this->load->view('templates/header');
