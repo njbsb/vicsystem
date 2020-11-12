@@ -89,7 +89,8 @@
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Academic</a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="<?= site_url('academic') ?>">Academic ControlPanel</a>
-                            <a class="dropdown-item" href="<?= site_url('academicplan') ?>">Academic Plan</a>
+                            <a class="dropdown-item" href="<?= site_url('academicplan') ?>">Academic Plan (Student)</a>
+                            <a class="dropdown-item" href="<?= site_url('academicplan/mentor') ?>">Academic Plan (Mentor)</a>
                             <a class="dropdown-item" href="<?= site_url('enroll') ?>">Enroll Students</a>
                         </div>
                     </li>

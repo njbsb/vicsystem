@@ -72,58 +72,7 @@
     </tbody>
 </table>
 <hr>
-<!-- ACADEMIC PLAN -->
-<div class="row justify-content-between">
-    <div class="col-4">
-        <h3>Academic Plan</h3>
-    </div>
-    <div class="col-4">
-        <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacademicplan" style="float: right;">Add Academic Plan</button>
-    </div>
-</div>
-<table id="acp_table" class="table display">
-    <thead class="table-dark">
-        <tr>
-            <td>Matric</td>
-            <td>Name</td>
-            <td>Academic Session</td>
-            <td>GPA Target</td>
-            <td>GPA Achieved</td>
-            <td>Status</td>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($academicplan as $acp) : ?>
-            <tr>
-                <td><?= $acp['student_matric'] ?></td>
-                <td><?= $acp['name'] ?></td>
-                <td><?= $acp['acadyear'] . ' Semester ' . $acp['semester_id'] ?></td>
-                <td><?= $acp['gpa_target'] ?></td>
-                <td><?= $acp['gpa_achieved'] ?></td>
 
-                <?php if ($acp['gpa_achieved'] > $acp['gpa_target']) : ?>
-                    <td class="text-success">
-                        Passed
-                    </td>
-                <?php else : ?>
-                    <td class="text-warning">
-                        Not Pass
-                    </td>
-                <?php endif ?>
-            </tr>
-        <?php endforeach ?>
-    </tbody>
-    <tfoot>
-        <tr>
-            <td>Matric</td>
-            <td>Name</td>
-            <td>Academic Session</td>
-            <td>GPA Target</td>
-            <td>GPA Achieved</td>
-            <td>Status</td>
-        </tr>
-    </tfoot>
-</table>
 
 <div id="addacademicsession" class="modal fade">
     <div class="modal-dialog" role="document">

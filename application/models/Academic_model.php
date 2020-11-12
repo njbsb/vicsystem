@@ -127,8 +127,25 @@ class Academic_model extends CI_Model
                     $query = $this->db->get();
                     return $query->result_array();
                 }
+            } else {
+                $this->db->select("acp.*, std.name, acy.acadyear, acs.semester_id, 
+                concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
+                    ->from('academicplan as acp')
+                    ->where(array('acp.acadsession_id' => $acadsession_id))
+                    ->join('academicsession as acs', 'acs.id = acp.acadsession_id')
+                    ->join('academicyear as acy', 'acy.id = acs.acadyear_id')
+                    ->join('user as std', 'std.id = acp.student_matric');
+                $query = $this->db->get();
+                return $query->result_array();
             }
         }
+    }
+
+    public function get_academicplan_byyearsem($acadyear_id, $semester_id)
+    {
+        // $this->db->select("acp.*, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
+        // ->from('academicplan as acp')
+        // ->where(array('acadyear'))
     }
 
     public function get_this_academicplan($student_id, $acadsession_id)

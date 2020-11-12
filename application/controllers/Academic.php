@@ -33,14 +33,47 @@ class Academic extends CI_Controller
             'academicplans' => $this->scoretable->get_arraytable_academicplan(
                 $this->academic_model->get_academicplan($student_id)
             ),
-            'score_comp' => $this->scoretable->get_arraytable_comp(
-                $this->score_model->get_students_scorebycomp($student_id)
-            ),
             'activeacadsession' => $activeacadsession
         );
 
         $this->load->view('templates/header');
-        $this->load->view('academic/academicplan', $data);
+        $this->load->view('academic/plan/student', $data);
+    }
+
+    public function academicplanmentor()
+    {
+        $activesession = $this->academic_model->get_activeacademicsession();
+        $data = array(
+            'title' => "Student's academic plan",
+            'academicplans' => $this->academic_model->get_academicplan(FALSE, $activesession['id']),
+            'academicyears' => $this->academic_model->get_academicyear(),
+            'semesters' => $this->semester_model->get_semesters(),
+            'activesession' => $activesession
+        );
+        // print_r($data['activesession']);
+        $this->load->view('templates/header');
+        $this->load->view('academic/plan/mentor', $data);
+    }
+
+    public function academicplanrecords()
+    {
+        $acadyear_id = $this->input->post('acadyear_id');
+        $semester_id = $this->input->post('semester_id');
+        $academicsession = $this->academic_model->get_academicsession_byyearsem($acadyear_id, $semester_id);
+        if (empty($academicsession)) {
+            $this->load->view('templates/header');
+        } else {
+            $academicplans = $this->academic_model->get_academicplan(FALSE, $academicsession['id']);
+            $data = array(
+                'title' => 'Academic Plan Records',
+                'academicyears' => $this->academic_model->get_academicyear(),
+                'semesters' => $this->semester_model->get_semesters(),
+                'academicsession' => $academicsession,
+                'academicplans' => $academicplans
+            );
+            $this->load->view('templates/header');
+            $this->load->view('academic/plan/records', $data);
+        }
     }
 
     public function records()
