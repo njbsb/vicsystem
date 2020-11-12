@@ -183,7 +183,11 @@
 <div id="registercommittee" class="modal fade">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <?= form_open('organization/register_committee') ?>
+            <?php $hidden = array(
+                'acadyear_id' => $activeacadyear['id'],
+                'sig_id' => $sig_id
+            ); ?>
+            <?= form_open('organization/register_committee', '', $hidden) ?>
             <div class="modal-header">
                 <h5 class="modal-title">Register new committee</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -192,12 +196,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <input name="sig_id" type="text" value="<?= $sig_id ?>" class="form-control" readonly hidden>
-                </div>
-                <div class="form-group">
                     <label for="acadyear_id">Current Academic Year</label>
                     <input name="acadyear" type="text" value="<?= $activeacadyear['acadyear'] ?>" class="form-control" readonly>
-                    <input name="acadyear_id" type="hidden" value="<?= $activeacadyear['id'] ?>" class="form-control" readonly>
                 </div>
                 <div class="form-group">
                     <label for="role">Role</label>
@@ -210,7 +210,7 @@
                 <div class="form-group">
                     <label for="role_desc">Description</label>
                     <input name="role_desc" type="text" class="form-control">
-                    <small>Only necessary if registering AJK</small>
+                    <small>Only necessary when registering AJK</small>
                 </div>
                 <div class="form-group">
                     <label for="student_id">Member</label>
