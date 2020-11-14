@@ -74,11 +74,6 @@ class Student_model extends CI_Model
         return $this->db->insert('student', $studentdata);
     }
 
-    public function register_highcoms($highcoms)
-    {
-        return $this->db->insert_batch('activity_committee', $highcoms);
-    }
-
     public function update_student($student_id, $studentdata)
     {
         $this->db->where('matric', $student_id);

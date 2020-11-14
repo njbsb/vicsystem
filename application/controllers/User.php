@@ -3,8 +3,10 @@ class User extends CI_Controller
 {
     public function index()
     {
-        $data['title'] = 'All Users';
-        $data['users'] = $this->user_model->get_user();
+        $data = array(
+            'title' => 'All Users',
+            'users' => $this->user_model->get_user()
+        );
         $this->load->view('templates/header');
         $this->load->view('user/index', $data);
         $this->load->view('templates/footer');
@@ -12,12 +14,14 @@ class User extends CI_Controller
 
     public function profile()
     {
-        $data['title'] = 'User profile';
         $id = 'A160001'; # get the current session user first
-        $data['user'] = $this->user_model->get_user($id);
-        $sig_id = $data['user']['sig_id'];
-        $usertype = $data['user']['usertype_id'];
-
+        $user = $this->user_model->get_user($id);
+        $data = array(
+            'title' => 'User Profile',
+            'user' => $user
+        );
+        $sig_id = $user['sig_id'];
+        $usertype = $user['usertype_id'];
         $this->load->view('templates/header');
         switch ($usertype) {
             case '1':
@@ -114,15 +118,15 @@ class User extends CI_Controller
         if ($usertype_id) {
             switch ($usertype_id) {
                 case 1:
-                    // admin
+                    # admin
                     $this->admin_model->delete_admin($id);
                     break;
                 case 2:
-                    // mentor
+                    # mentor
                     $this->mentor_model->delete_mentor($id);
                     break;
                 case 3:
-                    // student
+                    # student
                     $this->student_model->delete_student($id);
                     break;
             }

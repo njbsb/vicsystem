@@ -4,12 +4,9 @@
     <?= form_open_multipart('user/update/' . $student['id']) ?>
     <div class="row">
         <div class="col-lg-4">
-            <div class="card border-secondary mb-3" style="max-width: 20rem;">
-                <?php if ($student['profile_image']) : ?>
-                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/') . $student['profile_image'] ?>">
-                <?php else : ?>
-                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . 'default.jpg') ?>">
-                <?php endif ?>
+            <div class="card border-primary mb-3" style="max-width: 20rem;">
+                <?php $image = ($student['profile_image']) ? $student['profile_image'] : 'default.jpg'; ?>
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $image) ?>">
                 <div class="card-footer text-muted">
                     <?= $student['id'] ?>
                 </div>
@@ -30,27 +27,21 @@
                 <input name="usertype_id" value="<?= $user['usertype_id'] ?>" type="hidden" class="form-control" readonly>
             </div>
             <div class="form-group">
-                <label>Select Program</label>
-                <select name="sig_id" class="form-control" id="" readonly>
+                <label>SIG</label>
+                <select name="sig_id" class="form-control" id="" readonly disabled>
                     <?php foreach ($sigs as $sig) : ?>
-                        <option value="<?= $sig['id'] ?>" <?php if ($sig['id'] == $student['sig_id']) {
-                                                                echo 'selected';
-                                                            } ?>>
-                            <?= $sig['signame'] ?>
-                        </option>
+                        <?php $selected = ($sig['id'] == $student['sig_id']) ? 'selected' : ''; ?>
+                        <option value="<?= $sig['id'] ?>" <?= $selected ?>><?= $sig['signame'] ?></option>
                     <?php endforeach ?>
                 </select>
             </div>
 
             <div class="form-group">
                 <label>Program</label>
-                <select name="program_code" class="form-control" id="" readonly>
+                <select name="program_code" class="form-control" id="" readonly disabled>
                     <?php foreach ($programs as $program) : ?>
-                        <option value="<?= $program['code'] ?>" <?php if ($program['code'] == $student['program_code']) {
-                                                                    echo 'selected';
-                                                                } ?>>
-                            <?= $program['name'] ?>
-                        </option>
+                        <?php $selected = ($program['code'] == $student['program_code']) ? 'selected' : ''; ?>
+                        <option value="<?= $program['code'] ?>" <?= $selected ?>><?= $program['name'] ?></option>
                     <?php endforeach ?>
                 </select>
             </div>
@@ -68,13 +59,10 @@
             </div>
             <div class="form-group">
                 <label>Mentor</label>
-                <select name="mentor_matric" class="form-control" id="" readonly>
+                <select name="mentor_matric" class="form-control" id="" readonly disabled>
                     <?php foreach ($mentors as $mentor) : ?>
-                        <option value="<?= $mentor['id'] ?>" <?php if ($mentor['id'] == $student['mentor_matric']) {
-                                                                    echo 'selected';
-                                                                } ?>>
-                            <?= $mentor['name'] ?>
-                        </option>
+                        <?php $selected = ($mentor['id'] == $student['mentor_matric']) ? 'selected' : ''; ?>
+                        <option value="<?= $mentor['id'] ?>" <?= $selected ?>><?= $mentor['name'] ?></option>
                     <?php endforeach ?>
                 </select>
             </div>

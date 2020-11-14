@@ -4,11 +4,11 @@
     <table id="usertable" class="table table-hover">
         <thead class="table-dark">
             <tr>
-                <td>ID</td>
-                <td>Name</td>
-                <td>User type</td>
-                <td>Status</td>
-                <td></td>
+                <th>ID</th>
+                <th>Name</th>
+                <th>User type</th>
+                <th>Status</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
