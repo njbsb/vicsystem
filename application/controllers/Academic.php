@@ -3,6 +3,9 @@ class Academic extends CI_Controller
 {
     public function index()
     {
+        if ($this->session->userdata('isStudent')) {
+            redirect(site_url());
+        }
         $latest_year = $this->academic_model->get_latest_academicyear();
         $years = explode("/", $latest_year['acadyear']);
         $suggested_year = '';
@@ -10,7 +13,6 @@ class Academic extends CI_Controller
             $years[$i] = $year + 1;
         }
         $suggested_year = $years[0] . '/' . $years[1];
-
         $data = array(
             'academicyear' => $this->academic_model->get_academicyear(),
             'academicsession' => $this->academic_model->get_academicsession(),
@@ -19,14 +21,17 @@ class Academic extends CI_Controller
             'title' => 'Academic Control Page',
             'new_year' => $suggested_year
         );
-        // print_r($suggested_year);
         $this->load->view('templates/header');
         $this->load->view('academic/index', $data);
     }
 
-    public function academicplan()
+    public function academicplanstudent()
     {
-        $student_id = 'A160000';
+        # for student
+        if (!$this->session->userdata('isStudent')) {
+            redirect(site_url());
+        }
+        $student_id = $this->session->userdata('username');
         $student = $this->student_model->get_student($student_id);
         $activeacadsession = $this->academic_model->get_activeacademicsession();
         $data = array(
@@ -52,6 +57,10 @@ class Academic extends CI_Controller
 
     public function academicplanmentor()
     {
+        # for mentor
+        if (!$this->session->userdata('isMentor')) {
+            redirect('home');
+        }
         $activesession = $this->academic_model->get_activeacademicsession();
         $data = array(
             'title' => "Student's academic plan",
@@ -60,7 +69,6 @@ class Academic extends CI_Controller
             'semesters' => $this->semester_model->get_semesters(),
             'activesession' => $activesession
         );
-        // print_r($data['activesession']);
         $this->load->view('templates/header');
         $this->load->view('academic/plan/mentor', $data);
     }
@@ -122,12 +130,11 @@ class Academic extends CI_Controller
                 'scorecomp' => $scorecomp,
                 'total_all' => $total_all
             );
-            // print_r($data['citras']);
             $this->load->view('templates/header');
             $this->load->view('academic/records', $data);
         } else {
             # put error message
-            redirect('academicplan');
+            redirect('academicplan/student');
         }
 
         // print_r($selected_academicsession);

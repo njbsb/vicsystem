@@ -19,4 +19,12 @@ class Sig_model extends CI_Model
             return $query->row_array();
         }
     }
+
+    public function get_sig_id($user_id)
+    {
+        $query = $this->db->get_where('user', array(
+            'id' => $user_id
+        ));
+        return $query->row()->sig_id;
+    }
 }

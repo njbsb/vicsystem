@@ -5,25 +5,33 @@
     </div>
 </div>
 <div id="committees" class="">
-    <div class="form-group">
-        <a data-toggle="modal" data-target="#add_actcommittee" class="btn btn-outline-primary">Add committee</a>
-    </div>
-    <table id="tbl_committee" class="table table-hover" style="text-align:left;">
+    <?php if ($isHighcom or $this->session->userdata('isMentor')) : ?>
+        <div class="form-group">
+            <a data-toggle="modal" data-target="#add_actcommittee" class="btn btn-outline-primary">Add committee</a>
+        </div>
+    <?php endif ?>
+
+    <table id="tbl_committee" class="table" style="text-align:left;">
         <thead class="table-dark">
             <tr>
                 <th scope="col">Position</th>
                 <th scope="col">Name</th>
-                <th></th>
+                <?php if ($isHighcom or $this->session->userdata('isMentor')) : ?>
+                    <th></th>
+                <?php endif ?>
             </tr>
         </thead>
         <tbody class="list">
             <?php if ($committees) : ?>
                 <?php foreach ($committees as $com) : ?>
-                    <?php $disabled = (in_array($com['role_id'], $highcoms_id)) ? 'disabled' : ''; ?>
+                    <?php $disabled = (in_array($com['role_id'], $highcoms_id) and !$this->session->userdata('isMentor')) ? 'disabled' : ''; ?>
+                    <?php $disabled_nothighcom = ($isHighcom) ? '' : 'disabled' ?>
                     <tr>
                         <td scope="row"><?= $com['rolename'] ?></td>
                         <td scope="row"><?= $com['name'] ?></td>
-                        <td><button data-toggle="modal" data-target="#delete_committee" data-roleid="<?= $com['role_id'] ?>" class="btn-sm btn btn-outline-danger" <?= $disabled ?>>Delete</button></td>
+                        <?php if ($isHighcom or $this->session->userdata('isMentor')) : ?>
+                            <td><button data-toggle="modal" data-target="#delete_committee" data-roleid="<?= $com['role_id'] ?>" class="btn-sm btn btn-outline-danger" <?= $disabled ?> <?= $disabled_nothighcom ?>>Delete</button></td>
+                        <?php endif ?>
                     </tr>
                 <?php endforeach ?>
             <?php endif ?>
@@ -34,7 +42,6 @@
 <div id="add_actcommittee" class="modal fade">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <!-- INSERT URL TO ADD ACTIVITY COMMITTEE HERE -->
             <?php $hidden = array('activity_id' => $activity['id']) ?>
             <?= form_open('/activity/addcommittee/' . $activity['id'], '', $hidden) ?>
             <div class="modal-header">

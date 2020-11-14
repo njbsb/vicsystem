@@ -1,6 +1,8 @@
 <h2><?= $title ?></h2>
-<br>
-<button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#activity_type">Create Activity</button>
+<?php if ($this->session->userdata('isMentor')) : ?>
+    <br>
+    <button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#activity_type">Create Activity</button>
+<?php endif ?>
 <hr>
 <table id="activitytable" class="table table-hover" style="text-align:left;">
     <thead class="table-dark">

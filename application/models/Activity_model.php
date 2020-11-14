@@ -49,10 +49,34 @@ class Activity_model extends CI_Model
 
     public function get_sig_activity($sig_id)
     {
-        $query = $this->db->get_where('activity', array(
-            'sig_id' => $sig_id
-        ));
+        $this->db->select("act.id, act.activity_name, act.slug, act.datetime_start, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, sig.code, mtr.name as advisorname")
+            ->from('activity as act')
+            ->where('act.sig_id', $sig_id)
+            ->join('academicsession as acs', 'act.acadsession_id = acs.id', 'left')
+            ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
+            ->join('user as mtr', 'act.advisor_matric = mtr.id', 'left')
+            ->join('sig as sig', 'act.sig_id = sig.id')
+            ->order_by('act.id', 'DESC');
+        $query = $this->db->get();
         return $query->result_array();
+    }
+
+    public function check_activity_highCom($user_id, $activity_id)
+    {
+        $highcoms_id = $this->committee_model->get_acthighcoms_id(); # array
+        $this->db->select('*')
+            ->from('activity_committee')
+            ->where(array(
+                'student_matric' => $user_id,
+                'activity_id' => $activity_id,
+            ))
+            ->where_in('role_id', $highcoms_id);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function create_activity($activity_data)

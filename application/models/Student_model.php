@@ -30,6 +30,12 @@ class Student_model extends CI_Model
         return $query->row_array();
     }
 
+    public function get_mentor_matric($student_id)
+    {
+        $query = $this->db->get_where('student', array('matric' => $student_id));
+        return $query->row()->mentor_matric;
+    }
+
     public function get_sigstudents($sig_id)
     {
         $this->db->select('user.id, user.name')

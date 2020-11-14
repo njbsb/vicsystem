@@ -24,7 +24,7 @@
         body {
             font: 14px Montserrat, sans-serif;
             line-height: 1.8;
-            background-color: #cfcfc4;
+            background-color: #ffb6c1;
         }
 
         table {
@@ -63,79 +63,115 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="<?= site_url(); ?>">VIC System</a>
+            <a class="navbar-brand" href="<?= site_url() ?>">VIC System</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <?php if ($this->session->userdata('logged_in')) : ?>
+                <div class="collapse navbar-collapse" id="navbarColor03">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= site_url('profile') ?>">Profile <span class="sr-only">(current)</span></a>
+                        </li>
+                        <?php if ($this->session->userdata('isStudent')) : ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= site_url('mentor') ?>">Mentors</a>
+                            </li>
+                        <?php endif ?>
 
-            <div class="collapse navbar-collapse" id="navbarColor03">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url('profile') ?>">Profile <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url('mentor') ?>">Mentors</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url('student') ?>">Students</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url('organization') ?>">SIG</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url('activity') ?>">Activity</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Academic</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="<?= site_url('academic') ?>">Academic ControlPanel</a>
-                            <a class="dropdown-item" href="<?= site_url('academicplan') ?>">Academic Plan (Student)</a>
-                            <a class="dropdown-item" href="<?= site_url('academicplan/mentor') ?>">Academic Plan (Mentor)</a>
-                            <a class="dropdown-item" href="<?= site_url('enroll') ?>">Enroll Students</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url() ?>user">Users</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Scoring</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="<?= site_url('score') ?>">Score</a>
-                            <a class="dropdown-item" href="<?= site_url('scoreplan') ?>">Scoring Plan</a>
-                        </div>
-                    </li>
+                        <?php if (!$this->session->userdata('isStudent')) : ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= site_url('student') ?>">Students</a>
+                            </li>
+                        <?php endif ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= site_url('organization') ?>">SIG</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= site_url('activity') ?>">Activity</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Academic</a>
+                            <div class="dropdown-menu">
+                                <?php if ($this->session->userdata('isMentor') or $this->session->userdata('isAdmin')) : ?>
+                                    <a class="dropdown-item" href="<?= site_url('academic') ?>">Academic ControlPanel</a>
+                                    <a class="dropdown-item" href="<?= site_url('academicplan/mentor') ?>">Academic Plan (Mentor)</a>
+                                    <a class="dropdown-item" href="<?= site_url('enroll') ?>">Enroll Students</a>
+                                <?php else : ?>
+                                    <a class="dropdown-item" href="<?= site_url('academicplan/student') ?>">Academic Plan (Student)</a>
+                                <?php endif ?>
+                            </div>
+                        </li>
+                        <?php if ($this->session->userdata('isMentor') or $this->session->userdata('isAdmin')) : ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= site_url() ?>user">Users</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Scoring</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="<?= site_url('score') ?>">Score</a>
+                                    <a class="dropdown-item" href="<?= site_url('scoreplan') ?>">Scoring Plan</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Register</a>
+                                <div class="dropdown-menu">
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="<?= site_url('collaborator') ?>">Collaborator</a>
+                                    <a class="dropdown-item" href="<?= site_url('citra') ?>">Citra</a>
+                                    <a class="dropdown-item" href="<?= site_url('category') ?>">Comment Category</a>
+                                </div>
+                            </li>
+                        <?php endif ?>
+                    </ul>
+                </div>
+            <?php endif ?>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Register</a>
-                        <div class="dropdown-menu">
-                            <!-- <a class="dropdown-item" href="<?= site_url('activity/create') ?>">Activity</a> -->
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="<?= site_url('collaborator') ?>">Collaborator</a>
-                            <a class="dropdown-item" href="<?= site_url('citra') ?>">Citra</a>
-                            <a class="dropdown-item" href="<?= site_url('category') ?>">Comment Category</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
         </div>
 
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="<?= site_url() ?>login">Login <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Account</a>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="<?= site_url('academicplan') ?>">Academic Plan</a>
-                    <a class="dropdown-item" href="<?= site_url('profile/update') ?>">Update Profile</a>
-                    <a class="dropdown-item" href="#">Log Out</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Switch Account</a>
-                </div>
-            </li>
+            <?php if ($this->session->userdata('logged_in')) : ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= site_url('logout') ?>">LogOut<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Account</a>
+                    <div class="dropdown-menu">
+                        <!-- <a class="dropdown-item" href="<?= site_url('academicplan') ?>">Academic Plan</a> -->
+                        <a class="dropdown-item" href="<?= site_url('profile/update') ?>">Update Profile</a>
+                        <a class="dropdown-item" href="<?= site_url('logout') ?>">Log Out</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Switch Account</a>
+                    </div>
+                </li>
+            <?php else : ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= site_url('login') ?>">Login<span class="sr-only">(current)</span></a>
+                </li>
+            <?php endif ?>
+
+
         </ul>
 
     </nav>
 
     <div class="container">
         <br>
+        <?php if ($this->session->flashdata('login_failed')) : ?>
+            <div class="alert alert-dismissible alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Oh snap!</strong> <?= $this->session->flashdata('login_failed') ?>
+            </div>
+        <?php endif ?>
+        <?php if ($this->session->flashdata('user_loggedin')) : ?>
+            <div class="alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Welcome!</strong> <?= $this->session->flashdata('user_loggedin') ?>
+            </div>
+        <?php endif ?>
+        <?php if ($this->session->flashdata('logged_out')) : ?>
+            <div class="alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong></strong> <?= $this->session->flashdata('logged_out') ?>
+            </div>
+        <?php endif ?>

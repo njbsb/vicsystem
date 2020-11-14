@@ -45,7 +45,6 @@
         </div>
     <?php endif ?>
     <?= form_open('comment/create/' . $activity['id']) ?>
-    <input type="hidden" name="id" value="A160000" class="form-control" readonly>
     <div class="form-group">
         <!-- <label>Comment</label> -->
         <textarea name="comment" class="form-control" rows="3" required="required"></textarea>

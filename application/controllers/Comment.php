@@ -15,9 +15,10 @@ class Comment extends CI_Controller
             $this->load->view('activity/comments');
             $this->load->view('templates/footer');
         } else {
+            $user_id = $this->session->userdata('username');
             $commentdata = array(
                 'activity_id' => $activity_id,
-                'student_matric' => $this->input->post('id'),
+                'student_matric' => $user_id,
                 'comment' => $this->input->post('comment'),
                 'category_id' => $this->input->post('category_id')
             );

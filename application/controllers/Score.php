@@ -7,13 +7,15 @@ class Score extends CI_Controller
 
     public function index()
     {
-        $sig_id = 1; # retreive from mentor's
+        if (!$this->session->userdata('isMentor')) {
+            redirect(site_url());
+        }
+        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         $academicsessions = $this->academic_model->get_academicsession();
         foreach ($academicsessions as $i => $academicsession) {
             $enrollingstudents = $this->student_model->get_enrolling_students($academicsession['id'], $sig_id);
             $academicsessions[$i]['enrolling'] = count($enrollingstudents);
         }
-        // print_r($academicsessions);
         $data = array(
             'title' => 'Score Index',
             'academicsessions' => $academicsessions,
@@ -26,7 +28,10 @@ class Score extends CI_Controller
 
     public function viewacs($acadsession_slug)
     {
-        $sig_id = 1; #VIC
+        if (!$this->session->userdata('isMentor')) {
+            redirect(site_url());
+        }
+        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         $academicsession = $this->academic_model->get_academicsession(FALSE, $acadsession_slug);
         $enrolling = $this->student_model->get_enrolling_students($academicsession['id'], $sig_id);
         foreach ($enrolling as $i => $std) {
@@ -36,13 +41,17 @@ class Score extends CI_Controller
             'academicsession' => $academicsession,
             'enrolling' => $enrolling
         );
-        print_r($enrolling);
+        // print_r($enrolling);
         $this->load->view('templates/header');
         $this->load->view('score/viewacs', $data);
     }
 
     public function view($acadsession_slug = NULL, $student_id)
     {
+        if (!$this->session->userdata('isMentor')) {
+            redirect(site_url());
+        }
+        // $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         $student = $this->student_model->get_student($student_id);
         $thisacadsession = $this->academic_model->get_academicsession(FALSE, $acadsession_slug);
         $scoreplans = $this->score_model->get_scoreplan($thisacadsession['id'], FALSE);
@@ -87,6 +96,9 @@ class Score extends CI_Controller
 
     public function scoreplan($slug = NULL)
     {
+        if (!$this->session->userdata('isMentor')) {
+            redirect(site_url());
+        }
         if ($slug == FALSE) {
             # scoreplan index
             $activitycategories = $this->activity_model->get_activitycategory();

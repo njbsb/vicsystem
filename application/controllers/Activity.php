@@ -3,7 +3,13 @@ class Activity extends CI_Controller
 {
     public function index()
     {
-        $activities = $this->activity_model->get_activity();
+        $user_id = $this->session->userdata('username');
+        $sig_id = $this->sig_model->get_sig_id($user_id);
+        if ($this->session->userdata('isAdmin')) {
+            $activities = $this->activity_model->get_activity();
+        } else {
+            $activities = $this->activity_model->get_sig_activity($sig_id);
+        }
         foreach ($activities as $i => $activity) {
             $committee = $this->activity_model->get_committees($activity['id']);
             $activities[$i]['committeenum'] = count($committee);
@@ -20,6 +26,9 @@ class Activity extends CI_Controller
 
     public function view($slug = NULL)
     {
+        if (!$this->session->userdata('username')) {
+            redirect(site_url());
+        }
         $activity = $this->activity_model->get_activity($slug);
         if (empty($activity)) {
             show_404();
@@ -34,6 +43,10 @@ class Activity extends CI_Controller
             'sig_members' => $this->student_model->get_sigstudents($activity['sig_id']),
             'highcoms_id' => $this->committee_model->get_acthighcoms_id()
         );
+        if ($this->session->userdata('isStudent')) {
+            $isHighcom = $this->activity_model->check_activity_highCom($this->session->userdata('username'), $activity['id']);
+            $data['isHighcom'] = $isHighcom;
+        }
         $this->load->view('templates/header');
         $this->load->view('activity/view', $data);
         if ($data['committees']) {
