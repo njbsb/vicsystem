@@ -38,13 +38,6 @@
     <hr>
 
     <h4>Add comment</h4>
-    <!-- <?php if (validation_errors()) {
-                echo '<div class="alert alert-dismissible alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <p class="mb-0">' . validation_errors() . '</p>
-        </div>';
-            }
-            ?> -->
     <?php if (validation_errors()) : ?>
         <div class="alert alert-dismissible alert-warning">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -70,7 +63,7 @@
     </div>
     <input type="hidden" name="slug" value="<?php echo $activity['slug']; ?>">
     <button class="btn btn-primary" type="submit">Submit</button>
-    <?php echo form_close() ?>
+    <?= form_close() ?>
 </div>
 
 <script type="text/javascript">
@@ -79,49 +72,54 @@
     var limit = 3;
 
     function buildComments(array) {
-        var commentcontent = document.getElementById('comment_content');
-        if (jQuery.isEmptyObject(array)) {
-            commentcontent.innerHTML += `<p>No comments for this activity</p>`
-        } else {
-            for (var i = 0; i < array.length; i++) {
-                if (!array[i].student_matric) {
-                    array[i].student_matric = 'deleted user';
-                }
-                var comment = `<div class="alert alert-dismissible alert-primary">
-                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                    ${array[i].comment} [by <a href="<?= base_url('student/') ?>${array[i].student_matric}"><strong>${array[i].student_matric}</strong></a>]
-                                    <a href="<?= site_url('category/comments/') ?>${array[i].category_id}"><span class="badge badge-pill badge-primary">${array[i].category}</span></a>
-                                </div>`
-                commentcontent.innerHTML += comment;
-            }
-            commentcontent.innerHTML += `<ul class="pagination pagination-sm">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">&laquo;</a>
-                </li>
-                <li class="page-item active">
-                    <a class="page-link" href="#">1</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">3</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">4</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">5</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">&raquo;</a>
-                </li>
-            </ul>`
-        }
+        // var commentcontent = document.getElementById('comment_content');
+        // if (jQuery.isEmptyObject(array)) {
+        //     commentcontent.innerHTML += `<p>No comments for this activity</p>`
+        // } else {
+        //     for (var i = 0; i < array.length; i++) {
+        //         if (!array[i].student_matric) {
+        //             array[i].student_matric = 'deleted user';
+        //         }
+        //         var comment = `<div class="alert alert-dismissible alert-primary">
+        //                             <button type="button" class="close" data-dismiss="alert">&times;</button>
+        //                             ${array[i].comment} [by <a href="<?= base_url('student/') ?>${array[i].student_matric}"><strong>${array[i].student_matric}</strong></a>]
+        //                             <a href="<?= site_url('category/comments/') ?>${array[i].category_id}"><span class="badge badge-pill badge-primary">${array[i].category}</span></a>
+        //                         </div>`
+        //         commentcontent.innerHTML += comment;
+        //     }
+        //     commentcontent.innerHTML += `<ul class="pagination pagination-sm">
+        //         <li class="page-item disabled">
+        //             <a class="page-link" href="#">&laquo;</a>
+        //         </li>
+        //         <li class="page-item active">
+        //             <a class="page-link" href="#">1</a>
+        //         </li>
+        //         <li class="page-item">
+        //             <a class="page-link" href="#">2</a>
+        //         </li>
+        //         <li class="page-item">
+        //             <a class="page-link" href="#">3</a>
+        //         </li>
+        //         <li class="page-item">
+        //             <a class="page-link" href="#">4</a>
+        //         </li>
+        //         <li class="page-item">
+        //             <a class="page-link" href="#">5</a>
+        //         </li>
+        //         <li class="page-item">
+        //             <a class="page-link" href="#">&raquo;</a>
+        //         </li>
+        //     </ul>`
+        // }
     }
 
     $(document).ready(function() {
         $('#checkbox_comments').click(function() {
+            function load_comment(page) {
+                $.ajax({
+
+                })
+            }
             $('#comments').toggle();
         });
     });

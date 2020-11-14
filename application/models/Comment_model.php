@@ -30,4 +30,30 @@ class Comment_model extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    public function count_all($activity_id)
+    {
+        $query = $this->db->get_where('comment', array('activity_id' => $activity_id));
+        return $query->num_rows();
+    }
+
+    public function fetch_details($activity_id, $limit, $start)
+    {
+        $output = '';
+        $this->db->select('*');
+        $this->db->from('comment as cmt');
+        $this->db->where('cmt.activity_id', $activity_id);
+        $this->db->order_by('cmt.commented_at', 'DESC');
+        $this->db->limit($limit, $start);
+        $query = $this->db->get();
+        // $output .= '';
+        foreach ($query->result() as $row) {
+            $output .= '<div class="alert alert-dismissible alert-primary">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        ' . $row->comment . '[by <a href="' . site_url('student/' . $row->student_matric) . '"><strong>' . $row->student_matric . '</strong></a>]
+                    <a href=""><span class="badge badge-pill badge-primary">' . $row->category . '</span></a>
+                    </div>';
+        }
+        return $output;
+    }
 }

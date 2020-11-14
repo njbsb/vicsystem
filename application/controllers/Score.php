@@ -92,14 +92,17 @@ class Score extends CI_Controller
             $activitycategories = $this->activity_model->get_activitycategory();
             $academicsessions = $this->academic_model->get_academicsession();
             foreach ($academicsessions as $index => $acs) {
+                $totalcategory = 0;
                 foreach ($activitycategories as $id => $cat) {
                     $activitycategories[$id]['categorycount'] = $this->activity_model->get_categoryactivitycount($acs['id'], $cat['id']);
                     $activitycategories[$id]['categorytotalpercent'] = $this->score_model->get_categorytotalpercent($acs['id'], $cat['id']);
+                    $totalcategory += $activitycategories[$id]['categorytotalpercent'];
                 }
                 $academicsessions[$index]['activitycategories'] = $activitycategories;
+                $academicsessions[$index]['total'] = $totalcategory;
             }
             $data = array(
-                'title' => 'All Score Plans',
+                'title' => 'Score Plans',
                 'activitycategory' => $activitycategories,
                 'activeacadsession' => $this->academic_model->get_activeacademicsession(),
                 'academicsessions' => $academicsessions

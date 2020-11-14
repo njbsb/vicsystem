@@ -151,10 +151,10 @@ class Committee_model extends CI_Model
 
     public function get_roles_activity()
     {
-        $roles = array('5', '6', '7', '8', '9', '10', '11', '12');
         $this->db->select('*')
             ->from('role')
-            ->where_in('id', $roles);
+            ->like('keyword', 'activity')
+            ->not_like('keyword', 'highcom');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -171,5 +171,19 @@ class Committee_model extends CI_Model
         $this->db->set($comdata);
         $this->db->insert('activity_committee');
         return true;
+    }
+
+    public function get_acthighcoms_id()
+    {
+        $this->db->select('id')
+            ->from('role')
+            ->like('keyword', 'activity')
+            ->like('keyword', 'highcom');
+        $query = $this->db->get();
+        $highcom_id = array();
+        foreach ($query->result_array() as $highcom) {
+            $highcom_id[] = $highcom['id'];
+        }
+        return $highcom_id;
     }
 }

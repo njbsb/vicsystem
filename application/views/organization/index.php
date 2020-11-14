@@ -128,10 +128,10 @@
 <table id="orgcom_table" class="table table-hover">
     <thead class="table-dark">
         <tr>
-            <td>Matric</td>
-            <td>Name</td>
-            <td>Role</td>
-            <td>Action</td>
+            <th>Matric</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>

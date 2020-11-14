@@ -108,7 +108,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Register</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="<?= site_url('activity/create') ?>">Activity</a>
+                            <!-- <a class="dropdown-item" href="<?= site_url('activity/create') ?>">Activity</a> -->
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="<?= site_url('collaborator') ?>">Collaborator</a>
                             <a class="dropdown-item" href="<?= site_url('citra') ?>">Citra</a>
