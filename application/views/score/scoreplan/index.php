@@ -1,21 +1,21 @@
 <h2><?= $title ?></h2>
 <br>
 <div class="">
-    <div class="form-group">
+    <!-- <div class="form-group">
         <button data-toggle="modal" data-target="#addscoreplan" class="btn btn-outline-danger" disabled>Add new scoring plan</button>
-    </div>
+    </div> -->
 
     <table id="scoreplanindex" class="table">
         <thead class="table-dark">
             <tr>
-                <td>Session</td>
-                <td>Year</td>
+                <th>Session</th>
+                <th>Year</th>
                 <?php foreach ($activitycategory as $actcat) : ?>
-                    <td data-toggle="tooltip" data-placement="top" title="" data-original-title="<?= $actcat['category'] ?> Count"><?= $actcat['category'] ?></td>
-                    <td>Total % (<?= $actcat['code'] ?>)</td>
+                    <th data-toggle="tooltip" data-placement="top" title="" data-original-title="<?= $actcat['category'] ?> Count"><?= $actcat['category'] ?></th>
+                    <th data-toggle="tooltip" data-placement="top" title="Cumulative Percent"><?= $actcat['category'] ?> %</th>
                 <?php endforeach ?>
-                <td>Total %</td>
-                <td></td>
+                <th data-toggle="tooltip" data-placement="top" title="55% Max">Total %</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -27,24 +27,12 @@
                         <td><?= $cat['categorycount'] ?></td>
                         <td><?= $cat['categorytotalpercent'] ?>%</td>
                     <?php endforeach ?>
-                    <td>0%</td>
+                    <td><?= $acs['total'] ?>%</td>
                     <td><a href="<?= site_url('scoreplan/' . $acs['slug']) ?>" class="badge badge-pill badge-dark">view</a></td>
                 </tr>
             <?php endforeach ?>
-            <!-- <?php foreach ($summarytable as $row) : ?>
-                <tr>
-                    <td><?= $row['academicsession'] ?></td>
-                    <td><?= $row['academicyear'] ?></td>
-                    <?php foreach ($row['categories'] as $category) : ?>
-                        <td><?= $category['count'] ?></td>
-                        <td><?= $category['categorytotalpercent'] ?> %</td>
-                    <?php endforeach ?>
-                    <td><?= $row['totalpercent'] ?> %</td>
-                    <td><a href="<?= site_url('scoreplan/' . $row['slug']) ?>" class="badge badge-pill badge-dark">view</a></td>
-                </tr>
-            <?php endforeach ?> -->
         </tbody>
-        <tfoot class="table-dark">
+        <!-- <tfoot class="table-dark">
             <tr>
                 <td>Session</td>
                 <td>Year</td>
@@ -55,7 +43,7 @@
                 <td>Total %</td>
                 <td></td>
             </tr>
-        </tfoot>
+        </tfoot> -->
     </table>
 </div>
 <!-- MODAL -->
@@ -105,26 +93,27 @@
 
 <script>
     $(document).ready(function() {
-        $('#scoreplanindex').DataTable({
-            initComplete: function() {
-                this.api().columns().every(function() {
-                    var column = this;
-                    var select = $('<select><option value=""></option></select>')
-                        .appendTo($(column.footer()).empty())
-                        .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
-                            column
-                                .search(val ? '^' + val + '$' : '', true, false)
-                                .draw();
-                        });
-                    column.data().unique().sort().each(function(d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>')
-                    });
-                });
-            }
-        });
+        $('#scoreplanindex').DataTable();
+        // $('#scoreplanindex').DataTable({
+        //     initComplete: function() {
+        //         this.api().columns().every(function() {
+        //             var column = this;
+        //             var select = $('<select><option value=""></option></select>')
+        //                 .appendTo($(column.footer()).empty())
+        //                 .on('change', function() {
+        //                     var val = $.fn.dataTable.util.escapeRegex(
+        //                         $(this).val()
+        //                     );
+        //                     column
+        //                         .search(val ? '^' + val + '$' : '', true, false)
+        //                         .draw();
+        //                 });
+        //             column.data().unique().sort().each(function(d, j) {
+        //                 select.append('<option value="' + d + '">' + d + '</option>')
+        //             });
+        //         });
+        //     }
+        // });
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>

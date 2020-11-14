@@ -4,11 +4,11 @@
 <table class="table" id="scoretable">
     <thead class="table-dark">
         <tr>
-            <td>Academic Year</td>
-            <td>Academic Session</td>
-            <td>Students Enrolling</td>
-            <td>Students Marked</td>
-            <td></td>
+            <th>Academic Year</th>
+            <th>Academic Session</th>
+            <th>Students Enrolling</th>
+            <th>Students Marked</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>

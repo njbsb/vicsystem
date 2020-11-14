@@ -19,14 +19,13 @@
             <div class="form-group">
                 <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addscoreplan<?= $actcat['code'] ?>">Add Score Plan</button>
             </div>
-
-            <table class="table">
+            <table id="table<?= $actcat['code'] ?>" class="table">
                 <thead class="table-dark">
                     <tr>
-                        <td>Label</td>
-                        <td>Activity</td>
-                        <td>Weightage %</td>
-                        <td></td>
+                        <th>Label</th>
+                        <th>Activity</th>
+                        <th>Weightage %</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,7 +35,7 @@
                                 <td><?= $scp['label'] ?></td>
                                 <td><?= $scp['activity_name'] ?></td>
                                 <td><?= $scp['percentweightage'] ?> %</td>
-                                <td><a type="button" data-toggle="modal" data-target="#editscoreplan<?= $scp['id'] ?>" class="btn btn-outline-primary btn-sm">edit score plan</a></td>
+                                <td><a type="button" data-toggle="modal" data-target="#editscoreplan<?= $scp['id'] ?>" class="btn btn-outline-primary btn-sm">Edit</a></td>
                             </tr>
                         <?php endforeach ?>
                     <?php else : ?>
@@ -153,10 +152,15 @@
                 </div>
             </div>
         <?php endforeach ?>
+        <script>
+            $(document).ready(function() {
+                $('#table<?= $actcat['code'] ?>').DataTable();
+            });
+        </script>
     <?php endforeach ?>
     <!-- COMPONENTS -->
     <div class="tab-pane fade show" id="c">
         <br>
-        <p>C</p>
+        Nothing's here
     </div>
 </div>
