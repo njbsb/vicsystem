@@ -1,4 +1,4 @@
-<h2 class="text-center"><?php echo $title; ?></h2>
+<h2 class="text-center"><?= $title ?></h2>
 
 <div class="container-fluid text-center">
     <?= form_open_multipart('user/update/' . $mentor['id']) ?>
@@ -10,7 +10,8 @@
                 <!-- <h3 class="card-header">
                     Header
                 </h3> -->
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/') . $mentor['profile_image'] ?>">
+                <?php $profile_image = ($mentor['profile_image']) ? $mentor['profile_image'] : 'default.jpg' ?>
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $profile_image) ?>">
                 <div class="card-footer text-muted">
                     <?= $mentor['id'] ?>
                 </div>
@@ -18,14 +19,12 @@
 
             <div class="form-group">
                 <label>Select profile photo</label>
-                <input name="photo_path" type="file" class="form-control-file" aria-describedby="fileHelp">
-                <small id="fileHelp" class="form-text text-muted">Choose a proper profile photo.</small>
+                <input name="profile_image" type="file" class="form-control-file" aria-describedby="fileHelp">
+                <small id="fileHelp" class="form-text text-muted"><?= $profile_image ?></small>
             </div>
 
         </div>
         <div class="col-lg-8 text-left">
-            <!-- <div class="bs-component">
-            </div> -->
             <div class="form-group">
                 <label>Name</label>
                 <input class="form-control" name="name" value="<?= $mentor['name'] ?>" readonly>
@@ -41,35 +40,26 @@
 
             <div class="form-group">
                 <label>SIG</label>
-                <select name="sig_id" class="form-control" id="" disabled>
-                    <?php foreach ($sigs as $sig) : ?>
-                        <option value="<?= $sig['id'] ?>" <?php if ($sig['id'] == $mentor['sig_id']) {
-                                                                echo 'selected';
-                                                            } ?>>
-                            <?= $sig['signame'] ?>
-                        </option>
-                    <?php endforeach ?>
+                <select name="sig_id" class="form-control" readonly>
+                    <option value="<?= $mentor['sig_id'] ?>"><?= $mentor['signame'] ?></option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label>Role in SIG</label>
-                <select name="sigrole_id" class="form-control" id="" disabled>
-                    <option value="">
-                        Club Advisor
-                    </option>
+                <select name="sigrole_id" class="form-control" readonly>
+                    <option value="<?= $mentor['orgrole_id'] ?>"><?= $mentor['rolename'] ?></option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>Phone Number</label>
-                <input class="form-control" name="phonenum" value="013-8877343" readonly>
+                <label>Room Number</label>
+                <input class="form-control" name="roomnum" value="<?= $mentor['roomnum'] ?>">
             </div>
             <br>
             <button type="submit" class="btn btn-primary">Update profile</button>
-
         </div>
-    </div> <br>
-
+    </div>
+    <br>
     <?= form_close() ?>
 </div>

@@ -20,6 +20,7 @@
             <h6><b>Email:</b> <a href="mailto:<?= $mentor['email'] ?>"><?= $mentor['email'] ?></a></h6>
             <h6><b>SIG:</b> <?= $mentor['signame'] ?></h6>
             <h6><b>SIG Role:</b> <?= $mentor['rolename'] ?></h6>
+            <h6><b>Room Num:</b> <?= $mentor['roomnum'] ?></h6>
 
         </div>
     </div>

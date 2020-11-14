@@ -33,10 +33,6 @@
                 <button name="usertype_id" type="submit" class="btn btn-primary" value="2">Mentor</button>
                 <?= form_close() ?>
             </div>
-            <!-- <div class="modal-footer text-center" style="text-align: center;">
-                <button type="button" class="btn btn-primary">Student</button>
-                <button type="button" class="btn btn-primary">Mentor</button>
-            </div> -->
         </div>
     </div>
 </div>

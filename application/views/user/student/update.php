@@ -1,12 +1,13 @@
 <h2 class="text-center"><?= $title ?></h2>
 
 <div class="container-fluid text-center">
-    <?= form_open_multipart('user/update/' . $student['id']) ?>
+    <?php $hidden = array('usertype_id' => $usertype_id) ?>
+    <?= form_open_multipart('user/update/' . $student['id'], '', $hidden) ?>
     <div class="row">
         <div class="col-lg-4">
             <div class="card border-primary mb-3" style="max-width: 20rem;">
-                <?php $image = ($student['profile_image']) ? $student['profile_image'] : 'default.jpg'; ?>
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $image) ?>">
+                <?php $profile_image = ($student['profile_image']) ? $student['profile_image'] : 'default.jpg'; ?>
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $profile_image) ?>">
                 <div class="card-footer text-muted">
                     <?= $student['id'] ?>
                 </div>
@@ -15,7 +16,7 @@
             <div class="form-group">
                 <label>Select profile photo</label>
                 <input name="profile_image" type="file" class="form-control-file" aria-describedby="fileHelp">
-                <small id="fileHelp" class="form-text text-muted">Choose a proper profile photo.</small>
+                <small id="fileHelp" class="form-text text-muted"><?= $profile_image ?></small>
             </div>
         </div>
         <div class="col-lg-8 text-left">
@@ -24,7 +25,7 @@
             <div class="form-group">
                 <label>Name</label>
                 <input class="form-control" name="name" value="<?= $student['name'] ?>" readonly>
-                <input name="usertype_id" value="<?= $user['usertype_id'] ?>" type="hidden" class="form-control" readonly>
+                <!-- <input name="usertype_id" value="<?= $user['usertype_id'] ?>" type="hidden" class="form-control" readonly> -->
             </div>
             <div class="form-group">
                 <label>SIG</label>

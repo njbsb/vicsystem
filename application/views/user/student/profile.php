@@ -19,7 +19,7 @@
             <h3><b><?= $student['name'] ?></b></h3>
             <h6><b>Club name:</b> <?= $student['signamecode'] ?></h6>
             <h6><b>Program:</b> <?= $student['program_name'] ?></h6>
-            <h6><b>Year:</b> 3 (hardcoded)</h6>
+            <h6><b>Year:</b> <?= $student['year'] ?></h6>
             <h6><b>Phone Num:</b> <a href="#"><?= $student['phonenum'] ?></a></h6>
             <h6><b>Email:</b> <a href="mailto:<?= $student['email'] ?>"><?= $student['email'] ?></a></h6>
             <h6><b>Mentor:</b> <?= $student['mentor_name'] ?></h6>

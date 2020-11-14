@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 
 $route['academic'] = 'academic/index';
-$route['academicplan'] = 'academic/academicplan';
+$route['academicplan/student'] = 'academic/academicplanstudent';
 $route['academicplan/mentor'] = 'academic/academicplanmentor';
 $route['academicplan/records'] = 'academic/academicplanrecords';
 $route['academic/records'] = 'academic/records';
@@ -23,6 +23,7 @@ $route['collaborator'] = 'collaborator/index';
 $route['user'] = 'user/index';
 $route['register'] = 'user/register';
 $route['login'] = 'user/login';
+$route['logout'] = 'user/logout';
 $route['validate/(:any)'] = 'user/validate/$1';
 // $route['user'] = 'user/index';
 

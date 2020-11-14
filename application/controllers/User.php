@@ -3,18 +3,21 @@ class User extends CI_Controller
 {
     public function index()
     {
+        if (!$this->session->userdata('isMentor')) {
+            redirect('home');
+        }
         $data = array(
             'title' => 'All Users',
             'users' => $this->user_model->get_user()
         );
         $this->load->view('templates/header');
         $this->load->view('user/index', $data);
-        $this->load->view('templates/footer');
+        // $this->load->view('templates/footer');
     }
 
     public function profile()
     {
-        $id = 'A160001'; # get the current session user first
+        $id = $this->session->userdata('username');
         $user = $this->user_model->get_user($id);
         $data = array(
             'title' => 'User Profile',
@@ -35,28 +38,29 @@ class User extends CI_Controller
                 break;
             case '3':
                 $data['student'] = $this->student_model->get_student($id);
+                $data['student']['year'] = date('Y') - $data['student']['year_joined'] + 1;
                 $data['activity_roles'] = $this->committee_model->get_activityroles($id);
                 $data['org_roles'] = $this->committee_model->get_orgroles($id, $sig_id);
                 $this->load->view('user/student/profile', $data);
                 break;
         }
-        $this->load->view('templates/footer');
     }
 
     public function edit()
     {
-        $data['title'] = 'Update profile';
-        $id = 'A160001'; # get the current session user 
+        $id = $this->session->userdata('username'); # get the current session user 
         if (!$id) {
             redirect('home');
         }
-        $data['user'] = $this->user_model->get_user($id);
-        $usertype_id = $data['user']['usertype_id'];
-
-        $data['sigs'] = $this->sig_model->get_sig();
-        $data['programs'] = $this->program_model->get_programs();
-        $data['mentors'] = $this->mentor_model->get_mentor();
-
+        $user = $this->user_model->get_user($id);
+        $usertype_id = $user['usertype_id'];
+        $data = array(
+            'title' => 'Update Profile',
+            'sigs' => $this->sig_model->get_sig(),
+            'programs' => $this->program_model->get_programs(),
+            'mentors' => $this->mentor_model->get_mentor(),
+            'usertype_id' => $usertype_id
+        );
         $this->load->view('templates/header');
         switch ($usertype_id) {
             case '1':
@@ -72,20 +76,19 @@ class User extends CI_Controller
                 $this->load->view('user/student/update', $data);
                 break;
         }
-        $this->load->view('templates/footer');
-        # NOT DONE
-        # get the current session user
     }
 
     public function update($user_id)
     {
-        $usertype_id = $this->input->post('usertype_id');
-        $config['upload_path'] = './assets/images/profile';
-        $config['allowed_types'] = 'gif|jpg|png';
-        $config['max_size'] = 500;
-        $config['max_width'] = 1024;
-        $config['max_height'] = 768;
-        $config['file_name'] = $user_id . '-' . substr(md5(rand()), 0, 10);
+        $usertype_id = $this->user_model->get_usertype_id($user_id);
+        $config = array(
+            'upload_path' => './assets/images/profile',
+            'allowed_types' => 'gif|jpg|png',
+            'max_size' => 500,
+            'max_width' => 2048,
+            'max_height' => 2048,
+            'file_name' => $user_id . '-' . substr(md5(rand()), 0, 10)
+        );
         $this->load->library('upload', $config);
 
         if (@$_FILES['profile_image']['name'] != NULL) {
@@ -100,13 +103,16 @@ class User extends CI_Controller
                 //
                 break;
             case '2':
-                //
+                $userdata = array('profile_image' => $profile_image);
+                $this->user_model->update_user($user_id, $userdata);
+                $mentordata = array('roomnum' => $this->input->post('roomnum'));
+                $this->mentor_model->update_mentor($user_id, $mentordata);
                 break;
             case '3':
-                $userchange = array('profile_image' => $profile_image);
-                $studentchange = array('phonenum' => $this->input->post('phonenum'));
-                $this->student_model->update_student($user_id, $studentchange);
-                $this->user_model->update_user($user_id, $userchange);
+                $userdata = array('profile_image' => $profile_image);
+                $this->user_model->update_user($user_id, $userdata);
+                $studentdata = array('phonenum' => $this->input->post('phonenum'));
+                $this->student_model->update_student($user_id, $studentdata);
                 break;
         }
         redirect('profile');
@@ -137,9 +143,47 @@ class User extends CI_Controller
 
     public function login()
     {
-        $data['title'] = 'Login';
-        $this->load->view('templates/header');
-        $this->load->view('user/login', $data);
+        $this->form_validation->set_rules('username', 'username', 'required');
+        $this->form_validation->set_rules('password', 'password', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $data = array(
+                'title' => 'Login'
+            );
+            $this->load->view('templates/header');
+            $this->load->view('user/login', $data);
+        } else {
+            $username = $this->input->post('username');
+            $password = md5($this->input->post('password'));
+            $user_id = $this->user_model->login($username, $password);
+            if ($user_id) {
+                $user_data = array(
+                    'username' => $user_id,
+                    'user_type' => $this->user_model->get_usertype_id($user_id),
+                    'isMentor' => $this->user_model->get_mentor_status($user_id),
+                    'isStudent' => $this->user_model->get_student_status($user_id),
+                    'isAdmin' => $this->user_model->get_admin_status($user_id),
+                    'logged_in' => true
+                );
+                $this->session->set_userdata($user_data);
+                $this->session->set_flashdata('user_loggedin', 'You are now logged in as ' . $user_id);
+                redirect(site_url());
+            } else {
+                $this->session->set_flashdata('login_failed', 'Login is invalid');
+                redirect('login');
+            }
+        }
+    }
+
+    public function logout()
+    {
+        $this->session->unset_userdata('username');
+        $this->session->unset_userdata('logged_in');
+        $this->session->unset_userdata('isStudent');
+        $this->session->unset_userdata('isMentor');
+        $this->session->unset_userdata('isAdmin');
+        $this->session->set_flashdata('logged_out', 'You have successfully logged out!');
+        redirect('login');
     }
 
     public function register()
@@ -305,7 +349,6 @@ class User extends CI_Controller
                 # IF MENTOR
                 $data['mentorroles'] = $this->role_model->get_mentor_roles();
                 $data['mentor'] = $this->mentor_model->get_mentor($id);
-                print_r($data['mentor']);
                 $this->load->view('user/mentor/validate_mentor', $data);
             } elseif ($usertype_id == 3) {
                 # IF STUDENT
@@ -349,7 +392,6 @@ class User extends CI_Controller
                 }
             }
             $this->user_model->update_user($id, $userdata);
-            // $this->user_model->approve_user($id);
             redirect('user');
         }
     }

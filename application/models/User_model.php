@@ -7,6 +7,21 @@ class User_model extends CI_Model
         $this->load->database();
     }
 
+    public function login($username, $password)
+    {
+        $this->db->where(array(
+            'id' => $username,
+            'password' => $password
+        ));
+        $query = $this->db->get('user');
+        if ($query->num_rows() == 1) {
+            return $query->row(0)->id;
+            # return essential user data: id, usertype, sig_id, mentor_id
+        } else {
+            return false;
+        }
+    }
+
     public function get_user($user_id = FALSE)
     {
         if ($user_id === FALSE) {
@@ -21,7 +36,7 @@ class User_model extends CI_Model
         }
         // return specific user
         $this->db->select('user.*, ust.usertype, uss.userstatus, user.dob, sig.code, sig.signame')
-            ->from('user as user')
+            ->from('user')
             ->where('user.id', $user_id)
             ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
             ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left')
@@ -50,8 +65,63 @@ class User_model extends CI_Model
 
     public function get_usertype_id($user_id)
     {
-        $usertype_id = $this->db->select('usertype_id')->get_where('user', array('id' => $user_id))->row()->usertype_id;
+        $usertype_id = $this->db->select('usertype_id')
+            ->get_where('user', array('id' => $user_id))
+            ->row()->usertype_id;
         return $usertype_id;
+    }
+
+    public function get_mentor_status($user_id)
+    {
+        $query = $this->db->get_where(
+            'mentor',
+            array(
+                'matric' => $user_id
+            )
+        );
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function get_student_status($user_id)
+    {
+        $query = $this->db->get_where(
+            'student',
+            array(
+                'matric' => $user_id
+            )
+        );
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function get_admin_status($user_id)
+    {
+        $query = $this->db->get_where(
+            'user',
+            array(
+                'id' => $user_id,
+                'usertype_id' => 1
+            )
+        );
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function get_my_sig($user_id)
+    {
+        $query = $this->db->get_where('user', array('id' => $user_id));
+        $my_sig = $this->sig_model->get_sig($query->row()->sig_id);
+        return $my_sig;
     }
 
     public function get_usertypename($user_id)
