@@ -4,24 +4,26 @@
         <label class="custom-control-label" for="checkbox_committee">Show committees</label>
     </div>
 </div>
-<div id="committees" class="col-sm-6">
+<div id="committees" class="">
     <div class="form-group">
         <a data-toggle="modal" data-target="#add_actcommittee" class="btn btn-outline-primary">Add committee</a>
     </div>
     <table id="tbl_committee" class="table table-hover" style="text-align:left;">
         <thead class="table-dark">
             <tr>
-                <!-- <th scope="col">No</th> -->
                 <th scope="col">Position</th>
                 <th scope="col">Name</th>
+                <th></th>
             </tr>
         </thead>
         <tbody class="list">
             <?php if ($committees) : ?>
                 <?php foreach ($committees as $com) : ?>
+                    <?php $disabled = (in_array($com['role_id'], $highcoms_id)) ? 'disabled' : ''; ?>
                     <tr>
                         <td scope="row"><?= $com['rolename'] ?></td>
                         <td scope="row"><?= $com['name'] ?></td>
+                        <td><button data-toggle="modal" data-target="#delete_committee" data-roleid="<?= $com['role_id'] ?>" class="btn-sm btn btn-outline-danger" <?= $disabled ?>>Delete</button></td>
                     </tr>
                 <?php endforeach ?>
             <?php endif ?>
@@ -33,7 +35,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <!-- INSERT URL TO ADD ACTIVITY COMMITTEE HERE -->
-            <?= form_open('/activity/addcommittee/' . $activity['id']) ?>
+            <?php $hidden = array('activity_id' => $activity['id']) ?>
+            <?= form_open('/activity/addcommittee/' . $activity['id'], '', $hidden) ?>
             <div class="modal-header">
                 <h5 class="modal-title">Add committee</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -42,8 +45,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="activity_id">Activity ID</label>
-                    <input value="<?= $activity['id'] ?>" type="text" class="form-control" readonly>
+                    <label for="activity_id">Activity</label>
+                    <input value="<?= $activity['activity_name'] ?>" type="text" class="form-control" readonly>
                 </div>
                 <div class="form-group">
                     <label for="role_id">Roles</label>
@@ -76,10 +79,36 @@
     </div>
 </div>
 
+<div id="delete_committee" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <?= form_open('activity/delete_committee') ?>
+            <div class="modal-header">
+                <h5 class="modal-title">Delete committee</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Committee</label>
+                    <input type="text" readonly class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Delete committee</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+            </div>
+            <?= form_close() ?>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     $(document).ready(function() {
         $('#checkbox_committee').click(function() {
             $('#committees').toggle();
         });
+        $('#tbl_committee').DataTable();
     });
 </script>

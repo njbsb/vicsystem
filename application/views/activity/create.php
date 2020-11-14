@@ -1,29 +1,23 @@
 <h2 class="text-center"><?= $title; ?></h2>
-<!-- <?php if (validation_errors()) : ?>
+<?php if (validation_errors()) : ?>
     <div class="alert alert-dismissible alert-warning">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         <h4 class="alert-heading">Warning!</h4>
         <p class="mb-0"><?= validation_errors() ?></p>
     </div>
-<?php endif ?> -->
+<?php endif ?>
 
 <?= form_open_multipart('activity/create'); ?>
 <fieldset class="col-md-auto">
-    <!-- <legend>Author</legend> -->
-
-    <!-- load current user data here -->
     <div class="form-group">
         <label>User name</label>
         <input name="author_id" type="text" readonly="" class="form-control" id="author" value="A161010/K001" readonly>
     </div>
-    <!-- Form fields start here -->
-
     <div class="form-group">
         <label for="activitycategory_id">Activity Category</label>
-        <input class="form-control" type="text" value="<?= $activitycategory['category'] . ' (' . $activitycategory['code'] . ')' ?>" name="activitycategory" readonly>
+        <input class="form-control" type="text" value="<?= $activitycategory['categorycode'] ?>" name="activitycategory" readonly>
         <input class="form-control" type="hidden" value="<?= $activitycategory['id'] ?>" name="activitycategory_id">
     </div>
-
     <!-- Activity Name -->
     <div class="form-group">
         <label>Activity Name</label>
@@ -38,7 +32,7 @@
         <small class="form-text text-muted">Please include summary report of the activity</small>
     </div>
 
-    <!-- Activity Class -->
+    <!-- Activity Type -->
     <div class="form-group">
         <label for="activitytype_id">Activity type</label>
         <select name="activitytype_id" class="form-control" required>
@@ -53,13 +47,11 @@
     <div class="form-group">
         <label>Venue</label>
         <input name="venue" type="text" class="form-control" placeholder="Enter venue name">
-        <!-- <small class="form-text text-muted">Venue of the activity</small> -->
     </div>
     <!-- Theme -->
     <div class="form-group">
         <label>Theme</label>
         <input name="theme" type="text" class="form-control" placeholder="Enter activity theme">
-        <!-- <small class="form-text text-muted">Theme</small> -->
     </div>
 
     <!-- Academic Session -->
@@ -95,7 +87,7 @@
             <option value="" selected disabled hidden>Choose Advisor</option>
             <?php foreach ($mentors as $mentor) : ?>
                 <option value="<?php echo $mentor['id']; ?>">
-                    <?php echo $mentor['name'] . ' (' . $mentor['id'] . ')'; ?>
+                    <?= $mentor['name'] . ' (' . $mentor['id'] . ')' ?>
                 </option>
             <?php endforeach ?>
         </select>
@@ -108,9 +100,9 @@
                 <label for="director">Project Director</label>
                 <select name="projectdirector" id="projectdirector" class="form-control">
                     <option value="" selected disabled hidden>Choose Project Director</option>
-                    <?php foreach ($sigstudents as $ss) : ?>
-                        <option value="<?= $ss['id'] ?>">
-                            <?= $ss['id'] . ' ' . $ss['name'] ?>
+                    <?php foreach ($sigstudents as $std) : ?>
+                        <option value="<?= $std['id'] ?>">
+                            <?= $std['id'] . ' ' . $std['name'] ?>
                         </option>
                     <?php endforeach ?>
                 </select>

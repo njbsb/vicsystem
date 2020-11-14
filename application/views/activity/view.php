@@ -1,10 +1,15 @@
-<h2>Activity: <?= $activity['activity_name'] ?></h2>
+<?php if ($activity['photo_path']) : ?>
+    <div class="container-fluid text-center">
+        <img style="width:auto" src="<?= base_url('assets/images/activity/') . $activity['photo_path'] ?>">
+    </div>
+<?php else : ?>
+    <small>This activity does not have any photo uploaded</small>
+<?php endif ?>
 
-<small>Activity created on <?= $activity['created_at']; ?></small><br>
+<h2>Activity: <?= $activity['activity_name'] ?></h2>
+<small>Activity created on <?= $activity['created_at'] ?></small><br>
 <br>
-<div class="container-fluid text-center">
-    <img style="width:auto" src="<?= base_url('assets/images/activity/') . $activity['photo_path'] ?>">
-</div>
+
 <h6>Desc</h6>
 <?= $activity['activity_desc'] ?>
 
@@ -23,8 +28,8 @@
 
 <hr>
 <div class="row">
-    <?= form_open('/activity/edit/' . $activity['slug']); ?>
-    <input type="submit" value="Update" class="btn btn-outline-secondary">
+    <?= form_open('activity/edit/' . $activity['slug']) ?>
+    <input type="submit" value="Update" class="btn btn-outline-primary">
     <?= form_close() ?>
     &nbsp;
     <a data-toggle="modal" data-target="#confirmdelete" class="btn btn-outline-danger">Delete activity</a>
@@ -42,11 +47,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label for="activityname">Activity:</label>
-                    <input value="<?= $activity['activity_name'] ?>" name="activityname" type="text" class="form-control">
-                    <input value="<?= $activity['id'] ?>" type="hidden" class="form-control">
-                </div>
+                You are about to delete activity: <?= $activity['activity_name'] ?>.
+                Proceed?
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-danger">Delete anyway</button>

@@ -11,7 +11,7 @@ class Activity_model extends CI_Model
     {
         if ($slug === FALSE && $activity_id === FALSE) {
             // this code will get all activities
-            $this->db->select("act.activity_name, act.slug, act.datetime_start, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, sig.code, mtr.name as advisorname")
+            $this->db->select("act.id, act.activity_name, act.slug, act.datetime_start, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, sig.code, mtr.name as advisorname")
                 ->from('activity as act')
                 ->join('academicsession as acs', 'act.acadsession_id = acs.id', 'left')
                 ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
@@ -77,11 +77,23 @@ class Activity_model extends CI_Model
 
     public function get_highcoms($activity_id)
     {
+        $highcom_id = $this->committee_model->get_acthighcoms_id();
         $this->db->select('actcom.student_matric as id, user.name, actcom.role_id, role.rolename')
             ->from('activity_committee as actcom')
-            ->where(array('activity_id' => $activity_id))
+            ->where(array('actcom.activity_id' => $activity_id))
+            ->where_in('actcom.role_id', $highcom_id)
             ->join('user as user', 'user.id = actcom.student_matric')
             ->join('role as role', 'role.id = actcom.role_id');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function get_act_highcoms_position()
+    {
+        $this->db->select('id, rolename')
+            ->from('role')
+            ->like('keyword', 'activity')
+            ->like('keyword', 'highcom');
         $query = $this->db->get();
         return $query->result_array();
     }
