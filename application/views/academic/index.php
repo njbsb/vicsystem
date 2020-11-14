@@ -103,14 +103,9 @@
                         <?php endforeach ?>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="status">Status (default):</label>
-                    <input name="status" type="text" id="status" readonly value="inactive" class="form-control">
-                </div>
             </div>
             <div class="modal-footer">
-                <!-- <button type="submit" class="btn btn-primary">Add</button> -->
-                <input type="submit" class="btn btn-primary" value="add">
+                <button type="submit" class="btn btn-primary">Add</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
@@ -131,11 +126,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="acadyear">Academic Year:</label>
-                    <input name="acadyear" type="text" placeholder="20XX/20XX" id="acadyear" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="status">Status (default):</label>
-                    <input name="status" type="text" id="status" readonly value="inactive" class="form-control">
+                    <input name="acadyear" type="text" placeholder="20XX/20XX" readonly value="<?= $new_year ?>" id="acadyear" class="form-control">
                 </div>
             </div>
             <div class="modal-footer">
@@ -143,26 +134,6 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
-        </div>
-    </div>
-</div>
-
-<div id="addacademicplan" class="modal fade">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Modal body text goes here.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Save changes</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
         </div>
     </div>
 </div>
@@ -178,11 +149,13 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p id="confirmtext">This will set this academic session to active.</p>
+                <p id="confirmtext">This will set this academic session to active: </p>
                 <div class="form-group">
+                    <label>ID</label>
                     <input name="session_id" readonly type="text" class="form-control">
                 </div>
                 <div class="form-group">
+                    <label>Session</label>
                     <input name="session_string" readonly type="text" class="form-control">
                 </div>
 
@@ -209,9 +182,11 @@
             <div class="modal-body">
                 <p id="confirmtext">This will set this academic year to active.</p>
                 <div class="form-group">
+                    <Label>ID</Label>
                     <input name="acadyear_id" readonly type="text" class="form-control">
                 </div>
                 <div class="form-group">
+                    <label>Year</label>
                     <input name="year_string" readonly type="text" class="form-control">
                 </div>
 
@@ -230,26 +205,6 @@
     $(document).ready(function() {
         $('#acs_table').DataTable();
         $('#acy_table').DataTable();
-        $('#acp_table').DataTable({
-            initComplete: function() {
-                this.api().columns().every(function() {
-                    var column = this;
-                    var select = $('<select><option value=""></option></select>')
-                        .appendTo($(column.footer()).empty())
-                        .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
-                            column
-                                .search(val ? '^' + val + '$' : '', true, false)
-                                .draw();
-                        });
-                    column.data().unique().sort().each(function(d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>')
-                    });
-                });
-            }
-        });
         var confirmtext = document.getElementById('confirmtext');
         $('#setactive_acs').on('show.bs.modal', function(e) {
             var userid = $(e.relatedTarget).data('acsid');

@@ -79,10 +79,10 @@
         <table id="tableacademicplan" class="table display">
             <thead class="table-dark">
                 <tr>
-                    <td>Academic Session</td>
-                    <td>GPA Target</td>
-                    <td>GPA Achieved</td>
-                    <td>Increment</td>
+                    <th>Academic Session</th>
+                    <th>GPA Target</th>
+                    <th>GPA Achieved</th>
+                    <th>Increment</th>
                 </tr>
             </thead>
             <tbody>

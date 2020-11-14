@@ -5,10 +5,10 @@
 <table class="table">
     <thead class="table-dark">
         <tr>
-            <td>Academic Session</td>
-            <td>GPA Target</td>
-            <td>GPA Achieved</td>
-            <td>Increment</td>
+            <th>Academic Session</th>
+            <th>GPA Target</th>
+            <th>GPA Achieved</th>
+            <th>Increment</th>
         </tr>
     </thead>
     <tbody class="table-light">
@@ -57,14 +57,14 @@
         <table class="table">
             <thead class="table-dark">
                 <tr>
-                    <td>Academic Session</td>
+                    <th>Academic Session</th>
                     <?php if ($scoreplans) : ?>
                         <?php foreach ($scoreplans as $scoreplan) : ?>
-                            <td class="text-warning"><?= $scoreplan['label'] ?></td>
+                            <th class="text-warning"><?= $scoreplan['label'] ?></th>
                         <?php endforeach ?>
                     <?php endif ?>
-                    <td>Components</td>
-                    <td>Total</td>
+                    <th>Components</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody class="table-default">
@@ -90,13 +90,13 @@
         <table class="table">
             <thead class="table-dark">
                 <tr>
-                    <td>Activity Name</td>
-                    <td>Level</td>
+                    <th>Activity Name</th>
+                    <th>Level</th>
                     <?php foreach ($levelrubrics as $rubric => $val) : ?>
-                        <td class="text-warning"><?= ucfirst($rubric) ?></td>
+                        <th class="text-warning"><?= ucfirst($rubric) ?></th>
                     <?php endforeach ?>
-                    <td>Total Score</td>
-                    <td>Total Percent</td>
+                    <th>Total Score</th>
+                    <th>Total Percent</th>
                 </tr>
             </thead>
             <tbody>
@@ -126,10 +126,10 @@
         <table class="table"">
             <thead class=" table-dark">
             <tr>
-                <td>Digital CV</td>
-                <td>Leadership</td>
-                <td>Volunteer</td>
-                <td>Total</td>
+                <th>Digital CV</th>
+                <th>Leadership</th>
+                <th>Volunteer</th>
+                <th>Total</th>
             </tr>
             </thead>
             <tbody>

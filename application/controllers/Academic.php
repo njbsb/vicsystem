@@ -3,13 +3,23 @@ class Academic extends CI_Controller
 {
     public function index()
     {
+        $latest_year = $this->academic_model->get_latest_academicyear();
+        $years = explode("/", $latest_year['acadyear']);
+        $suggested_year = '';
+        foreach ($years as $i => $year) {
+            $years[$i] = $year + 1;
+        }
+        $suggested_year = $years[0] . '/' . $years[1];
+
         $data = array(
             'academicyear' => $this->academic_model->get_academicyear(),
             'academicsession' => $this->academic_model->get_academicsession(),
             'academicplan' => $this->academic_model->get_academicplan(),
             'semesters' => $this->academic_model->get_semester(),
-            'title' => 'Academic Control Page'
+            'title' => 'Academic Control Page',
+            'new_year' => $suggested_year
         );
+        // print_r($suggested_year);
         $this->load->view('templates/header');
         $this->load->view('academic/index', $data);
     }
@@ -182,7 +192,7 @@ class Academic extends CI_Controller
             'acadyear_id' => $this->input->post('acadyear_id'),
             'semester_id' => $this->input->post('semester_id'),
             'slug' => $acs_slug,
-            'status' => $this->input->post('status')
+            'status' => 'inactive'
         );
         $this->academic_model->create_acs($acsdata);
         redirect('academic');
@@ -192,7 +202,7 @@ class Academic extends CI_Controller
     {
         $acydata = array(
             'acadyear' => $this->input->post('acadyear'),
-            'status' => $this->input->post('status')
+            'status' => 'inactive'
         );
         $this->academic_model->create_acy($acydata);
         redirect('academic');

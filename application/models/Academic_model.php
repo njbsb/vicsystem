@@ -80,6 +80,16 @@ class Academic_model extends CI_Model
         return $query->num_rows();
     }
 
+    public function get_latest_academicyear()
+    {
+        $this->db->select('*')
+            ->from('academicyear')
+            ->order_by('id', 'DESC')
+            ->limit(1);
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+
     public function get_academicyear($academicyear_id = NULL)
     {
         if ($academicyear_id == FALSE) {

@@ -40,12 +40,12 @@
 <table id="acp_table" class="table display">
     <thead class="table-dark">
         <tr>
-            <td>Matric</td>
-            <td>Name</td>
+            <th>Matric</th>
+            <th>Name</th>
             <!-- <td>Academic Session</td> -->
-            <td>GPA Target</td>
-            <td>GPA Achieved</td>
-            <td>Status</td>
+            <th>GPA Target</th>
+            <th>GPA Achieved</th>
+            <th>Status</th>
         </tr>
     </thead>
     <tbody>
