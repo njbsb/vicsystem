@@ -2,11 +2,8 @@
     <div class="row">
         <div class="col-lg-4">
             <div class="card border-dark mb-3" style="max-width: 20rem;">
-                <?php if ($student['profile_image']) : ?>
-                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $student['profile_image']) ?>">
-                <?php else : ?>
-                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/default.jpg') ?>">
-                <?php endif ?>
+                <?php $profile_image = ($student['profile_image']) ? $student['profile_image'] : 'default.jpg' ?>
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $profile_image) ?>">
                 <div class="card-footer text-muted">
                     Joined <?= $student['sigcode'] ?>: <?= $student['year_joined'] ?>
                 </div>
@@ -16,20 +13,19 @@
             <h3><b><?= $student['name'] ?></b></h3>
             <h6><b>Club name:</b> <?= $student['signame'] ?></h6>
             <h6><b>Program:</b> <?= $student['program_name'] ?></h6>
-            <h6><b>Year:</b> 3(hardcode)</h6>
+            <h6><b>Year:</b> <?= $student['year'] ?></h6>
             <h6><b>Phone Num:</b> <?= $student['phonenum'] ?></h6>
             <h6><b>Email:</b> <a href="mailto:<?= $student['email'] ?>"><?= $student['email'] ?></a></h6>
             <h6><b>Mentor:</b> <?= $student['mentor_name'] ?></h6>
 
         </div>
-        <div class="col-lg-4">
-            <?= form_open('/student/edit/' . $student['id']); ?>
-            <input type="submit" value="Edit Student" class="btn btn-outline-secondary">
-            <?= form_close() ?>
-        </div>
-        <div class="col-lg-8 text-left">
-            <!-- <button type="submit" class="btn btn-primary">Update profile 2</button> -->
-        </div>
+        <?php if (!$this->session->userdata('isStudent')) : ?>
+            <div class="col-lg-4">
+                <?= form_open('/student/edit/' . $student['id']); ?>
+                <input type="submit" value="Edit Student" class="btn btn-outline-primary">
+                <?= form_close() ?>
+            </div>
+        <?php endif ?>
 
     </div>
     <hr>

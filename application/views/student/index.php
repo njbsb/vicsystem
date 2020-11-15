@@ -1,7 +1,11 @@
-<h2><?= $title ?></h2>
+<h2 class="text-center"><?= $title ?></h2>
 <div class="container-fluid text-center">
-    <div class="row" id="card_student">
-    </div>
+    <?php if ($students) : ?>
+        <div class="row" id="card_student">
+        </div>
+    <?php else : ?>
+        No students data
+    <?php endif ?>
 </div>
 
 

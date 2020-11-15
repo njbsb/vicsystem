@@ -4,20 +4,49 @@ class Student extends CI_Controller
 
     public function index()
     {
-        $data['title'] = 'My Students';
-        $data['students'] = $this->student_model->get_student();
+        if (!$this->session->userdata('username')) {
+            redirect(site_url());
+        }
+        if ($this->session->userdata('isStudent')) {
+            redirect(site_url());
+        }
+        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
+        $sig = $this->sig_model->get_sig($sig_id);
+        if ($this->session->userdata('isMentor')) {
+            $students = $this->student_model->get_student('', $sig_id);
+            $title = $sig['code'] . ' Students';
+        }
+        if ($this->session->userdata('isAdmin')) {
+            $students = $this->student_model->get_student();
+            $title = 'All Students';
+        }
+        $data = array(
+            'title' => $title,
+            'students' => $students
+        );
+        // $data['title'] = 'My Students';
+        // $data['students'] = $this->student_model->get_student();
         $this->load->view('templates/header');
         $this->load->view('student/index', $data);
     }
 
     public function view($student_id)
     {
-        $data['student'] = $this->student_model->get_student($student_id);
-        if (!array_filter($data['student'])) {
+        $student = $this->student_model->get_student($student_id);
+        // $data['student'] = $this->student_model->get_student($student_id);
+        if (!array_filter($student)) {
             show_404();
         }
-        $data['activity_roles'] = $this->committee_model->get_activityroles($student_id);
-        $data['org_roles'] = $this->committee_model->get_orgroles($student_id, $data['student']['sig_id']);
+        if (date('Y') - $student['year_joined'] + 1 > 4) {
+            $student['year'] = 'Alumni';
+        } else {
+            $student['year'] = date('Y') - $student['year_joined'] + 1;
+        }
+        $data = array(
+            'student' => $student,
+            'activity_roles' => $this->committee_model->get_activityroles($student_id),
+            'org_roles' => $this->committee_model->get_orgroles($student_id, $student['sig_id'])
+        );
         $this->load->view('templates/header');
         $this->load->view('student/view', $data);
         $this->load->view('templates/footer');
@@ -25,17 +54,27 @@ class Student extends CI_Controller
 
     public function edit($student_id = NULL)
     {
-        $data['student'] = $this->student_model->get_student($student_id);
-        if (empty($data['student']) || !array_filter($data['student']) || $student_id == FALSE) {
+        if ($this->session->userdata('isStudent')) {
+            redirect('student');
+        }
+        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
+        $student = $this->student_model->get_student($student_id);
+        if (empty($student) || !array_filter($student) || $student_id == FALSE) {
             show_404();
         }
-        $data['title'] = 'Edit Student';
-        $data['programs'] = $this->program_model->get_programs();
-        $data['sigs'] = $this->sig_model->get_sig();
-        $data['mentors'] = $this->mentor_model->get_mentor();
+        if ($student['sig_id'] != $sig_id) {
+            redirect('student');
+        }
+        $data = array(
+            'title' => 'Edit Student: ' . $student['id'],
+            'student' => $student,
+            'programs' => $this->program_model->get_programs(),
+            'sigs' => $this->sig_model->get_sig(),
+            'mentors' => $this->mentor_model->get_sigmentors($student['sig_id'])
+        );
         $this->load->view('templates/header');
         $this->load->view('student/edit', $data);
-        $this->load->view('templates/footer');
+        // $this->load->view('templates/footer');
     }
 
     public function update($student_id)

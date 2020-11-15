@@ -5,42 +5,34 @@
     <div class="row">
         <div class="col-lg-4">
             <div class="card border-dark mb-3" style="max-width: 20rem;">
-                <?php if ($student['profile_image']) : ?>
-                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/') . $student['profile_image'] ?>">
-                <?php else : ?>
-                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/') . 'default.jpg' ?>">
-                <?php endif ?>
-
+                <?php $profile_image = ($student['profile_image']) ? $student['profile_image'] : 'default.jpg' ?>
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $profile_image) ?>">
                 <div class="card-footer text-muted">
-                    Joined <?= $student['sigcode'] ?>: XXXX
+                    Joined <?= $student['sigcode'] ?>: <?= $student['year_joined'] ?>
                 </div>
             </div>
         </div>
         <div class="col-lg-4 text-left">
 
             <?php if (validation_errors()) : ?>
-                <?= validation_errors(); ?>
+                <?= validation_errors() ?>
             <?php endif ?>
 
             <?= form_open('student/update/' . $student['id']); ?>
-            <input type="hidden" name="id" value="<?= $student['id'] ?>">
-
             <fieldset>
                 <!-- NAME -->
                 <div class="form-group">
                     <label>Student Name</label>
-                    <input name="name" type="text" class="form-control form-control-lg" aria-describedby="" placeholder="Enter student name" value="<?= $student['name'] ?>">
+                    <input name="name" type="text" class="form-control form-control-lg" aria-describedby="" placeholder="Enter student name" value="<?= $student['name'] ?>" readonly>
                 </div>
                 <!-- SIG -->
                 <div class="form-group">
                     <label>Select SIG</label>
-                    <select name="sig_id" class="form-control form-control-sm" disabled>
+                    <select name="sig_id" class="form-control form-control-sm">
                         <?php foreach ($sigs as $sig) : ?>
-                            <option value="<?= $sig['id'] ?>" <?php
-                                                                if ($sig['id'] == $student['sig_id']) {
-                                                                    echo 'selected';
-                                                                } ?>>
-                                <?= $sig['signame'] . ' (' . $sig['code'] . ')'; ?>
+                            <?php $selected = ($sig['id'] == $student['sig_id']) ? 'selected' : '' ?>
+                            <option value="<?= $sig['id'] ?>" <?= $selected ?>>
+                                <?= $sig['namecode'] ?>
                             </option>
                         <?php endforeach ?>
                     </select>
@@ -50,10 +42,8 @@
                     <label>Select Program</label>
                     <select name="program_code" class="form-control form-control-sm">
                         <?php foreach ($programs as $program) : ?>
-                            <option value="<?= $program['code'] ?>" <?php
-                                                                    if ($program['code'] == $student['program_code']) {
-                                                                        echo 'selected';
-                                                                    } ?>>
+                            <?php $selected = ($program['code'] == $student['program_code']) ? 'selected' : '' ?>
+                            <option value="<?= $program['code'] ?>" <?= $selected ?>>
                                 <?= $program['name'] ?>
                             </option>
                         <?php endforeach ?>
@@ -74,10 +64,8 @@
                     <label>Select Mentor</label>
                     <select name="mentor_matric" class="form-control form-control-sm">
                         <?php foreach ($mentors as $mentor) : ?>
-                            <option value="<?= $mentor['id'] ?>" <?php
-                                                                    if ($mentor['id'] == $student['mentor_matric']) {
-                                                                        echo 'selected';
-                                                                    } ?>>
+                            <?php $selected = ($mentor['id'] == $student['mentor_matric']) ? 'selected' : '' ?>
+                            <option value="<?= $mentor['id'] ?>" <?= $selected ?>>
                                 <?= $mentor['name'] ?>
                             </option>
                         <?php endforeach ?>

@@ -6,9 +6,9 @@ class Student_model extends CI_Model
         $this->load->database();
     }
 
-    public function get_student($student_id = FALSE)
+    public function get_student($student_id = FALSE, $sig_id = FALSE)
     {
-        if ($student_id === FALSE) {
+        if ($student_id === FALSE and $sig_id === FALSE) {
             $this->db->select('user.id, user.profile_image')
                 ->from('user as user')
                 ->where(array('userstatus_id' => '2', 'usertype_id' => '3'))
@@ -16,18 +16,34 @@ class Student_model extends CI_Model
             $query = $this->db->get();
             return $query->result_array();
         }
-        $this->db->select("user.id, user.name, user.email, user.dob, user.profile_image, user.sig_id,
+        if ($student_id) {
+            # returns specific user
+            $this->db->select("user.id, user.name, user.email, user.dob, user.profile_image, user.sig_id,
         std.phonenum, std.program_code, std.mentor_matric, std.year_joined,
         mtr.name as mentor_name, prg.name as program_name, 
-        sig.id as sigid, sig.code as sigcode, sig.signame, concat(sig.signame, ' (', sig.code, ')') as signamecode")
-            ->from('user as user')
-            ->where(array('user.id' => $student_id))
-            ->join('student as std', 'std.matric = user.id', 'left')
-            ->join('program as prg', 'prg.code = std.program_code', 'left')
-            ->join('sig as sig', 'sig.id = user.sig_id', 'left')
-            ->join('user as mtr', 'mtr.id = std.mentor_matric', 'left');
-        $query = $this->db->get();
-        return $query->row_array();
+        sig.code as sigcode, sig.signame, concat(sig.signame, ' (', sig.code, ')') as signamecode")
+                ->from('user as user')
+                ->where(array('user.id' => $student_id))
+                ->join('student as std', 'std.matric = user.id', 'left')
+                ->join('program as prg', 'prg.code = std.program_code', 'left')
+                ->join('sig as sig', 'sig.id = user.sig_id', 'left')
+                ->join('user as mtr', 'mtr.id = std.mentor_matric', 'left');
+            $query = $this->db->get();
+            return $query->row_array();
+        }
+        if ($sig_id) {
+            # returns active students under specific sig
+            $this->db->select('user.id, user.profile_image')
+                ->from('student as std')
+                ->join('user', 'user.id = std.matric')
+                ->where(array(
+                    'user.userstatus_id' => '2',
+                    'user.sig_id' => $sig_id
+                ))
+                ->order_by('user.id');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
     }
 
     public function get_mentor_matric($student_id)
