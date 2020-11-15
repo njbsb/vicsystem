@@ -22,27 +22,38 @@ class User_model extends CI_Model
         }
     }
 
-    public function get_user($user_id = FALSE)
+    public function get_user($user_id = FALSE, $sig_id = FALSE)
     {
-        if ($user_id === FALSE) {
-            // return array of users
+        if ($user_id === FALSE and $sig_id === FALSE) {
+            # return array of users
             $this->db->select('user.id, user.name, user.userstatus_id, ust.usertype, uss.userstatus')
                 ->from('user as user')
                 ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
                 ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left');
-
             $query = $this->db->get();
             return $query->result_array();
         }
-        // return specific user
-        $this->db->select('user.*, ust.usertype, uss.userstatus, user.dob, sig.code, sig.signame')
-            ->from('user')
-            ->where('user.id', $user_id)
-            ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
-            ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left')
-            ->join('sig as sig', 'user.sig_id = sig.id', 'left');
-        $query = $this->db->get();
-        return $query->row_array();
+        if ($user_id) {
+            # return specific user
+            $this->db->select('user.*, ust.usertype, uss.userstatus, user.dob, sig.code, sig.signame')
+                ->from('user')
+                ->where('user.id', $user_id)
+                ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
+                ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left')
+                ->join('sig as sig', 'user.sig_id = sig.id', 'left');
+            $query = $this->db->get();
+            return $query->row_array();
+        }
+        if ($sig_id) {
+            # returns user with specific sig
+            $this->db->select('user.id, user.name, user.userstatus_id, ust.usertype, uss.userstatus')
+                ->from('user as user')
+                ->where('sig_id', $sig_id)
+                ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
+                ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
     }
 
     public function register_user($userdata)

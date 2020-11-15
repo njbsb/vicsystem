@@ -3,12 +3,18 @@ class User extends CI_Controller
 {
     public function index()
     {
-        if (!$this->session->userdata('isMentor')) {
+        if ($this->session->userdata('isStudent')) {
             redirect('home');
+        }
+        if ($this->session->userdata('isMentor')) {
+            $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
+            $users = $this->user_model->get_user('', $sig_id);
+        } elseif ($this->session->userdata('isAdmin')) {
+            $users = $this->user_model->get_user();
         }
         $data = array(
             'title' => 'All Users',
-            'users' => $this->user_model->get_user()
+            'users' => $users
         );
         $this->load->view('templates/header');
         $this->load->view('user/index', $data);

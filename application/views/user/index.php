@@ -1,4 +1,4 @@
-<h4><?= $title ?></h4>
+<h2><?= $title ?></h2>
 
 <div>
     <table id="usertable" class="table table-hover">
@@ -26,7 +26,9 @@
                     <?php endif ?>
                     <td>
                         <a class="badge badge-info" href="<?= site_url('validate/') . $user['id'] ?>">Review</a>
-                        <a class="badge badge-danger" data-toggle="modal" data-userid="<?= $user['id'] ?>" onclick="$('#confirmDelete #formDelete').attr('action', '<?= site_url('user/delete/' . $user['id']) ?>')" href="#confirmDelete">Delete</a>
+                        <?php if ($user['id'] != $this->session->userdata('username')) : ?>
+                            <a class="badge badge-danger" data-toggle="modal" data-userid="<?= $user['id'] ?>" onclick="$('#confirmDelete #formDelete').attr('action', '<?= site_url('user/delete/' . $user['id']) ?>')" href="#confirmDelete">Delete</a>
+                        <?php endif ?>
                     </td>
                 </tr>
             <?php endforeach ?>
