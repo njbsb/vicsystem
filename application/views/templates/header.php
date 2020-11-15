@@ -70,23 +70,22 @@
             <?php if ($this->session->userdata('logged_in')) : ?>
                 <div class="collapse navbar-collapse" id="navbarColor03">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link" href="<?= site_url('profile') ?>">Profile <span class="sr-only">(current)</span></a>
-                        </li>
+                        </li> -->
                         <?php if ($this->session->userdata('isStudent')) : ?>
                             <li class="nav-item">
                                 <a class="nav-link" href="<?= site_url('mentor') ?>">Mentors</a>
                             </li>
                         <?php endif ?>
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= site_url('organization') ?>">SIG</a>
+                        </li>
                         <?php if (!$this->session->userdata('isStudent')) : ?>
                             <li class="nav-item">
                                 <a class="nav-link" href="<?= site_url('student') ?>">Students</a>
                             </li>
                         <?php endif ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= site_url('organization') ?>">SIG</a>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<?= site_url('activity') ?>">Activity</a>
                         </li>
@@ -109,14 +108,14 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Scoring</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="<?= site_url('score') ?>">Score</a>
                                     <a class="dropdown-item" href="<?= site_url('scoreplan') ?>">Scoring Plan</a>
+                                    <a class="dropdown-item" href="<?= site_url('score') ?>">Student's Score</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Register</a>
                                 <div class="dropdown-menu">
-                                    <div class="dropdown-divider"></div>
+                                    <!-- <div class="dropdown-divider"></div> -->
                                     <a class="dropdown-item" href="<?= site_url('collaborator') ?>">Collaborator</a>
                                     <a class="dropdown-item" href="<?= site_url('citra') ?>">Citra</a>
                                     <a class="dropdown-item" href="<?= site_url('category') ?>">Comment Category</a>
@@ -135,9 +134,10 @@
                     <a class="nav-link" href="<?= site_url('logout') ?>">LogOut<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Account</a>
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><?= $this->session->userdata('username') ?></a>
                     <div class="dropdown-menu">
                         <!-- <a class="dropdown-item" href="<?= site_url('academicplan') ?>">Academic Plan</a> -->
+                        <a class="dropdown-item" href="<?= site_url('profile') ?>">Profile <span class="sr-only">(current)</span></a>
                         <a class="dropdown-item" href="<?= site_url('profile/update') ?>">Update Profile</a>
                         <a class="dropdown-item" href="<?= site_url('logout') ?>">Log Out</a>
                         <div class="dropdown-divider"></div>
