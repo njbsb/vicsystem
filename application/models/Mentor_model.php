@@ -39,9 +39,15 @@ class Mentor_model extends CI_Model
 
     public function get_sigmentors($sig_id)
     {
-        $this->db->select('user.id, user.name')
-            ->from('user as user')
-            ->where(array('usertype_id' => '2', 'sig_id' => $sig_id, 'userstatus_id' => '2'));
+        $this->db->select('user.id, user.name, user.email, user.sig_id, user.profile_image, mtr.position, mtr.roomnum, mtr.orgrole_id, sig.code as sigcode, sig.signame, role.rolename')
+            ->from('mentor as mtr')
+            ->join('user', 'mtr.matric = user.id', 'left')
+            ->where(array(
+                'user.sig_id' => $sig_id,
+                'user.userstatus_id' => '2' #active
+            ))
+            ->join('sig as sig', 'sig.id = user.sig_id', 'left')
+            ->join('role as role', 'role.id = mtr.orgrole_id', 'left');
         $query = $this->db->get();
         return $query->result_array();
     }

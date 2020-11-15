@@ -7,7 +7,7 @@ class Mentor extends CI_Controller
         $my_sig = $this->user_model->get_my_sig($current_id);
         $data = array(
             'title' => $my_sig['signame'] . "'s Mentors",
-            'mentors' => $this->mentor_model->get_mentor()
+            'mentors' => $this->mentor_model->get_sigmentors($my_sig['id'])
         );
         if ($this->session->userdata('isStudent')) {
             $mentor_matric = $this->student_model->get_mentor_matric($this->session->userdata('username'));
