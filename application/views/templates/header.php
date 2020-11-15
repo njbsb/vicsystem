@@ -19,6 +19,7 @@
     <script src="<?= base_url('assets/js/dataTables.bootstrap.js') ?>"></script>
     <script src="<?= base_url('assets/js/jquery.dataTables.min.js') ?>"></script>
     <script src="<?= base_url('assets/js/list.js') ?>"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
 
     <style>
         body {
@@ -102,9 +103,6 @@
                             </div>
                         </li>
                         <?php if ($this->session->userdata('isMentor') or $this->session->userdata('isAdmin')) : ?>
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= site_url() ?>user">Users</a>
-                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Scoring</a>
                                 <div class="dropdown-menu">
@@ -112,8 +110,11 @@
                                     <a class="dropdown-item" href="<?= site_url('score') ?>">Student's Score</a>
                                 </div>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= site_url() ?>user">Users</a>
+                            </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Register</a>
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Others</a>
                                 <div class="dropdown-menu">
                                     <!-- <div class="dropdown-divider"></div> -->
                                     <a class="dropdown-item" href="<?= site_url('collaborator') ?>">Collaborator</a>
@@ -130,9 +131,9 @@
 
         <ul class="navbar-nav mr-auto">
             <?php if ($this->session->userdata('logged_in')) : ?>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="<?= site_url('logout') ?>">LogOut<span class="sr-only">(current)</span></a>
-                </li>
+                </li> -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><?= $this->session->userdata('username') ?></a>
                     <div class="dropdown-menu">
