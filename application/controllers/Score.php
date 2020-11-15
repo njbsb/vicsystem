@@ -176,6 +176,7 @@ class Score extends CI_Controller
         $student_id = $this->input->post('student_id'); #hidden
         $levelrubrics = $this->input->post('keys');
         $scoreleveldata = array(
+            'marker_matric' => $this->session->userdata('username'),
             'student_matric' => $student_id,
             'scoreplan_id' => $this->input->post('scoreplan_id') #hidden
         );

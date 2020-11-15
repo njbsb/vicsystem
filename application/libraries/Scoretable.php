@@ -11,7 +11,7 @@ class Scoretable
 
     public function get_student_totalscore_acs($acadsession_id, $student_id)
     {
-        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
+        $sig_id = $this->CI->sig_model->get_sig_id($this->CI->session->userdata('username'));
         $scoreplans = $this->CI->score_model->get_scoreplan($sig_id, $acadsession_id, FALSE);
         $scorecomps = array('scores' => $this->CI->score_model->get_scoreplan_scorecomp($student_id, $acadsession_id));
         # SCORE LEVELS
