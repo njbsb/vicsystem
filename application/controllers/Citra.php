@@ -3,10 +3,10 @@ class Citra extends CI_Controller
 {
     public function index()
     {
-
-        $data['title'] = 'Citra';
-        $data['citras'] = $this->citra_model->get_citra();
-
+        $data = array(
+            'title' => 'Citra Courses',
+            'citras' => $this->citra_model->get_citra()
+        );
         $this->load->view('templates/header');
         $this->load->view('citra/index', $data);
         $this->load->view('templates/footer');
@@ -14,14 +14,15 @@ class Citra extends CI_Controller
 
     public function view($code = NULL)
     {
-        $data['citra'] = $this->citra_model->get_citra($code);
-
-        if (empty($data['citra'])) {
+        $citra = $this->citra_model->get_citra($code);
+        if (empty($citra)) {
             show_404();
         }
-        $data['title'] = $data['citra']['name_en'];
+        $data = array(
+            'citra' => $citra,
+        );
         $this->load->view('templates/header');
         $this->load->view('citra/view', $data);
-        $this->load->view('templates/footer');
+        // $this->load->view('templates/footer');
     }
 }

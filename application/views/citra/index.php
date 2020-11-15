@@ -1,4 +1,4 @@
-<h2 class="text-center"><?= $title; ?></h2>
+<h2 class="text-center margin"><?= $title ?></h2>
 <div class="row text-center ">
     <?php foreach ($citras as $citra) : ?>
         <div class="col-sm-4">
@@ -23,10 +23,5 @@
                 </div>
             </div>
         </div>
-
     <?php endforeach ?>
-</div>
-<div class="container-fluid text-center">
-
-
 </div>
