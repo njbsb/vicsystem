@@ -104,7 +104,7 @@ class Academic extends CI_Controller
         if ($selected_academicsession) {
             $total_all = 0;
             $scoreleveltotal = $this->score_model->get_maxscore_position() + $this->score_model->get_maxscore_meeting() + $this->score_model->get_maxscore_attendance() + $this->score_model->get_maxscore_involvement();
-            $scoreplans = $this->score_model->get_scoreplan($acadsession_id = $selected_academicsession['id'], $category_id = FALSE);
+            $scoreplans = $this->score_model->get_scoreplan($student['sig_id'], $selected_academicsession['id'], FALSE);
             foreach ($scoreplans as $i => $scoreplan) {
                 $scores = $this->score_model->get_scoreplan_scorelevel($student_id = $student_id, $scoreplan['id']);
                 $total = $scores ? array_sum($scores) : 0;
@@ -136,24 +136,24 @@ class Academic extends CI_Controller
             # put error message
             redirect('academicplan/student');
         }
-
-        // print_r($selected_academicsession);
     }
 
     public function enroll()
     {
+        if (!$this->session->userdata('username')) {
+            redirect(site_url());
+        }
         $this->form_validation->set_rules('acadsession_id', 'academic session', 'required');
         // $this->form_validation->set_rules('students', 'student', 'required');
 
         if ($this->form_validation->run() == FALSE) {
-            $sig_id = 1;
+            $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
             $activesession = $this->academic_model->get_activeacademicsession();
             $enrolledstudents = $this->student_model->get_enrolling_students($activesession['id'], $sig_id);
             $data = array(
                 'title' => 'STUDENTS ENROLLMENT',
                 'availablestudents' => $this->student_model->get_available_sigstudents($sig_id, $enrolledstudents),
                 'enrolledstudents' => $enrolledstudents,
-                'academicsessions' => $this->academic_model->get_academicsession(),
                 'activesession' => $activesession
             );
             $this->load->view('templates/header');
