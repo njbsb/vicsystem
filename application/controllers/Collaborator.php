@@ -3,11 +3,13 @@ class Collaborator extends CI_Controller
 {
     public function index()
     {
-        $data['title'] = 'Collaborator';
-        $data['collaborators'] = $this->collaborator_model->get_collaborators();
+        $data = array(
+            'title' => 'Collaborators',
+            'collaborators' => $this->collaborator_model->get_collaborators()
+        );
         $this->load->view('templates/header');
         $this->load->view('collaborator/index', $data);
-        $this->load->view('templates/footer');
+        // $this->load->view('templates/footer');
     }
 
     public function create()
@@ -20,14 +22,16 @@ class Collaborator extends CI_Controller
             $data['title'] = 'Create new collaborator';
             $this->load->view('templates/header');
             $this->load->view('collaborator/create', $data);
-            $this->load->view('templates/footer');
+            // $this->load->view('templates/footer');
         } else {
-            $config['upload_path'] = './assets/images/collaborator';
-            $config['allowed_types'] = 'gif|jpg|png';
-            $config['max_size'] = 1000;
-            $config['max_width'] = 2048;
-            $config['max_height'] = 1024;
-            $config['file_name'] = url_title($this->input->post('name')) . '-' . substr(md5(rand()), 0, 10);
+            $config = array(
+                'upload_path' => './assets/images/collaborator',
+                'allowed_types' => 'gif|jpg|png',
+                'max_size' => 1000,
+                'max_width' => 2048,
+                'max_height' => 1024,
+                'file_name' => url_title($this->input->post('name')) . '-' . substr(md5(rand()), 0, 10)
+            );
             $this->load->library('upload', $config);
 
             if (@$_FILES['logo']['name'] != NULL) {
