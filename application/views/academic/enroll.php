@@ -11,12 +11,9 @@
 <div class="form-group">
     <legend>Active Session</legend>
     <select name="acadsession_id" class="form-control">
-        <?php foreach ($academicsessions as $acs) : ?>
-            <?php $selected = ($acs['status'] == 'active') ? 'selected'  : '' ?>
-            <option disabled value="<?= $acs['id'] ?>" <?= $selected ?>><?= $acs['academicsession'] ?></option>
-        <?php endforeach ?>
+        <option value="<?= $activesession['id'] ?>"><?= $activesession['academicsession'] ?></option>
     </select>
-    <small>To enroll in another academic session, you must set the academic session to active first!</small>
+    <small>You can only enroll students in an active academic session!</small>
 </div>
 <hr>
 
@@ -26,11 +23,11 @@
 <table id="studenttable" class="table" style="text-align:center;">
     <thead class="table-dark">
         <tr>
-            <td>Pick</td>
-            <td>Intake</td>
-            <td>Matric</td>
-            <td>Name</td>
-            <td>Status</td>
+            <th>Pick</th>
+            <th>Intake</th>
+            <th>Matric</th>
+            <th>Name</th>
+            <th>Status</th>
         </tr>
     </thead>
     <tbody>
@@ -63,11 +60,11 @@
 <table id="enrolledtable" class="table">
     <thead class="table-dark">
         <tr>
-            <td>Matric</td>
-            <td>Name</td>
-            <td>GPA Target</td>
-            <td>GPA Achieved</td>
-            <td></td>
+            <th>Matric</th>
+            <th>Name</th>
+            <th>GPA Target</th>
+            <th>GPA Achieved</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>

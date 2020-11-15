@@ -1,4 +1,5 @@
-<h4 class="text-center"><?= $title ?></h4>
+<h2 class="text-center"><?= $title ?></h2>
+<h4 class="text-center"><?= $sig['signame'] ?></h4>
 <h4 class="text-center"><?= $activeacadyear['acadyear'] ?></h4>
 
 <?php if ($president) : ?>
@@ -184,8 +185,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <?php $hidden = array(
-                'acadyear_id' => $activeacadyear['id'],
-                'sig_id' => $sig_id
+                'acadyear_id' => $activeacadyear['id']
             ); ?>
             <?= form_open('organization/register_committee', '', $hidden) ?>
             <div class="modal-header">

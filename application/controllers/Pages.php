@@ -8,7 +8,6 @@ class Pages extends CI_Controller
         }
         if ($this->session->userdata('logged_in')) {
             $user = $this->user_model->get_user($this->session->userdata('username'));
-            // $data['title'] = 'Welcome, ' . $user['name'];
             $data = array(
                 'user_name' => $user['name']
             );

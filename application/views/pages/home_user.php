@@ -2,7 +2,7 @@
 <!-- <p>Welcome to SIG Integrated System</p> -->
 
 <div class="jumbotron">
-    <h1 class="display-3">Welcome to VIC/SIG Integrated System, <?= $user_name ?>!</h1>
+    <h1 class="display-3">Welcome to VIC System, <?= $user_name ?>!</h1>
     <p class="lead">This is a website to manage VIC System.</p>
     <hr class="my-4">
     <p>Insert Leaderboard/Dashboard here.</p>
