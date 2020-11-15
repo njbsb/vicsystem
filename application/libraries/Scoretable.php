@@ -11,7 +11,8 @@ class Scoretable
 
     public function get_student_totalscore_acs($acadsession_id, $student_id)
     {
-        $scoreplans = $this->CI->score_model->get_scoreplan($acadsession_id, FALSE);
+        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
+        $scoreplans = $this->CI->score_model->get_scoreplan($sig_id, $acadsession_id, FALSE);
         $scorecomps = array('scores' => $this->CI->score_model->get_scoreplan_scorecomp($student_id, $acadsession_id));
         # SCORE LEVELS
         $scoreleveltotal = $this->CI->score_model->get_scoreleveltotal();
@@ -51,24 +52,6 @@ class Scoretable
             $acadplans[$i] = $acparray;
         }
         return $acadplans;
-    }
-
-    public function get_arraytable_comp($datacomp)
-    {
-        for ($i = 0; $i < count($datacomp); $i++) {
-            $datacomp[$i]['total'] = $datacomp[$i]['digitalcv'] + $datacomp[$i]['leadership'] + $datacomp[$i]['volunteer'];
-        }
-        return $datacomp;
-    }
-
-    # used in score/index
-
-    public function calculate_levelscore($eachlevel)
-    {
-        // $levelpercentage = $this->CI->score_model->get_levelscore($eachlevel['levelscore_id'])['percentweightage'];
-        // $totalscore = $eachlevel['position'] + $eachlevel['meeting'] + $eachlevel['attendance'] + $eachlevel['involvement'];
-        // return ($totalscore / 20) * $levelpercentage;
-        return 0;
     }
 
     public function get_level_rubrics()
