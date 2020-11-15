@@ -226,39 +226,46 @@ class Score_model extends CI_Model
             ->update('scorecomp', $score_comp);
     }
 
-    public function get_scoreplan($acadsession_id = NULL, $category_id = NULL)
+    public function get_scoreplan($sig_id, $acadsession_id = NULL, $category_id = NULL)
     {
         if ($acadsession_id == FALSE && $category_id == FALSE) {
+            # returns all scoreplans of specific sig
             $this->db->select("scp.*, act.activity_name, acs.slug, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
                 ->from('scoringplan as scp')
+                ->where('scp.sig_id', $sig_id)
                 ->join('academicsession as acs', 'scp.acadsession_id = acs.id', 'left')
                 ->join('academicyear as acy', 'acy.id = acs.acadyear_id', 'left')
                 ->join('activity as act', 'scp.activity_id = act.id', 'left');
         } else {
             if ($category_id == FALSE) {
-                $this->db->select('scp.*, act.activity_name')
-                    ->from('scoringplan as scp')
-                    ->where(array(
-                        'scp.acadsession_id' => $acadsession_id
-                    ))
-                    ->join('activity as act', 'scp.activity_id = act.id');
-            } elseif ($acadsession_id == FALSE) {
-                $this->db->select('scp.*, act.activity_name')
-                    ->from('scoringplan as scp')
-                    ->where(array(
-                        'scp.activitycategory_id' => $category_id
-                    ))
-                    ->join('activity as act', 'scp.activity_id = act.id');
-            } else {
+                # returns scoreplan under specific category
                 $this->db->select('scp.*, act.activity_name')
                     ->from('scoringplan as scp')
                     ->where(array(
                         'scp.acadsession_id' => $acadsession_id,
-                        'scp.activitycategory_id' => $category_id
+                        'scp.sig_id' => $sig_id
+                    ))
+                    ->join('activity as act', 'scp.activity_id = act.id');
+            } elseif ($acadsession_id == FALSE) {
+                # returns scoreplan under specific acs
+                $this->db->select('scp.*, act.activity_name')
+                    ->from('scoringplan as scp')
+                    ->where(array(
+                        'scp.activitycategory_id' => $category_id,
+                        'scp.sig_id' => $sig_id
+                    ))
+                    ->join('activity as act', 'scp.activity_id = act.id');
+            } else {
+                # returns scoreplan of specific sig under specific acadsession and category
+                $this->db->select('scp.*, act.activity_name')
+                    ->from('scoringplan as scp')
+                    ->where(array(
+                        'scp.acadsession_id' => $acadsession_id,
+                        'scp.activitycategory_id' => $category_id,
+                        'scp.sig_id' => $sig_id
                     ))
                     ->join('activity as act', 'scp.activity_id = act.id');
             }
-            # returns group of scoreplans under the same acadsession and category
         }
         $query = $this->db->get();
         return $query->result_array();
@@ -275,13 +282,14 @@ class Score_model extends CI_Model
         return $this->db->update('scoringplan', $scoreplandata);
     }
 
-    public function get_categorytotalpercent($acadsession_id, $category_id)
+    public function get_categorytotalpercent($acadsession_id, $category_id, $sig_id)
     {
         $this->db->select_sum('scp.percentweightage')
             ->from('scoringplan as scp')
             ->where(array(
                 'scp.acadsession_id' => $acadsession_id,
-                'scp.activitycategory_id' => $category_id
+                'scp.activitycategory_id' => $category_id,
+                'scp.sig_id' => $sig_id
             ));
         $totalpercent = $this->db->get()->row()->percentweightage;
         if (isset($totalpercent)) {

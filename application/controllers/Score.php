@@ -51,10 +51,10 @@ class Score extends CI_Controller
         if (!$this->session->userdata('isMentor')) {
             redirect(site_url());
         }
-        // $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
+        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         $student = $this->student_model->get_student($student_id);
         $thisacadsession = $this->academic_model->get_academicsession(FALSE, $acadsession_slug);
-        $scoreplans = $this->score_model->get_scoreplan($thisacadsession['id'], FALSE);
+        $scoreplans = $this->score_model->get_scoreplan($sig_id, $thisacadsession['id'], FALSE);
         $scorecomps = array('scores' => $this->score_model->get_scoreplan_scorecomp($student_id, $thisacadsession['id']));
         # SCORE LEVELS
         $scoreleveltotal = $this->score_model->get_scoreleveltotal();
@@ -87,7 +87,6 @@ class Score extends CI_Controller
             'scorecomps' => $scorecomps,
             'totalwhole' => $totalwhole
         );
-
         # score by level will be contained in scoreplans
         # since each score plans will carry 1 score by level
         $this->load->view('templates/header');
@@ -96,9 +95,10 @@ class Score extends CI_Controller
 
     public function scoreplan($slug = NULL)
     {
-        if (!$this->session->userdata('isMentor')) {
+        if ($this->session->userdata('isStudent')) {
             redirect(site_url());
         }
+        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         if ($slug == FALSE) {
             # scoreplan index
             $activitycategories = $this->activity_model->get_activitycategory();
@@ -106,8 +106,8 @@ class Score extends CI_Controller
             foreach ($academicsessions as $index => $acs) {
                 $totalcategory = 0;
                 foreach ($activitycategories as $id => $cat) {
-                    $activitycategories[$id]['categorycount'] = $this->activity_model->get_categoryactivitycount($acs['id'], $cat['id']);
-                    $activitycategories[$id]['categorytotalpercent'] = $this->score_model->get_categorytotalpercent($acs['id'], $cat['id']);
+                    $activitycategories[$id]['categorycount'] = $this->activity_model->get_categoryactivitycount($acs['id'], $cat['id'], $sig_id);
+                    $activitycategories[$id]['categorytotalpercent'] = $this->score_model->get_categorytotalpercent($acs['id'], $cat['id'], $sig_id);
                     $totalcategory += $activitycategories[$id]['categorytotalpercent'];
                 }
                 $academicsessions[$index]['activitycategories'] = $activitycategories;
@@ -126,7 +126,7 @@ class Score extends CI_Controller
             $academicsession = $this->academic_model->get_academicsession(FALSE, $slug);
             $activitycategories = $this->activity_model->get_activitycategory();
             foreach ($activitycategories as $i => $actcat) {
-                $activitycategories[$i]['scoreplan'] = $this->score_model->get_scoreplan($academicsession['id'], $actcat['id']);
+                $activitycategories[$i]['scoreplan'] = $this->score_model->get_scoreplan($sig_id, $academicsession['id'], $actcat['id']);
                 $activitycategories[$i]['unregistered'] = $this->activity_model->get_category_unregisteredactivity($academicsession['id'], $actcat['id']);
             }
             $data = array(
