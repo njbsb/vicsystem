@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/dataTables.bootstrap.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/sticky-footer.css') ?>" rel="stylesheet">
     <!-- <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.min.css"> -->
+    <script src="https://kit.fontawesome.com/dff01397e8.js" crossorigin="anonymous"></script>
 
     <script src="http://cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
     <script src="<?= base_url('assets/js/jquery.min.js') ?>"></script>
