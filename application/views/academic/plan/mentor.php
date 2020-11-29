@@ -40,33 +40,24 @@
 <table id="acp_table" class="table display">
     <thead class="table-dark">
         <tr>
-            <td>Matric</td>
-            <td>Name</td>
-            <!-- <td>Academic Session</td> -->
-            <td>GPA Target</td>
-            <td>GPA Achieved</td>
-            <td>Status</td>
+            <th>Matric</th>
+            <th>Name</th>
+            <th>GPA Target</th>
+            <th>GPA Achieved</th>
+            <th>Status</th>
         </tr>
     </thead>
     <tbody>
         <?php if ($academicplans) : ?>
             <?php foreach ($academicplans as $acp) : ?>
+                <?php $text = ($acp['gpa_achieved'] > $acp['gpa_target']) ? 'Passed' : 'Not pass' ?>
+                <?php $textclass = ($acp['gpa_achieved'] > $acp['gpa_target']) ? 'text-success' : 'text-warning' ?>
                 <tr>
                     <td><?= $acp['student_matric'] ?></td>
                     <td><?= $acp['name'] ?></td>
-                    <!-- <td><?= $acp['acadyear'] . ' Semester ' . $acp['semester_id'] ?></td> -->
                     <td><?= $acp['gpa_target'] ?></td>
                     <td><?= $acp['gpa_achieved'] ?></td>
-
-                    <?php if ($acp['gpa_achieved'] > $acp['gpa_target']) : ?>
-                        <td class="text-success">
-                            Passed
-                        </td>
-                    <?php else : ?>
-                        <td class="text-warning">
-                            Not Pass
-                        </td>
-                    <?php endif ?>
+                    <td class="<?= $textclass ?>"><?= $text ?></td>
                 </tr>
             <?php endforeach ?>
         <?php else : ?>

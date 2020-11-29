@@ -9,7 +9,7 @@
         <thead class="table-dark">
             <tr>
                 <th>Session</th>
-                <th>Year</th>
+                <!-- <th>Year</th> -->
                 <?php foreach ($activitycategory as $actcat) : ?>
                     <th data-toggle="tooltip" data-placement="top" title="" data-original-title="<?= $actcat['category'] ?> Count"><?= $actcat['category'] ?></th>
                     <th data-toggle="tooltip" data-placement="top" title="Cumulative Percent"><?= $actcat['category'] ?> %</th>
@@ -22,12 +22,13 @@
             <?php foreach ($academicsessions as $acs) : ?>
                 <tr>
                     <td><?= $acs['academicsession'] ?></td>
-                    <td><?= $acs['academicyear'] ?></td>
+                    <!-- <td><?= $acs['academicyear'] ?></td> -->
                     <?php foreach ($acs['activitycategories'] as $cat) : ?>
                         <td><?= $cat['categorycount'] ?></td>
                         <td><?= $cat['categorytotalpercent'] ?>%</td>
                     <?php endforeach ?>
-                    <td><?= $acs['total'] ?>%</td>
+                    <?php $textclass = ($acs['total'] == 55) ? 'text-success' : 'text-danger' ?>
+                    <td class="<?= $textclass ?>"><?= $acs['total'] ?>%</td>
                     <td><a href="<?= site_url('scoreplan/' . $acs['slug']) ?>" class="badge badge-pill badge-dark">view</a></td>
                 </tr>
             <?php endforeach ?>

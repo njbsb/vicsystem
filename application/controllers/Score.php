@@ -80,12 +80,12 @@ class Score extends CI_Controller
             $scores = $this->score_model->get_scoreplan_scorelevel($student_id, $scoreplan['id']);
             $scoreplans[$i]['totalpercent'] =  $scores ? (array_sum($scores) / $scoreleveltotal) * $scoreplan['percentweightage'] : 0;
             $totalwhole += $scoreplans[$i]['totalpercent'];
-            $scoreplans[$i]['scores'] = $scores;
+            $scoreplans[$i]['scores'] = isset($scores) ? $scores : array();
         }
         # SCORE COMPONENTS
         $scorecomps['totalpercent'] = (!empty($scorecomps['scores'])) ? array_sum($scorecomps['scores']) : 0;
         $totalwhole += $scorecomps['totalpercent'];
-
+        // print_r($scoreplans);
         $data = array(
             'title' => 'Score: ' . $student['name'] . ' on ' . $thisacadsession['academicsession'],
             'student_id' => $student['id'],
@@ -102,7 +102,8 @@ class Score extends CI_Controller
             'levelrubrics' => $this->scoretable->get_level_rubrics(),
             'scoreplans' => $scoreplans,
             'scorecomps' => $scorecomps,
-            'totalwhole' => $totalwhole
+            'totalwhole' => $totalwhole,
+            'scoreleveltotal' => $scoreleveltotal
         );
         # score by level will be contained in scoreplans
         # since each score plans will carry 1 score by level

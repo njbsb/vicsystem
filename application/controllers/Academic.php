@@ -1,6 +1,7 @@
 <?php
 class Academic extends CI_Controller
 {
+    # pages
     public function index()
     {
         if ($this->session->userdata('isStudent') or !$this->session->userdata('username')) {
@@ -26,7 +27,6 @@ class Academic extends CI_Controller
         }
     }
 
-    # pages
     public function academicplanstudent()
     {
         # for student

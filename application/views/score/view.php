@@ -15,9 +15,10 @@
         <tr>
             <td><?= $academicsession['academicsession'] ?></td>
             <?php foreach ($scoreplans as $scoreplan) : ?>
-                <td><?= $scoreplan['totalpercent'] ?> %</td>
+                <?php $badge = (array_sum($scoreplan['scores']) > 18) ? '<i class="fas fa-award"></i>' : '' ?>
+                <td class=""><?= $scoreplan['totalpercent'] ?> % <?= $badge ?></td>
             <?php endforeach ?>
-            <td><?= $scorecomps['totalpercent'] ?> %</td>
+            <td><?= $scorecomps['totalpercent'] ?> % </td>
             <td><?= $totalwhole ?> %</td>
         </tr>
     </tbody>
@@ -38,6 +39,15 @@
         <div class="tab-pane fade show" id="<?= $scoreplan['label'] ?>">
             <br>
             <div class="form-group">
+                <h6>Total:</h6>
+                <?php $textclass = (array_sum($scoreplan['scores']) > 18) ? 'text-success' : '' ?>
+                <?php $scpbadge = (array_sum($scoreplan['scores']) > 18) ? '<i class="fas fa-award" style="color: #18bc9c;"></i>' : '' ?>
+                <h3 class="<?= $textclass ?>"><?= array_sum($scoreplan['scores']) ?>/<?= $scoreleveltotal ?> <?= $scpbadge ?></h3>
+                <?php if (array_sum($scoreplan['scores']) > 18) : ?>
+                    <small><?= $student['name'] ?> earned a badge!</small>
+                <?php endif ?>
+            </div>
+            <div class="form-group">
                 <label for="activity">Activity/Workshop</label>
                 <input name="activity" value="<?= $scoreplan['activity_name'] ?>" readonly type="text" class="form-control">
             </div>
@@ -48,10 +58,10 @@
                             <label><?= ucfirst($key) ?></label>
                             <div class="form-group">
                                 <select name="<?= $key ?>" class="custom-select" readonly>
-                                    <option value="" disabled hidden selected>Select <?= $key ?> score</option>
                                     <?php foreach ($guide[$key] as $scoreguide) : ?>
-                                        <?php $selected = ($scoreguide['score'] == $score) ? 'selected' : '' ?>
-                                        <option disabled value="<?= $scoreguide['score'] ?>" <?= $selected ?>><?= $scoreguide['concat'] ?></option>
+                                        <?php if ($scoreguide['score'] == $score) :  ?>
+                                            <option value="<?= $scoreguide['score'] ?>"><?= $scoreguide['concat'] ?></option>
+                                        <?php endif ?>
                                     <?php endforeach ?>
                                 </select>
                             </div>
@@ -160,6 +170,13 @@
 
     <div class="tab-pane fade" id="comp">
         <br>
+        <div class="form-group">
+            <h6>Total:</h6>
+            <h3><?= array_sum($scorecomps['scores']) ?>/15</h3>
+            <?php if (array_sum($scorecomps['scores']) == 15) : ?>
+                <small>Full score!</small>
+            <?php endif ?>
+        </div>
         <div class="row">
             <?php if ($scorecomps['scores']) : ?>
                 <?php foreach ($scorecomps['scores'] as $key => $value) : ?>
@@ -169,10 +186,11 @@
                             <?php if ($key == 'volunteer') : ?>
                                 <input name="<?= $key ?>" value="<?= $value ?>" type="number" max="15" class="form-control" readonly>
                             <?php else : ?>
-                                <select name="<?= $key ?>" class="custom-select">
+                                <select name="<?= $key ?>" class="custom-select" readonly>
                                     <?php foreach ($guide[$key] as $scoreguide) : ?>
-                                        <?php $selected = ($scoreguide['score'] == $value) ? 'selected' : ''; ?>
-                                        <option disabled value="<?= $scoreguide['score'] ?>" <?= $selected ?>><?= $scoreguide['concat'] ?></option>
+                                        <?php if ($scoreguide['score'] == $value) : ?>
+                                            <option value="<?= $scoreguide['score'] ?>"><?= $scoreguide['concat'] ?></option>
+                                        <?php endif ?>
                                     <?php endforeach ?>
                                 </select>
                             <?php endif ?>

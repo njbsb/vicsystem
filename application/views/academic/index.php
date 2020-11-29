@@ -12,26 +12,23 @@
 <table id="acs_table" class="table text-center">
     <thead class="table-dark">
         <tr>
-            <td>ID</td>
-            <td>Academic Year</td>
-            <td>Semester</td>
-            <td>Status</td>
-            <td></td>
+            <th>ID</th>
+            <th>Academic Year</th>
+            <th>Semester</th>
+            <th>Status</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         <?php foreach ($academicsession as $acs) : ?>
+            <?php $textclass = ($acs['status'] == 'active') ? 'text-success' : 'text-muted' ?>
+            <?php $disabled = ($acs['status'] == 'active') ? 'disabled' : '' ?>
             <tr>
                 <td><?= $acs['id'] ?></td>
                 <td><?= $acs['academicyear'] ?></td>
                 <td><?= $acs['semester_id'] ?></td>
-                <?php if ($acs['status'] == 'active') : ?>
-                    <td class="text-success"><?= $acs['status'] ?></td>
-                <?php else : ?>
-                    <td class="text-muted"><?= $acs['status'] ?></td>
-                <?php endif ?>
-                <!-- <td><?= $acs['status'] ?></td> -->
-                <td><a data-toggle="modal" data-target="#setactive_acs" data-string="<?= $acs['academicyear'] . ' Sem ' . $acs['semester_id'] ?>" data-acsid="<?= $acs['id'] ?>" class="btn btn-outline-primary btn-sm" href="#setactive_acs">Toggle Active</a></td>
+                <td class="<?= $textclass ?>"><?= $acs['status'] ?></td>
+                <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acs" data-string="<?= $acs['academicsession'] ?>" data-acsid="<?= $acs['id'] ?>" class="btn btn-outline-primary btn-sm">Toggle Active</button></td>
             </tr>
         <?php endforeach ?>
     </tbody>
@@ -49,24 +46,21 @@
 <table id="acy_table" class="table text-center">
     <thead class="table-dark">
         <tr>
-            <td>ID</td>
-            <td>Academic Year</td>
-            <td>Status</td>
-            <td></td>
+            <th>ID</th>
+            <th>Academic Year</th>
+            <th>Status</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         <?php foreach ($academicyear as $acy) : ?>
+            <?php $textclass = ($acy['status'] == 'active') ? 'text-success' : 'text-muted' ?>
+            <?php $disabled = ($acy['status'] == 'active') ? 'disabled' : '' ?>
             <tr>
                 <td><?= $acy['id'] ?></td>
                 <td><?= $acy['acadyear'] ?></td>
-                <?php if ($acy['status'] == 'active') : ?>
-                    <td class="text-success"><?= $acy['status'] ?></td>
-                <?php else : ?>
-                    <td class="text-muted"><?= $acy['status'] ?></td>
-                <?php endif ?>
-
-                <td><a data-toggle="modal" data-target="#setactive_acy" data-string="<?= $acy['acadyear'] ?>" data-acyid="<?= $acy['id'] ?>" class="btn btn-outline-primary btn-sm" href="#setactive_acy">Toggle Active</a></td>
+                <td class="<?= $textclass ?>"><?= $acy['status'] ?></td>
+                <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acy" data-string="<?= $acy['acadyear'] ?>" data-acyid="<?= $acy['id'] ?>" class="btn btn-outline-primary btn-sm">Toggle Active</button></td>
             </tr>
         <?php endforeach ?>
     </tbody>
