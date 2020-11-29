@@ -98,9 +98,12 @@ class Academic extends CI_Controller
     public function records()
     {
         $student_id = $this->input->post('student_id');
-        $student = $this->student_model->get_student($student_id);
         $acadyear_id = $this->input->post('acadyear_id');
         $semester_id = $this->input->post('semester_id');
+        if ((!$student_id and !$acadyear_id and !$semester_id) or !$this->session->userdata('isStudent')) {
+            redirect('academicplan/student');
+        }
+        $student = $this->student_model->get_student($student_id);
         $selected_academicsession = $this->academic_model->get_academicsession_byyearsem($acadyear_id, $semester_id);
         if ($selected_academicsession) {
             $total_all = 0;

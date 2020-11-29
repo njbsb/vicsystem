@@ -45,7 +45,6 @@
             'acadsession_id' => $activeacadsession['id']
         ); ?>
         <?= form_open('academic/set_gpatarget', '', $hidden) ?>
-        <!-- <h4>Register GPA target</h4> -->
         <div class="form-group">
             <label for="acadsession_id">Academic Session</label>
             <input name="activeacademicsession" value="<?= $activeacadsession['academicsession'] ?>" type="text" class="form-control" readonly>
@@ -78,15 +77,13 @@
     <tbody>
         <?php if ($academicplans) : ?>
             <?php foreach ($academicplans as $acp) : ?>
+                <?php $sign = ($acp['difference'] > 0) ? '+' : '' ?>
+                <?php $textclass = ($acp['difference'] > 0) ? 'text-success' : 'text-danger' ?>
                 <tr>
                     <td><?= $acp['academicsession'] ?></td>
                     <td><?= $acp['gpa_target'] ?></td>
                     <td><?= $acp['gpa_achieved'] ?></td>
-                    <?php if ($acp['difference'] > 0) : ?>
-                        <td class="text-success">+<?= $acp['difference'] ?></td>
-                    <?php else : ?>
-                        <td class="text-danger"><?= $acp['difference'] ?></td>
-                    <?php endif ?>
+                    <td class="<?= $textclass ?>"><?= $sign ?><?= $acp['difference'] ?></td>
                 </tr>
             <?php endforeach ?>
         <?php else : ?>
