@@ -9,28 +9,6 @@ class Scoretable
         $this->CI = &get_instance();
     }
 
-    public function get_student_totalscore_acs($acadsession_id, $student_id)
-    {
-        $sig_id = $this->CI->sig_model->get_sig_id($this->CI->session->userdata('username'));
-        $scoreplans = $this->CI->score_model->get_scoreplan($sig_id, $acadsession_id, FALSE);
-        $scorecomps = array('scores' => $this->CI->score_model->get_scoreplan_scorecomp($student_id, $acadsession_id));
-        # SCORE LEVELS
-        $scoreleveltotal = $this->CI->score_model->get_scoreleveltotal();
-        $totalwhole = 0;
-        foreach ($scoreplans as  $i => $scoreplan) {
-            $scores = $this->CI->score_model->get_scoreplan_scorelevel($student_id, $scoreplan['id']);
-            $scoreplans[$i]['totalpercent'] =  $scores ? (array_sum($scores) / $scoreleveltotal) * $scoreplan['percentweightage'] : 0;
-            $totalwhole += $scoreplans[$i]['totalpercent'];
-            $scoreplans[$i]['scores'] = $scores;
-        }
-        # SCORE COMPONENTS
-        if ($scorecomps['scores']) {
-            $scorecomps['totalpercent'] = array_sum($scorecomps['scores']);
-            $totalwhole += $scorecomps['totalpercent'];
-        }
-        return $totalwhole;
-    }
-
     public function get_arraytable_academicplan($academicplans)
     {
         $acadplans = array();

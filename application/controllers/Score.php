@@ -34,8 +34,26 @@ class Score extends CI_Controller
         $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         $academicsession = $this->academic_model->get_academicsession(FALSE, $acadsession_slug);
         $enrolling = $this->student_model->get_enrolling_students($academicsession['id'], $sig_id);
+        $scoreplans = $this->score_model->get_scoreplan($sig_id, $academicsession['id'], FALSE);
+        $scoreleveltotal = $this->score_model->get_scoreleveltotal();
         foreach ($enrolling as $i => $std) {
-            $enrolling[$i]['score'] = $this->scoretable->get_student_totalscore_acs($academicsession['id'], $std['matric']);
+            $score = 0;
+            $badgecount = 0;
+            foreach ($scoreplans as $scoreplan) {
+                $scores = $this->score_model->get_scoreplan_scorelevel($std['matric'], $scoreplan['id']);
+                $totalpercent = $scores ? (array_sum($scores) / $scoreleveltotal) * $scoreplan['percentweightage'] : 0;
+                $score += $totalpercent;
+                $scoresum = ($scores) ? array_sum($scores) : 0;
+                if ($scoresum > 18) {
+                    $badgecount += 1;
+                }
+            }
+            $scorecomps = array('scores' => $this->score_model->get_scoreplan_scorecomp($std['matric'], $academicsession['id']));
+            if ($scorecomps['scores']) {
+                $score += array_sum($scorecomps['scores']);
+            }
+            $enrolling[$i]['score'] = $score;
+            $enrolling[$i]['badgecount'] = $badgecount;
         }
         $data = array(
             'academicsession' => $academicsession,
