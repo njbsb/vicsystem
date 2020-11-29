@@ -11,6 +11,7 @@
         </div>
         <div class="col-lg-4 text-left">
             <h3><b><?= $student['name'] ?></b></h3>
+            <h6><b>Matric:</b> <?= $student['id'] ?></h6>
             <h6><b>Club name:</b> <?= $student['signame'] ?></h6>
             <h6><b>Program:</b> <?= $student['program_name'] ?></h6>
             <h6><b>Year:</b> <?= $student['year'] ?></h6>
@@ -26,9 +27,9 @@
                 <?= form_close() ?>
             </div>
         <?php endif ?>
-
     </div>
     <hr>
+
     <h2>Previous Activity and Roles</h2> <br>
     <h4>Activities</h4>
     <?php if ($activity_roles) : ?>
@@ -36,7 +37,7 @@
             <?php foreach ($activity_roles as $actrole) : ?>
                 <div class="col-md-4">
                     <div class="card text-white bg-dark mb-3">
-                        <div class="card-header"><a class="text-white" href="<?= site_url('activity/' . $actrole['slug']) ?>"><?= $actrole['activity_name'] ?></a></div>
+                        <div class="card-header"><a class="text-warning" href="<?= site_url('activity/' . $actrole['slug']) ?>"><?= $actrole['activity_name'] ?></a></div>
                         <div class="card-body">
                             <h4 class="card-title"><?= $actrole['rolename'] ?></h4>
                             <p class="card-text"><?= $actrole['role_desc'] ?></p>
@@ -55,7 +56,7 @@
             <?php foreach ($org_roles as $orgrole) : ?>
                 <div class="col-md-4">
                     <div class="card text-white bg-dark mb-3">
-                        <div class="card-header"><?= $orgrole['acadyear'] ?></div>
+                        <div class="card-header text-warning"><?= $orgrole['acadyear'] ?></div>
                         <div class="card-body">
                             <h4 class="card-title"><?= $orgrole['rolename'] ?></h4>
                             <p class="card-text"><?= $orgrole['role_desc'] ?></p>

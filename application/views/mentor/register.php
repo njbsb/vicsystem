@@ -57,7 +57,5 @@
     <input type="file" name="photo_path" class="form-control-file">
     <small id="fileHelp" class="form-text text-muted">Please select a square (1:1) image.</small>
 </div>
-
 <button type="submit" class="btn btn-primary btn-block">Register</button>
-
-<?php echo form_close(); ?>
+<?php echo form_close() ?>

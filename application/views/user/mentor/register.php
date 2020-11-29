@@ -8,14 +8,13 @@
 
 
 <div class="row justify-content-md-center">
-    <div class="col-md-4 col-md-offset-4">
+    <div class="col-md-6 col-md-offset-3">
         <h3 class="text-center"><?= $title ?></h3>
-        <?= form_open('register') ?>
+        <?php $hidden = array('usertype_id' => $usertype_id) ?>
+        <?= form_open('register', '', $hidden) ?>
         <!-- Usertype -->
         <div class="form-group">
-            <!-- <label>Usertype</label> -->
             <input type="text" class="form-control" id='usertype_id' name="usertype_name" value="<?= $usertype_name ?>" readonly="" required>
-            <input type="hidden" class="form-control" id='usertype_id' name="usertype_id" value="<?= $usertype_id ?>" readonly="" required>
         </div>
 
         <!-- ID -->
@@ -50,13 +49,12 @@
 
         <!-- SIG -->
         <div class="form-group">
-            <label>Select SIG</label>
+            <label>Special Interest Group (SIG)</label>
             <select name="sig_id" class="form-control" id="sig_id">
                 <option value="" selected disabled hidden>Choose SIG</option>
                 <?php foreach ($sigs as $sig) : ?>
-                    <option value="<?= $sig['id'] ?>" <?php if ($sig_id == $sig['id']) {
-                                                            echo 'selected';
-                                                        } ?>>
+                    <?php $selected = ($sig_id == $sig['id']) ? 'selected' : '' ?>
+                    <option value="<?= $sig['id'] ?>" <?= $selected ?>>
                         <?= $sig['namecode'] ?>
                     </option>
                 <?php endforeach ?>
@@ -68,7 +66,8 @@
             <select name="orgrole_id" class="form-control" required>
                 <option value="" selected disabled hidden>Choose role in SIG</option>
                 <?php foreach ($mentorroles as $mr) : ?>
-                    <option value="<?= $mr['id'] ?>"><?= $mr['rolename'] ?></option>
+                    <?php $selected = ($orgrole_id == $mr['id']) ? 'selected' : '' ?>
+                    <option value="<?= $mr['id'] ?>" <?= $selected ?>><?= $mr['rolename'] ?></option>
                 <?php endforeach ?>
             </select>
         </div>
@@ -82,16 +81,14 @@
         <!-- PASSWORD -->
         <div class="form-group">
             <label>Password</label>
-            <input value="password" type="password" class="form-control" name="password" placeholder="Password" required>
+            <input value="" type="password" class="form-control" name="password" placeholder="Password" required>
         </div>
         <div class="form-group">
             <label>Confirm password</label>
-            <input value="password" type="password" class="form-control" name="confirmpassword" placeholder="Confirm password" required>
+            <input value="" type="password" class="form-control" name="confirmpassword" placeholder="Confirm password" required>
         </div>
-
-
         <button type="submit" class="btn btn-primary btn-block">Register</button>
-
         <?= form_close() ?>
     </div>
 </div>
+<br>

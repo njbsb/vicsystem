@@ -6,25 +6,6 @@ class Score_model extends CI_Model
         $this->load->database();
     }
 
-    public function create_emptyscores($student_id, $acadsession_id)
-    {
-        $levelscore = $this->get_levelscore();
-        foreach ($levelscore as $levelscore) {
-            $levelarray = array(
-                'acadsession_id' => $acadsession_id,
-                'student_matric' => $student_id,
-                'levelscore_id' => $levelscore['id']
-            );
-            $this->db->insert('scorelevel', $levelarray);
-        }
-        $comparray = array(
-            'acadsession_id' => $acadsession_id,
-            'student_matric' => $student_id
-        );
-        $this->db->insert('scorecomp', $comparray);
-        return true;
-    }
-
     public function get_levelscore($id = NULL)
     {
         if ($id == FALSE) {
@@ -203,6 +184,7 @@ class Score_model extends CI_Model
         $this->db->get_where('scorelevel', array('levelscore' => $level_id));
     }
 
+    #  SCORE LEVEL
     public function add_scoreleveldata($scoreleveldata)
     {
         return $this->db->insert('scorelevel', $scoreleveldata);
@@ -214,16 +196,33 @@ class Score_model extends CI_Model
             ->update('scorelevel', $scoredata);
     }
 
+    # SCORE COMP
+    public function add_scorecompdata($scorecompdata)
+    {
+        return $this->db->insert('scorecomp', $scorecompdata);
+    }
+
     public function update_scorecompdata($where, $scoredata)
     {
         return $this->db->where($where)
             ->update('scorecomp', $scoredata);
     }
 
-    public function setscorecomp($where, $score_comp)
+    // public function setscorecomp($where, $score_comp)
+    // {
+    //     return $this->db->where($where)
+    //         ->update('scorecomp', $score_comp);
+    // }
+
+    public function add_scoringplan($scoreplandata)
     {
-        return $this->db->where($where)
-            ->update('scorecomp', $score_comp);
+        return $this->db->insert('scoringplan', $scoreplandata);
+    }
+
+    public function update_scoreplan($scoreplan_id, $scoreplandata)
+    {
+        $this->db->where('id', $scoreplan_id);
+        return $this->db->update('scoringplan', $scoreplandata);
     }
 
     public function get_scoreplan($sig_id, $acadsession_id = NULL, $category_id = NULL)
@@ -269,17 +268,6 @@ class Score_model extends CI_Model
         }
         $query = $this->db->get();
         return $query->result_array();
-    }
-
-    public function add_scoringplan($scoreplandata)
-    {
-        return $this->db->insert('scoringplan', $scoreplandata);
-    }
-
-    public function update_scoreplan($scoreplan_id, $scoreplandata)
-    {
-        $this->db->where('id', $scoreplan_id);
-        return $this->db->update('scoringplan', $scoreplandata);
     }
 
     public function get_categorytotalpercent($acadsession_id, $category_id, $sig_id)

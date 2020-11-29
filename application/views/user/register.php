@@ -57,9 +57,8 @@
             <!-- <label>Select SIG</label> -->
             <select name="sig_id" class="form-control" id="sig_id">
                 <?php foreach ($sigs as $sig) : ?>
-                    <option value="<?= $sig['id'] ?>" <?php if ($sig_id == $sig['id']) {
-                                                            echo 'selected';
-                                                        } ?>>
+                    <?php $selected = ($sig_id == $sig['id']) ? 'selected' : '' ?>
+                    <option value="<?= $sig['id'] ?>" <?= $selected ?>>
                         <?= $sig['namecode'] ?>
                     </option>
                 <?php endforeach ?>

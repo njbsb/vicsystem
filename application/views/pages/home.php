@@ -1,4 +1,4 @@
-<h2><?= $title ?></h2>
+<!-- <h2><?= $title ?></h2> -->
 <!-- <p>Welcome to SIG Integrated System</p> -->
 
 <div class="jumbotron">

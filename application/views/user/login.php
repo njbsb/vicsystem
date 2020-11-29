@@ -1,3 +1,10 @@
+<?php if (validation_errors()) : ?>
+    <div class="alert alert-dismissible alert-secondary">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h6 class="alert-heading">Oops!</h6>
+        <p class="mb-0"><?= validation_errors() ?></p>
+    </div>
+<?php endif ?>
 <div class="row justify-content-md-center">
     <div class="col-md-4 col-md-offset-4 text-center">
         <?= form_open('user/login') ?>
@@ -10,7 +17,6 @@
         </div>
         <button type="submit" class="btn btn-primary btn-block">Login</button>
         <?= form_close() ?>
-        <!-- <a href="<?= base_url('register') ?>" data-toggle="modal" class=""> -->
         <a href="#chooseUser" data-toggle="modal" class="">
             Register here
         </a>
@@ -29,8 +35,8 @@
             <div class="modal-body">
                 <p>You are a:</p>
                 <?= form_open('register') ?>
-                <button name="usertype_id" type="submit" class="btn btn-primary" value="3">Student</button>&nbsp;
-                <button name="usertype_id" type="submit" class="btn btn-primary" value="2">Mentor</button>
+                <button name="usertype_id" type="submit" class="btn btn-primary" value="<?= $this->user_model->get_student_usertype_id() ?>">Student</button>&nbsp;
+                <button name="usertype_id" type="submit" class="btn btn-primary" value="<?= $this->user_model->get_mentor_usertype_id() ?>">Mentor</button>
                 <?= form_close() ?>
             </div>
         </div>

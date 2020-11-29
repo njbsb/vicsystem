@@ -10,10 +10,10 @@ class Organization extends CI_Controller
         $sig = $this->sig_model->get_sig($sig_id);
         $activeacadyear = $this->committee_model->get_activeacadyear();
         $acadyear_id = $activeacadyear['id'];
-
         $data = array(
             'title' => 'Organization Hierarchy',
             'sig' => $sig,
+            'isMentor' => $this->session->userdata('isMentor'),
             'activeacadyear' => $activeacadyear,
             'president' => $this->committee_model->get_president($sig_id, $acadyear_id),
             'deputypresident' => $this->committee_model->get_deputypresident($sig_id, $acadyear_id),
@@ -24,7 +24,6 @@ class Organization extends CI_Controller
             'roles_org' => $this->committee_model->get_roles_org(), # to register new com
             'sig_member' => $this->student_model->get_sigstudents($sig_id) # to register new com
         );
-
         $this->load->view('templates/header');
         $this->load->view('organization/index', $data);
         $this->load->view('templates/footer');
@@ -33,7 +32,7 @@ class Organization extends CI_Controller
     public function delete_committee()
     {
         $acadyear_id = $this->committee_model->get_activeacadyear()['id'];
-        $sig_id = '1';
+        $sig_id = $this->input->post('sig_id');
         $matric = $this->input->post('stdmatric');
         $deluser = array(
             'acadyear_id' => $acadyear_id,
@@ -46,7 +45,8 @@ class Organization extends CI_Controller
 
     public function register_committee()
     {
-        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
+        $sig_id = $this->input->post('sig_id');
+        // $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         $comdata = array(
             'acadyear_id' => $this->input->post('acadyear_id'),
             'student_matric' => $this->input->post('student_id'),

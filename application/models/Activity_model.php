@@ -11,12 +11,13 @@ class Activity_model extends CI_Model
     {
         if ($slug === FALSE && $activity_id === FALSE) {
             // this code will get all activities
-            $this->db->select("act.id, act.activity_name, act.slug, act.datetime_start, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, sig.code, mtr.name as advisorname")
+            $this->db->select("act.id, act.activity_name, act.slug, act.datetime_start, act.activitycategory_id, act.advisor_matric, acttype.type, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, sig.code, mtr.name as advisorname")
                 ->from('activity as act')
                 ->join('academicsession as acs', 'act.acadsession_id = acs.id', 'left')
                 ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
                 ->join('user as mtr', 'act.advisor_matric = mtr.id', 'left')
                 ->join('sig as sig', 'act.sig_id = sig.id')
+                ->join('activity_type as acttype', 'act.activitytype_id = acttype.id')
                 ->order_by('act.id', 'DESC');
             $query = $this->db->get();
             return $query->result_array();
@@ -49,13 +50,14 @@ class Activity_model extends CI_Model
 
     public function get_sig_activity($sig_id)
     {
-        $this->db->select("act.id, act.activity_name, act.slug, act.datetime_start, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, sig.code, mtr.name as advisorname")
+        $this->db->select("act.id, act.activity_name, act.activity_desc, act.slug, act.activitycategory_id, acttype.type, act.photo_path, act.datetime_start, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, sig.code, mtr.name as advisorname")
             ->from('activity as act')
             ->where('act.sig_id', $sig_id)
             ->join('academicsession as acs', 'act.acadsession_id = acs.id', 'left')
             ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
             ->join('user as mtr', 'act.advisor_matric = mtr.id', 'left')
             ->join('sig as sig', 'act.sig_id = sig.id')
+            ->join('activity_type as acttype', 'act.activitytype_id = acttype.id')
             ->order_by('act.id', 'DESC');
         $query = $this->db->get();
         return $query->result_array();

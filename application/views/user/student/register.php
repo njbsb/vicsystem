@@ -8,14 +8,13 @@
 
 
 <div class="row justify-content-md-center">
-    <div class="col-md-4 col-md-offset-4">
+    <div class="col-md-6 col-md-offset-3">
         <h3 class="text-center"><?= $title ?></h3>
-        <?= form_open('register') ?>
+        <?php $hidden = array('usertype_id' => $usertype_id) ?>
+        <?= form_open('register', '', $hidden) ?>
         <!-- Usertype -->
         <div class="form-group">
-            <!-- <label>Usertype</label> -->
             <input type="text" class="form-control" id='usertype_id' name="usertype_name" value="<?= $usertype_name ?>" readonly="" required>
-            <input type="hidden" class="form-control" id='usertype_id' name="usertype_id" value="<?= $usertype_id ?>" required>
         </div>
 
         <!-- ID -->
@@ -48,9 +47,8 @@
             <select name="program_code" class="form-control" required>
                 <option value="" selected disabled hidden>Choose academic program</option>
                 <?php foreach ($programs as $prog) : ?>
-                    <option value="<?= $prog['code'] ?>" <?php if ($prog['code'] = $program_code) {
-                                                                echo 'selected';
-                                                            } ?>>
+                    <?php $selected = ($prog['code'] = $program_code) ? 'selected' : '' ?>
+                    <option value="<?= $prog['code'] ?>" <?= $selected ?>>
                         <?= $prog['name'] ?>
                     </option>
                 <?php endforeach ?>
@@ -59,13 +57,12 @@
 
         <!-- SIG -->
         <div class="form-group">
-            <label>Select SIG</label>
+            <label>Special Interest Group (SIG)</label>
             <select name="sig_id" class="form-control" id="sig_id" required>
                 <option value="" selected disabled hidden>Choose SIG</option>
                 <?php foreach ($sigs as $sig) : ?>
-                    <option value="<?= $sig['id'] ?>" <?php if ($sig_id == $sig['id']) {
-                                                            echo 'selected';
-                                                        } ?>>
+                    <?php $selected = ($sig_id == $sig['id']) ? 'selected' : '' ?>
+                    <option value="<?= $sig['id'] ?>" <?= $selected ?>>
                         <?= $sig['namecode'] ?>
                     </option>
                 <?php endforeach ?>
@@ -81,11 +78,11 @@
         <!-- PASSWORD -->
         <div class="form-group">
             <label>Password</label>
-            <input value="password" type="password" class="form-control" name="password" placeholder="Password" required>
+            <input value="" type="password" class="form-control" name="password" placeholder="Password" required>
         </div>
         <div class="form-group">
             <label>Confirm password</label>
-            <input value="password" type="password" class="form-control" name="confirmpassword" placeholder="Confirm password" required>
+            <input value="" type="password" class="form-control" name="confirmpassword" placeholder="Confirm password" required>
         </div>
 
         <!-- SUBMIT BUTTON -->
@@ -93,3 +90,4 @@
         <?= form_close() ?>
     </div>
 </div>
+<br>

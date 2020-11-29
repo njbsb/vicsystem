@@ -17,7 +17,7 @@ class Score extends CI_Controller
             $academicsessions[$i]['enrolling'] = count($enrollingstudents);
         }
         $data = array(
-            'title' => 'Score Index',
+            'title' => 'Scores',
             'academicsessions' => $academicsessions,
             'academicyears' => $this->academic_model->get_academicyear(),
             'semesters' => $this->semester_model->get_semesters()
@@ -41,7 +41,6 @@ class Score extends CI_Controller
             'academicsession' => $academicsession,
             'enrolling' => $enrolling
         );
-        // print_r($enrolling);
         $this->load->view('templates/header');
         $this->load->view('score/viewacs', $data);
     }
@@ -169,7 +168,6 @@ class Score extends CI_Controller
         redirect('scoreplan/' . $this->input->post('acslug'));
     }
 
-
     public function add_scorelevel()
     {
         $acslug = $this->input->post('acslug'); # hidden
@@ -205,6 +203,21 @@ class Score extends CI_Controller
         redirect('score/' . $acslug  . '/' . $student_id);
     }
 
+    public function add_scorecomp()
+    {
+        $acslug = $this->input->post('acslug');
+        $student_id = $this->input->post('student_id');
+        $scorecompdata = array(
+            'acadsession_id' => $this->input->post('acadsession_id'),
+            'student_matric' => $student_id,
+            'digitalcv' => $this->input->post('digitalcv'),
+            'leadership' => $this->input->post('leadership'),
+            'volunteer' => $this->input->post('volunteer')
+        );
+        $this->score_model->add_scorecompdata($scorecompdata);
+        redirect('score/' . $acslug . '/' . $student_id);
+    }
+
     public function edit_scorecomp()
     {
         $acslug = $this->input->post('acslug');
@@ -222,18 +235,18 @@ class Score extends CI_Controller
         redirect('score/' . $acslug . '/' . $student_id);
     }
 
-    public function setscorecomp($student_id)
-    {
-        $where = array(
-            'acadsession_id' => $this->input->post('acadsession_id'),
-            'student_matric' => $student_id
-        );
-        $score_comp = array(
-            'digitalcv' => $this->input->post('digitalcv'),
-            'leadership' => $this->input->post('digitalcv'),
-            'volunteer' => $this->input->post('volunteer')
-        );
-        $this->score_model->setscorecomp($where, $score_comp);
-        redirect('score/' . $student_id);
-    }
+    // public function setscorecomp($student_id)
+    // {
+    //     $where = array(
+    //         'acadsession_id' => $this->input->post('acadsession_id'),
+    //         'student_matric' => $student_id
+    //     );
+    //     $score_comp = array(
+    //         'digitalcv' => $this->input->post('digitalcv'),
+    //         'leadership' => $this->input->post('digitalcv'),
+    //         'volunteer' => $this->input->post('volunteer')
+    //     );
+    //     $this->score_model->setscorecomp($where, $score_comp);
+    //     redirect('score/' . $student_id);
+    // }
 }

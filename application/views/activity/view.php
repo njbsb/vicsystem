@@ -10,7 +10,7 @@
     <small>Activity created on <?= date('jS F Y', strtotime($activity['created_at'])) ?></small><br>
     <br>
     <h6>Desc</h6>
-    <?= $activity['activity_desc'] ?>
+    <p class="text-justify"><?= $activity['activity_desc'] ?></p>
     <h6>SIG</h6>
     <p><?= $activity['signame'] ?></p>
     <h6>Venue</h6>

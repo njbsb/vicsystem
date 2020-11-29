@@ -1,7 +1,7 @@
 <h2 class="margin"><?= $title ?></h2>
-<hr>
+<!-- <hr> -->
 <table class="table text-center">
-    <thead class="table-dark">
+    <thead class="table-primary">
         <tr>
             <td>Academic Session</td>
             <?php foreach ($scoreplans as $scoreplan) : ?>
@@ -22,14 +22,15 @@
         </tr>
     </tbody>
 </table>
+<hr>
 <ul class="nav nav-tabs">
     <?php foreach ($scoreplans as $scoreplan) : ?>
         <li class="nav-item">
-            <a class="nav-link btn-warning" data-toggle="tab" href="#<?= $scoreplan['label'] ?>">Level <?= $scoreplan['label'] ?></a>
+            <a class="nav-link" data-toggle="tab" href="#<?= $scoreplan['label'] ?>">Level <?= $scoreplan['label'] ?></a>
         </li>
     <?php endforeach ?>
     <li class="nav-item">
-        <a class="nav-link btn-info" data-toggle="tab" href="#comp">Components</a>
+        <a class="nav-link" data-toggle="tab" href="#comp">Components</a>
     </li>
 </ul>
 <div id="myTabContent" class="tab-content">
@@ -46,7 +47,7 @@
                         <div class="col-6">
                             <label><?= ucfirst($key) ?></label>
                             <div class="form-group">
-                                <select name="<?= $key ?>" class="custom-select">
+                                <select name="<?= $key ?>" class="custom-select" readonly>
                                     <option value="" disabled hidden selected>Select <?= $key ?> score</option>
                                     <?php foreach ($guide[$key] as $scoreguide) : ?>
                                         <?php $selected = ($scoreguide['score'] == $score) ? 'selected' : '' ?>
@@ -216,7 +217,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Leadership</label>
-                                <select name="digitalcv" class="custom-select" required>
+                                <select name="leadership" class="custom-select" required>
                                     <option value="" selected disabled>Select digital CV score</option>
                                     <?php foreach ($guide['leadership'] as $scoreguide) : ?>
                                         <?php $selected = ($scoreguide['score'] == $component) ? 'selected' : ''; ?>
@@ -237,7 +238,6 @@
                     </div>
                 </div>
             </div>
-
 
             <div id="editcomp" class="modal fade">
                 <div class="modal-dialog" role="document">

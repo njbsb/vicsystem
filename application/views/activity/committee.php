@@ -14,9 +14,10 @@
     <table id="tbl_committee" class="table" style="text-align:left;">
         <thead class="table-dark">
             <tr>
-                <th scope="col">Position</th>
+                <th scope="col">Matric</th>
                 <th scope="col">Name</th>
-                <?php if ($isHighcom or $this->session->userdata('isMentor')) : ?>
+                <th scope="col">Position</th>
+                <?php if ($isHighcom or ($this->session->userdata('username') == $activity['advisor_matric'])) : ?>
                     <th></th>
                 <?php endif ?>
             </tr>
@@ -24,13 +25,14 @@
         <tbody class="list">
             <?php if ($committees) : ?>
                 <?php foreach ($committees as $com) : ?>
-                    <?php $disabled = (in_array($com['role_id'], $highcoms_id) and !$this->session->userdata('isMentor')) ? 'disabled' : ''; ?>
-                    <?php $disabled_nothighcom = ($isHighcom) ? '' : 'disabled' ?>
                     <tr>
-                        <td scope="row"><?= $com['rolename'] ?></td>
+                        <td scope="row"><?= $com['student_matric'] ?></td>
                         <td scope="row"><?= $com['name'] ?></td>
-                        <?php if ($isHighcom or $this->session->userdata('isMentor')) : ?>
-                            <td><button data-toggle="modal" data-target="#delete_committee" data-roleid="<?= $com['role_id'] ?>" class="btn-sm btn btn-outline-danger" <?= $disabled ?> <?= $disabled_nothighcom ?>>Delete</button></td>
+                        <td scope="row"><?= $com['rolename'] ?></td>
+                        <?php if ($isHighcom or ($this->session->userdata('username') == $activity['advisor_matric'])) : ?>
+                            <!-- only advisor and highcom can see the delete button -->
+                            <?php $disabled = ($isHighcom and in_array($com['role_id'], $highcoms_id)) ? 'disabled' : '' ?>
+                            <td><button data-toggle="modal" data-target="#delete_committee" data-roleid="<?= $com['role_id'] ?>" class="btn-sm btn btn-outline-danger" <?= $disabled ?>>Delete</button></td>
                         <?php endif ?>
                     </tr>
                 <?php endforeach ?>

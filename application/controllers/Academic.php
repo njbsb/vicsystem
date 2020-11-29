@@ -3,32 +3,34 @@ class Academic extends CI_Controller
 {
     public function index()
     {
-        if ($this->session->userdata('isStudent')) {
+        if ($this->session->userdata('isStudent') or !$this->session->userdata('username')) {
             redirect(site_url());
+        } else {
+            $latest_year = $this->academic_model->get_latest_academicyear();
+            $years = explode("/", $latest_year['acadyear']);
+            $suggested_year = '';
+            foreach ($years as $i => $year) {
+                $years[$i] = $year + 1;
+            }
+            $suggested_year = $years[0] . '/' . $years[1];
+            $data = array(
+                'academicyear' => $this->academic_model->get_academicyear(),
+                'academicsession' => $this->academic_model->get_academicsession(),
+                'academicplan' => $this->academic_model->get_academicplan(),
+                'semesters' => $this->academic_model->get_semester(),
+                'title' => 'Academic Control Page',
+                'new_year' => $suggested_year
+            );
+            $this->load->view('templates/header');
+            $this->load->view('academic/index', $data);
         }
-        $latest_year = $this->academic_model->get_latest_academicyear();
-        $years = explode("/", $latest_year['acadyear']);
-        $suggested_year = '';
-        foreach ($years as $i => $year) {
-            $years[$i] = $year + 1;
-        }
-        $suggested_year = $years[0] . '/' . $years[1];
-        $data = array(
-            'academicyear' => $this->academic_model->get_academicyear(),
-            'academicsession' => $this->academic_model->get_academicsession(),
-            'academicplan' => $this->academic_model->get_academicplan(),
-            'semesters' => $this->academic_model->get_semester(),
-            'title' => 'Academic Control Page',
-            'new_year' => $suggested_year
-        );
-        $this->load->view('templates/header');
-        $this->load->view('academic/index', $data);
     }
 
+    # pages
     public function academicplanstudent()
     {
         # for student
-        if (!$this->session->userdata('isStudent')) {
+        if (!$this->session->userdata('isStudent') and !$this->session->userdata('username')) {
             redirect(site_url());
         }
         $student_id = $this->session->userdata('username');
@@ -50,7 +52,6 @@ class Academic extends CI_Controller
             ),
             'activeacadsession' => $activeacadsession
         );
-
         $this->load->view('templates/header');
         $this->load->view('academic/plan/student', $data);
     }
@@ -58,7 +59,7 @@ class Academic extends CI_Controller
     public function academicplanmentor()
     {
         # for mentor
-        if (!$this->session->userdata('isMentor')) {
+        if (!$this->session->userdata('isMentor') and !$this->session->userdata('username')) {
             redirect('home');
         }
         $activesession = $this->academic_model->get_activeacademicsession();
@@ -140,7 +141,7 @@ class Academic extends CI_Controller
 
     public function enroll()
     {
-        if (!$this->session->userdata('username')) {
+        if (!$this->session->userdata('username') or $this->session->userdata('isStudent')) {
             redirect(site_url());
         }
         $this->form_validation->set_rules('acadsession_id', 'academic session', 'required');
@@ -151,7 +152,7 @@ class Academic extends CI_Controller
             $activesession = $this->academic_model->get_activeacademicsession();
             $enrolledstudents = $this->student_model->get_enrolling_students($activesession['id'], $sig_id);
             $data = array(
-                'title' => 'STUDENTS ENROLLMENT',
+                'title' => 'Student Enrollment',
                 'availablestudents' => $this->student_model->get_available_sigstudents($sig_id, $enrolledstudents),
                 'enrolledstudents' => $enrolledstudents,
                 'activesession' => $activesession
@@ -159,36 +160,43 @@ class Academic extends CI_Controller
             $this->load->view('templates/header');
             $this->load->view('academic/enroll', $data);
         } else {
+            # data is submitted
             $acadsession_id = $this->input->post('acadsession_id');
             $students = $this->input->post('students');
             foreach ($students as $std_id) {
                 $this->academic_model->create_academicplan($acadsession_id, $std_id);
             }
             redirect('enroll');
-            # code if data post
         }
     }
 
+    # controller functions
 
+    # unenroll
+    public function unenroll()
+    {
+        $acadsession_id = $this->input->post('acadsession_id');
+        $students = $this->input->post('students');
+        foreach ($students as $std) {
+            $this->academic_model->delete_academicplan($acadsession_id, $std);
+        }
+        redirect('enroll');
+    }
 
+    # called when mentor enroll students
     public function create_academicplan($student_id)
     {
-        $this->form_validation->set_rules('gpa_target', 'GPA target', 'required');
-
-        if ($this->form_validation->run() == FALSE) {
-        } else {
-            $acadsession_id = $this->input->post('activeacadsession_id');
-            $acpdata = array(
-                'student_matric' => $student_id,
-                'acadsession_id' => $acadsession_id,
-                'gpa_target' => $this->input->post('gpa_target')
-            );
-            $this->academic_model->create_academicplan($acpdata);
-            $this->score_model->create_emptyscores($student_id, $acadsession_id);
-            redirect('academicplan');
-        }
+        $acadsession_id = $this->input->post('activeacadsession_id');
+        $acpdata = array(
+            'student_matric' => $student_id,
+            'acadsession_id' => $acadsession_id,
+            'gpa_target' => $this->input->post('gpa_target')
+        );
+        $this->academic_model->create_academicplan($acpdata);
+        redirect('academicplan/student');
     }
 
+    # called by mentor in academic control panel
     public function create_academicsession()
     {
         $acy = $this->academic_model->get_academicyear($this->input->post('acadyear_id'));
@@ -227,5 +235,16 @@ class Academic extends CI_Controller
         $id = $this->input->post('acadyear_id');
         $this->academic_model->setactive_acadyear($id);
         redirect('academic');
+    }
+
+    public function set_gpatarget()
+    {
+        $where = array(
+            'student_matric' => $this->input->post('student_id'),
+            'acadsession_id' => $this->input->post('acadsession_id')
+        );
+        $gpa = array('gpa_target' => $this->input->post('gpa_target'));
+        $this->academic_model->set_gpa($where, $gpa);
+        redirect('academicplan/student');
     }
 }

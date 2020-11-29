@@ -1,9 +1,9 @@
-<h2 class="text-center">Edit: <?= $student['id'] ?></h2>
+<h2 class="">Edit Student: <?= $student['name'] ?> (<?= $student['id'] ?>)</h2>
 
 
 <div class="container-fluid text-center">
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-md-4">
             <div class="card border-dark mb-3" style="max-width: 20rem;">
                 <?php $profile_image = ($student['profile_image']) ? $student['profile_image'] : 'default.jpg' ?>
                 <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $profile_image) ?>">
@@ -12,13 +12,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 text-left">
+        <div class="col-md-8 text-left">
 
             <?php if (validation_errors()) : ?>
                 <?= validation_errors() ?>
             <?php endif ?>
-
-            <?= form_open('student/update/' . $student['id']); ?>
+            <?php $hidden = array('student_id' => $student['id']) ?>
+            <?= form_open('student/update', '', $hidden) ?>
             <fieldset>
                 <!-- NAME -->
                 <div class="form-group">
@@ -28,12 +28,11 @@
                 <!-- SIG -->
                 <div class="form-group">
                     <label>Select SIG</label>
-                    <select name="sig_id" class="form-control form-control-sm">
+                    <select name="sig_id" class="form-control form-control-sm" readonly>
                         <?php foreach ($sigs as $sig) : ?>
                             <?php $selected = ($sig['id'] == $student['sig_id']) ? 'selected' : '' ?>
-                            <option value="<?= $sig['id'] ?>" <?= $selected ?>>
-                                <?= $sig['namecode'] ?>
-                            </option>
+                            <?php $disabled = ($sig['id'] == $student['sig_id']) ? '' : 'disabled' ?>
+                            <option value="<?= $sig['id'] ?>" <?= $selected, $disabled ?>><?= $sig['namecode'] ?></option>
                         <?php endforeach ?>
                     </select>
                 </div>
@@ -71,9 +70,12 @@
                         <?php endforeach ?>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary" disabled>Update</button>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-outline-primary">Update</button>
+                </div>
+
             </fieldset>
             <?= form_close() ?>
         </div>
-    </div> <br>
+    </div>
 </div>

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>VIC System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?= base_url('assets/css/lux.bootstrap.min.css') ?>" media="screen">
+    <link rel="stylesheet" href="<?= base_url('assets/css/flatly.bootstrap.min.css') ?>" media="screen">
     <link rel="stylesheet" href="<?= base_url('assets/css/jquery.dataTables.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/dataTables.bootstrap.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/sticky-footer.css') ?>" rel="stylesheet">
@@ -25,25 +25,36 @@
         body {
             font: 14px Montserrat, sans-serif;
             line-height: 1.8;
-            background-color: #ffb6c1;
+            /* background-color: #ffb6c1; */
         }
 
         table {
             max-width: 100%;
         }
 
-        .btn {
+        /* .btn {
             font: 12px Montserrat, sans-serif;
             text-transform: none;
-        }
+        } */
 
         input {
             font: 14px Montserrat, sans-serif;
         }
 
+        p.activitydesc {
+            text-align: justify;
+        }
+
         /* h2 {
             font: 20px Montserrat, sans-serif;
         } */
+
+        .post-date {
+            background: #f4f4f4;
+            padding: 4px;
+            margin: 3px 0;
+            display: block;
+        }
 
         .margin {
             margin-bottom: 35px;

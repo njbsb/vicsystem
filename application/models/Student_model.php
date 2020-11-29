@@ -59,7 +59,7 @@ class Student_model extends CI_Model
             ->where(array(
                 'sig_id' => $sig_id,
                 'usertype_id' => '3',
-                'userstatus_id' => '2'
+                'userstatus_id' => '2' #active
             ));
         $query = $this->db->get();
         return $query->result_array();
@@ -70,7 +70,10 @@ class Student_model extends CI_Model
         $this->db->select('std.matric, user.name, std.year_joined')
             ->from('student as std')
             ->join('user', 'user.id = std.matric')
-            ->where(array('user.sig_id' => $sig_id));
+            ->where(array(
+                'user.sig_id' => $sig_id,
+                'user.userstatus_id' => 2
+            ));
         if (isset($enrolledstudents)) {
             foreach ($enrolledstudents as $std) {
                 $this->db->where_not_in('std.matric', $std['matric']);

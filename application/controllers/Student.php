@@ -24,16 +24,16 @@ class Student extends CI_Controller
             'title' => $title,
             'students' => $students
         );
-        // $data['title'] = 'My Students';
-        // $data['students'] = $this->student_model->get_student();
         $this->load->view('templates/header');
         $this->load->view('student/index', $data);
     }
 
     public function view($student_id)
     {
+        if ($this->session->userdata('isStudent')) {
+            redirect(site_url());
+        }
         $student = $this->student_model->get_student($student_id);
-        // $data['student'] = $this->student_model->get_student($student_id);
         if (!array_filter($student)) {
             show_404();
         }
@@ -77,8 +77,9 @@ class Student extends CI_Controller
         // $this->load->view('templates/footer');
     }
 
-    public function update($student_id)
+    public function update()
     {
+        $student_id = $this->input->post('student_id');
         $userdata = array(
             'name' => $this->input->post('name'),
             'email' => $this->input->post('email'),

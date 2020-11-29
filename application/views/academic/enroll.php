@@ -54,28 +54,30 @@
 </table>
 <button class="btn btn-outline-primary" type="submit">Add Students</button>
 <?= form_close() ?>
-
 <hr>
+
 <h3 class="margin">Enrolled Students</h3>
-<table id="enrolledtable" class="table">
-    <thead class="table-dark">
+<?php $hidden = array('acadsession_id' => $activesession['id']) ?>
+<?= form_open('unenroll', '', $hidden) ?>
+<table id="enrolledtable" class="table" style="text-align:center;">
+    <thead class="table-success">
         <tr>
+            <th>Pick</th>
             <th>Matric</th>
             <th>Name</th>
             <th>GPA Target</th>
             <th>GPA Achieved</th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
         <?php if ($enrolledstudents) : ?>
             <?php foreach ($enrolledstudents as $std) : ?>
                 <tr>
+                    <td><input name="students[]" value="<?= $std['matric'] ?>" type="checkbox" /></td>
                     <td><?= $std['matric'] ?></td>
                     <td><?= $std['name'] ?></td>
                     <td><?= $std['gpa_target'] ?></td>
                     <td><?= $std['gpa_achieved'] ?></td>
-                    <td></td>
                 </tr>
             <?php endforeach ?>
         <?php else : ?>
@@ -88,7 +90,7 @@
 <div class="form-group">
     <button class="btn btn-outline-danger">Un-Enroll</button>
 </div>
-
+<?= form_close() ?>
 
 <script>
     $(document).ready(function() {

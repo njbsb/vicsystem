@@ -22,16 +22,14 @@
             <h6><b>Club name:</b> <?= $mentor['signame'] ?></h6>
             <h6><b>Role:</b> <?= $mentor['rolename'] ?></h6>
             <h6><b>Room:</b> <?= $mentor['roomnum'] ?></h6>
-
         </div>
-        <div class="col-lg-4">
-            <?= form_open('/mentor/edit/' . $mentor['id']) ?>
-            <input type="submit" value="Edit Mentor" class="btn btn-outline-secondary">
-            <?= form_close() ?>
-        </div>
-        <div class="col-lg-8 text-left">
-            <!-- <button type="submit" class="btn btn-primary">Update profile 2</button> -->
-        </div>
+        <?php if ($isMentor) : ?>
+            <div class="col-lg-4">
+                <?= form_open('/mentor/edit/' . $mentor['id']) ?>
+                <input type="submit" value="Edit Mentor" class="btn btn-outline-secondary">
+                <?= form_close() ?>
+            </div>
+        <?php endif ?>
 
     </div>
     <hr>

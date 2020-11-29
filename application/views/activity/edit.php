@@ -15,7 +15,7 @@
 ) ?>
 <?= form_open_multipart('activity/update', '', $hidden); ?>
 <div class="row">
-    <div class="col-md-8 offset-md-2 align-self-center">
+    <div class="col-md-10 offset-md-1 align-self-center">
         <!-- NAME -->
         <div class="form-group">
             <label>Activity Name</label>
@@ -75,12 +75,12 @@
             <div class="form-group col-sm-6">
                 <label>Choose a file (Paperwork)</label>
                 <input name="paperwork_file" type="file" class="form-control-file" id="paperwork_file" aria-describedby="fileHelp">
-                <small id="fileHelp" class="form-text text-muted">Existing: <?= $activity['paperwork_file'] ?></small>
+                <small id="fileHelp" class="form-text text-muted">Existing: <?= $activity['paperwork_file'] ? $activity['paperwork_file'] : 'none' ?></small>
             </div>
             <div class="form-group col-sm-6">
                 <label>Choose a photo (Activity Image)</label>
                 <input name="photo_path" type="file" class="form-control-file" id="photo_path" aria-describedby="fileHelp">
-                <small id="fileHelp" class="form-text text-muted">Existing: <?= $activity['photo_path'] ?></small>
+                <small id="fileHelp" class="form-text text-muted">Existing: <?= $activity['photo_path'] ? $activity['photo_path'] : 'none' ?></small>
             </div>
         </div>
 

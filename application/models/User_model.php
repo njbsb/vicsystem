@@ -15,6 +15,7 @@ class User_model extends CI_Model
         ));
         $query = $this->db->get('user');
         if ($query->num_rows() == 1) {
+            // and $query->row(0)->userstatus_id == 2
             return $query->row(0)->id;
             # return essential user data: id, usertype, sig_id, mentor_id
         } else {
@@ -154,6 +155,18 @@ class User_model extends CI_Model
         return $this->db->update('user', array('userstatus_id' => '2'));
     }
 
+    public function get_mentor_usertype_id()
+    {
+        $query = $this->db->get_where('usertype', array('usertype' => 'mentor'));
+        return $query->row()->id;
+    }
+
+    public function get_student_usertype_id()
+    {
+        $query = $this->db->get_where('usertype', array('usertype' => 'student'));
+        return $query->row()->id;
+    }
+
     public function id_exist($user_id)
     {
         $this->db->where('id', $user_id);
@@ -162,6 +175,16 @@ class User_model extends CI_Model
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function id_active($user_id)
+    {
+        $query = $this->db->get_where('user', array('id' => $user_id));
+        if ($query->num_rows() > 1 and  $query->row()->userstatus_id != 2) {
+            return false;
+        } else {
+            return true;
         }
     }
 }

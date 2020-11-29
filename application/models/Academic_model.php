@@ -170,7 +170,7 @@ class Academic_model extends CI_Model
             ->join('academicyear as acy', 'acy.id = acs.acadyear_id')
             ->join('user as std', 'std.id = acp.student_matric');
         $query = $this->db->get();
-        return $query->result_array();
+        return $query->row_array();
     }
 
     public function get_semester()
@@ -210,6 +210,15 @@ class Academic_model extends CI_Model
         $this->db->insert('academicplan', $academicplan);
     }
 
+    public function delete_academicplan($acadsession_id, $student_id)
+    {
+        $this->db->where(array(
+            'acadsession_id' => $acadsession_id,
+            'student_matric' => $student_id
+        ));
+        return $this->db->delete('academicplan');
+    }
+
     public function setactive_acadsession($acadsession_id)
     {
         $active = array('status' => 'active');
@@ -229,5 +238,10 @@ class Academic_model extends CI_Model
         $this->db->where('id !=', $acadyear_id)
             ->update('academicyear', $inactive);
         return true;
+    }
+
+    public function set_gpa($where, $gpa)
+    {
+        return $this->db->where($where)->update('academicplan', $gpa);
     }
 }

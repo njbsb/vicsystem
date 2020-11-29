@@ -25,28 +25,36 @@ class User extends CI_Controller
     {
         $id = $this->session->userdata('username');
         $user = $this->user_model->get_user($id);
-        $data = array(
-            'title' => 'User Profile',
-            'user' => $user
-        );
         $sig_id = $user['sig_id'];
         $usertype = $user['usertype_id'];
         $this->load->view('templates/header');
         switch ($usertype) {
             case '1':
-                $data['admin'] = $this->admin_model->get_admin($id);
+                $data = array(
+                    'title' => 'User Profile',
+                    'user' => $user,
+                    'admin' => $this->admin_model->get_admin($id)
+                );
                 $this->load->view('user/admin/profile', $data);
                 break;
             case '2':
-                $data['mentor'] = $this->mentor_model->get_mentor($id);
-                $data['activity_roles'] = $this->committee_model->get_activityroles($id);
+                $data = array(
+                    'title' => 'User Profile',
+                    'user' => $user,
+                    'mentor' => $this->mentor_model->get_mentor($id),
+                    'activity_roles' => $this->committee_model->get_activityroles($id)
+                );
                 $this->load->view('user/mentor/profile', $data);
                 break;
             case '3':
-                $data['student'] = $this->student_model->get_student($id);
+                $data = array(
+                    'title' => 'User Profile',
+                    'user' => $user,
+                    'student' => $this->student_model->get_student($id),
+                    'activity_roles' => $this->committee_model->get_activityroles($id),
+                    'org_roles' => $this->committee_model->get_orgroles($id, $sig_id)
+                );
                 $data['student']['year'] = date('Y') - $data['student']['year_joined'] + 1;
-                $data['activity_roles'] = $this->committee_model->get_activityroles($id);
-                $data['org_roles'] = $this->committee_model->get_orgroles($id, $sig_id);
                 $this->load->view('user/student/profile', $data);
                 break;
         }
@@ -149,7 +157,10 @@ class User extends CI_Controller
 
     public function login()
     {
-        $this->form_validation->set_rules('username', 'username', 'required');
+        if ($this->session->userdata('username')) {
+            redirect(site_url());
+        }
+        $this->form_validation->set_rules('username', 'username', 'required|callback_id_active');
         $this->form_validation->set_rules('password', 'password', 'required');
 
         if ($this->form_validation->run() == FALSE) {
@@ -196,7 +207,7 @@ class User extends CI_Controller
     {
         $usertype_id = $this->input->post('usertype_id');
         if (!$usertype_id) {
-            redirect('home');
+            redirect('login');
         }
         # this usertype_id is from login page
 
@@ -210,11 +221,14 @@ class User extends CI_Controller
         $sig_id = $this->input->post('sig_id');
         $dob = $this->input->post('dob');
 
-        if ($usertype_id == '2') {
+        $mentor_typeid = $this->user_model->get_mentor_usertype_id();
+        $student_typeid = $this->user_model->get_student_usertype_id();
+
+        if ($usertype_id == $mentor_typeid) {
             $position = $this->input->post('position');
             $roomnum = $this->input->post('roomnum');
             $orgrole_id = $this->input->post('orgrole_id');
-        } elseif ($usertype_id = '3') {
+        } elseif ($usertype_id == $student_typeid) {
             $program_code = $this->input->post('program_code');
             $phonenum = $this->input->post('phonenum');
         }
@@ -227,11 +241,11 @@ class User extends CI_Controller
             $this->form_validation->set_rules('email', 'Email', 'required');
             $this->form_validation->set_rules('password', 'Password', 'required');
             $this->form_validation->set_rules('confirmpassword', 'Confirm Password', 'matches[password]');
-            if ($usertype_id == '2' && $position && $roomnum && $orgrole_id) {
+            if ($usertype_id == $mentor_typeid && $position && $roomnum && $orgrole_id) {
                 $this->form_validation->set_rules('position', 'Position', 'required');
                 $this->form_validation->set_rules('roomnum', 'Room number', 'required');
                 $this->form_validation->set_rules('orgrole_id', 'Organization role', 'required');
-            } elseif ($usertype_id == '3' && $program_code && $phonenum) {
+            } elseif ($usertype_id == $student_typeid && $program_code && $phonenum) {
                 $this->form_validation->set_rules('program_code', 'Program', 'required');
                 $this->form_validation->set_rules('phonenum', 'Phone Number', 'required');
             }
@@ -260,14 +274,14 @@ class User extends CI_Controller
 
             $this->load->view('templates/header');
 
-            if ($usertype_id == '2') {
+            if ($usertype_id == $mentor_typeid) {
                 // MENTOR
                 $data['position'] = $position;
                 $data['roomnum'] = $roomnum;
                 $data['orgrole_id'] = $orgrole_id;
                 $data['mentorroles'] = $this->role_model->get_mentor_roles();
                 $this->load->view('user/mentor/register', $data);
-            } else {
+            } elseif ($usertype_id == $student_typeid) {
                 // STUDENT
                 $data['program_code'] = $program_code;
                 $data['phonenum'] = $phonenum;
@@ -288,7 +302,7 @@ class User extends CI_Controller
             );
             $this->user_model->register_user($userdata);
 
-            if ($usertype_id == '2') {
+            if ($usertype_id == $mentor_typeid) {
                 # send data to mentor model
                 $mentordata = array(
                     'matric' => $id,
@@ -297,7 +311,7 @@ class User extends CI_Controller
                     'orgrole_id' => $orgrole_id
                 );
                 $this->mentor_model->register_mentor($mentordata);
-            } elseif ($usertype_id = '3') {
+            } elseif ($usertype_id = $student_typeid) {
                 # send data to student model
                 $studentdata = array(
                     'matric' => $id,
@@ -318,6 +332,17 @@ class User extends CI_Controller
         $id_exist = $this->user_model->id_exist($id);
         if ($id_exist == true) {
             $this->form_validation->set_message('id_exist',  'User already exists. Please select another ID');
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+
+    public function id_active($id)
+    {
+        $id_active = $this->user_model->id_active($id);
+        if ($id_active == false) {
+            $this->form_validation->set_message('id_active', "This user's account is either disabled or has not been validated yet. Contact your admin.");
             return FALSE;
         } else {
             return TRUE;

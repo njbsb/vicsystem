@@ -7,7 +7,7 @@
         <div class="col-md-4 offset-md-4">
             <div class="card mb-4">
                 <h4 class="card-header text-white bg-dark">
-                    <?= $president['rolename']; ?>
+                    <?= $president['rolename'] ?>
                 </h4>
                 <img style="max-height:240px; max-width:auto; display: block; object-fit:cover;  padding:10px;" src="<?= base_url('assets/images/profile/' . $president['profile_image']); ?>" alt="<?= $president['profile_image']; ?>">
                 <div class="card-body">
@@ -31,7 +31,7 @@
         <?php if ($secretary) : ?>
             <div class="card mb-4">
                 <h4 class="card-header text-white bg-dark">
-                    <?= $secretary['rolename']; ?>
+                    <?= $secretary['rolename'] ?>
                 </h4>
                 <img style="max-height:240px; max-width:auto; display: block; object-fit:cover;  padding:10px;" src="<?= base_url('assets/images/profile/' . $secretary['profile_image']); ?>" alt="<?= $secretary['profile_image']; ?>">
                 <div class="card-body">
@@ -94,7 +94,7 @@
     </div>
 </div>
 <hr>
-<div class="row text-center">
+<div class="row text-center justify-content-center">
     <?php if ($orgajks) : ?>
         <?php foreach ($orgajks as $ajk) : ?>
             <div class="col-md-3">
@@ -124,15 +124,21 @@
     <?php endif ?>
 </div>
 <hr>
-<button data-toggle="modal" data-target="#registercommittee" class="btn btn-outline-primary margin">Add new committee</button>
-
+<div class="row justify-content-center">
+    <!-- insert members here -->
+</div>
+<?php if ($isMentor) : ?>
+    <button data-toggle="modal" data-target="#registercommittee" class="btn btn-outline-primary margin">Add new committee</button>
+<?php endif ?>
 <table id="orgcom_table" class="table table-hover">
     <thead class="table-dark">
         <tr>
             <th>Matric</th>
             <th>Name</th>
             <th>Role</th>
-            <th>Action</th>
+            <?php if ($this->session->userdata('isMentor')) : ?>
+                <th>Action</th>
+            <?php endif ?>
         </tr>
     </thead>
     <tbody>
@@ -141,7 +147,9 @@
                 <td><?= $sigcom['student_matric'] ?></td>
                 <td><?= $sigcom['name'] ?></td>
                 <td><?= $sigcom['rolename'] ?></td>
-                <td><a class="btn btn-outline-warning btn-sm" data-stdrole="<?= $sigcom['rolename'] ?>" data-stdname="<?= $sigcom['name'] ?>" data-stdmatric="<?= $sigcom['student_matric'] ?>" data-toggle="modal" data-target="#delete_orgcom">Delete</a></td>
+                <?php if ($this->session->userdata('isMentor')) : ?>
+                    <td><a class="btn btn-outline-warning btn-sm" data-stdrole="<?= $sigcom['rolename'] ?>" data-stdname="<?= $sigcom['name'] ?>" data-stdmatric="<?= $sigcom['student_matric'] ?>" data-toggle="modal" data-target="#delete_orgcom">Delete</a></td>
+                <?php endif ?>
             </tr>
         <?php endforeach ?>
     </tbody>
@@ -150,7 +158,8 @@
 <div id="delete_orgcom" class="modal fade">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <?= form_open('organization/delete_committee') ?>
+            <?php $hidden = array('sig_id' => $sig['id']) ?>
+            <?= form_open('organization/delete_committee', '', $hidden) ?>
             <div class="modal-header">
                 <h5 class="modal-title">Delete organization committee</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -173,7 +182,7 @@
                 <p>Confirm to delete this committee?</p>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" disabled>Delete role</button>
+                <button type="submit" class="btn btn-primary">Delete role</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
             <?= form_close() ?>
@@ -185,7 +194,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <?php $hidden = array(
-                'acadyear_id' => $activeacadyear['id']
+                'acadyear_id' => $activeacadyear['id'],
+                'sig_id' => $sig['id']
             ); ?>
             <?= form_open('organization/register_committee', '', $hidden) ?>
             <div class="modal-header">

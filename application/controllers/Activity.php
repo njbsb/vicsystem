@@ -16,6 +16,7 @@ class Activity extends CI_Controller
         }
         $data = array(
             'title' => 'Activities',
+            'sig' => $this->sig_model->get_sig($sig_id),
             'activitycategory' => $this->activity_model->get_activitycategory(),
             'activities' => $activities
         );
@@ -46,6 +47,9 @@ class Activity extends CI_Controller
         if ($this->session->userdata('isStudent')) {
             $isHighcom = $this->activity_model->check_activity_highCom($this->session->userdata('username'), $activity['id']);
             $data['isHighcom'] = $isHighcom;
+        } else {
+            # if mentor or admin
+            $data['isHighcom'] = false;
         }
         $this->load->view('templates/header');
         $this->load->view('activity/view', $data);
@@ -57,12 +61,12 @@ class Activity extends CI_Controller
 
     public function create()
     {
-        $sig_id = '1';
-
+        if (!$this->session->userdata('username') or $this->session->userdata('isStudent')) {
+            redirect(site_url());
+        }
+        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         $this->form_validation->set_rules('activityname', 'Activity Name', 'required');
-
         if ($this->form_validation->run() == FALSE) {
-
             if (!$this->input->post('activity_cat')) {
                 redirect('activity');
             }
@@ -72,7 +76,7 @@ class Activity extends CI_Controller
                 'title' => 'Create Activity',
                 'academicsessions' => $this->academic_model->get_academicsession(),
                 'sigs' => $this->sig_model->get_sig(),
-                'mentors' =>  $this->mentor_model->get_mentor(),
+                'mentors' =>  $this->mentor_model->get_sigmentors($sig_id),
                 'semesters' => $this->semester_model->get_semesters(),
                 'sigstudents' => $this->student_model->get_sigstudents($sig_id),
                 'highcoms' => $this->activity_model->get_act_highcoms_position(),
@@ -133,7 +137,7 @@ class Activity extends CI_Controller
 
     public function edit($slug)
     {
-        $sig_id = 1;
+        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         $activity = $this->activity_model->get_activity($slug);
         if (empty($activity)) {
             show_404();
