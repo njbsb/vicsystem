@@ -4,7 +4,7 @@
     <!-- <div class="form-group">
         <button data-toggle="modal" data-target="#addscoreplan" class="btn btn-outline-danger" disabled>Add new scoring plan</button>
     </div> -->
-
+    <h6>Please make sure total score plans mark percentages add up to 55%</h6>
     <table id="scoreplanindex" class="table">
         <thead class="table-dark">
             <tr>
@@ -46,6 +46,7 @@
             </tr>
         </tfoot> -->
     </table>
+    
 </div>
 <!-- MODAL -->
 <div id="addscoreplan" class="modal fade">
