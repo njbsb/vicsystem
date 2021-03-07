@@ -6,36 +6,36 @@
 </div>
 <div id="committees" class="">
     <?php if ($isHighcom or $this->session->userdata('isMentor')) : ?>
-        <div class="form-group">
-            <a data-toggle="modal" data-target="#add_actcommittee" class="btn btn-outline-primary">Add committee</a>
-        </div>
+    <div class="form-group">
+        <a data-toggle="modal" data-target="#add_actcommittee" class="btn btn-outline-primary">Add committee</a>
+    </div>
     <?php endif ?>
 
-    <table id="tbl_committee" class="table" style="text-align:left;">
+    <table id="tbl_committee" class="table table-hover" style="text-align:left;">
         <thead class="table-dark">
             <tr>
                 <th scope="col">Matric</th>
                 <th scope="col">Name</th>
                 <th scope="col">Position</th>
                 <?php if ($isHighcom or ($this->session->userdata('username') == $activity['advisor_matric'])) : ?>
-                    <th></th>
+                <th></th>
                 <?php endif ?>
             </tr>
         </thead>
         <tbody class="list">
             <?php if ($committees) : ?>
-                <?php foreach ($committees as $com) : ?>
-                    <tr>
-                        <td scope="row"><?= $com['student_matric'] ?></td>
-                        <td scope="row"><?= $com['name'] ?></td>
-                        <td scope="row"><?= $com['rolename'] ?></td>
-                        <?php if ($isHighcom or ($this->session->userdata('username') == $activity['advisor_matric'])) : ?>
-                            <!-- only advisor and highcom can see the delete button -->
-                            <?php $disabled = ($isHighcom and in_array($com['role_id'], $highcoms_id)) ? 'disabled' : '' ?>
-                            <td><button data-toggle="modal" data-target="#delete_committee" data-roleid="<?= $com['role_id'] ?>" class="btn-sm btn btn-outline-danger" <?= $disabled ?>>Delete</button></td>
-                        <?php endif ?>
-                    </tr>
-                <?php endforeach ?>
+            <?php foreach ($committees as $com) : ?>
+            <tr>
+                <td scope="row"><?= $com['student_matric'] ?></td>
+                <td scope="row"><?= $com['name'] ?></td>
+                <td scope="row"><?= $com['rolename'] ?></td>
+                <?php if ($isHighcom or ($this->session->userdata('username') == $activity['advisor_matric'])) : ?>
+                <!-- only advisor and highcom can see the delete button -->
+                <?php $disabled = ($isHighcom and in_array($com['role_id'], $highcoms_id)) ? 'disabled' : '' ?>
+                <td><button data-toggle="modal" data-target="#delete_committee" data-roleid="<?= $com['role_id'] ?>" class="btn-sm btn btn-outline-danger" <?= $disabled ?>>Delete</button></td>
+                <?php endif ?>
+            </tr>
+            <?php endforeach ?>
             <?php endif ?>
         </tbody>
     </table>
@@ -61,7 +61,7 @@
                     <label for="role_id">Roles</label>
                     <select name="role_id" class="form-control">
                         <?php foreach ($activity_roles as $acr) : ?>
-                            <option value="<?= $acr['id'] ?>"><?= $acr['rolename'] ?></option>
+                        <option value="<?= $acr['id'] ?>"><?= $acr['rolename'] ?></option>
                         <?php endforeach ?>
                     </select>
                 </div>
@@ -74,7 +74,7 @@
                     <label for="student_matric">Member</label>
                     <select name="student_matric" class="form-control">
                         <?php foreach ($sig_members as $sm) : ?>
-                            <option value="<?= $sm['id'] ?>"><?= $sm['name'] ?></option>
+                        <option value="<?= $sm['id'] ?>"><?= $sm['name'] ?></option>
                         <?php endforeach ?>
                     </select>
                 </div>
@@ -114,10 +114,10 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('#checkbox_committee').click(function() {
-            $('#committees').toggle();
-        });
-        $('#tbl_committee').DataTable();
+$(document).ready(function() {
+    $('#checkbox_committee').click(function() {
+        $('#committees').toggle();
     });
+    $('#tbl_committee').DataTable();
+});
 </script>

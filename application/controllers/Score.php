@@ -17,7 +17,7 @@ class Score extends CI_Controller
             $academicsessions[$i]['enrolling'] = count($enrollingstudents);
         }
         $data = array(
-            'title' => 'Scores',
+            'title' => "Student's Activity Scores",
             'academicsessions' => $academicsessions,
             'academicyears' => $this->academic_model->get_academicyear(),
             'semesters' => $this->semester_model->get_semesters()

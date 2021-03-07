@@ -13,7 +13,7 @@ class User extends CI_Controller
             $users = $this->user_model->get_user();
         }
         $data = array(
-            'title' => 'All Users',
+            'title' => 'Manage Users',
             'users' => $users
         );
         $this->load->view('templates/header');

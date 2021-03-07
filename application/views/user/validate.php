@@ -1,22 +1,22 @@
 <?php if (validation_errors()) : ?>
-    <div class="alert alert-dismissible alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <h4 class="alert-heading">Warning!</h4>
-        <p class="mb-0"><?= validation_errors() ?></p>
-    </div>
+<div class="alert alert-dismissible alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h4 class="alert-heading">Warning!</h4>
+    <p class="mb-0"><?= validation_errors() ?></p>
+</div>
 <?php endif ?>
 <h2 class="text-center"><?= $user['id'] ?></h2>
 <?= form_open('user/validate/' . $user['id']) ?>
 <div class="row">
     <div class="col-lg-4">
         <div class="card border mb-3 text-center" style="max-width: 20rem;">
-            <h4 class="card-header">
+            <h4 class="card-header text-primary">
                 <b><?= ucfirst($user['usertype']) ?></b>
             </h4>
             <?php if ($user['profile_image']) : ?>
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $user['profile_image']) ?>">
+            <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $user['profile_image']) ?>">
             <?php else : ?>
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . 'default.jpg') ?>">
+            <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . 'default.jpg') ?>">
             <?php endif ?>
 
             <div class="card-footer text-muted">
@@ -47,11 +47,11 @@
             <select name="sig_id" class="form-control" id="sig_id" readonly>
                 <option value="" selected disabled hidden>Choose SIG</option>
                 <?php foreach ($sigs as $sig) : ?>
-                    <option value="<?= $sig['id'] ?>" <?php if ($user['sig_id'] == $sig['id']) {
+                <option value="<?= $sig['id'] ?>" <?php if ($user['sig_id'] == $sig['id']) {
                                                             echo 'selected';
                                                         } ?>>
-                        <?= $sig['namecode'] ?>
-                    </option>
+                    <?= $sig['namecode'] ?>
+                </option>
                 <?php endforeach ?>
             </select>
         </div>
@@ -78,7 +78,7 @@
                     <select name="userstatus_id" id="" class="form-control" style="max-width: 20rem;">
                         <option value="" selected disabled hidden>Choose user status</option>
                         <?php foreach ($userstatuses as $us) : ?>
-                            <option value="<?= $us['id'] ?>" <?php if ($us['id'] == $user['userstatus_id']) {
+                        <option value="<?= $us['id'] ?>" <?php if ($us['id'] == $user['userstatus_id']) {
                                                                     echo 'selected';
                                                                 } ?>><?= $us['userstatus'] ?></option>
                         <?php endforeach ?>
