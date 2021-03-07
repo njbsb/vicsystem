@@ -23,14 +23,18 @@
 <!-- <script src="https://raw.githubusercontent.com/javve/list.js/v1.5.0/dist/list.min.js"></script> -->
 
 <script type="text/javascript">
-    // $(document).on('click', 'li', function() {
-    //     $(this).addClass('active').siblings().removeClass('active');
+// $(document).on('click', 'li', function() {
+//     $(this).addClass('active').siblings().removeClass('active');
+// });
+$(document).ready(function() {
+    // $('li').click(function() {
+    //     $(this).addClass('.active').siblings().removeClass('active');
     // });
-    $(document).ready(function() {
-        // $('li').click(function() {
-        //     $(this).addClass('.active').siblings().removeClass('active');
-        // });
-    });
+});
+</script>
+<script src=""></script>
+<script>
+$('#navbar').bootnavbar();
 </script>
 </body>
 
