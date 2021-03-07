@@ -18,13 +18,9 @@ class Pages extends CI_Controller
                 $activities[$key]['diff'] = $d;
             }
             $coursecount = $this->student_model->get_studentbycourse($user['sig_id']);
-            $data = array(
-                'user_name' => $user['name'],
-                'activesession' => $this->academic_model->get_activeacademicsession(),
-                'birthdaymembers' => $this->user_model->get_birthdaymembers($user['sig_id']),
-                'upcomingactivities' => $activities
-            );
+            $intakedata = $this->student_model->get_studentbyintake($user['sig_id']);
             $pieData = [];
+            $barData = [];
             // print_r($coursecount);
             $totalmembercount = 0;
             foreach($coursecount as $row) {
@@ -32,8 +28,19 @@ class Pages extends CI_Controller
                 $pieData['data'][] = $row->program_count;
                 $totalmembercount += $row->program_count;
             }
-            $data['chart_data'] = json_encode($pieData);
-            $data['total_count'] = $totalmembercount;
+            foreach($intakedata as $intake) {
+                $barData['label'][] = $intake->year_joined;
+                $barData['data'][] = $intake->intake_count;
+            }
+            $data = array(
+                'user_name' => $user['name'],
+                'activesession' => $this->academic_model->get_activeacademicsession(),
+                'birthdaymembers' => $this->user_model->get_birthdaymembers($user['sig_id']),
+                'upcomingactivities' => $activities,
+                'chart_data' => json_encode($pieData),
+                'total_count' => $totalmembercount,
+                'barchart_data' => json_encode($barData)
+            );
             $this->load->view('templates/header');
             $this->load->view('pages/home_user', $data);
             $this->load->view('templates/footer');

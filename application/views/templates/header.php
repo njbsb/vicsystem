@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/jquery.dataTables.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/dataTables.bootstrap.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/sticky-footer.css') ?>" rel="stylesheet">
+    <link rel="stylesheet" href="<?= base_url('assets/css/sigcustom.css') ?>" rel="stylesheet">
     <!-- <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.min.css"> -->
     <script src="https://kit.fontawesome.com/dff01397e8.js" crossorigin="anonymous"></script>
 
@@ -23,7 +24,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
         crossorigin="anonymous"></script>
     <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
-
     <style>
     body {
         font: 14px Montserrat, sans-serif;
@@ -49,8 +49,8 @@
     }
 
     /* h2 {
-            font: 20px Montserrat, sans-serif;
-        } */
+        font: 36px Roboto, sans-serif;
+    } */
 
     .post-date {
         background: #f4f4f4;
@@ -122,7 +122,7 @@
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">Admin</a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="<?= site_url() ?>user">Manage Users</a>
-                            <a class="dropdown-item" href="<?= site_url('academic') ?>">Academic Data</a>
+                            <a class="dropdown-item" href="<?= site_url('academic') ?>">Academic Control</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -156,9 +156,6 @@
 
         <ul class="navbar-nav mr-auto">
             <?php if ($this->session->userdata('logged_in')) : ?>
-            <!-- <li class="nav-item">
-                <a class="nav-link" href="<?= site_url('logout') ?>">LogOut<span class="sr-only">(current)</span></a>
-            </li> -->
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><?= $this->session->userdata('username') ?></a>
                 <div class="dropdown-menu">

@@ -1,6 +1,6 @@
 <!-- <h2><?= $title ?></h2> -->
 <!-- <p>Welcome to SIG Integrated System</p> -->
-<div class="jumbotron bg-white">
+<div class="jumbotron bg-white" style="padding-bottom: 0px;">
     <h5 class="text-right text-muted"><b>Today is <?= date("jS F Y (l)") ?></b></h5>
     <h1 class="display-3">Welcome to VIC System, <?= $user_name ?>!</h1>
     <p class="lead">This is a website to manage VIC Information and Activities</p>
@@ -9,6 +9,7 @@
     </p>
 </div>
 <h3 class="text-center">Information Analytics</h3>
+<br>
 <div class="jumbotron bg-muted" style="border-radius: 16px">
     <div class="row">
         <div class="col-sm-6">
@@ -16,7 +17,7 @@
             <canvas responsive="true" id="pieChart"></canvas>
         </div>
         <div class="col-sm-6">
-            <label>Chart 1</label>
+            <label><b>VIC Intake by Year</b></label>
             <canvas id="barChart" responsive="true"></canvas>
         </div>
     </div>
@@ -35,7 +36,7 @@
                     <?php endforeach ?>
                 </p>
                 <p class="lead">
-                    <a class="btn btn-primary btn-sm" href="Jumbo action link" role="button">Jumbo action name</a>
+                    <a class="btn btn-primary btn-sm" href="#" role="button">Send a wish!</a>
                 </p>
             </div>
         </div>
@@ -45,7 +46,7 @@
             <div class="container">
                 <h5 class="text-left text-primary"><b>Current Academic Session: <?= $activesession['academicsession'] ?></b></h5>
                 <hr class="my-2">
-                <p><b>Upcoming activities this semester:</b></p>
+                <p>Upcoming activities this semester:</p>
                 <!-- <p>
                     <?php foreach($upcomingactivities as $key => $activity): ?>
                     <?= $key+1 ?>. <?= $activity['activity_name'] ?> (<?= date_format(date_create($activity['datetime_start']),'j/n') ?>) <br>
@@ -81,16 +82,17 @@
 </div>
 
 <script>
-var ctx = document.getElementById('barChart').getContext('2d');
 var pieC = document.getElementById('pieChart').getContext('2d');
 
-var barChart = new Chart(ctx, {
+var bData = JSON.parse(`<?php echo $barchart_data; ?>`);
+var btx = document.getElementById('barChart').getContext('2d');
+var barChart = new Chart(btx, {
     type: 'bar',
     data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: bData.label,
         datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
+            label: '# of Intake',
+            data: bData.data,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
