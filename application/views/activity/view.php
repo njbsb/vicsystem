@@ -1,47 +1,48 @@
-<div style="text-align: center;">
-    <?php if ($activity['photo_path']) : ?>
-        <div class="container-fluid text-center">
-            <img style="width:auto" src="<?= base_url('assets/images/activity/') . $activity['photo_path'] ?>">
-        </div>
-    <?php else : ?>
-        <small>This activity does not have any photo uploaded</small>
-    <?php endif ?>
-    <h1>Activity: <?= $activity['activity_name'] ?></h1>
-    <small>Activity created on <?= date('jS F Y', strtotime($activity['created_at'])) ?></small><br>
-    <br>
-    <h6>Desc</h6>
+<div class="container">
+    <p class="text-right">Created on <?= date('jS F Y', strtotime($activity['created_at'])) ?><br>By: <?= $activity['signame'] ?></p>
+    <div class="container-fluid text-center">
+        <?php $photopath = ($activity['photo_path']) ? $activity['photo_path'] : 'default_2.jpg' ?>
+        <img style="max-width: 100%; object-fit: cover; object-position: center; border: 1.5px solid #B1B1B1; box-sizing: border-box; border-radius: 14px; background-position: center center;
+  background-repeat: no-repeat;" width="1280" height="330" src="<?= base_url('assets/images/activity/') . $photopath ?>" alt="">
+    </div>
+    <h2 class="text-primary"><b><?= $activity['activity_name'] ?></b></h2>
     <p class="text-justify"><?= $activity['activity_desc'] ?></p>
-    <h6>SIG</h6>
-    <p><?= $activity['signame'] ?></p>
-    <h6>Venue</h6>
-    <?php if ($activity['venue']) : ?>
-        <p><?= $activity['venue'] ?></p>
-    <?php else : ?>
-        <p><small>No venue data recorded</small></p>
-    <?php endif ?>
-    <h6>Theme</h6>
-    <?php if ($activity['theme']) : ?>
-        <p><?= $activity['theme'] ?></p>
-    <?php else : ?>
-        <p><small>No theme data recorded</small></p>
-    <?php endif ?>
-    <h6>Date</h6>
-    <p><?= date('jS F Y \a\t H:i a', strtotime($activity['datetime_start'])) ?>
-        <br>to<br>
-        <?= date('jS F Y \a\t H:i a', strtotime($activity['datetime_end'])) ?></p>
-    <h6>Advisor</h6>
-    <p><?= $activity['advisorname'] ?></p>
+    <div class="container h-100">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="row h-100 align-self-center">
+                    <span class="iconify" data-icon="ic:outline-place" data-inline="false" style="width:24px; height:24px;"></span>
+                    &nbsp;&nbsp;<b><?= $activity['venue'] ?></b>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row h-100 align-self-center">
+                    <span class="iconify" data-icon="akar-icons:calendar" data-inline="false" style="width:24px; height:24px;"></span>
+                    &nbsp;&nbsp;<b><?= date('jS M Y', strtotime($activity['datetime_start'])) ?> to <?= date('jS M Y', strtotime($activity['datetime_end'])) ?></b>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row h-100 align-self-center">
+                    <span class="iconify" data-icon="ic:outline-supervised-user-circle" data-inline="true" style="width:24px; height:24px;"></span>
+                    &nbsp;&nbsp;<b><?= $activity['advisorname'] ?></b>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <p><b>Theme: </b><?= $activity['theme'] ?></p>
 </div>
 <hr>
-<div class="container d-flex justify-content-center">
+<!-- <hr> -->
+<div class="container d-flex justify-content-start">
     <div class="row">
         <?php if ($this->session->userdata('isMentor') or $isHighcom) : ?>
-            <?= form_open('activity/edit/' . $activity['slug']) ?>
-            <input type="submit" value="Update" class="btn btn-outline-primary">
-            <?= form_close() ?>
-            &nbsp;
-            <?php $disabled = ($this->session->userdata('isMentor')) ? '' : 'disabled' ?>
-            <button data-toggle="modal" data-target="#confirmdelete" class="btn btn-outline-danger" <?= $disabled ?>>Delete activity</button>
+        <?= form_open('activity/edit/' . $activity['slug']) ?>
+        <input type="submit" value="Update" class="btn btn-outline-primary">
+        <?= form_close() ?>
+        &nbsp;
+        <?php $disabled = ($this->session->userdata('isMentor')) ? '' : 'disabled' ?>
+        <button data-toggle="modal" data-target="#confirmdelete" class="btn btn-outline-danger" <?= $disabled ?>>Delete activity</button>
         <?php endif ?>
 
     </div>
