@@ -2,7 +2,7 @@
 <!-- <p>Welcome to SIG Integrated System</p> -->
 <div class="jumbotron bg-white" style="padding-bottom: 0px;">
     <h5 class="text-right text-muted"><b>Today is <?= date("jS F Y (l)") ?></b></h5>
-    <h1 class="display-3">Welcome to VIC System, <?= $user_name ?>!</h1>
+    <h1 class="display-3">Welcome to VIC Web, <?= $user_name ?>!</h1>
     <p class="lead">This is a website to manage VIC Information and Activities</p>
     <hr class="my-4">
     <p class="lead">
