@@ -17,16 +17,23 @@ class Pages extends CI_Controller
                 $d = ($date_event < $date_now) ? 'Event passed' : $diff->format("%r%a days");
                 $activities[$key]['diff'] = $d;
             }
-            // print_r($activities);
+            $coursecount = $this->student_model->get_studentbycourse($user['sig_id']);
             $data = array(
                 'user_name' => $user['name'],
                 'activesession' => $this->academic_model->get_activeacademicsession(),
                 'birthdaymembers' => $this->user_model->get_birthdaymembers($user['sig_id']),
                 'upcomingactivities' => $activities
             );
-            // print_r($data['activesession']);
-            // $birthdaymembers = $this->user_model->get_birthdaymembers($user['sig_id']);
-            // print_r($data['upcomingactivities']);
+            $pieData = [];
+            // print_r($coursecount);
+            $totalmembercount = 0;
+            foreach($coursecount as $row) {
+                $pieData['label'][] = $row->program_code;
+                $pieData['data'][] = $row->program_count;
+                $totalmembercount += $row->program_count;
+            }
+            $data['chart_data'] = json_encode($pieData);
+            $data['total_count'] = $totalmembercount;
             $this->load->view('templates/header');
             $this->load->view('pages/home_user', $data);
             $this->load->view('templates/footer');

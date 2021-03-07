@@ -46,6 +46,16 @@ class Student_model extends CI_Model
         }
     }
 
+    public function get_studentbycourse($sig_id) {
+        $this->db->select('program_code, count(*) as program_count')
+        ->from('student')
+        ->join('user', 'user.id = student.matric')
+        ->where('user.sig_id', $sig_id)
+        ->group_by('program_code');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
     public function get_mentor_matric($student_id)
     {
         $query = $this->db->get_where('student', array('matric' => $student_id));
