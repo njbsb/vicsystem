@@ -56,6 +56,16 @@ class Student_model extends CI_Model
         return $query->result();
     }
 
+    public function get_studentbyintake($sig_id) {
+        $this->db->select('year_joined, count(*) as intake_count')
+        ->from('student')
+        ->join('user', 'user.id = student.matric')
+        ->where('user.sig_id', $sig_id)
+        ->group_by('year_joined');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
     public function get_mentor_matric($student_id)
     {
         $query = $this->db->get_where('student', array('matric' => $student_id));
