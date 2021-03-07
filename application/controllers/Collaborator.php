@@ -4,7 +4,7 @@ class Collaborator extends CI_Controller
     public function index()
     {
         $data = array(
-            'title' => 'Collaborators',
+            'title' => 'Industry Collaborators',
             'collaborators' => $this->collaborator_model->get_collaborators()
         );
         $this->load->view('templates/header');
