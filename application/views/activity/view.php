@@ -60,7 +60,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                You are about to delete activity: <?= $activity['activity_name'] ?>.
+                You are about to delete activity: <?= $activity['activity_name'] ?>. You can undo this.
                 Proceed?
             </div>
             <div class="modal-footer">
