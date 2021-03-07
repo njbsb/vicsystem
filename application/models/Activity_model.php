@@ -48,6 +48,16 @@ class Activity_model extends CI_Model
         }
     }
 
+    public function get_upcomingactivities($sig_id, $acadsession_id) {
+        $this->db->select('*')
+            ->from('activity')->where(array(
+                'sig_id' => $sig_id,
+                'acadsession_id' => $acadsession_id
+            ));
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     public function get_sig_activity($sig_id)
     {
         $this->db->select("act.id, act.activity_name, act.activity_desc, act.slug, act.activitycategory_id, acttype.type, act.photo_path, act.datetime_start, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, sig.code, mtr.name as advisorname")

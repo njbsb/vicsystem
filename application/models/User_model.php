@@ -167,6 +167,17 @@ class User_model extends CI_Model
         return $query->row()->id;
     }
 
+    public function get_birthdaymembers($sig_id) {
+        // current month
+        $this->db->select('name, dob')
+            ->from('user')->where(array(
+                'MONTH(dob)' => date('m'),
+                'sig_id' => $sig_id
+            ));
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     public function id_exist($user_id)
     {
         $this->db->where('id', $user_id);
