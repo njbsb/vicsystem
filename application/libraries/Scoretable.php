@@ -19,13 +19,26 @@ class Scoretable
             foreach ($citrarow as $cr) {
                 $citrastring .= $cr['citra_code'] . ' ';
             }
+            
+            if(floatval($acp['gpa_achieved']) == 0 or floatval($acp['gpa_achieved']) == null) {
+                $difference = 'No data';
+            }
+            else {
+                $difference = floatval($acp['gpa_achieved']) - floatval($acp['gpa_target']);
+            }
+            if($acp['gpa_achieved'] == 0 or $acp['gpa_achieved'] == null) {
+                $gpa_achieved = 'No data';
+            }
+            else {
+                $gpa_achieved = $acp['gpa_achieved'];
+            }
             $acparray = array(
                 'acadsession_id' => $acp['acadsession_id'],
                 'academicsession' => $acp['academicsession'],
                 'citra_reg' => $citrastring,
                 'gpa_target' => $acp['gpa_target'],
-                'gpa_achieved' => $acp['gpa_achieved'],
-                'difference' => floatval($acp['gpa_achieved']) - floatval($acp['gpa_target'])
+                'gpa_achieved' => $gpa_achieved,
+                'difference' => $difference
             );
             $acadplans[$i] = $acparray;
         }

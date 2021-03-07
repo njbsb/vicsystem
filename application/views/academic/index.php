@@ -6,7 +6,8 @@
         <h3>Academic Session</h3>
     </div>
     <div class="col-4">
-        <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacademicsession" style="float: right;">Add Academic Session</button>
+        <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacademicsession"
+            style="float: right;">Add Academic Session</button>
     </div>
 </div>
 <table id="acs_table" class="table text-center">
@@ -21,15 +22,17 @@
     </thead>
     <tbody>
         <?php foreach ($academicsession as $acs) : ?>
-            <?php $textclass = ($acs['status'] == 'active') ? 'text-success' : 'text-muted' ?>
-            <?php $disabled = ($acs['status'] == 'active') ? 'disabled' : '' ?>
-            <tr>
-                <td><?= $acs['id'] ?></td>
-                <td><?= $acs['academicyear'] ?></td>
-                <td><?= $acs['semester_id'] ?></td>
-                <td class="<?= $textclass ?>"><?= $acs['status'] ?></td>
-                <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acs" data-string="<?= $acs['academicsession'] ?>" data-acsid="<?= $acs['id'] ?>" class="btn btn-outline-primary btn-sm">Toggle Active</button></td>
-            </tr>
+        <?php $textclass = ($acs['status'] == 'active') ? 'text-success' : 'text-muted' ?>
+        <?php $disabled = ($acs['status'] == 'active') ? 'disabled' : '' ?>
+        <tr>
+            <td><?= $acs['id'] ?></td>
+            <td><?= $acs['academicyear'] ?></td>
+            <td><?= $acs['semester_id'] ?></td>
+            <td class="<?= $textclass ?>"><?= $acs['status'] ?></td>
+            <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acs"
+                    data-string="<?= $acs['academicsession'] ?>" data-acsid="<?= $acs['id'] ?>"
+                    class="btn btn-outline-primary btn-sm">Toggle Active</button></td>
+        </tr>
         <?php endforeach ?>
     </tbody>
 </table>
@@ -40,7 +43,8 @@
         <h3>Academic Year</h3>
     </div>
     <div class="col-4">
-        <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacadyear" style="float: right;">Add Academic Year</button>
+        <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacadyear"
+            style="float: right;">Add Academic Year</button>
     </div>
 </div>
 <table id="acy_table" class="table text-center">
@@ -54,14 +58,16 @@
     </thead>
     <tbody>
         <?php foreach ($academicyear as $acy) : ?>
-            <?php $textclass = ($acy['status'] == 'active') ? 'text-success' : 'text-muted' ?>
-            <?php $disabled = ($acy['status'] == 'active') ? 'disabled' : '' ?>
-            <tr>
-                <td><?= $acy['id'] ?></td>
-                <td><?= $acy['acadyear'] ?></td>
-                <td class="<?= $textclass ?>"><?= $acy['status'] ?></td>
-                <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acy" data-string="<?= $acy['acadyear'] ?>" data-acyid="<?= $acy['id'] ?>" class="btn btn-outline-primary btn-sm">Toggle Active</button></td>
-            </tr>
+        <?php $textclass = ($acy['status'] == 'active') ? 'text-success' : 'text-muted' ?>
+        <?php $disabled = ($acy['status'] == 'active') ? 'disabled' : '' ?>
+        <tr>
+            <td><?= $acy['id'] ?></td>
+            <td><?= $acy['acadyear'] ?></td>
+            <td class="<?= $textclass ?>"><?= $acy['status'] ?></td>
+            <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acy"
+                    data-string="<?= $acy['acadyear'] ?>" data-acyid="<?= $acy['id'] ?>"
+                    class="btn btn-outline-primary btn-sm">Toggle Active</button></td>
+        </tr>
         <?php endforeach ?>
     </tbody>
 </table>
@@ -84,7 +90,7 @@
                     <select name="acadyear_id" id="acadyear_id" class="form-control" required>
                         <option value="" selected disabled hidden>Select academic year</option>
                         <?php foreach ($academicyear as $acadyear) : ?>
-                            <option value="<?= $acadyear['id'] ?>"><?= $acadyear['acadyear'] ?></option>
+                        <option value="<?= $acadyear['id'] ?>"><?= $acadyear['acadyear'] ?></option>
                         <?php endforeach ?>
                     </select>
                 </div>
@@ -93,7 +99,7 @@
                     <select name="semester_id" id="semester_id" class="form-control" required>
                         <option value="" selected disabled hidden>Select semester</option>
                         <?php foreach ($semesters as $sem) : ?>
-                            <option value="<?= $sem['id'] ?>"><?= $sem['semester'] ?></option>
+                        <option value="<?= $sem['id'] ?>"><?= $sem['semester'] ?></option>
                         <?php endforeach ?>
                     </select>
                 </div>
@@ -120,7 +126,8 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="acadyear">Academic Year:</label>
-                    <input name="acadyear" type="text" placeholder="20XX/20XX" readonly value="<?= $new_year ?>" id="acadyear" class="form-control">
+                    <input name="acadyear" type="text" placeholder="20XX/20XX" readonly value="<?= $new_year ?>"
+                        id="acadyear" class="form-control">
                 </div>
             </div>
             <div class="modal-footer">
@@ -195,30 +202,30 @@
 </div>
 
 <script>
-    var tables = ['#acs_table', '#acy_table', '#acp_table'];
-    $(document).ready(function() {
-        $('#acs_table').DataTable();
-        $('#acy_table').DataTable();
-        var confirmtext = document.getElementById('confirmtext');
-        $('#setactive_acs').on('show.bs.modal', function(e) {
-            var userid = $(e.relatedTarget).data('acsid');
-            var acads = $(e.relatedTarget).data('string');
-            confirmtext.innerHTML += ' <b>(' + acads + ')</b>';
-            $(e.currentTarget).find('input[name="session_id"]').val(userid);
-            $(e.currentTarget).find('input[name="session_string"]').val(acads);
-        });
-        $('#setactive_acs').on('hide.bs.modal', function(e) {
-            confirmtext.innerHTML = 'This will set this academic session to active.';
-        });
-        $('#setactive_acy').on('show.bs.modal', function(e) {
-            var id = $(e.relatedTarget).data('acyid');
-            var years = $(e.relatedTarget).data('string');
-            confirmtext.innerHTML += ' <b>(' + years + ')</b>';
-            $(e.currentTarget).find('input[name="acadyear_id"]').val(id);
-            $(e.currentTarget).find('input[name="year_string"]').val(years);
-        });
-        $('#setactive_acy').on('hide.bs.modal', function(e) {
-            confirmtext.innerHTML = 'This will set this academic year to active.';
-        });
+var tables = ['#acs_table', '#acy_table', '#acp_table'];
+$(document).ready(function() {
+    $('#acs_table').DataTable();
+    $('#acy_table').DataTable();
+    var confirmtext = document.getElementById('confirmtext');
+    $('#setactive_acs').on('show.bs.modal', function(e) {
+        var userid = $(e.relatedTarget).data('acsid');
+        var acads = $(e.relatedTarget).data('string');
+        confirmtext.innerHTML += ' <b>(' + acads + ')</b>';
+        $(e.currentTarget).find('input[name="session_id"]').val(userid);
+        $(e.currentTarget).find('input[name="session_string"]').val(acads);
     });
+    $('#setactive_acs').on('hide.bs.modal', function(e) {
+        confirmtext.innerHTML = 'This will set this academic session to active.';
+    });
+    $('#setactive_acy').on('show.bs.modal', function(e) {
+        var id = $(e.relatedTarget).data('acyid');
+        var years = $(e.relatedTarget).data('string');
+        confirmtext.innerHTML += ' <b>(' + years + ')</b>';
+        $(e.currentTarget).find('input[name="acadyear_id"]').val(id);
+        $(e.currentTarget).find('input[name="year_string"]').val(years);
+    });
+    $('#setactive_acy').on('hide.bs.modal', function(e) {
+        confirmtext.innerHTML = 'This will set this academic year to active.';
+    });
+});
 </script>
