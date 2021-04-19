@@ -6,8 +6,7 @@
         <h3>Academic Session</h3>
     </div>
     <div class="col-4">
-        <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacademicsession"
-            style="float: right;">Add Academic Session</button>
+        <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacademicsession" style="float: right;">Add Academic Session</button>
     </div>
 </div>
 <table id="acs_table" class="table text-center">
@@ -27,10 +26,9 @@
         <tr>
             <td><?= $acs['id'] ?></td>
             <td><?= $acs['academicyear'] ?></td>
-            <td><?= $acs['semester_id'] ?></td>
+            <td><?= $acs['semester'] ?></td>
             <td class="<?= $textclass ?>"><?= $acs['status'] ?></td>
-            <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acs"
-                    data-string="<?= $acs['academicsession'] ?>" data-acsid="<?= $acs['id'] ?>"
+            <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acs" data-string="<?= $acs['academicsession'] ?>" data-acsid="<?= $acs['id'] ?>"
                     class="btn btn-outline-primary btn-sm">Toggle Active</button></td>
         </tr>
         <?php endforeach ?>
@@ -43,8 +41,7 @@
         <h3>Academic Year</h3>
     </div>
     <div class="col-4">
-        <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacadyear"
-            style="float: right;">Add Academic Year</button>
+        <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacadyear" style="float: right;">Add Academic Year</button>
     </div>
 </div>
 <table id="acy_table" class="table text-center">
@@ -64,8 +61,7 @@
             <td><?= $acy['id'] ?></td>
             <td><?= $acy['acadyear'] ?></td>
             <td class="<?= $textclass ?>"><?= $acy['status'] ?></td>
-            <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acy"
-                    data-string="<?= $acy['acadyear'] ?>" data-acyid="<?= $acy['id'] ?>"
+            <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acy" data-string="<?= $acy['acadyear'] ?>" data-acyid="<?= $acy['id'] ?>"
                     class="btn btn-outline-primary btn-sm">Toggle Active</button></td>
         </tr>
         <?php endforeach ?>
@@ -99,7 +95,7 @@
                     <select name="semester_id" id="semester_id" class="form-control" required>
                         <option value="" selected disabled hidden>Select semester</option>
                         <?php foreach ($semesters as $sem) : ?>
-                        <option value="<?= $sem['id'] ?>"><?= $sem['semester'] ?></option>
+                        <option value="<?= $sem ?>"><?= $sem ?></option>
                         <?php endforeach ?>
                     </select>
                 </div>
@@ -126,8 +122,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="acadyear">Academic Year:</label>
-                    <input name="acadyear" type="text" placeholder="20XX/20XX" readonly value="<?= $new_year ?>"
-                        id="acadyear" class="form-control">
+                    <input name="acadyear" type="text" placeholder="20XX/20XX" readonly value="<?= $new_year ?>" id="acadyear" class="form-control">
                 </div>
             </div>
             <div class="modal-footer">

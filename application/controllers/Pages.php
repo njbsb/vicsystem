@@ -8,9 +8,10 @@ class Pages extends CI_Controller
         }
         if ($this->session->userdata('logged_in')) {
             $user = $this->user_model->get_user($this->session->userdata('username'));
+            // print_r($user);
             $activesession = $this->academic_model->get_activeacademicsession();
             $activities = $this->activity_model->get_upcomingactivities($user['sig_id'], $activesession['id']);
-            foreach($activities as $key => $act) {
+            foreach ($activities as $key => $act) {
                 $date_event = date_create($act['datetime_start']);
                 $date_now = date_create(date('y-m-d'));
                 $diff = date_diff($date_now, $date_event);
@@ -23,13 +24,13 @@ class Pages extends CI_Controller
             $barData = [];
             // print_r($coursecount);
             $totalmembercount = 0;
-            foreach($coursecount as $row) {
-                $pieData['label'][] = $row->program_code;
+            foreach ($coursecount as $row) {
+                $pieData['label'][] = $row->program_id;
                 $pieData['data'][] = $row->program_count;
                 $totalmembercount += $row->program_count;
             }
-            foreach($intakedata as $intake) {
-                $barData['label'][] = $intake->year_joined;
+            foreach ($intakedata as $intake) {
+                $barData['label'][] = $intake->yearjoined;
                 $barData['data'][] = $intake->intake_count;
             }
             $data = array(

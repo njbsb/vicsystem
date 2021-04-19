@@ -8,13 +8,13 @@ class Sig_model extends CI_Model
 
     public function get_sig($sig_id = NULL)
     {
-        $this->db->select("sig.*, concat(signame, ' (', code, ')') as namecode")
+        $this->db->select("sig.*, concat(name, ' (', code, ')') as namecode")
             ->from('sig');
         if ($sig_id == FALSE) {
             $query = $this->db->get();
             return $query->result_array();
         } else {
-            $this->db->where('id', $sig_id);
+            $this->db->where('code', $sig_id);
             $query = $this->db->get();
             return $query->row_array();
         }
@@ -26,5 +26,6 @@ class Sig_model extends CI_Model
             'id' => $user_id
         ));
         return $query->row()->sig_id;
+        // return $query->row_array()['sig_id'];
     }
 }

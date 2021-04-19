@@ -46,7 +46,7 @@ class Organization extends CI_Controller
         $data = array(
             'title' => 'Organization Hierarchy',
             'sig' => $sig,
-            'isMentor' => $this->session->userdata('isMentor'),
+            'isMentor' => $this->session->userdata('user_type') == 'mentor',
             'activeacadyear' => $activeacadyear,
             'president' => $president,
             'secondrows' => $secondrows,

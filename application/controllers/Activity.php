@@ -5,7 +5,7 @@ class Activity extends CI_Controller
     {
         $user_id = $this->session->userdata('username');
         $sig_id = $this->sig_model->get_sig_id($user_id);
-        if ($this->session->userdata('isAdmin')) {
+        if ($this->session->userdata('user_type') == 'admin') {
             $activities = $this->activity_model->get_activity();
         } else {
             $activities = $this->activity_model->get_sig_activity($sig_id);
@@ -44,7 +44,7 @@ class Activity extends CI_Controller
             'sig_members' => $this->student_model->get_sigstudents($activity['sig_id']),
             'highcoms_id' => $this->committee_model->get_acthighcoms_id()
         );
-        if ($this->session->userdata('isStudent')) {
+        if ($this->session->userdata('user_type') == 'mentor') {
             $isHighcom = $this->activity_model->check_activity_highCom($this->session->userdata('username'), $activity['id']);
             $data['isHighcom'] = $isHighcom;
         } else {
@@ -61,7 +61,7 @@ class Activity extends CI_Controller
 
     public function create()
     {
-        if (!$this->session->userdata('username') or $this->session->userdata('isStudent')) {
+        if (!$this->session->userdata('username') or $this->session->userdata('user_type') == 'student') {
             redirect(site_url());
         }
         $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
@@ -72,7 +72,7 @@ class Activity extends CI_Controller
             }
             $data = array(
                 'activitycategory' => $this->activity_model->get_activitycategory($this->input->post('activity_cat')),
-                'activitytype' => $this->activity_model->get_activitytype($this->input->post('activity_cat')),
+                // 'activitytype' => $this->activity_model->get_activitytype($this->input->post('activity_cat')),
                 'title' => 'Create Activity',
                 'academicsessions' => $this->academic_model->get_academicsession(),
                 'sigs' => $this->sig_model->get_sig(),

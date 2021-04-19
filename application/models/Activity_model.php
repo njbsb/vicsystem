@@ -11,13 +11,14 @@ class Activity_model extends CI_Model
     {
         if ($slug === FALSE && $activity_id === FALSE) {
             // this code will get all activities
-            $this->db->select("act.id, act.activity_name, act.slug, act.datetime_start, act.activitycategory_id, act.advisor_matric, acttype.type, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, sig.code, mtr.name as advisorname")
+            $this->db->select("act.id, act.title, act.slug, act.datetime_start, act.activitycategory_id,
+            concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, sig.code, mtr.name as advisorname")
                 ->from('activity as act')
                 ->join('academicsession as acs', 'act.acadsession_id = acs.id', 'left')
                 ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
-                ->join('user as mtr', 'act.advisor_matric = mtr.id', 'left')
-                ->join('sig as sig', 'act.sig_id = sig.id')
-                ->join('activity_type as acttype', 'act.activitytype_id = acttype.id')
+                // ->join('user as mtr', 'act.advisor_matric = mtr.id', 'left')
+                ->join('sig as sig', 'act.sig_id = sig.code')
+                // ->join('activity_type as acttype', 'act.activitytype_id = acttype.id')
                 ->order_by('act.id', 'DESC');
             $query = $this->db->get();
             return $query->result_array();
@@ -48,7 +49,8 @@ class Activity_model extends CI_Model
         }
     }
 
-    public function get_upcomingactivities($sig_id, $acadsession_id) {
+    public function get_upcomingactivities($sig_id, $acadsession_id)
+    {
         $this->db->select('*')
             ->from('activity')->where(array(
                 'sig_id' => $sig_id,
@@ -60,14 +62,15 @@ class Activity_model extends CI_Model
 
     public function get_sig_activity($sig_id)
     {
-        $this->db->select("act.id, act.activity_name, act.activity_desc, act.slug, act.activitycategory_id, acttype.type, act.photo_path, act.datetime_start, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, sig.code, mtr.name as advisorname")
+        $this->db->select("act.id, act.title, act.description, act.slug, act.activitycategory_id, 
+        act.datetime_start, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession, sig.code")
             ->from('activity as act')
             ->where('act.sig_id', $sig_id)
             ->join('academicsession as acs', 'act.acadsession_id = acs.id', 'left')
             ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
-            ->join('user as mtr', 'act.advisor_matric = mtr.id', 'left')
-            ->join('sig as sig', 'act.sig_id = sig.id')
-            ->join('activity_type as acttype', 'act.activitytype_id = acttype.id')
+            // ->join('user as mtr', 'act.advisor_matric = mtr.id', 'left')
+            ->join('sig as sig', 'act.sig_id = sig.code')
+            // ->join('activity_type as acttype', 'act.activitytype_id = acttype.id')
             ->order_by('act.id', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
@@ -126,10 +129,14 @@ class Activity_model extends CI_Model
 
     public function get_act_highcoms_position()
     {
-        $this->db->select('id, rolename')
-            ->from('role')
-            ->like('keyword', 'activity')
-            ->like('keyword', 'highcom');
+        $this->db->select('id, role')
+            ->from('role_activity')
+            ->where(array(
+                'level' => 'student',
+                'description' => 'highcom'
+            ));
+        // ->like('keyword', 'activity')
+        // ->like('keyword', 'highcom');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -158,13 +165,13 @@ class Activity_model extends CI_Model
     {
         if ($actcat_id == FALSE) {
             $this->db->select("actcat.*, concat(actcat.category, ' (', actcat.code, ')') as categorycode")
-                ->from('activity_category as actcat');
+                ->from('activitycategory as actcat');
             $query = $this->db->get();
             return $query->result_array();
         }
         $this->db->select("actcat.*, concat(actcat.category, ' (', actcat.code, ')') as categorycode")
-            ->from('activity_category as actcat')
-            ->where(array('id' => $actcat_id));
+            ->from('activitycategory as actcat')
+            ->where(array('code' => $actcat_id));
         $query = $this->db->get();
         return $query->row_array();
     }
@@ -187,7 +194,7 @@ class Activity_model extends CI_Model
                 'activity.acadsession_id' => $acadsession_id,
                 'activity.activitycategory_id' => $category_id
             ))
-            ->join('scoringplan', 'scoringplan.activity_id = activity.id');
+            ->join('score_plan', 'score_plan.activity_id = activity.id');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -200,7 +207,7 @@ class Activity_model extends CI_Model
                 'act.acadsession_id' => $acadsession_id,
                 'act.activitycategory_id' => $category_id
             ))
-            ->join('scoringplan as scp', 'scp.activity_id = act.id');
+            ->join('score_plan as scp', 'scp.activity_id = act.id');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -208,7 +215,7 @@ class Activity_model extends CI_Model
     public function get_category_unregisteredactivity($acadsession_id, $category_id)
     {
         $activities = $this->get_category_registeredactivity($acadsession_id, $category_id);
-        $this->db->select('act.id, act.activity_name');
+        $this->db->select('act.id, act.title');
         $this->db->from('activity as act');
         $this->db->where(array(
             'act.acadsession_id' => $acadsession_id,
@@ -225,9 +232,9 @@ class Activity_model extends CI_Model
     {
         $this->db->where(array(
             'acadsession_id' => $acadsession_id,
-            'activitycategory_id' => $category_id,
-            'sig_id' => $sig_id
-        ))->from('scoringplan');
+            // 'sig_id' => $sig_id,
+            'activitycategory_id' => $category_id
+        ))->from('score_plan');
         return $this->db->count_all_results();
     }
 }

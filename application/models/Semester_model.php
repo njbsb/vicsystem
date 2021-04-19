@@ -8,7 +8,6 @@ class Semester_model extends CI_Model
 
     public function get_semesters()
     {
-        $query = $this->db->get('semester');
-        return $query->result_array();
+        return array(1,2);
     }
 }

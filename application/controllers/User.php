@@ -3,22 +3,196 @@ class User extends CI_Controller
 {
     public function index()
     {
-        if ($this->session->userdata('isStudent')) {
+        $usertype = $this->session->userdata('user_type');
+        if ($usertype == 'student') {
             redirect('home');
         }
-        if ($this->session->userdata('isMentor')) {
+        if ($usertype == 'mentor') {
             $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
             $users = $this->user_model->get_user('', $sig_id);
-        } elseif ($this->session->userdata('isAdmin')) {
+        } elseif ($usertype == 'admin') {
             $users = $this->user_model->get_user();
         }
         $data = array(
             'title' => 'Manage Users',
             'users' => $users
         );
+        print_r($data['users']);
         $this->load->view('templates/header');
         $this->load->view('user/index', $data);
         // $this->load->view('templates/footer');
+    }
+
+    public function login()
+    {
+        if ($this->session->userdata('username')) {
+            redirect(site_url());
+        }
+        $this->form_validation->set_rules('username', 'username', 'required|callback_id_active');
+        $this->form_validation->set_rules('password', 'password', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $data = array(
+                'title' => 'Login'
+            );
+            $this->load->view('templates/header');
+            $this->load->view('user/login', $data);
+        } else {
+
+            # user clicked on Login
+            $username = $this->input->post('username');
+            $password = md5($this->input->post('password'));
+            $user_id = $this->user_model->login($username, $password);
+            if ($user_id) {
+                # successful login
+                $user_data = array(
+                    'username' => $user_id,
+                    'user_type' => $this->user_model->get_usertype($user_id),
+                    'isMentor' => false,
+                    'isStudent' => false,
+                    'isAdmin' => false,
+                    // 'isMentor' => $this->user_model->get_mentor_status($user_id),
+                    // 'isStudent' => $this->user_model->get_student_status($user_id),
+                    // 'isAdmin' => $this->user_model->get_admin_status($user_id),
+                    'logged_in' => true
+                );
+                $this->session->set_userdata($user_data);
+                $this->session->set_flashdata('user_loggedin', 'You are now logged in as ' . $user_id);
+                redirect(site_url());
+            } else {
+                $this->session->set_flashdata('login_failed', 'Login is invalid');
+                redirect('login');
+            }
+        }
+    }
+
+    public function register()
+    {
+        $usertype = $this->input->post('usertype');
+        if (!$usertype) {
+            redirect('login');
+        }
+        # if user didnt select either mentor or student from login page, he will be redirected to login page again
+
+        # VALUE RETRIEVAL
+        # this will return no value if we came from login page
+        # but will return value if we submit registration form
+        $id = $this->input->post('id');
+        $name = $this->input->post('name');
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
+        $sig_id = $this->input->post('sig_id');
+        $dob = $this->input->post('dob');
+
+        $mentor = 'mentor';
+        $student = 'student';
+        // $mentor_typeid = $this->user_model->get_mentor_usertype_id();
+        // $student_typeid = $this->user_model->get_student_usertype_id();
+
+        if ($usertype == $mentor) {
+            $position = $this->input->post('position');
+            $roomnum = $this->input->post('roomnum');
+            $orgrole_id = $this->input->post('orgrole_id');
+        } elseif ($usertype == $student) {
+            $program_code = $this->input->post('program_code');
+            $phonenum = $this->input->post('phonenum');
+        }
+        # END VALUE RETRIEVAL
+
+        # VALIDATION OF REGISTRATION FORM
+        if ($id && $name && $email && $password && $sig_id && $dob) {
+            $this->form_validation->set_rules('id', 'ID', 'required|callback_id_exist');
+            $this->form_validation->set_rules('name', 'Name', 'required');
+            $this->form_validation->set_rules('email', 'Email', 'required');
+            $this->form_validation->set_rules('password', 'Password', 'required');
+            $this->form_validation->set_rules('confirmpassword', 'Confirm Password', 'matches[password]');
+            if ($usertype == $mentor && $position && $roomnum && $orgrole_id) {
+                $this->form_validation->set_rules('position', 'Position', 'required');
+                $this->form_validation->set_rules('roomnum', 'Room number', 'required');
+                $this->form_validation->set_rules('orgrole_id', 'Organization role', 'required');
+            } elseif ($usertype == $student && $program_code && $phonenum) {
+                $this->form_validation->set_rules('program_code', 'Program', 'required');
+                $this->form_validation->set_rules('phonenum', 'Phone Number', 'required');
+            }
+        }
+        # END VALIDATION
+
+        if ($this->form_validation->run() === FALSE) {
+            # ON FIRST LANDING TO REGISTRATION FORM
+            # NO REGISTRATION DATA IS SUBMITTED
+
+            if ($usertype) {
+                # if user selected either 'mentor' or 'student' from login page
+                // $data['usertype_name'] = ucfirst($this->user_model->get_usertypename($usertype));
+                $data['usertype_name'] = ucfirst($usertype);
+            } else {
+                redirect('login');
+            }
+            $data['usertype'] = $usertype; # this is to be sent as value in the registration form
+            $data['title'] = 'Register' . ' ' . ucfirst($usertype);
+            $data['sigs'] = $this->sig_model->get_sig();
+
+            # this will fetch data from previously filled registration form when validation error occurs
+            $data['id'] = $id;
+            $data['name'] = $name;
+            $data['email'] = $email;
+            $data['sig_id'] = $sig_id;
+            $data['dob'] = $dob;
+            // $data['program_code'] = $program_code;
+
+            $this->load->view('templates/header');
+
+            if ($usertype == $mentor) {
+                // MENTOR
+                $data['position'] = $position;
+                $data['roomnum'] = $roomnum;
+                $data['orgrole_id'] = $orgrole_id;
+                $data['mentorroles'] = $this->role_model->get_mentor_roles();
+                $this->load->view('user/mentor/register', $data);
+            } elseif ($usertype == $student) {
+                // STUDENT
+                $data['program_code'] = $program_code;
+                $data['phonenum'] = $phonenum;
+                $data['programs'] = $this->program_model->get_programs();
+                $this->load->view('user/student/register', $data);
+            }
+        } else {
+            # INSERT DATA TO DB
+            $enc_password = md5($this->input->post('password'));
+            $userdata = array(
+                'id' => $id,
+                'name' => $name,
+                'email' => $email,
+                'password' => $enc_password,
+                'sig_id' => $sig_id,
+                'usertype_id' => $usertype,
+                'dob' => $dob
+            );
+            $this->user_model->register_user($userdata);
+
+            if ($usertype == $mentor_typeid) {
+                # send data to mentor model
+                $mentordata = array(
+                    'matric' => $id,
+                    'position' => $position,
+                    'roomnum' => $roomnum,
+                    'orgrole_id' => $orgrole_id
+                );
+                $this->mentor_model->register_mentor($mentordata);
+            } elseif ($usertype = $student_typeid) {
+                # send data to student model
+                $studentdata = array(
+                    'matric' => $id,
+                    'phonenum' => $phonenum,
+                    'program_code' => $program_code
+                );
+                $this->student_model->register_student($studentdata);
+            }
+            $data['title'] = 'Registration Successful';
+            $data['content'] = 'Your registration is currently pending admin\'s approval. Your admin will contact you once your registration is approved';
+            $this->load->view('templates/header');
+            $this->load->view('user/register_success', $data);
+        }
     }
 
     public function profile()
@@ -26,10 +200,10 @@ class User extends CI_Controller
         $id = $this->session->userdata('username');
         $user = $this->user_model->get_user($id);
         $sig_id = $user['sig_id'];
-        $usertype = $user['usertype_id'];
+        $usertype = $user['usertype'];
         $this->load->view('templates/header');
         switch ($usertype) {
-            case '1':
+            case 'admin':
                 $data = array(
                     'title' => 'User Profile',
                     'user' => $user,
@@ -37,7 +211,7 @@ class User extends CI_Controller
                 );
                 $this->load->view('user/admin/profile', $data);
                 break;
-            case '2':
+            case 'mentor':
                 $data = array(
                     'title' => 'User Profile',
                     'user' => $user,
@@ -46,7 +220,7 @@ class User extends CI_Controller
                 );
                 $this->load->view('user/mentor/profile', $data);
                 break;
-            case '3':
+            case 'student':
                 $data = array(
                     'title' => 'User Profile',
                     'user' => $user,
@@ -54,7 +228,7 @@ class User extends CI_Controller
                     'activity_roles' => $this->committee_model->get_activityroles($id),
                     'org_roles' => $this->committee_model->get_orgroles($id, $sig_id)
                 );
-                $data['student']['year'] = date('Y') - $data['student']['year_joined'] + 1;
+                $data['student']['year'] = date('Y') - $data['student']['yearjoined'] + 1;
                 $this->load->view('user/student/profile', $data);
                 break;
         }
@@ -67,25 +241,25 @@ class User extends CI_Controller
             redirect('home');
         }
         $user = $this->user_model->get_user($id);
-        $usertype_id = $user['usertype_id'];
+        $usertype = $user['usertype'];
         $data = array(
             'title' => 'Update Profile',
             'sigs' => $this->sig_model->get_sig(),
             'programs' => $this->program_model->get_programs(),
             'mentors' => $this->mentor_model->get_mentor(),
-            'usertype_id' => $usertype_id
+            'usertype' => $usertype
         );
         $this->load->view('templates/header');
-        switch ($usertype_id) {
-            case '1':
+        switch ($usertype) {
+            case 'admin':
                 $data['admin'] = $this->admin_model->get_admin($id);
                 $this->load->view('user/admin/update', $data);
                 break;
-            case '2':
+            case 'mentor':
                 $data['mentor'] = $this->mentor_model->get_mentor($id);
                 $this->load->view('user/mentor/update', $data);
                 break;
-            case '3':
+            case 'student':
                 $data['student'] = $this->student_model->get_student($id);
                 $this->load->view('user/student/update', $data);
                 break;
@@ -155,43 +329,6 @@ class User extends CI_Controller
         redirect('user');
     }
 
-    public function login()
-    {
-        if ($this->session->userdata('username')) {
-            redirect(site_url());
-        }
-        $this->form_validation->set_rules('username', 'username', 'required|callback_id_active');
-        $this->form_validation->set_rules('password', 'password', 'required');
-
-        if ($this->form_validation->run() == FALSE) {
-            $data = array(
-                'title' => 'Login'
-            );
-            $this->load->view('templates/header');
-            $this->load->view('user/login', $data);
-        } else {
-            $username = $this->input->post('username');
-            $password = md5($this->input->post('password'));
-            $user_id = $this->user_model->login($username, $password);
-            if ($user_id) {
-                $user_data = array(
-                    'username' => $user_id,
-                    'user_type' => $this->user_model->get_usertype_id($user_id),
-                    'isMentor' => $this->user_model->get_mentor_status($user_id),
-                    'isStudent' => $this->user_model->get_student_status($user_id),
-                    'isAdmin' => $this->user_model->get_admin_status($user_id),
-                    'logged_in' => true
-                );
-                $this->session->set_userdata($user_data);
-                $this->session->set_flashdata('user_loggedin', 'You are now logged in as ' . $user_id);
-                redirect(site_url());
-            } else {
-                $this->session->set_flashdata('login_failed', 'Login is invalid');
-                redirect('login');
-            }
-        }
-    }
-
     public function logout()
     {
         $this->session->unset_userdata('username');
@@ -201,130 +338,6 @@ class User extends CI_Controller
         $this->session->unset_userdata('isAdmin');
         $this->session->set_flashdata('logged_out', 'You have successfully logged out!');
         redirect('login');
-    }
-
-    public function register()
-    {
-        $usertype_id = $this->input->post('usertype_id');
-        if (!$usertype_id) {
-            redirect('login');
-        }
-        # this usertype_id is from login page
-
-        # VALUE RETRIEVAL
-        # this will return no value if we came from login page
-        # but will return value if we submit registration form
-        $id = $this->input->post('id');
-        $name = $this->input->post('name');
-        $email = $this->input->post('email');
-        $password = $this->input->post('password');
-        $sig_id = $this->input->post('sig_id');
-        $dob = $this->input->post('dob');
-
-        $mentor_typeid = $this->user_model->get_mentor_usertype_id();
-        $student_typeid = $this->user_model->get_student_usertype_id();
-
-        if ($usertype_id == $mentor_typeid) {
-            $position = $this->input->post('position');
-            $roomnum = $this->input->post('roomnum');
-            $orgrole_id = $this->input->post('orgrole_id');
-        } elseif ($usertype_id == $student_typeid) {
-            $program_code = $this->input->post('program_code');
-            $phonenum = $this->input->post('phonenum');
-        }
-        # END VALUE RETRIEVAL
-
-        # VALIDATION OF REGISTRATION FORM
-        if ($id && $name && $email && $password && $sig_id && $dob) {
-            $this->form_validation->set_rules('id', 'ID', 'required|callback_id_exist');
-            $this->form_validation->set_rules('name', 'Name', 'required');
-            $this->form_validation->set_rules('email', 'Email', 'required');
-            $this->form_validation->set_rules('password', 'Password', 'required');
-            $this->form_validation->set_rules('confirmpassword', 'Confirm Password', 'matches[password]');
-            if ($usertype_id == $mentor_typeid && $position && $roomnum && $orgrole_id) {
-                $this->form_validation->set_rules('position', 'Position', 'required');
-                $this->form_validation->set_rules('roomnum', 'Room number', 'required');
-                $this->form_validation->set_rules('orgrole_id', 'Organization role', 'required');
-            } elseif ($usertype_id == $student_typeid && $program_code && $phonenum) {
-                $this->form_validation->set_rules('program_code', 'Program', 'required');
-                $this->form_validation->set_rules('phonenum', 'Phone Number', 'required');
-            }
-        }
-        # END VALIDATION
-
-        if ($this->form_validation->run() === FALSE) {
-            # ON FIRST LANDING TO REGISTRATION FORM
-            # NO REGISTRATION DATA IS SUBMITTED
-
-            if ($usertype_id) {
-                $data['usertype_name'] = ucfirst($this->user_model->get_usertypename($usertype_id));
-            } else {
-                redirect('login');
-            }
-            $data['usertype_id'] = $usertype_id; # this is to be sent as value in the registration form
-            $data['title'] = 'Register';
-            $data['sigs'] = $this->sig_model->get_sig();
-
-            # this will fetch data from previously filled registration form when validation error occurs
-            $data['id'] = $id;
-            $data['name'] = $name;
-            $data['email'] = $email;
-            $data['sig_id'] = $sig_id;
-            $data['dob'] = $dob;
-
-            $this->load->view('templates/header');
-
-            if ($usertype_id == $mentor_typeid) {
-                // MENTOR
-                $data['position'] = $position;
-                $data['roomnum'] = $roomnum;
-                $data['orgrole_id'] = $orgrole_id;
-                $data['mentorroles'] = $this->role_model->get_mentor_roles();
-                $this->load->view('user/mentor/register', $data);
-            } elseif ($usertype_id == $student_typeid) {
-                // STUDENT
-                $data['program_code'] = $program_code;
-                $data['phonenum'] = $phonenum;
-                $data['programs'] = $this->program_model->get_programs();
-                $this->load->view('user/student/register', $data);
-            }
-        } else {
-            # INSERT DATA TO DB
-            $enc_password = md5($this->input->post('password'));
-            $userdata = array(
-                'id' => $id,
-                'name' => $name,
-                'email' => $email,
-                'password' => $enc_password,
-                'sig_id' => $sig_id,
-                'usertype_id' => $usertype_id,
-                'dob' => $dob
-            );
-            $this->user_model->register_user($userdata);
-
-            if ($usertype_id == $mentor_typeid) {
-                # send data to mentor model
-                $mentordata = array(
-                    'matric' => $id,
-                    'position' => $position,
-                    'roomnum' => $roomnum,
-                    'orgrole_id' => $orgrole_id
-                );
-                $this->mentor_model->register_mentor($mentordata);
-            } elseif ($usertype_id = $student_typeid) {
-                # send data to student model
-                $studentdata = array(
-                    'matric' => $id,
-                    'phonenum' => $phonenum,
-                    'program_code' => $program_code
-                );
-                $this->student_model->register_student($studentdata);
-            }
-            $data['title'] = 'Registration Successful';
-            $data['content'] = 'Your registration is currently pending admin\'s approval. Your admin will contact you once your registration is approved';
-            $this->load->view('templates/header');
-            $this->load->view('user/register_success', $data);
-        }
     }
 
     public function id_exist($id)
@@ -353,17 +366,17 @@ class User extends CI_Controller
     {
         $data['title'] = 'Validate: ' . $id;
         $data['user'] = $this->user_model->get_user($id);
-        $usertype_id = $data['user']['usertype_id'];
+        $usertype = $data['user']['usertype'];
         // validate
         $this->form_validation->set_rules('id', 'ID', 'required');
         $this->form_validation->set_rules('name', 'Name', 'required');
         $this->form_validation->set_rules('email', 'Email', 'required');
         $this->form_validation->set_rules('sig_id', 'SIG', 'required');
-        if ($usertype_id == '2') {
+        if ($usertype == 'mentor') {
             $this->form_validation->set_rules('position', 'Position', 'required');
             $this->form_validation->set_rules('roomnum', 'Room Number', 'required');
             $this->form_validation->set_rules('orgrole_id', 'SIG Role', 'required');
-        } elseif ($usertype_id == '3') {
+        } elseif ($usertype == 'student') {
             $this->form_validation->set_rules('phonenum', 'Phone Number', 'required');
             $this->form_validation->set_rules('program_code', 'Program Code', 'required');
             $this->form_validation->set_rules('mentor_matric', 'Mentor Matric', 'required');
@@ -376,12 +389,12 @@ class User extends CI_Controller
             $this->load->view('templates/header');
             $this->load->view('user/validate', $data);
 
-            if ($usertype_id == 2) {
+            if ($usertype == 'mentor') {
                 # IF MENTOR
                 $data['mentorroles'] = $this->role_model->get_mentor_roles();
                 $data['mentor'] = $this->mentor_model->get_mentor($id);
                 $this->load->view('user/mentor/validate_mentor', $data);
-            } elseif ($usertype_id == 3) {
+            } elseif ($usertype == 'student') {
                 # IF STUDENT
                 $data['sigmentors'] = $this->mentor_model->get_sigmentors($data['user']['sig_id']);
                 $data['programs'] = $this->program_model->get_programs();
@@ -398,7 +411,7 @@ class User extends CI_Controller
                 'dob' => $this->input->post('dob'),
                 'userstatus_id' => $this->input->post('userstatus_id')
             );
-            if ($usertype_id == '2') {
+            if ($usertype == 'mentor') {
                 $mentordata = array(
                     'position' => $this->input->post('position'),
                     'roomnum' => $this->input->post('roomnum'),
@@ -409,7 +422,7 @@ class User extends CI_Controller
                 } else {
                     $this->mentor_model->register_mentor($mentordata);
                 }
-            } elseif ($usertype_id == '3') {
+            } elseif ($usertype == 'student') {
                 $studentdata = array(
                     'matric' => $id,
                     'phonenum' => $this->input->post('phonenum'),

@@ -5,7 +5,7 @@
         <?php foreach($students as $student): ?>
         <div class="col-md-2">
             <div class="card mb2">
-                <?php $profileimage = ($student['profile_image']) ? $student['profile_image'] : 'default.jpg' ?>
+                <?php $profileimage = 'default.jpg' ?>
                 <img class="card-img-top" src="<?= base_url() . 'assets/images/profile/'.$profileimage ?>" style="padding:6px;" alt="">
                 <div class="card-footer text-muted">
                     <a href="<?= site_url('/student/'). $student['id'] ?>"><?= $student['id'] ?></a>

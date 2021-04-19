@@ -1,5 +1,5 @@
 <h2 class="text-center"><?= $title ?></h2>
-<h4 class="text-center"><?= $sig['signame'] ?></h4>
+<h4 class="text-center"><?= $sig['name'] ?></h4>
 <h4 class="text-center"><?= $activeacadyear['acadyear'] ?></h4>
 
 <?php if ($president) : ?>
@@ -13,9 +13,9 @@
                 alt="<?= $president['profile_image']; ?>">
             <div class="card-body">
                 <h5 class="card-title">
-                    <?php if($president['name'] == '-'): ?>
+                    <?php if ($president['name'] == '-') : ?>
                     <a href="#"><?= $president['name'] ?></a>
-                    <?php else: ?>
+                    <?php else : ?>
                     <a href="<?= site_url('/student/' . $president['student_matric']) ?>"><?= $president['name'] ?></a>
                     <?php endif ?>
                 </h5>
@@ -30,7 +30,7 @@
 <?php endif ?>
 
 <div class="row text-center">
-    <?php foreach ($secondrows as $rows): ?>
+    <?php foreach ($secondrows as $rows) : ?>
     <div class="col-md-4">
         <div class="card mb-4">
             <h4 class="card-header text-white bg-dark">
@@ -40,9 +40,9 @@
                 alt="<?= $rows['profile_image']; ?>">
             <div class="card-body">
                 <h5 class="card-title">
-                    <?php if($rows['name'] != '-'): ?>
+                    <?php if ($rows['name'] != '-') : ?>
                     <a href="<?= site_url('/student/' . $rows['student_matric']) ?>"><?= $rows['name'] ?></a>
-                    <?php else: ?>
+                    <?php else : ?>
                     <a href="#"><?= $rows['name'] ?></a>
                     <?php endif ?>
 
@@ -73,11 +73,11 @@
                 alt="<?= $ajk['profile_image']; ?>">
             <div class="card-body">
                 <h5 class="card-title">
-                    <a href="<?= site_url('/student/' . $ajk['student_matric']) ?>">
+                    <a href="<?= site_url('/student/' . $ajk['student_id']) ?>">
                         <?= $ajk['name'] ?>
                     </a>
                 </h5>
-                <h6 class="card-subtitle text-muted"><?= $ajk['student_matric']; ?></h6>
+                <h6 class="card-subtitle text-muted"><?= $ajk['student_id']; ?></h6>
             </div>
             <div class="card-footer text-muted">
                 <?= $ajk['email'] ?>
@@ -86,8 +86,8 @@
     </div>
     <?php endforeach ?>
     <?php else : ?>
-    <div class="col-md-4 offset-md-4">
-        <p class="text-center">No AJK for the current year</p>
+    <div class="col align-self-center">
+        <p class="">No AJK for the current year</p>
     </div>
     <?php endif ?>
 </div>
@@ -104,7 +104,7 @@
             <th>Matric</th>
             <th>Name</th>
             <th>Role</th>
-            <?php if ($this->session->userdata('isMentor')) : ?>
+            <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
             <th>Action</th>
             <?php endif ?>
         </tr>
@@ -115,7 +115,7 @@
             <td><?= $sigcom['student_matric'] ?></td>
             <td><?= $sigcom['name'] ?></td>
             <td><?= $sigcom['rolename'] ?></td>
-            <?php if ($this->session->userdata('isMentor')) : ?>
+            <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
             <td><a class="btn btn-outline-warning btn-sm" data-stdrole="<?= $sigcom['rolename'] ?>" data-stdname="<?= $sigcom['name'] ?>" data-stdmatric="<?= $sigcom['student_matric'] ?>"
                     data-toggle="modal" data-target="#delete_orgcom">Delete</a></td>
             <?php endif ?>
@@ -127,7 +127,7 @@
 <div id="delete_orgcom" class="modal fade">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <?php $hidden = array('sig_id' => $sig['id']) ?>
+            <?php $hidden = array('sig_id' => $sig['code']) ?>
             <?= form_open('organization/delete_committee', '', $hidden) ?>
             <div class="modal-header">
                 <h5 class="modal-title">Delete organization committee</h5>
@@ -164,7 +164,7 @@
         <div class="modal-content">
             <?php $hidden = array(
                 'acadyear_id' => $activeacadyear['id'],
-                'sig_id' => $sig['id']
+                'sig_id' => $sig['code']
             ); ?>
             <?= form_open('organization/register_committee', '', $hidden) ?>
             <div class="modal-header">
@@ -182,7 +182,7 @@
                     <label for="role">Role</label>
                     <select name="role_id" class="form-control" required>
                         <?php foreach ($roles_org as $rorg) : ?>
-                        <option value="<?= $rorg['id'] ?>"><?= $rorg['rolename'] ?></option>
+                        <option value="<?= $rorg['id'] ?>"><?= $rorg['role'] ?></option>
                         <?php endforeach ?>
                     </select>
                 </div>

@@ -8,11 +8,11 @@ class Committee_model extends CI_Model
 
     public function get_orgcommittee($sig_id)
     {
-        $this->db->select('orgcom.*, std.name, std.profile_image, role.rolename')
-            ->from('org_committee as orgcom')
-            ->where(array('orgcom.sig_id' => $sig_id))
-            ->join('user as std', 'std.id = orgcom.student_matric')
-            ->join('role as role', 'role.id = orgcom.role_id')
+        $this->db->select('orgcom.*, std.name, role.role')
+            ->from('committee_organization as orgcom')
+            // ->where(array('orgcom.sig_id' => $sig_id))
+            ->join('user as std', 'std.id = orgcom.student_id')
+            ->join('role_organization as role', 'role.id = orgcom.role_id')
             ->join('academicyear as acy', 'acy.id = orgcom.acadyear_id')
             ->where(array('acy.status' => 'active'));
         $query = $this->db->get();
@@ -21,11 +21,11 @@ class Committee_model extends CI_Model
 
     public function get_president($sig_id, $acadyear_id)
     {
-        $this->db->select('orgcom.*, std.name, std.email, std.profile_image, role.rolename, acy.acadyear')
-            ->from('org_committee as orgcom')
-            ->where(array('orgcom.sig_id' => $sig_id, 'role_id' => '3'))
-            ->join('user as std', 'std.id = orgcom.student_matric')
-            ->join('role as role', 'role.id = orgcom.role_id')
+        $this->db->select('orgcom.*, std.name, std.email, role.role, acy.acadyear')
+            ->from('committee_organization as orgcom')
+            ->where(array('role_id' => '3'))
+            ->join('user as std', 'std.id = orgcom.student_id')
+            ->join('role_organization as role', 'role.id = orgcom.role_id')
             ->join('academicyear as acy', 'acy.id = orgcom.acadyear_id')
             ->where(array('acy.id' => $acadyear_id));
         $query = $this->db->get();
@@ -34,11 +34,11 @@ class Committee_model extends CI_Model
 
     public function get_deputypresident($sig_id, $acadyear_id)
     {
-        $this->db->select('orgcom.*, std.name, std.email, std.profile_image, role.rolename')
-            ->from('org_committee as orgcom')
-            ->where(array('orgcom.sig_id' => $sig_id, 'role_id' => '4'))
-            ->join('user as std', 'std.id = orgcom.student_matric')
-            ->join('role as role', 'role.id = orgcom.role_id')
+        $this->db->select('orgcom.*, std.name, std.email, role.role')
+            ->from('committee_organization as orgcom')
+            ->where(array('role_id' => '4'))
+            ->join('user as std', 'std.id = orgcom.student_id')
+            ->join('role_organization as role', 'role.id = orgcom.role_id')
             ->join('academicyear as acy', 'acy.id = orgcom.acadyear_id')
             ->where(array('acy.id' => $acadyear_id));
         $query = $this->db->get();
@@ -47,11 +47,11 @@ class Committee_model extends CI_Model
 
     public function get_orgtreasurer($sig_id, $acadyear_id)
     {
-        $this->db->select('orgcom.*, std.name, std.email, std.profile_image, role.rolename')
-            ->from('org_committee as orgcom')
-            ->where(array('orgcom.sig_id' => $sig_id, 'role_id' => '7'))
-            ->join('user as std', 'std.id = orgcom.student_matric')
-            ->join('role as role', 'role.id = orgcom.role_id')
+        $this->db->select('orgcom.*, std.name, std.email, role.role')
+            ->from('committee_organization as orgcom')
+            ->where(array('role_id' => '7'))
+            ->join('user as std', 'std.id = orgcom.student_id')
+            ->join('role_organization as role', 'role.id = orgcom.role_id')
             ->join('academicyear as acy', 'acy.id = orgcom.acadyear_id')
             ->where(array('acy.id' => $acadyear_id));
         $query = $this->db->get();
@@ -60,11 +60,11 @@ class Committee_model extends CI_Model
 
     public function get_orgsecretary($sig_id, $acadyear_id)
     {
-        $this->db->select('orgcom.*, std.name, std.email, std.profile_image, role.rolename')
-            ->from('org_committee as orgcom')
-            ->where(array('orgcom.sig_id' => $sig_id, 'role_id' => '9'))
-            ->join('user as std', 'std.id = orgcom.student_matric')
-            ->join('role as role', 'role.id = orgcom.role_id')
+        $this->db->select('orgcom.*, std.name, std.email, role.role')
+            ->from('committee_organization as orgcom')
+            ->where(array('role_id' => '9'))
+            ->join('user as std', 'std.id = orgcom.student_id')
+            ->join('role_organization as role', 'role.id = orgcom.role_id')
             ->join('academicyear as acy', 'acy.id = orgcom.acadyear_id')
             ->where(array('acy.id' => $acadyear_id));
         $query = $this->db->get();
@@ -73,11 +73,11 @@ class Committee_model extends CI_Model
 
     public function get_ajks($sig_id, $acadyear_id)
     {
-        $this->db->select('orgcom.*, std.name, std.email, std.profile_image, role.rolename')
-            ->from('org_committee as orgcom')
-            ->where(array('orgcom.sig_id' => $sig_id, 'role_id' => '11'))
-            ->join('user as std', 'std.id = orgcom.student_matric')
-            ->join('role as role', 'role.id = orgcom.role_id')
+        $this->db->select('orgcom.*, std.name, std.email, role.role')
+            ->from('committee_organization as orgcom')
+            ->where(array('role_id' => '11'))
+            ->join('user as std', 'std.id = orgcom.student_id')
+            ->join('role_organization as role', 'role.id = orgcom.role_id')
             ->join('academicyear as acy', 'acy.id = orgcom.acadyear_id')
             ->where(array('acy.id' => $acadyear_id));
         $query = $this->db->get();
@@ -94,12 +94,12 @@ class Committee_model extends CI_Model
     {
         # used in profile page
         # shows specific student's role(s) in activities
-        $this->db->select("act.id, act.activity_name, act.slug, std.name, role.rolename, actcom.role_desc")
-            ->from('activity_committee as actcom')
-            ->where(array('actcom.student_matric' => $student_id))
-            ->join('user as std', 'std.id = actcom.student_matric')
+        $this->db->select("act.id, act.title as activity_name, act.slug, std.name, role.role, actcom.description as role_desc")
+            ->from('committee_activity as actcom')
+            ->where(array('actcom.student_id' => $student_id))
+            ->join('user as std', 'std.id = actcom.student_id')
             ->join('activity as act', 'act.id = actcom.activity_id')
-            ->join('role as role', 'role.id = actcom.role_id');
+            ->join('role_activity as role', 'role.id = actcom.role_id');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -108,12 +108,12 @@ class Committee_model extends CI_Model
     {
         // used in profile page
         // shows specific student's role(s) in organization
-        $this->db->select('acy.acadyear, role.rolename, orgcom.role_desc, sig.signame')
-            ->from('org_committee as orgcom')
-            ->where(array('orgcom.student_matric' => $student_id, 'orgcom.sig_id' => $sig_id))
+        $this->db->select('acy.acadyear, role.role, orgcom.description as role_desc')
+            ->from('committee_organization as orgcom')
+            ->where(array('orgcom.student_id' => $student_id))
             ->join('academicyear as acy', 'acy.id = orgcom.acadyear_id')
-            ->join('role as role', 'role.id = orgcom.role_id')
-            ->join('sig as sig', 'sig.id = orgcom.sig_id');
+            ->join('role_organization as role', 'role.id = orgcom.role_id');
+        // ->join('sig as sig', 'sig.code = orgcom.sig_id');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -121,11 +121,12 @@ class Committee_model extends CI_Model
     public function get_mentor_activityroles($mentor_id)
     {
         # called in mentor/view
-        $this->db->select("act.id, act.slug, act.activity_name, mtr.name, 
-        concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
+        $this->db->select("act.id, act.slug, act.title,
+        concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
             ->from('activity as act')
-            ->where('act.advisor_matric', $mentor_id)
-            ->join('user as mtr', 'mtr.id = act.advisor_matric')
+            // ->where('act.advisor_matric', $mentor_id)
+            // ->join('commmittee_activity')
+            // ->join('user', 'user.id = act.advisor_matric')
             ->join('academicsession as acs', 'acs.id = act.acadsession_id')
             ->join('academicyear as acy', 'acy.id = acs.acadyear_id');
         $query = $this->db->get();
@@ -135,7 +136,7 @@ class Committee_model extends CI_Model
     public function delete_orgcommittee($deleteuserdata)
     {
         $this->db->where($deleteuserdata);
-        $this->db->delete('org_committee');
+        $this->db->delete('committee_organization');
         return true;
     }
 
@@ -143,7 +144,7 @@ class Committee_model extends CI_Model
     {
         $roles = array('3', '4', '7', '8', '9', '10', '11', '12');
         $this->db->select('*')
-            ->from('role')
+            ->from('role_organization')
             ->where_in('id', $roles);
         $query = $this->db->get();
         return $query->result_array();
@@ -162,7 +163,7 @@ class Committee_model extends CI_Model
     public function register_org_committee($comdata)
     {
         $this->db->set($comdata);
-        $this->db->insert('org_committee');
+        $this->db->insert('committee_organization');
         return true;
     }
 

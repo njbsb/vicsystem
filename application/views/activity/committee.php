@@ -5,7 +5,7 @@
     </div>
 </div>
 <div id="committees" class="">
-    <?php if ($isHighcom or $this->session->userdata('isMentor')) : ?>
+    <?php if ($isHighcom or $this->session->userdata('user_type') == 'mentor') : ?>
     <div class="form-group">
         <a data-toggle="modal" data-target="#add_actcommittee" class="btn btn-outline-primary">Add committee</a>
     </div>

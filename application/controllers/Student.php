@@ -7,16 +7,16 @@ class Student extends CI_Controller
         if (!$this->session->userdata('username')) {
             redirect(site_url());
         }
-        if ($this->session->userdata('isStudent')) {
+        if ($this->session->userdata('user_type') == 'student') {
             redirect(site_url());
         }
         $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         $sig = $this->sig_model->get_sig($sig_id);
-        if ($this->session->userdata('isMentor')) {
+        if ($this->session->userdata('user_type') == 'mentor') {
             $students = $this->student_model->get_student('', $sig_id);
             $title = $sig['code'] . ' Students';
         }
-        if ($this->session->userdata('isAdmin')) {
+        if ($this->session->userdata('user_type') == 'admin') {
             $students = $this->student_model->get_student();
             $title = 'All Students';
         }
@@ -30,17 +30,17 @@ class Student extends CI_Controller
 
     public function view($student_id)
     {
-        if ($this->session->userdata('isStudent')) {
+        if ($this->session->userdata('user_type') == 'student') {
             redirect(site_url());
         }
         $student = $this->student_model->get_student($student_id);
         if (!array_filter($student)) {
             show_404();
         }
-        if (date('Y') - $student['year_joined'] + 1 > 4) {
+        if (date('Y') - $student['yearjoined'] + 1 > 4) {
             $student['year'] = 'Alumni';
         } else {
-            $student['year'] = date('Y') - $student['year_joined'] + 1;
+            $student['year'] = date('Y') - $student['yearjoined'] + 1;
         }
         $data = array(
             'student' => $student,
@@ -54,7 +54,7 @@ class Student extends CI_Controller
 
     public function edit($student_id = NULL)
     {
-        if ($this->session->userdata('isStudent')) {
+        if ($this->session->userdata('user_type') == 'mentor') {
             redirect('student');
         }
         $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));

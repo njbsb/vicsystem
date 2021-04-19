@@ -24,6 +24,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
         crossorigin="anonymous"></script>
     <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <style>
     body {
         font: 14px Montserrat, sans-serif;
@@ -75,7 +76,7 @@
 </head>
 
 <body>
-
+    <?php $usertype =  $this->session->userdata('user_type') ?>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="<?= site_url() ?>">VIC System</a>
@@ -94,7 +95,7 @@
 
                             <a class="dropdown-item" href="<?= site_url('organization') ?>">Organization</a>
 
-                            <?php if ($this->session->userdata('isStudent')) : ?>
+                            <?php if ($usertype == 'student') : ?>
                             <a class="dropdown-item" href="<?= site_url('mentor') ?>">Mentors</a>
                             <?php else: ?>
                             <a class="dropdown-item" href="<?= site_url('student') ?>">Students</a>
@@ -107,7 +108,7 @@
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Academic</a>
                         <div class="dropdown-menu">
-                            <?php if ($this->session->userdata('isMentor')) : ?>
+                            <?php if ($usertype == 'mentor') : ?>
                             <a class="dropdown-item" href="<?= site_url('academicplan/mentor') ?>">Academic Plan</a>
                             <a class="dropdown-item" href="<?= site_url('enroll') ?>">Enroll Students</a>
                             <a class="dropdown-item" href="<?= site_url('scoreplan') ?>">Scoring Plan</a>
@@ -117,7 +118,7 @@
                             <?php endif ?>
                         </div>
                     </li>
-                    <?php if ($this->session->userdata('isMentor') or $this->session->userdata('isAdmin')) : ?>
+                    <?php if ($usertype == 'mentor' or $usertype == 'admin') : ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">Admin</a>
                         <div class="dropdown-menu">
@@ -130,7 +131,7 @@
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="<?= site_url('citra') ?>">Citra</a>
                             <a class="dropdown-item" href="<?= site_url('collaborator') ?>">Collaborator</a>
-                            <a class="dropdown-item" href="<?= site_url('category') ?>">Comment Category</a>
+                            <!-- <a class="dropdown-item" href="<?= site_url('category') ?>">Comment Category</a> -->
                         </div>
                     </li>
                     <?php endif ?>
@@ -161,9 +162,8 @@
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="<?= site_url('profile') ?>">Profile <span class="sr-only">(current)</span></a>
                     <a class="dropdown-item" href="<?= site_url('profile/update') ?>">Update Profile</a>
-                    <a class="dropdown-item" href="<?= site_url('logout') ?>">Log Out</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Switch Account</a>
+                    <a class="dropdown-item" href="<?= site_url('logout') ?>">Log Out</a>
                 </div>
             </li>
             <?php else : ?>

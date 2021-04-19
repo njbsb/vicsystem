@@ -7,7 +7,7 @@ class Score extends CI_Controller
 
     public function index()
     {
-        if (!$this->session->userdata('isMentor')) {
+        if (!$this->session->userdata('user_type') == 'mentor') {
             redirect(site_url());
         }
         $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
@@ -28,7 +28,7 @@ class Score extends CI_Controller
 
     public function viewacs($acadsession_slug)
     {
-        if (!$this->session->userdata('isMentor')) {
+        if (!$this->session->userdata('user_type') == 'mentor') {
             redirect(site_url());
         }
         $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
@@ -65,7 +65,7 @@ class Score extends CI_Controller
 
     public function view($acadsession_slug = NULL, $student_id)
     {
-        if (!$this->session->userdata('isMentor')) {
+        if (!$this->session->userdata('user_type') == 'mentor') {
             redirect(site_url());
         }
         $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
@@ -113,7 +113,7 @@ class Score extends CI_Controller
 
     public function scoreplan($slug = NULL)
     {
-        if ($this->session->userdata('isStudent')) {
+        if ($this->session->userdata('user_type') == 'student') {
             redirect(site_url());
         }
         $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
@@ -121,11 +121,12 @@ class Score extends CI_Controller
             # scoreplan index
             $activitycategories = $this->activity_model->get_activitycategory();
             $academicsessions = $this->academic_model->get_academicsession();
+            print_r($activitycategories);
             foreach ($academicsessions as $index => $acs) {
                 $totalcategory = 0;
                 foreach ($activitycategories as $id => $cat) {
-                    $activitycategories[$id]['categorycount'] = $this->activity_model->get_categoryactivitycount($acs['id'], $cat['id'], $sig_id);
-                    $activitycategories[$id]['categorytotalpercent'] = $this->score_model->get_categorytotalpercent($acs['id'], $cat['id'], $sig_id);
+                    $activitycategories[$id]['categorycount'] = $this->activity_model->get_categoryactivitycount($acs['id'], $cat['code'], $sig_id);
+                    $activitycategories[$id]['categorytotalpercent'] = $this->score_model->get_categorytotalpercent($acs['id'], $cat['code'], $sig_id);
                     $totalcategory += $activitycategories[$id]['categorytotalpercent'];
                 }
                 $academicsessions[$index]['activitycategories'] = $activitycategories;
@@ -144,8 +145,8 @@ class Score extends CI_Controller
             $academicsession = $this->academic_model->get_academicsession(FALSE, $slug);
             $activitycategories = $this->activity_model->get_activitycategory();
             foreach ($activitycategories as $i => $actcat) {
-                $activitycategories[$i]['scoreplan'] = $this->score_model->get_scoreplan($sig_id, $academicsession['id'], $actcat['id']);
-                $activitycategories[$i]['unregistered'] = $this->activity_model->get_category_unregisteredactivity($academicsession['id'], $actcat['id']);
+                $activitycategories[$i]['scoreplan'] = $this->score_model->get_scoreplan($sig_id, $academicsession['id'], $actcat['code']);
+                $activitycategories[$i]['unregistered'] = $this->activity_model->get_category_unregisteredactivity($academicsession['id'], $actcat['code']);
             }
             $data = array(
                 'acslug' => $slug,
@@ -165,6 +166,7 @@ class Score extends CI_Controller
     {
         $acslug = $this->input->post('acslug');
         $scoreplan = array(
+            'sig_id' => '1',
             'acadsession_id' => $this->input->post('acadsession_id'),
             'activitycategory_id' => $this->input->post('activitycategory_id'),
             'activity_id' => $this->input->post('activity_id'),
@@ -242,7 +244,7 @@ class Score extends CI_Controller
         $acslug = $this->input->post('acslug');
         $student_id = $this->input->post('student_id');
         $where = array(
-            'student_matric' => $student_id,
+            'student_id' => $student_id,
             'acadsession_id' => $this->input->post('acadsession_id')
         );
         $keys = $this->input->post('keys');

@@ -1,5 +1,5 @@
-<h2><?= $sig['signame'], "'s ", $title ?></h2>
-<?php if ($this->session->userdata('isMentor')) : ?>
+<h2><?= $sig['name'], "'s ", $title ?></h2>
+<?php if ($this->session->userdata('user_type') == 'mentor') : ?>
 <br>
 <button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#activity_type">Create Activity</button>
 <?php endif ?>
@@ -10,7 +10,7 @@
             <th scope="col">Activity</th>
             <th scope="col">Date</th>
             <th scope="col">Academic Session</th>
-            <?php if ($this->session->userdata('isAdmin')) : ?>
+            <?php if ($this->session->userdata('user_type') == 'admin') : ?>
             <th scope="col">SIG</th>
             <?php endif ?>
             <th scope="col">No of Committees</th>
@@ -23,7 +23,7 @@
             <td class="Activity" scope="row"><a href="<?= site_url('/activity/' . $activity['slug']) ?>"><?= $activity['activity_name'] ?></a></t>
             <td class="Date"><?= date('d/m/Y', strtotime($activity['datetime_start'])) ?></td>
             <td><?= $activity['academicsession'] ?></td>
-            <?php if ($this->session->userdata('isAdmin')) : ?>
+            <?php if ($this->session->userdata('user_type') == 'admin') : ?>
             <td><?= $activity['code'] ?></td>
             <?php endif ?>
             <td><?= $activity['committeenum'] ?></td>
@@ -75,7 +75,7 @@
                 <p>Choose category of activity</p>
                 <?= form_open('activity/create') ?>
                 <?php foreach ($activitycategory as $actcat) : ?>
-                <button name="activity_cat" type="submit" class="btn btn-primary" value="<?= $actcat['id'] ?>"><?= $actcat['category'] . ' (' . $actcat['code'] . ')' ?></button>&nbsp;
+                <button name="activity_cat" type="submit" class="btn btn-primary" value="<?= $actcat['code'] ?>"><?= $actcat['category'] . ' (' . $actcat['code'] . ')' ?></button>&nbsp;
                 <?php endforeach ?>
                 <?= form_close() ?>
             </div>

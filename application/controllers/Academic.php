@@ -4,7 +4,7 @@ class Academic extends CI_Controller
     # pages
     public function index()
     {
-        if ($this->session->userdata('isStudent') or !$this->session->userdata('username')) {
+        if ($this->session->userdata('user_type') == 'student' or !$this->session->userdata('username')) {
             redirect(site_url());
         } else {
             $latest_year = $this->academic_model->get_latest_academicyear();
@@ -18,10 +18,11 @@ class Academic extends CI_Controller
                 'academicyear' => $this->academic_model->get_academicyear(),
                 'academicsession' => $this->academic_model->get_academicsession(),
                 'academicplan' => $this->academic_model->get_academicplan(),
-                'semesters' => $this->academic_model->get_semester(),
+                'semesters' => $this->semester_model->get_semesters(),
                 'title' => 'Academic Control Page',
                 'new_year' => $suggested_year
             );
+            // print_r($data['semesters']);
             $this->load->view('templates/header');
             $this->load->view('academic/index', $data);
         }
@@ -30,7 +31,7 @@ class Academic extends CI_Controller
     public function academicplanstudent()
     {
         # for student
-        if (!$this->session->userdata('isStudent') and !$this->session->userdata('username')) {
+        if (!$this->session->userdata('user_type') == 'student' and !$this->session->userdata('username')) {
             redirect(site_url());
         }
         $student_id = $this->session->userdata('username');
@@ -59,7 +60,7 @@ class Academic extends CI_Controller
     public function academicplanmentor()
     {
         # for mentor
-        if (!$this->session->userdata('isMentor') and !$this->session->userdata('username')) {
+        if (!$this->session->userdata('user_type') == 'mentor' and !$this->session->userdata('username')) {
             redirect('home');
         }
         $activesession = $this->academic_model->get_activeacademicsession();
@@ -77,8 +78,8 @@ class Academic extends CI_Controller
     public function academicplanrecords()
     {
         $acadyear_id = $this->input->post('acadyear_id');
-        $semester_id = $this->input->post('semester_id');
-        $academicsession = $this->academic_model->get_academicsession_byyearsem($acadyear_id, $semester_id);
+        $semester = $this->input->post('semester');
+        $academicsession = $this->academic_model->get_academicsession_byyearsem($acadyear_id, $semester);
         if (empty($academicsession)) {
             $this->load->view('templates/header');
         } else {
@@ -100,7 +101,7 @@ class Academic extends CI_Controller
         $student_id = $this->input->post('student_id');
         $acadyear_id = $this->input->post('acadyear_id');
         $semester_id = $this->input->post('semester_id');
-        if ((!$student_id and !$acadyear_id and !$semester_id) or !$this->session->userdata('isStudent')) {
+        if ((!$student_id and !$acadyear_id and !$semester_id) or !$this->session->userdata('user_type') == 'student') {
             redirect('academicplan/student');
         }
         $student = $this->student_model->get_student($student_id);
@@ -127,7 +128,7 @@ class Academic extends CI_Controller
                 'title' => 'Record: ' . $student['name'],
                 'student' => $student,
                 'academicsession' => $selected_academicsession,
-                'citras' => $this->citra_model->get_citra_registered($student_id, $selected_academicsession['id']),
+                // 'citras' => $this->citra_model->get_citra_registered($student_id, $selected_academicsession['id']),
                 'academicplan' => $this->academic_model->get_academicplan($student_id, $selected_academicsession['id']),
                 'levelrubrics' => $this->scoretable->get_level_rubrics(),
                 'scoreplans' => $scoreplans,
@@ -144,7 +145,9 @@ class Academic extends CI_Controller
 
     public function enroll()
     {
-        if (!$this->session->userdata('username') or $this->session->userdata('isStudent')) {
+        # to enroll students into new academic session
+
+        if (!$this->session->userdata('username') or $this->session->userdata('user_type') == 'student') {
             redirect(site_url());
         }
         $this->form_validation->set_rules('acadsession_id', 'academic session', 'required');

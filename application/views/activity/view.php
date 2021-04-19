@@ -36,12 +36,12 @@
 <!-- <hr> -->
 <div class="container d-flex justify-content-start">
     <div class="row">
-        <?php if ($this->session->userdata('isMentor') or $isHighcom) : ?>
+        <?php if ($this->session->userdata('user_type') == 'mentor' or $isHighcom) : ?>
         <?= form_open('activity/edit/' . $activity['slug']) ?>
         <input type="submit" value="Update" class="btn btn-outline-primary">
         <?= form_close() ?>
         &nbsp;
-        <?php $disabled = ($this->session->userdata('isMentor')) ? '' : 'disabled' ?>
+        <?php $disabled = ($this->session->userdata('user_type') == 'mentor') ? '' : 'disabled' ?>
         <button data-toggle="modal" data-target="#confirmdelete" class="btn btn-outline-danger" <?= $disabled ?>>Delete activity</button>
         <?php endif ?>
 

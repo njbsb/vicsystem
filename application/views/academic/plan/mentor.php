@@ -8,15 +8,15 @@
             <select name="acadyear_id" id="" class="form-control" required>
                 <option value="" disabled selected>Select academic year</option>
                 <?php foreach ($academicyears as $acadyear) : ?>
-                    <option value="<?= $acadyear['id'] ?>"><?= $acadyear['acadyear'] ?></option>
+                <option value="<?= $acadyear['id'] ?>"><?= $acadyear['acadyear'] ?></option>
                 <?php endforeach ?>
             </select>
         </div>
         <div class="col-md-3">
-            <select name="semester_id" id="" class="form-control" required>
+            <select name="semester" id="" class="form-control" required>
                 <option value="" disabled selected>Select semester</option>
                 <?php foreach ($semesters as $sem) : ?>
-                    <option value="<?= $sem['id'] ?>"><?= $sem['id'] ?></option>
+                <option value="<?= $sem ?>"><?= $sem ?></option>
                 <?php endforeach ?>
             </select>
         </div>
@@ -49,28 +49,28 @@
     </thead>
     <tbody>
         <?php if ($academicplans) : ?>
-            <?php foreach ($academicplans as $acp) : ?>
-                <?php $text = ($acp['gpa_achieved'] > $acp['gpa_target']) ? 'Passed' : 'Not pass' ?>
-                <?php $textclass = ($acp['gpa_achieved'] > $acp['gpa_target']) ? 'text-success' : 'text-warning' ?>
-                <tr>
-                    <td><?= $acp['student_matric'] ?></td>
-                    <td><?= $acp['name'] ?></td>
-                    <td><?= $acp['gpa_target'] ?></td>
-                    <td><?= $acp['gpa_achieved'] ?></td>
-                    <td class="<?= $textclass ?>"><?= $text ?></td>
-                </tr>
-            <?php endforeach ?>
+        <?php foreach ($academicplans as $acp) : ?>
+        <?php $text = ($acp['gpa_achieved'] > $acp['gpa_target']) ? 'Passed' : 'Not pass' ?>
+        <?php $textclass = ($acp['gpa_achieved'] > $acp['gpa_target']) ? 'text-success' : 'text-warning' ?>
+        <tr>
+            <td><?= $acp['student_matric'] ?></td>
+            <td><?= $acp['name'] ?></td>
+            <td><?= $acp['gpa_target'] ?></td>
+            <td><?= $acp['gpa_achieved'] ?></td>
+            <td class="<?= $textclass ?>"><?= $text ?></td>
+        </tr>
+        <?php endforeach ?>
         <?php else : ?>
-            <tr>
-                <td>No data</td>
-            </tr>
+        <tr>
+            <td>No data</td>
+        </tr>
         <?php endif ?>
 
     </tbody>
 </table>
 
 <script>
-    $(document).ready(function() {
-        $('#acp_table').DataTable();
-    });
+$(document).ready(function() {
+    $('#acp_table').DataTable();
+});
 </script>

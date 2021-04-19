@@ -1,11 +1,8 @@
 <div class="row">
     <div class="col-md-4 text-center">
         <h4><?= ucfirst($user['usertype']) ?> Form</h4>
-        <?php if ($user['userstatus_id'] == 1) : ?>
-            <span class="badge badge-warning"><?= $user['userstatus'] ?></span>
-        <?php elseif ($user['userstatus_id'] == 2) : ?>
-            <span class="badge badge-success"><?= $user['userstatus'] ?></span>
-        <?php endif ?>
+        <?php $badgetype = ($user['userstatus'] == 'pending') ? 'badge-warning' : 'badge-success' ?>
+        <span class="badge <?= $badgetype ?>"><?= $user['userstatus'] ?></span>
     </div>
     <div class="col-md-8 text-left">
         <!-- POSITION -->
@@ -24,11 +21,10 @@
             <select name="orgrole_id" class="form-control">
                 <option value="" selected disabled hidden>Choose mentor role</option>
                 <?php foreach ($mentorroles as $role) : ?>
-                    <option value="<?= $role['id'] ?>" <?php if ($mentor['orgrole_id'] == $role['id']) {
-                                                            echo 'selected';
-                                                        } ?>>
-                        <?= $role['rolename'] ?>
-                    </option>
+                <?php $roleselected = ($mentor['role_id'] == $role['id']) ? 'selected' : '' ?>
+                <option value="<?= $role['id'] ?>" <?= $roleselected ?>>
+                    <?= $role['role'] ?>
+                </option>
                 <?php endforeach ?>
             </select>
         </div>

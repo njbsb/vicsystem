@@ -17,9 +17,9 @@ $route['activity/create'] = 'activity/create';
 $route['activity/(:any)'] = 'activity/view/$1';
 $route['activity/committee/(:any)'] = 'activity/committee/$1';
 
-$route['category'] = 'category/index';
-$route['category/create'] = 'category/create';
-$route['category/comments/(:any)'] = 'category/comments/$1';
+// $route['category'] = 'category/index';
+// $route['category/create'] = 'category/create';
+// $route['category/comments/(:any)'] = 'category/comments/$1';
 
 $route['citra'] = 'citra/index';
 $route['citra/(:any)'] = 'citra/view/$1';

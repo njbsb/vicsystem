@@ -13,11 +13,8 @@
             <h4 class="card-header text-primary">
                 <b><?= ucfirst($user['usertype']) ?></b>
             </h4>
-            <?php if ($user['profile_image']) : ?>
-            <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $user['profile_image']) ?>">
-            <?php else : ?>
-            <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . 'default.jpg') ?>">
-            <?php endif ?>
+            <?php $profileimage = 'default.jpg' ?>
+            <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $profileimage) ?>">
 
             <div class="card-footer text-muted">
                 Applied: <?= $user['code'] ?>
@@ -47,9 +44,8 @@
             <select name="sig_id" class="form-control" id="sig_id" readonly>
                 <option value="" selected disabled hidden>Choose SIG</option>
                 <?php foreach ($sigs as $sig) : ?>
-                <option value="<?= $sig['id'] ?>" <?php if ($user['sig_id'] == $sig['id']) {
-                                                            echo 'selected';
-                                                        } ?>>
+                <?php $selectedsig = ($user['sig_id'] == $sig['code']) ? 'selected' : '' ?>
+                <option value="<?= $sig['code'] ?>" <?= $selectedsig ?>>
                     <?= $sig['namecode'] ?>
                 </option>
                 <?php endforeach ?>
@@ -78,9 +74,10 @@
                     <select name="userstatus_id" id="" class="form-control" style="max-width: 20rem;">
                         <option value="" selected disabled hidden>Choose user status</option>
                         <?php foreach ($userstatuses as $us) : ?>
-                        <option value="<?= $us['id'] ?>" <?php if ($us['id'] == $user['userstatus_id']) {
-                                                                    echo 'selected';
-                                                                } ?>><?= $us['userstatus'] ?></option>
+                        <?php $selectedstatus = ($us['status'] == $user['userstatus']) ? 'selected' : '' ?>
+                        <option value="<?= $us['status'] ?>" <?= $selectedstatus ?>>
+                            <?= $us['status'] ?>
+                        </option>
                         <?php endforeach ?>
                     </select>
                 </div>

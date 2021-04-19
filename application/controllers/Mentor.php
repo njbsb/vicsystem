@@ -6,10 +6,10 @@ class Mentor extends CI_Controller
         $current_id = $this->session->userdata('username');
         $my_sig = $this->user_model->get_my_sig($current_id);
         $data = array(
-            'title' => $my_sig['signame'] . "'s Mentors",
-            'mentors' => $this->mentor_model->get_sigmentors($my_sig['id'])
+            'title' => $my_sig['name'] . "'s Mentors",
+            'mentors' => $this->mentor_model->get_sigmentors($my_sig['code'])
         );
-        if ($this->session->userdata('isStudent')) {
+        if ($this->session->userdata('user_type') == 'student') {
             $mentor_matric = $this->student_model->get_mentor_matric($this->session->userdata('username'));
             $data['mentor_matric'] = $mentor_matric;
         }
@@ -23,7 +23,7 @@ class Mentor extends CI_Controller
         $data = array(
             'mentor' => $this->mentor_model->get_mentor($mentor_id),
             'activity_roles' => $this->committee_model->get_mentor_activityroles($mentor_id),
-            'isMentor' => $this->session->userdata('isMentor')
+            'isMentor' => $this->session->userdata('user_type') == 'mentor'
         );
         $this->load->view('templates/header');
         $this->load->view('mentor/view', $data);

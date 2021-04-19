@@ -9,3 +9,11 @@
     padding-top:4px; 
     border-radius:12px;
 }
+
+.img-mentor {
+    max-height:300px; 
+    display: block; 
+    object-fit:cover; 
+    padding:10px;
+    border-radius:50%;
+}

@@ -20,6 +20,11 @@
             <label><b>VIC Intake by Year</b></label>
             <canvas id="barChart" responsive="true"></canvas>
         </div>
+        <div class="col-sm-6">
+            <div id="apexchart">
+
+            </div>
+        </div>
     </div>
 </div>
 
@@ -183,4 +188,33 @@ $(function() {
     });
 
 });
+</script>
+<script>
+var apexoptions = {
+    series: [44, 55, 41, 17, 15],
+    chart: {
+        type: 'donut',
+    },
+    colors: ['rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+    ],
+    responsive: [{
+        breakpoint: 480,
+        options: {
+            chart: {
+                width: 200
+            },
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }]
+};
+
+var apexchart = new ApexCharts(document.querySelector("#apexchart"), apexoptions);
+apexchart.render();
 </script>

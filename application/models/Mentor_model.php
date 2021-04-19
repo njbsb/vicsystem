@@ -10,27 +10,31 @@ class Mentor_model extends CI_Model
     public function get_mentor($matric = FALSE)
     {
         if ($matric === FALSE) {
-            $this->db->select('user.id, user.name, user.email, user.profile_image, mtr.position, sig.code as sigcode, sig.signame, role.rolename')
+            $this->db->select('user.id, user.name, user.email, mtr.position, sig.code as sigcode, sig.name as signame, role.role')
                 ->from('user as user')
-                ->where(array('usertype_id' => '2', 'userstatus_id' => '2'))
+                ->where(array(
+                    'usertype' => 'mentor',
+                    'userstatus' => 'active'
+                ))
                 ->join('mentor as mtr', 'mtr.matric = user.id', 'left')
-                ->join('sig as sig', 'sig.id = user.sig_id', 'left')
-                ->join('role as role', 'role.id = mtr.orgrole_id', 'left');
+                ->join('sig as sig', 'sig.code = user.sig_id', 'left')
+                ->join('role_organization as role', 'role.id = mtr.role_id', 'left');
             $query = $this->db->get();
             return $query->result_array();
         }
-        $this->db->select('user.id, user.name, user.email, user.sig_id, user.profile_image, mtr.position, mtr.roomnum, mtr.orgrole_id, sig.code as sigcode, sig.signame, role.rolename')
+        $this->db->select('user.id, user.name, user.email, user.sig_id, mtr.role_id, role.role, mtr.position, mtr.roomnum, sig.code as sigcode, sig.name as signame')
             ->from('user as user')
             ->where(array('user.id' => $matric))
             ->join('mentor as mtr', 'mtr.matric = user.id', 'left')
-            ->join('sig as sig', 'sig.id = user.sig_id', 'left')
-            ->join('role as role', 'role.id = mtr.orgrole_id', 'left');
+            ->join('role_organization as role', 'mtr.role_id = role.id')
+            ->join('sig', 'sig.code = user.sig_id', 'left');
+        // ->join('role_organization as role', 'role.id = mtr.orgrole_id', 'left');
         $query = $this->db->get();
         if (!$query->num_rows()) {
             $default = array(
                 'position' => '',
                 'roomnum' => '',
-                'orgrole_id' => ''
+                'role_id' => ''
             );
             return $default;
         }
@@ -39,15 +43,16 @@ class Mentor_model extends CI_Model
 
     public function get_sigmentors($sig_id)
     {
-        $this->db->select('user.id, user.name, user.email, user.sig_id, user.profile_image, mtr.position, mtr.roomnum, mtr.orgrole_id, sig.code as sigcode, sig.signame, role.rolename')
+        $this->db->select('user.id, user.name, user.email, user.sig_id, mtr.position, mtr.roomnum, role.role, sig.code as sigcode, sig.name as signame')
             ->from('mentor as mtr')
             ->join('user', 'mtr.matric = user.id', 'left')
             ->where(array(
                 'user.sig_id' => $sig_id,
-                'user.userstatus_id' => '2' #active
+                'user.userstatus' => 'active' #active
             ))
-            ->join('sig as sig', 'sig.id = user.sig_id', 'left')
-            ->join('role as role', 'role.id = mtr.orgrole_id', 'left');
+            ->join('role_organization as role', 'role.id = mtr.role_id')
+            ->join('sig as sig', 'sig.code = user.sig_id', 'left');
+        // ->join('role_organization as role', 'role.id = mtr.orgrole_id', 'left');
         $query = $this->db->get();
         return $query->result_array();
     }

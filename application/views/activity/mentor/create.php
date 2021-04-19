@@ -3,7 +3,7 @@
 
 <?php $hidden = array(
     'author_matric' => '',
-    'activitycategory_id' => $activitycategory['id'],
+    'activitycategory_id' => $activitycategory['code'],
     'acadsession_id' => $activesession['id']
 ); ?>
 <?= form_open('activity/create', '', $hidden) ?>
@@ -34,27 +34,27 @@
         <select name="advisor_matric" class="form-control" required>
             <option value="" selected disabled hidden>Choose Advisor</option>
             <?php foreach ($mentors as $mentor) : ?>
-                <option value="<?php echo $mentor['id']; ?>">
-                    <?= $mentor['name'] . ' (' . $mentor['id'] . ')' ?>
-                </option>
+            <option value="<?php echo $mentor['id']; ?>">
+                <?= $mentor['name'] . ' (' . $mentor['id'] . ')' ?>
+            </option>
             <?php endforeach ?>
         </select>
     </div>
     <div class="row">
         <?php foreach ($highcoms as $highcom) : ?>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label><?= $highcom['rolename'] ?></label>
-                    <select name="highcoms[<?= $highcom['id'] ?>]" id="" class="form-control" required>
-                        <option value="" disabled selected hidden>Select <?= strtolower($highcom['rolename']) ?></option>
-                        <?php foreach ($sigstudents as $std) : ?>
-                            <option value="<?= $std['id'] ?>">
-                                <?= $std['id'] . ' ' . $std['name'] ?>
-                            </option>
-                        <?php endforeach ?>
-                    </select>
-                </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label><?= $highcom['role'] ?></label>
+                <select name="highcoms[<?= $highcom['id'] ?>]" id="" class="form-control" required>
+                    <option value="" disabled selected hidden>Select <?= strtolower($highcom['role']) ?></option>
+                    <?php foreach ($sigstudents as $std) : ?>
+                    <option value="<?= $std['id'] ?>">
+                        <?= $std['id'] . ' ' . $std['name'] ?>
+                    </option>
+                    <?php endforeach ?>
+                </select>
             </div>
+        </div>
         <?php endforeach ?>
     </div>
     <div class="form-group">

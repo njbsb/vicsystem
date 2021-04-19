@@ -27,31 +27,31 @@ class User_model extends CI_Model
     {
         if ($user_id === FALSE and $sig_id === FALSE) {
             # return array of users
-            $this->db->select('user.id, user.name, user.userstatus_id, ust.usertype, uss.userstatus')
-                ->from('user as user')
-                ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
-                ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left');
+            $this->db->select('id, name, userstatus')
+                ->from('user as user');
+                // ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
+                // ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left');
             $query = $this->db->get();
             return $query->result_array();
         }
         if ($user_id) {
             # return specific user
-            $this->db->select('user.*, ust.usertype, uss.userstatus, user.dob, sig.code, sig.signame')
+            $this->db->select('user.*, sig.code, sig.name as signame')
                 ->from('user')
                 ->where('user.id', $user_id)
-                ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
-                ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left')
-                ->join('sig as sig', 'user.sig_id = sig.id', 'left');
+                // ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
+                // ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left')
+                ->join('sig as sig', 'user.sig_id = sig.code', 'left');
             $query = $this->db->get();
             return $query->row_array();
         }
         if ($sig_id) {
             # returns user with specific sig
-            $this->db->select('user.id, user.name, user.userstatus_id, ust.usertype, uss.userstatus')
-                ->from('user as user')
-                ->where('sig_id', $sig_id)
-                ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
-                ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left');
+            $this->db->select('id, name, userstatus, usertype')
+                ->from('user')
+                ->where('sig_id', $sig_id);
+                // ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
+                // ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left');
             $query = $this->db->get();
             return $query->result_array();
         }
@@ -75,12 +75,13 @@ class User_model extends CI_Model
         return true;
     }
 
-    public function get_usertype_id($user_id)
+    public function get_usertype($user_id)
     {
-        $usertype_id = $this->db->select('usertype_id')
+        $usertype = $this->db->select('usertype')
             ->get_where('user', array('id' => $user_id))
-            ->row()->usertype_id;
-        return $usertype_id;
+            ->row()->usertype;
+        // $usertype_id = $this->db->select();
+        return $usertype;
     }
 
     public function get_mentor_status($user_id)
@@ -119,7 +120,7 @@ class User_model extends CI_Model
             'user',
             array(
                 'id' => $user_id,
-                'usertype_id' => 1
+                'usertype' => 'admin'
             )
         );
         if ($query->num_rows() > 0) {
@@ -152,7 +153,7 @@ class User_model extends CI_Model
     {
         $this->db->where('id', $user_id);
         // 2 = active
-        return $this->db->update('user', array('userstatus_id' => '2'));
+        return $this->db->update('user', array('userstatus' => 'active'));
     }
 
     public function get_mentor_usertype_id()

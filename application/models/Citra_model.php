@@ -9,7 +9,7 @@ class Citra_model extends CI_Model
     public function get_citra($code = FALSE)
     {
         if ($code === FALSE) {
-            $this->db->order_by('citra_level', 'ASC');
+            $this->db->order_by('level', 'ASC');
             $query = $this->db->get('citra');
             return $query->result_array();
         }
