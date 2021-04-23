@@ -72,7 +72,6 @@ class Activity extends CI_Controller
             }
             $data = array(
                 'activitycategory' => $this->activity_model->get_activitycategory($this->input->post('activity_cat')),
-                // 'activitytype' => $this->activity_model->get_activitytype($this->input->post('activity_cat')),
                 'title' => 'Create Activity',
                 'academicsessions' => $this->academic_model->get_academicsession(),
                 'sigs' => $this->sig_model->get_sig(),

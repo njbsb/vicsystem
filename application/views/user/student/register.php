@@ -13,9 +13,9 @@
         <?php $hidden = array('usertype' => $usertype) ?>
         <?= form_open('register', '', $hidden) ?>
         <!-- Usertype -->
-        <div class="form-group">
+        <!-- <div class="form-group">
             <input type="hidden" class="form-control" id='usertype' name="usertype_name" value="<?= ucfirst($usertype) ?>" readonly="" required>
-        </div>
+        </div> -->
 
         <!-- ID -->
         <div class="form-group">

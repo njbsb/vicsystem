@@ -8,37 +8,37 @@ class Organization extends CI_Controller
         }
         $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         $sig = $this->sig_model->get_sig($sig_id);
-        $activeacadyear = $this->committee_model->get_activeacadyear();
+        $activeacadyear = $this->academic_model->get_activeacadyear();
         $acadyear_id = $activeacadyear['id'];
 
-        $president = $this->committee_model->get_president($sig_id, $acadyear_id);
-        $deputypresident = $this->committee_model->get_deputypresident($sig_id, $acadyear_id);
-        $treasurer = $this->committee_model->get_orgtreasurer($sig_id, $acadyear_id);
-        $secretary = $this->committee_model->get_orgsecretary($sig_id, $acadyear_id);
+        $president = $this->committee_model->get_org_highcom('president', $acadyear_id);
+        $deputypresident = $this->committee_model->get_org_highcom('deputy president', $acadyear_id);
+        $treasurer = $this->committee_model->get_org_highcom('treasurer', $acadyear_id);
+        $secretary = $this->committee_model->get_org_highcom('secretary', $acadyear_id);
 
         $secondrows = array(
-            'secretary' => $secretary, 
-            'deputypresident' => $deputypresident, 
-            'treasurer' => $treasurer);
+            'secretary' => $secretary,
+            'deputypresident' => $deputypresident,
+            'treasurer' => $treasurer
+        );
         $secondrowid = array('secretary', 'deputypresident', 'treasurer');
         $secondrownames = array('Secretary', 'Deputy President', 'Treasurer');
-        foreach($secondrowid as $key=>$name) {
-            if(!$secondrows[$name]) {
+        foreach ($secondrowid as $key => $name) {
+            if (!$secondrows[$name]) {
                 $secondrows[$name] = array(
-                    'rolename' => $secondrownames[$key],
+                    'role' => $secondrownames[$key],
                     'profile_image' => '',
-                    'student_matric' => 'no data',
+                    'student_id' => 'no data',
                     'name' => '-',
                     'email' => '-'
                 );
             }
         }
-        // print_r($secondrows);
-        if(!$president) {
+        if (!$president) {
             $president = array(
-                'rolename' => 'President',
+                'role' => 'President',
                 'profile_image' => '',
-                'student_matric' => 'no data',
+                'student_id' => 'no data',
                 'name' => '-',
                 'email' => '-'
             );
@@ -49,43 +49,39 @@ class Organization extends CI_Controller
             'isMentor' => $this->session->userdata('user_type') == 'mentor',
             'activeacadyear' => $activeacadyear,
             'president' => $president,
-            'secondrows' => $secondrows,
-            'orgajks' => $this->committee_model->get_ajks($sig_id, $acadyear_id),
-            'sigcommittees' => $this->committee_model->get_orgcommittee($sig_id),
+            'secondrows' => $secondrows, # deputy, secretary, treasurer
+            'orgajks' => $this->committee_model->get_org_ajks($acadyear_id), # member with committee members (AJK) role
+            'sigcommittees' => $this->committee_model->get_org_committees($acadyear_id), # all committees registered in the table
             'roles_org' => $this->committee_model->get_roles_org(), # to register new com
             'sig_member' => $this->student_model->get_sigstudents($sig_id) # to register new com
         );
+        // print_r($data['sigcommittees']);
         $this->load->view('templates/header');
         $this->load->view('organization/index', $data);
         $this->load->view('templates/footer');
     }
 
-    public function delete_committee()
+    public function register_committee()
     {
-        $acadyear_id = $this->committee_model->get_activeacadyear()['id'];
-        $sig_id = $this->input->post('sig_id');
-        $matric = $this->input->post('stdmatric');
-        $deluser = array(
-            'acadyear_id' => $acadyear_id,
-            'sig_id' => $sig_id,
-            'student_matric' => $matric
+        $comdata = array(
+            'acadyear_id' => $this->input->post('acadyear_id'),
+            'student_id' => $this->input->post('student_id'),
+            'role_id' => $this->input->post('role_id'),
+            'description' => $this->input->post('description'),
         );
-        $this->committee_model->delete_orgcommittee($deluser);
+        $this->committee_model->register_org_committee($comdata);
         redirect('organization');
     }
 
-    public function register_committee()
+    public function delete_committee()
     {
-        $sig_id = $this->input->post('sig_id');
-        // $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
-        $comdata = array(
-            'acadyear_id' => $this->input->post('acadyear_id'),
-            'student_matric' => $this->input->post('student_id'),
-            'sig_id' => $sig_id,
-            'role_id' => $this->input->post('role_id'),
-            'role_desc' => $this->input->post('role_desc'),
+        $acadyear_id = $this->input->post('acadyear_id');
+        $student_id = $this->input->post('stdmatric');
+        $deluser = array(
+            'acadyear_id' => $acadyear_id,
+            'student_id' => $student_id
         );
-        $this->committee_model->register_org_committee($comdata);
+        $this->committee_model->delete_orgcommittee($deluser);
         redirect('organization');
     }
 }

@@ -60,6 +60,12 @@ class Academic_model extends CI_Model
         return $query->row_array();
     }
 
+    public function get_activeacadyear()
+    {
+        $query = $this->db->get_where('academicyear', array('status' => 'active'));
+        return $query->row_array();
+    }
+
     public function get_activeacademicsession()
     {
         $this->db->select("acs.*, acy.acadyear as academicyear, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")

@@ -39,8 +39,8 @@
             <div class="card text-white bg-dark mb-3">
                 <div class="card-header"><a class="text-warning" href="<?= site_url('activity/' . $actrole['slug']) ?>"><?= $actrole['activity_name'] ?></a></div>
                 <div class="card-body">
-                    <h4 class="card-title"><?= $actrole['rolename'] ?></h4>
-                    <p class="card-text"><?= $actrole['role_desc'] ?></p>
+                    <h4 class="card-title"><?= $actrole['role'] ?></h4>
+                    <p class="card-text"><?= $actrole['description'] ?></p>
                 </div>
             </div>
         </div>
@@ -58,8 +58,8 @@
             <div class="card text-white bg-dark mb-3">
                 <div class="card-header text-warning"><?= $orgrole['acadyear'] ?></div>
                 <div class="card-body">
-                    <h4 class="card-title"><?= $orgrole['rolename'] ?></h4>
-                    <p class="card-text"><?= $orgrole['role_desc'] ?></p>
+                    <h4 class="card-title"><?= $orgrole['role'] ?></h4>
+                    <p class="card-text"><?= $orgrole['description'] ?></p>
                 </div>
             </div>
         </div>

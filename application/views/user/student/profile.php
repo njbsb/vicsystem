@@ -49,8 +49,8 @@
             <div class="card text-white bg-dark mb-3">
                 <div class="card-header"><?= $orgrole['acadyear'] ?></div>
                 <div class="card-body">
-                    <h4 class="card-title"><?= $orgrole['rolename'] ?></h4>
-                    <p class="card-text"><?= $orgrole['role_desc'] ?></p>
+                    <h4 class="card-title"><?= $orgrole['role'] ?></h4>
+                    <p class="card-text"><?= $orgrole['description'] ?></p>
                 </div>
             </div>
         </div>

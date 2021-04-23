@@ -7,19 +7,20 @@
     <div class="col-md-4 offset-md-4">
         <div class="card mb-4">
             <h4 class="card-header text-white bg-dark">
-                <?= $president['rolename'] ?>
+                <?= $president['role'] ?>
             </h4>
-            <img style="max-height:240px; max-width:auto; display: block; object-fit:cover;  padding:10px;" src="<?= base_url('assets/images/profile/' . $president['profile_image']); ?>"
-                alt="<?= $president['profile_image']; ?>">
+            <?php // $profileimage = ($president['profile_image'] == '') ? '' : base_url('assets/images/profile/' . 'default.jpg') 
+                ?>
+            <!-- <img style="max-height:240px; max-width:auto; display: block; object-fit:cover;  padding:10px;" src="<?= $profileimage ?>"> -->
             <div class="card-body">
                 <h5 class="card-title">
                     <?php if ($president['name'] == '-') : ?>
                     <a href="#"><?= $president['name'] ?></a>
                     <?php else : ?>
-                    <a href="<?= site_url('/student/' . $president['student_matric']) ?>"><?= $president['name'] ?></a>
+                    <a href="<?= site_url('/student/' . $president['student_id']) ?>"><?= $president['name'] ?></a>
                     <?php endif ?>
                 </h5>
-                <h6 class="card-subtitle text-muted"><?= $president['student_matric']; ?></h6>
+                <h6 class="card-subtitle text-muted"><?= $president['student_id']; ?></h6>
             </div>
             <div class="card-footer text-muted">
                 <?= $president['email'] ?>
@@ -34,20 +35,20 @@
     <div class="col-md-4">
         <div class="card mb-4">
             <h4 class="card-header text-white bg-dark">
-                <?= $rows['rolename'] ?>
+                <?= $rows['role'] ?>
             </h4>
-            <img style="max-height:240px; max-width:auto; display: block; object-fit:cover;  padding:10px;" src="<?= base_url('assets/images/profile/' . $rows['profile_image']); ?>"
-                alt="<?= $rows['profile_image']; ?>">
+            <!-- <img style="max-height:240px; max-width:auto; display: block; object-fit:cover;  padding:10px;" src="<?= base_url('assets/images/profile/' . $rows['profile_image']); ?>"
+                alt="<?= $rows['profile_image']; ?>"> -->
             <div class="card-body">
                 <h5 class="card-title">
                     <?php if ($rows['name'] != '-') : ?>
-                    <a href="<?= site_url('/student/' . $rows['student_matric']) ?>"><?= $rows['name'] ?></a>
+                    <a href="<?= site_url('/student/' . $rows['student_id']) ?>"><?= $rows['name'] ?></a>
                     <?php else : ?>
                     <a href="#"><?= $rows['name'] ?></a>
                     <?php endif ?>
 
                 </h5>
-                <h6 class="card-subtitle text-muted"><?= $rows['student_matric']; ?></h6>
+                <h6 class="card-subtitle text-muted"><?= $rows['student_id']; ?></h6>
             </div>
             <div class="card-footer text-muted">
                 <?= $rows['email'] ?>
@@ -65,12 +66,12 @@
         <div class="card mb-3">
             <div class="card-header bg-dark">
                 <h4 class="text-white ">
-                    <?= $ajk['rolename']; ?>
+                    <?= $ajk['role']; ?>
                 </h4>
-                <span class="badge badge-pill badge-light"><?= $ajk['role_desc'] ?></span>
+                <span class="badge badge-pill badge-light"><?= $ajk['description'] ?></span>
             </div>
-            <img style="max-height:240px; max-width:auto; display: block; object-fit:cover;  padding:10px;" src="<?= base_url('assets/images/profile/' . $ajk['profile_image']); ?>"
-                alt="<?= $ajk['profile_image']; ?>">
+            <!-- <img style="max-height:240px; max-width:auto; display: block; object-fit:cover;  padding:10px;" src="<?= base_url('assets/images/profile/' . $ajk['profile_image']); ?>"
+                alt="<?= $ajk['profile_image']; ?>"> -->
             <div class="card-body">
                 <h5 class="card-title">
                     <a href="<?= site_url('/student/' . $ajk['student_id']) ?>">
@@ -112,12 +113,12 @@
     <tbody>
         <?php foreach ($sigcommittees as $sigcom) : ?>
         <tr>
-            <td><?= $sigcom['student_matric'] ?></td>
+            <td><?= $sigcom['student_id'] ?></td>
             <td><?= $sigcom['name'] ?></td>
-            <td><?= $sigcom['rolename'] ?></td>
+            <td><?= $sigcom['role'] ?></td>
             <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
-            <td><a class="btn btn-outline-warning btn-sm" data-stdrole="<?= $sigcom['rolename'] ?>" data-stdname="<?= $sigcom['name'] ?>" data-stdmatric="<?= $sigcom['student_matric'] ?>"
-                    data-toggle="modal" data-target="#delete_orgcom">Delete</a></td>
+            <td><a class="btn btn-outline-warning btn-sm" data-stdrole="<?= $sigcom['role'] ?>" data-stdname="<?= $sigcom['name'] ?>" data-stdmatric="<?= $sigcom['student_id'] ?>" data-toggle="modal"
+                    data-target="#delete_orgcom">Delete</a></td>
             <?php endif ?>
         </tr>
         <?php endforeach ?>
@@ -127,7 +128,7 @@
 <div id="delete_orgcom" class="modal fade">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <?php $hidden = array('sig_id' => $sig['code']) ?>
+            <?php $hidden = array('acadyear_id' => $activeacadyear['id']) ?>
             <?= form_open('organization/delete_committee', '', $hidden) ?>
             <div class="modal-header">
                 <h5 class="modal-title">Delete organization committee</h5>
@@ -151,7 +152,7 @@
                 <p>Confirm to delete this committee?</p>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Delete role</button>
+                <button type="submit" class="btn btn-danger">Delete role</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
             <?= form_close() ?>
@@ -187,8 +188,8 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="role_desc">Description</label>
-                    <input name="role_desc" type="text" class="form-control">
+                    <label for="description">Description</label>
+                    <input name="description" type="text" class="form-control">
                     <small>Only necessary when registering AJK</small>
                 </div>
                 <div class="form-group">
@@ -202,7 +203,7 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Register</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
             </div>
             <?= form_close() ?>
         </div>

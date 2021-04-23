@@ -1,8 +1,7 @@
 <h2 class="text-center"><?= $title; ?></h2>
 
-
 <?php $hidden = array(
-    'author_matric' => '',
+    'author_id' => $this->session->userdata('username'),
     'activitycategory_id' => $activitycategory['code'],
     'acadsession_id' => $activesession['id']
 ); ?>

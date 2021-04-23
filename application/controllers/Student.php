@@ -37,15 +37,17 @@ class Student extends CI_Controller
         if (!array_filter($student)) {
             show_404();
         }
-        if (date('Y') - $student['yearjoined'] + 1 > 4) {
-            $student['year'] = 'Alumni';
+        $yearjoined = $student['yearjoined'];
+        if (date('Y') - $yearjoined + 1 > 4) {
+            $duration = ' (' . $yearjoined . ' - ' . ($yearjoined + 4) . ')';
+            $student['year'] = 'Alumni' . $duration;
         } else {
-            $student['year'] = date('Y') - $student['yearjoined'] + 1;
+            $student['year'] = date('Y') - $yearjoined + 1;
         }
         $data = array(
             'student' => $student,
             'activity_roles' => $this->committee_model->get_activityroles($student_id),
-            'org_roles' => $this->committee_model->get_orgroles($student_id, $student['sig_id'])
+            'org_roles' => $this->committee_model->get_orgroles($student_id)
         );
         $this->load->view('templates/header');
         $this->load->view('student/view', $data);

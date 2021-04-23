@@ -10,18 +10,18 @@
                 <!-- <h3 class="card-header">
                     Header
                 </h3> -->
-                <?php $profile_image = ($mentor['profile_image']) ? $mentor['profile_image'] : 'default.jpg' ?>
+                <?php $profile_image = (isset($mentor['profile_image'])) ? $mentor['profile_image'] : 'default.jpg' ?>
                 <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $profile_image) ?>">
                 <div class="card-footer text-muted">
                     <?= $mentor['id'] ?>
                 </div>
             </div>
 
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label>Select profile photo</label>
                 <input name="profile_image" type="file" class="form-control-file" aria-describedby="fileHelp">
                 <small id="fileHelp" class="form-text text-muted"><?= $profile_image ?></small>
-            </div>
+            </div> -->
 
         </div>
         <div class="col-lg-8 text-left">
@@ -48,7 +48,7 @@
             <div class="form-group">
                 <label>Role in SIG</label>
                 <select name="sigrole_id" class="form-control" readonly>
-                    <option value="<?= $mentor['orgrole_id'] ?>"><?= $mentor['rolename'] ?></option>
+                    <option value="<?= $mentor['role_id'] ?>"><?= $mentor['role'] ?></option>
                 </select>
             </div>
 
