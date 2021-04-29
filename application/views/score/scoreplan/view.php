@@ -33,7 +33,7 @@
                 <?php foreach ($actcat['scoreplan'] as $scp) : ?>
                 <tr>
                     <td><?= $scp['label'] ?></td>
-                    <td><?= $scp['activity_name'] ?></td>
+                    <td><?= $scp['title'] ?></td>
                     <td><?= $scp['percentweightage'] ?> %</td>
                     <td><a type="button" data-toggle="modal" data-target="#editscoreplan<?= $scp['id'] ?>" class="btn btn-outline-primary btn-sm">Edit</a></td>
                 </tr>
@@ -82,7 +82,7 @@
                         <select name="activity_id" class="form-control" required>
                             <?php if ($actcat['unregistered']) : ?>
                             <?php foreach ($actcat['unregistered'] as $notact) : ?>
-                            <option value="<?= $notact['id'] ?>"><?= $notact['activity_name'] ?></option>
+                            <option value="<?= $notact['id'] ?>"><?= $notact['title'] ?></option>
                             <?php endforeach ?>
                             <?php else : ?>
                             <option value="" readonly>No activity available to be added</option>

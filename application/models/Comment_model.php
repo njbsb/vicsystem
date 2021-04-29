@@ -15,10 +15,15 @@ class Comment_model extends CI_Model
     {
         $this->db->select('*')
             ->from('comment as cmt')
-            ->where(array('cmt.activity_id' => $activity_id))
-            ->join('comment_category as cmtcat', 'cmt.category_id = cmtcat.id', 'left');
+            ->where(array('cmt.activity_id' => $activity_id));
+        // ->join('comment_category as cmtcat', 'cmt.category_id = cmtcat.id', 'left');
         $query = $this->db->get();
         return $query->result_array();
+    }
+
+    public function delete_comment($comment_id)
+    {
+        return $this->db->where('id', $comment_id)->delete('comment');
     }
 
     public function get_comments_bycategory($category_id)
@@ -50,7 +55,7 @@ class Comment_model extends CI_Model
         foreach ($query->result() as $row) {
             $output .= '<div class="alert alert-dismissible alert-primary">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        ' . $row->comment . '[by <a href="' . site_url('student/' . $row->student_matric) . '"><strong>' . $row->student_matric . '</strong></a>]
+                        ' . $row->comment . '[by <a href="' . site_url('student/' . $row->student_id) . '"><strong>' . $row->student_id . '</strong></a>]
                     <a href=""><span class="badge badge-pill badge-primary">' . $row->category . '</span></a>
                     </div>';
         }

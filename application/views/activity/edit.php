@@ -1,17 +1,15 @@
 <h2><?= $title ?></h2>
 <?php if (validation_errors()) : ?>
-    <div class="alert alert-dismissible alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <h4 class="alert-heading">Warning!</h4>
-        <p class="mb-0"><?= validation_errors() ?></p>
-    </div>
+<div class="alert alert-dismissible alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h4 class="alert-heading">Warning!</h4>
+    <p class="mb-0"><?= validation_errors() ?></p>
+</div>
 
 <?php endif ?>
 
 <?php $hidden = array(
-    'id' => $activity['id'],
-    'photo_path_hidden' => $activity['photo_path'],
-    'paperwork_file_hidden' => $activity['paperwork_file']
+    'id' => $activity['id']
 ) ?>
 <?= form_open_multipart('activity/update', '', $hidden); ?>
 <div class="row">
@@ -19,14 +17,14 @@
         <!-- NAME -->
         <div class="form-group">
             <label>Activity Name</label>
-            <input name="activityname" type="text" class="form-control" placeholder="Enter activity name" value="<?= $activity['activity_name'] ?>" readonly>
+            <input name="activityname" type="text" class="form-control" placeholder="Enter activity name" value="<?= $activity['title'] ?>">
             <small class="form-text text-muted">Please include unique activity name</small>
         </div>
         <!-- DESCRIPTION -->
         <div class="form-group">
             <label>Activity Description</label>
-            <textarea name="activitydesc" class="form-control ckeditor" rows="3"><?= $activity['activity_desc'] ?></textarea>
-            <small class="form-text text-muted">Please include summary report of the activity</small>
+            <textarea name="activitydesc" class="form-control ckeditor" rows="3"><?= $activity['description'] ?></textarea>
+            <small class="form-text text-muted">Please include summary of the activity</small>
         </div>
         <div class="form-group">
             <label>Venue</label>
@@ -38,50 +36,43 @@
         </div>
         <!-- ACADEMIC SESSION -->
         <div class="form-group">
-            <label>Select academic session</label>
-            <select name="academicsession_id" class="form-control" readonly>
+            <label>Academic session</label>
+            <input type="text" class="form-control" value="<?= $academicsession['academicsession'] ?>" readonly>
+            <!-- <select name="academicsession_id" class="form-control" readonly>
                 <option value="<?= $activity['acadsession_id'] ?>"><?= $academicsession['academicsession'] ?></option>
-            </select>
+            </select> -->
         </div>
         <!-- SIG -->
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label>Select SIG</label>
             <select name="sig_id" class="form-control" readonly>
-                <option value="<?= $sig['id'] ?>"><?= $sig['namecode'] ?></option>
+                <option value="<?= $sig['code'] ?>"><?= $sig['namecode'] ?></option>
             </select>
-        </div>
+        </div> -->
         <!-- ADVISOR -->
         <div class="form-group">
             <label>Select activity advisor</label>
-            <select name="advisor_matric" class="form-control">
-                <option value="<?= $activity['advisor_matric'] ?>" selected readonly><?= $activity['advisorname'] . ' (' . $activity['advisor_matric'] . ')' ?></option>
+            <select name="advisor_id" class="form-control">
+                <option value="<?= $activity['advisor_id'] ?>" selected readonly><?= $activity['advisorname'] . ' (' . $activity['advisor_id'] . ')' ?></option>
             </select>
         </div>
         <!-- HIGHCOM -->
         <div class="row">
             <?php foreach ($highcoms as $highcom) : ?>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label><?= $highcom['rolename'] ?></label>
-                        <select name="highcoms[<?= $highcom['role_id'] ?>]" class="form-control" readonly>
-                            <option value="<?= $highcom['id'] ?>"><?= $highcom['name'] . ' (' . $highcom['id'] . ')' ?></option>
-                        </select>
-                    </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label><?= $highcom['rolename'] ?></label>
+                    <select name="highcoms[<?= $highcom['role_id'] ?>]" class="form-control" readonly>
+                        <option value="<?= $highcom['id'] ?>"><?= $highcom['name'] . ' (' . $highcom['id'] . ')' ?></option>
+                    </select>
                 </div>
+            </div>
             <?php endforeach ?>
         </div>
-        <!-- Activity File and Image -->
-        <div class="row">
-            <div class="form-group col-sm-6">
-                <label>Choose a file (Paperwork)</label>
-                <input name="paperwork_file" type="file" class="form-control-file" id="paperwork_file" aria-describedby="fileHelp">
-                <small id="fileHelp" class="form-text text-muted">Existing: <?= $activity['paperwork_file'] ? $activity['paperwork_file'] : 'none' ?></small>
-            </div>
-            <div class="form-group col-sm-6">
-                <label>Choose a photo (Activity Image)</label>
-                <input name="photo_path" type="file" class="form-control-file" id="photo_path" aria-describedby="fileHelp">
-                <small id="fileHelp" class="form-text text-muted">Existing: <?= $activity['photo_path'] ? $activity['photo_path'] : 'none' ?></small>
-            </div>
+
+        <div class="form-group">
+            <label for="sp_link">SharePoint URL</label>
+            <input type="text" name="sp_link" id="sp_link" value="<?= $activity['sp_link'] ?>" class="form-control">
         </div>
 
         <!-- Start and end date -->

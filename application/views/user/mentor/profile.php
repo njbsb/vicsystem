@@ -12,10 +12,9 @@
         </div>
         <div class="col-lg-8 text-left">
             <h3><b><?= $mentor['name'] ?></b></h3>
-            <h6><b>Position:</b> <?= $mentor['position'] ?></h6>
             <h6><b>Email:</b> <a href="mailto:<?= $mentor['email'] ?>"><?= $mentor['email'] ?></a></h6>
-            <h6><b>SIG:</b> <?= $mentor['signame'] ?></h6>
-            <h6><b>SIG Role:</b> <?= $mentor['role'] ?></h6>
+            <h6><b>Position:</b> <?= $mentor['position'] ?></h6>
+            <h6><b>Role:</b> <?= $mentor['role'] ?></h6>
             <h6><b>Room Num:</b> <?= $mentor['roomnum'] ?></h6>
 
         </div>

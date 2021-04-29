@@ -17,7 +17,7 @@
                 <th scope="col">Matric</th>
                 <th scope="col">Name</th>
                 <th scope="col">Position</th>
-                <?php if ($isHighcom or ($this->session->userdata('username') == $activity['advisor_matric'])) : ?>
+                <?php if ($isHighcom or ($this->session->userdata('username') == $activity['advisor_id'])) : ?>
                 <th></th>
                 <?php endif ?>
             </tr>
@@ -26,13 +26,16 @@
             <?php if ($committees) : ?>
             <?php foreach ($committees as $com) : ?>
             <tr>
-                <td scope="row"><?= $com['student_matric'] ?></td>
+                <td scope="row"><?= $com['student_id'] ?></td>
                 <td scope="row"><?= $com['name'] ?></td>
-                <td scope="row"><?= $com['rolename'] ?></td>
-                <?php if ($isHighcom or ($this->session->userdata('username') == $activity['advisor_matric'])) : ?>
+                <td scope="row"><?= $com['role'] ?></td>
+                <?php if ($isHighcom or ($this->session->userdata('username') == $activity['advisor_id'])) : ?>
                 <!-- only advisor and highcom can see the delete button -->
                 <?php $disabled = ($isHighcom and in_array($com['role_id'], $highcoms_id)) ? 'disabled' : '' ?>
-                <td><button data-toggle="modal" data-target="#delete_committee" data-roleid="<?= $com['role_id'] ?>" class="btn-sm btn btn-outline-danger" <?= $disabled ?>>Delete</button></td>
+                <td><button data-toggle="modal" data-target="#delete_committee" data-roleid="<?= $com['role_id'] ?>" class="btn-sm btn btn-outline-danger" <?= $disabled ?>>
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
                 <?php endif ?>
             </tr>
             <?php endforeach ?>
@@ -55,13 +58,13 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="activity_id">Activity</label>
-                    <input value="<?= $activity['activity_name'] ?>" type="text" class="form-control" readonly>
+                    <input value="<?= $activity['title'] ?>" type="text" class="form-control" readonly>
                 </div>
                 <div class="form-group">
                     <label for="role_id">Roles</label>
                     <select name="role_id" class="form-control">
                         <?php foreach ($activity_roles as $acr) : ?>
-                        <option value="<?= $acr['id'] ?>"><?= $acr['rolename'] ?></option>
+                        <option value="<?= $acr['id'] ?>"><?= $acr['role'] ?></option>
                         <?php endforeach ?>
                     </select>
                 </div>
@@ -74,7 +77,9 @@
                     <label for="student_matric">Member</label>
                     <select name="student_matric" class="form-control">
                         <?php foreach ($sig_members as $sm) : ?>
-                        <option value="<?= $sm['id'] ?>"><?= $sm['name'] ?></option>
+                        <option value="<?= $sm['id'] ?>">
+                            <?= $sm['name'] ?>
+                        </option>
                         <?php endforeach ?>
                     </select>
                 </div>
@@ -105,8 +110,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Delete committee</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                <button type="button" class="btn btn-outline-danger">Delete</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
         </div>

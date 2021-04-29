@@ -23,21 +23,29 @@ class Mentor_model extends CI_Model
             return $query->result_array();
         }
         $this->db->select('user.id, user.name, user.email, user.sig_id, mtr.role_id, role.role, mtr.position, mtr.roomnum, sig.code as sigcode, sig.name as signame')
-            ->from('user as user')
-            ->where(array('user.id' => $matric))
+            ->from('user')
+            ->where(array(
+                'user.id' => $matric
+            ))
             ->join('mentor as mtr', 'mtr.matric = user.id', 'left')
-            ->join('role_organization as role', 'mtr.role_id = role.id')
+            ->join('role_organization as role', 'mtr.role_id = role.id', 'left')
             ->join('sig', 'sig.code = user.sig_id', 'left');
         // ->join('role_organization as role', 'role.id = mtr.orgrole_id', 'left');
         $query = $this->db->get();
-        if (!$query->num_rows()) {
-            $default = array(
-                'position' => '',
-                'roomnum' => '',
-                'role_id' => ''
-            );
-            return $default;
-        }
+        // if (!$query->num_rows()) {
+        //     $default = array(
+        //         'position' => '',
+        //         'roomnum' => '',
+        //         'role_id' => ''
+        //     );
+        //     return $default;
+        // }
+        return $query->row_array();
+    }
+
+    public function get_mentor_profile($id)
+    {
+        $query = $this->db->get_where('mentor', array('matric' => $id));
         return $query->row_array();
     }
 
@@ -64,8 +72,11 @@ class Mentor_model extends CI_Model
 
     public function update_mentor($id, $mentordata)
     {
-        $this->db->where('matric', $id);
-        return $this->db->update('mentor', $mentordata);
+        return $this->db->where('matric', $id)
+            ->set($mentordata)
+            ->insert('mentor');
+        // $this->db->where('matric', $id);
+        // return $this->db->update('mentor', $mentordata);
     }
 
     public function delete_mentor($matric)

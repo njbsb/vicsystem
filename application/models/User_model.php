@@ -27,10 +27,8 @@ class User_model extends CI_Model
     {
         if ($user_id === FALSE and $sig_id === FALSE) {
             # return array of users
-            $this->db->select('id, name, userstatus')
+            $this->db->select('id, name, userstatus, usertype, sig_id')
                 ->from('user as user');
-                // ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
-                // ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left');
             $query = $this->db->get();
             return $query->result_array();
         }
@@ -50,8 +48,6 @@ class User_model extends CI_Model
             $this->db->select('id, name, userstatus, usertype')
                 ->from('user')
                 ->where('sig_id', $sig_id);
-                // ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
-                // ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left');
             $query = $this->db->get();
             return $query->result_array();
         }
@@ -75,12 +71,21 @@ class User_model extends CI_Model
         return true;
     }
 
+    public function get_user_superior($id)
+    {
+        $superior_id = $this->db->get_where('user', array('id' => $id))->row()->superior_id;
+        $query = $this->db->get_where('user', array('id' => $superior_id));
+        // $query = $this->db->select('user.id, user.name')
+        //     ->from('user')
+        //     ->where('id', $superior_id)->get();
+        return $query->row_array();
+    }
+
     public function get_usertype($user_id)
     {
         $usertype = $this->db->select('usertype')
             ->get_where('user', array('id' => $user_id))
             ->row()->usertype;
-        // $usertype_id = $this->db->select();
         return $usertype;
     }
 
@@ -152,23 +157,11 @@ class User_model extends CI_Model
     public function approve_user($user_id)
     {
         $this->db->where('id', $user_id);
-        // 2 = active
         return $this->db->update('user', array('userstatus' => 'active'));
     }
 
-    public function get_mentor_usertype_id()
+    public function get_birthdaymembers($sig_id)
     {
-        $query = $this->db->get_where('usertype', array('usertype' => 'mentor'));
-        return $query->row()->id;
-    }
-
-    public function get_student_usertype_id()
-    {
-        $query = $this->db->get_where('usertype', array('usertype' => 'student'));
-        return $query->row()->id;
-    }
-
-    public function get_birthdaymembers($sig_id) {
         // current month
         $this->db->select('name, dob')
             ->from('user')->where(array(

@@ -34,13 +34,15 @@ class Activity extends CI_Controller
         if (empty($activity)) {
             show_404();
         }
+        // $activity['datetime_start'] = date('jS M Y', strtotime($activity['datetime_start']));
+        // $activity['datetime_end'] = date('jS M Y', strtotime($activity['datetime_end']));
         $data = array(
-            'title' => $activity['activity_name'],
+            'title' => $activity['title'],
             'activity' => $activity,
             'comments' => $this->comment_model->get_comments($activity['id']),
             'committees' => $this->activity_model->get_committees($activity['id']),
             'categories' => $this->category_model->get_category(),
-            'activity_roles' => $this->committee_model->get_roles_activity(),
+            'activity_roles' => $this->role_model->get_roles_activity(),
             'sig_members' => $this->student_model->get_sigstudents($activity['sig_id']),
             'highcoms_id' => $this->committee_model->get_acthighcoms_id()
         );
@@ -86,43 +88,30 @@ class Activity extends CI_Controller
             // $this->load->view('templates/footer');
         } else {
             $slug = url_title($this->input->post('activityname'));
-            // $config = array(
-            //     'upload_path' => './assets/images/activity',
-            //     'allowed_types' => 'gif|jpg|png',
-            //     'max_size' => 1000,
-            //     'max_width' => 2048,
-            //     'max_height' => 1024,
-            //     'file_name' => $slug . '-' . substr(md5(rand()), 0, 10)
-            // );
-            // $this->load->library('upload', $config);
-
-            // if (@$_FILES['photo_path']['name'] != NULL) {
-            //     if ($this->upload->do_upload('photo_path')) {
-            //         $photo_path = $this->upload->data('file_name');
-            //     } else {
-            //         $photo_path = 'default.jpg';
-            //     }
-            // }
-
             $activity_data = array(
-                'activity_name' => $this->input->post('activityname'),
+                'title' => $this->input->post('activityname'),
+                'acadsession_id' => $this->input->post('acadsession_id'),
                 'activitycategory_id' => $this->input->post('activitycategory_id'),
                 // 'activitytype_id' => $this->input->post('activitytype_id'),
-                'acadsession_id' => $this->input->post('acadsession_id'),
+                'datetime_start' => $this->input->post('datetime_start'),
+                'datetime_end' => $this->input->post('datetime_end'),
                 'sig_id' => $sig_id,
-                'advisor_matric' => $this->input->post('advisor_matric'),
+                'author_id' => $this->session->userdata('username'),
+                'advisor_id' => $this->input->post('advisor_id'),
                 'slug' => $slug
             );
             # returns newly added activity ID
             $activity_id = $this->activity_model->create_activity($activity_data);
-            $highcoms = $this->input->post('highcoms');
-            foreach ($highcoms as $id => $highcom) {
-                $highcomdata = array(
-                    'activity_id' => $activity_id,
-                    'student_matric' => $highcom,
-                    'role_id' => $id
-                );
-                $this->committee_model->register_act_committee($highcomdata);
+            if (isset($activity_id)) {
+                $highcoms = $this->input->post('highcoms');
+                foreach ($highcoms as $id => $highcom) {
+                    $highcomdata = array(
+                        'activity_id' => $activity_id,
+                        'student_id' => $highcom,
+                        'role_id' => $id
+                    );
+                    $this->committee_model->register_act_committee($highcomdata);
+                }
             }
             redirect('activity');
         }
@@ -142,7 +131,7 @@ class Activity extends CI_Controller
             show_404();
         }
         $data = array(
-            'title' => 'Edit: ' . $activity['activity_name'],
+            'title' => 'Edit: ' . $activity['title'],
             'academicsession' => $this->academic_model->get_academicsession($activity['acadsession_id']),
             'sig' => $this->sig_model->get_sig($sig_id),
             'mentors' => $this->mentor_model->get_mentor(),
@@ -161,56 +150,36 @@ class Activity extends CI_Controller
         $slug = url_title($this->input->post('activityname'));
 
         # Photo
-        $config_photo = array(
-            'upload_path' => './assets/images/activity',
-            'allowed_types' => 'gif|jpg|png',
-            'max_size' => 1000,
-            'max_width' => 2048,
-            'max_height' => 1024,
-            'file_name' => $slug . '-' . substr(md5(rand()), 0, 10),
-        );
-        $this->load->library('upload', $config_photo);
+        // $config_photo = array(
+        //     'upload_path' => './assets/images/activity',
+        //     'allowed_types' => 'gif|jpg|png',
+        //     'max_size' => 1000,
+        //     'max_width' => 2048,
+        //     'max_height' => 1024,
+        //     'file_name' => $slug . '-' . substr(md5(rand()), 0, 10),
+        // );
+        // $this->load->library('upload', $config_photo);
 
-        if (@$_FILES['photo_path']['name'] != NULL) {
-            if ($this->upload->do_upload('photo_path')) {
-                $photo_path = $this->upload->data('file_name');
-            } else {
-                $photo_path = 'default.jpg';
-            }
-        } else {
-            $photo_path = $this->input->post('photo_path_hidden');
-        }
-
-        # Paperwork / documents
-        $config_file = array(
-            'allowed_types' => 'docx|doc|pdf',
-            'file_name' => $slug . '- paperwork - ' . substr(md5(rand()), 0, 10),
-            'upload_path' => './assets/images/activity'
-        );
-        $this->load->library('upload', $config_file);
-        if (@$_FILES['paperwork_file']['name'] != NULL) {
-            if ($this->upload->do_upload('paperwork_file')) {
-                $paperwork_file = $this->upload->data('file_name');
-            } else {
-                $paperwork_file = '';
-            }
-        } else {
-            $paperwork_file = $this->input->post('paperwork_file_hidden');
-        }
+        // if (@$_FILES['photo_path']['name'] != NULL) {
+        //     if ($this->upload->do_upload('photo_path')) {
+        //         $photo_path = $this->upload->data('file_name');
+        //     } else {
+        //         $photo_path = 'default.jpg';
+        //     }
+        // } else {
+        //     $photo_path = $this->input->post('photo_path_hidden');
+        // }
 
         $activitydata = array(
-            'activity_name' => $this->input->post('activityname'),
-            'activity_desc' => $this->input->post('activitydesc'),
+            'title' => $this->input->post('activityname'),
+            'description' => $this->input->post('activitydesc'),
             'venue' => $this->input->post('venue'),
             'theme' => $this->input->post('theme'),
-            // 'acadsession_id' => $this->input->post('academicsession_id'),
-            // 'sig_id' => $this->input->post('sig_id'),
-            // 'advisor_matric' => $this->input->post('advisor_matric'),
+            'advisor_id' => $this->input->post('advisor_id'),
             'datetime_start' => $this->input->post('datetime_start'),
             'datetime_end' => $this->input->post('datetime_end'),
             'slug' => $slug,
-            'photo_path' => $photo_path,
-            'paperwork_file' => $paperwork_file
+            'sp_link' => $this->input->post('sp_link')
         );
 
         $this->activity_model->update_activity($id, $activitydata);
@@ -233,8 +202,8 @@ class Activity extends CI_Controller
         $comdata = array(
             'activity_id' => $activity_id,
             'role_id' => $this->input->post('role_id'),
-            'student_matric' => $this->input->post('student_matric'),
-            'role_desc' => $this->input->post('role_desc')
+            'student_id' => $this->input->post('student_matric'),
+            'description' => $this->input->post('role_desc')
         );
         $this->committee_model->register_act_committee($comdata);
         redirect('activity/' . $slug);

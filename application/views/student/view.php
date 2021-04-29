@@ -12,7 +12,6 @@
         <div class="col-lg-4 text-left">
             <h3><b><?= $student['name'] ?></b></h3>
             <h6><b>Matric:</b> <?= $student['id'] ?></h6>
-            <h6><b>Club name:</b> <?= $student['signame'] ?></h6>
             <h6><b>Program:</b> <?= $student['program_name'] ?></h6>
             <h6><b>Year:</b> <?= $student['year'] ?></h6>
             <h6><b>Phone Num:</b> <?= $student['phonenum'] ?></h6>
@@ -31,39 +30,65 @@
     <hr>
 
     <h2>Previous Activity and Roles</h2> <br>
-    <h4>Activities</h4>
+    <h4 class="text-primary"><b>Activities</b></h4>
     <?php if ($activity_roles) : ?>
     <div class="row justify-content-center">
-        <?php foreach ($activity_roles as $actrole) : ?>
-        <div class="col-md-4">
-            <div class="card text-white bg-dark mb-3">
-                <div class="card-header"><a class="text-warning" href="<?= site_url('activity/' . $actrole['slug']) ?>"><?= $actrole['activity_name'] ?></a></div>
-                <div class="card-body">
-                    <h4 class="card-title"><?= $actrole['role'] ?></h4>
-                    <p class="card-text"><?= $actrole['description'] ?></p>
-                </div>
-            </div>
-        </div>
-        <?php endforeach ?>
+        <table class="table">
+            <thead>
+                <tr class="table-primary">
+                    <th>Year</th>
+                    <th>Activity</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($activity_roles as $actrole) : ?>
+                <?php $desc = (isset($actrole['description'])) ? ' (' . $actrole['description'] . ')' : '' ?>
+                <tr class="table-light">
+                    <td><?= $actrole['acadyear'] . ' Semester ' . $actrole['semester'] ?></td>
+                    <td><?= $actrole['activity_name'] ?></td>
+                    <td><?= $actrole['role'] . $desc ?></td>
+                </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
     </div>
     <?php else : ?>
     <p>No data of roles in activity found</p>
     <?php endif ?>
     <hr>
-    <h4>SIG: <?= $student['signame'] ?></h4>
+    <h4 class="text-secondary"><b><?= $student['signame'] ?></b></h4>
+    <br>
     <?php if ($org_roles) : ?>
     <div class="row justify-content-center">
-        <?php foreach ($org_roles as $orgrole) : ?>
-        <div class="col-md-4">
+        <table class="table">
+            <thead>
+                <tr class="table-primary">
+                    <th>Academic Year</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($org_roles as $orgrole) : ?>
+                <?php $desc = (isset($orgrole['description'])) ? ' (' . $orgrole['description'] . ')' : '' ?>
+                <tr class="table-light">
+                    <td><?= $orgrole['acadyear'] ?></td>
+                    <td><?= $orgrole['role'] . $desc ?></td>
+                </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+
+        <!-- <div class="col-md-4">
             <div class="card text-white bg-dark mb-3">
-                <div class="card-header text-warning"><?= $orgrole['acadyear'] ?></div>
+                <div class="card-header text-warning"></div>
                 <div class="card-body">
-                    <h4 class="card-title"><?= $orgrole['role'] ?></h4>
+                    <h4 class="card-title"></h4>
                     <p class="card-text"><?= $orgrole['description'] ?></p>
                 </div>
             </div>
-        </div>
-        <?php endforeach ?>
+        </div> -->
+
     </div>
     <?php else : ?>
     <p>No data of roles in SIG found</p>

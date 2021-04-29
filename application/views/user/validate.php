@@ -6,9 +6,10 @@
 </div>
 <?php endif ?>
 <h2 class="text-center"><?= $user['id'] ?></h2>
-<?= form_open('user/validate/' . $user['id']) ?>
+<?php $hidden = array('mentor_id' => $superior['id']) ?>
+<?= form_open('user/validate/' . $user['id'], '', $hidden) ?>
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-4 text-center">
         <div class="card border mb-3 text-center" style="max-width: 20rem;">
             <h4 class="card-header text-primary">
                 <b><?= ucfirst($user['usertype']) ?></b>
@@ -20,6 +21,8 @@
                 Applied: <?= $user['code'] ?>
             </div>
         </div>
+        <?php $badgetype = ($user['userstatus'] == 'pending') ? 'badge-warning' : 'badge-success' ?>
+        <span class="badge <?= $badgetype ?>"><?= $user['userstatus'] ?></span>
     </div>
 
     <div class="col-lg-8 text-left">
@@ -38,28 +41,20 @@
             <label for="email">Email</label>
             <input value="<?= $user['email'] ?>" class="form-control" name="email" type="text" required>
         </div>
-        <!-- SIG -->
+        <!-- MENTOR ID -->
+        <?php if ($user['usertype'] == 'student') : ?>
         <div class="form-group">
-            <label>SIG</label>
-            <select name="sig_id" class="form-control" id="sig_id" readonly>
-                <option value="" selected disabled hidden>Choose SIG</option>
-                <?php foreach ($sigs as $sig) : ?>
-                <?php $selectedsig = ($user['sig_id'] == $sig['code']) ? 'selected' : '' ?>
-                <option value="<?= $sig['code'] ?>" <?= $selectedsig ?>>
-                    <?= $sig['namecode'] ?>
-                </option>
+            <label for="superior_id">Mentor/Superior</label>
+            <select name="superior_id" id="" class="form-control" required>
+                <option value="" disabled selected>Select a mentor</option>
+                <?php foreach ($mentors as $mentor) : ?>
+                <?php $mentorselected = ($user['superior_id'] == $mentor['id']) ? 'selected' : '' ?>
+                <option value="<?= $mentor['id'] ?>" <?= $mentorselected ?>><?= $mentor['name'] ?></option>
                 <?php endforeach ?>
             </select>
         </div>
+        <?php endif ?>
         <div class="row">
-            <div class="col-md-4">
-                <!-- PROFILE IMAGE -->
-                <div class="form-group">
-                    <label for="profile_image">Profile image</label>
-                    <input name="profile_image" type="file" class="form-control-file" id="" aria-describedby="fileHelp">
-                    <small id="fileHelp" class="form-text text-muted">Choose a proper profile image.</small>
-                </div>
-            </div>
             <div class="col-md-4">
                 <!-- DATE OF BIRTH -->
                 <div class="form-group">
@@ -70,20 +65,23 @@
             <div class="col-md-4">
                 <!-- USER STATUS -->
                 <div class="form-group">
-                    <label for="userstatus_id" class="text-danger">*User status</label>
-                    <select name="userstatus_id" id="" class="form-control" style="max-width: 20rem;">
+                    <label for="userstatus" class="text-danger">*User status</label>
+                    <select name="userstatus" id="" class="form-control" style="max-width: 20rem;">
                         <option value="" selected disabled hidden>Choose user status</option>
-                        <?php foreach ($userstatuses as $us) : ?>
-                        <?php $selectedstatus = ($us['status'] == $user['userstatus']) ? 'selected' : '' ?>
-                        <option value="<?= $us['status'] ?>" <?= $selectedstatus ?>>
-                            <?= $us['status'] ?>
+                        <?php foreach ($userstatus as $status) : ?>
+                        <?php $selectedstatus = ($status['status'] == $user['userstatus']) ? 'selected' : '' ?>
+                        <option value="<?= $status['status'] ?>" <?= $selectedstatus ?>>
+                            <?= $status['status'] ?>
                         </option>
                         <?php endforeach ?>
                     </select>
                 </div>
             </div>
         </div>
-        <!-- <p class="text-danger">Please select the status of the user</p> -->
+        <small>Please select user status to active to validate as active user</small>
+        <br><br>
+        <button type="submit" class="btn btn-outline-primary">Submit</button>
     </div>
 </div>
+<?= form_close() ?>
 <hr>

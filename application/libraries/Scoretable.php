@@ -14,22 +14,20 @@ class Scoretable
         $acadplans = array();
         for ($i = 0; $i < count($academicplans); $i++) {
             $acp = $academicplans[$i];
-            $citrarow = $this->CI->citra_model->get_students_registeredcitra($acp['student_matric'], $acp['acadsession_id']);
+            $citrarow = $this->CI->citra_model->get_students_registeredcitra($acp['student_id'], $acp['acadsession_id']);
             $citrastring = '';
             foreach ($citrarow as $cr) {
                 $citrastring .= $cr['citra_code'] . ' ';
             }
-            
-            if(floatval($acp['gpa_achieved']) == 0 or floatval($acp['gpa_achieved']) == null) {
+
+            if (floatval($acp['gpa_achieved']) == 0 or floatval($acp['gpa_achieved']) == null) {
                 $difference = 'No data';
-            }
-            else {
+            } else {
                 $difference = floatval($acp['gpa_achieved']) - floatval($acp['gpa_target']);
             }
-            if($acp['gpa_achieved'] == 0 or $acp['gpa_achieved'] == null) {
+            if ($acp['gpa_achieved'] == 0 or $acp['gpa_achieved'] == null) {
                 $gpa_achieved = 'No data';
-            }
-            else {
+            } else {
                 $gpa_achieved = $acp['gpa_achieved'];
             }
             $acparray = array(

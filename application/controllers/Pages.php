@@ -7,8 +7,18 @@ class Pages extends CI_Controller
             show_404();
         }
         if ($this->session->userdata('logged_in')) {
-            $user = $this->user_model->get_user($this->session->userdata('username'));
-            // print_r($user);
+            $username  = $this->session->userdata('username');
+            $user = $this->user_model->get_user($username);
+            switch ($user['usertype']) {
+                case 'mentor':
+                    $userspecific = $this->mentor_model->get_mentor_profile($username);
+                    break;
+                case 'student':
+                    $userspecific = $this->student_model->get_student_profile($username);
+                    break;
+            }
+            $profileComplete = (isset($userspecific)) ? true : false;
+
             $activesession = $this->academic_model->get_activeacademicsession();
             $activities = $this->activity_model->get_upcomingactivities($user['sig_id'], $activesession['id']);
             foreach ($activities as $key => $act) {
@@ -22,7 +32,6 @@ class Pages extends CI_Controller
             $intakedata = $this->student_model->get_studentbyintake($user['sig_id']);
             $pieData = [];
             $barData = [];
-            // print_r($coursecount);
             $totalmembercount = 0;
             foreach ($coursecount as $row) {
                 $pieData['label'][] = $row->program_id;
@@ -35,6 +44,7 @@ class Pages extends CI_Controller
             }
             $data = array(
                 'user_name' => $user['name'],
+                'profileComplete' => $profileComplete,
                 'activesession' => $this->academic_model->get_activeacademicsession(),
                 'birthdaymembers' => $this->user_model->get_birthdaymembers($user['sig_id']),
                 'upcomingactivities' => $activities,
@@ -49,7 +59,6 @@ class Pages extends CI_Controller
             $data['title'] = ucfirst($page);
             $this->load->view('templates/header');
             $this->load->view('pages/' . $page, $data);
-            // $this->load->view('templates/footer');
         }
     }
 }

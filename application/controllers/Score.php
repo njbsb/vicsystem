@@ -121,7 +121,7 @@ class Score extends CI_Controller
             # scoreplan index
             $activitycategories = $this->activity_model->get_activitycategory();
             $academicsessions = $this->academic_model->get_academicsession();
-            print_r($activitycategories);
+            // print_r($activitycategories);
             foreach ($academicsessions as $index => $acs) {
                 $totalcategory = 0;
                 foreach ($activitycategories as $id => $cat) {
@@ -166,7 +166,6 @@ class Score extends CI_Controller
     {
         $acslug = $this->input->post('acslug');
         $scoreplan = array(
-            'sig_id' => '1',
             'acadsession_id' => $this->input->post('acadsession_id'),
             'activitycategory_id' => $this->input->post('activitycategory_id'),
             'activity_id' => $this->input->post('activity_id'),
@@ -195,8 +194,8 @@ class Score extends CI_Controller
         $student_id = $this->input->post('student_id'); #hidden
         $levelrubrics = $this->input->post('keys');
         $scoreleveldata = array(
-            'marker_matric' => $this->session->userdata('username'),
-            'student_matric' => $student_id,
+            'marker_id' => $this->session->userdata('username'),
+            'student_id' => $student_id,
             'scoreplan_id' => $this->input->post('scoreplan_id') #hidden
         );
         foreach ($levelrubrics as $rubricname => $value) {
@@ -214,7 +213,7 @@ class Score extends CI_Controller
         $levelrubrics = $this->input->post('keys');
         $where = array(
             'scoreplan_id' => $this->input->post('scoreplan_id'),
-            'student_matric' => $this->input->post('student_id')
+            'student_id' => $this->input->post('student_id')
         );
         $scoreleveldata = array();
         foreach ($levelrubrics as $rubricname => $value) {
@@ -230,7 +229,7 @@ class Score extends CI_Controller
         $student_id = $this->input->post('student_id');
         $scorecompdata = array(
             'acadsession_id' => $this->input->post('acadsession_id'),
-            'student_matric' => $student_id,
+            'student_id' => $student_id,
             'digitalcv' => $this->input->post('digitalcv'),
             'leadership' => $this->input->post('leadership'),
             'volunteer' => $this->input->post('volunteer')
@@ -260,7 +259,7 @@ class Score extends CI_Controller
     // {
     //     $where = array(
     //         'acadsession_id' => $this->input->post('acadsession_id'),
-    //         'student_matric' => $student_id
+    //         'student_id' => $student_id
     //     );
     //     $score_comp = array(
     //         'digitalcv' => $this->input->post('digitalcv'),

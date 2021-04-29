@@ -16,13 +16,6 @@
                     <?= $mentor['id'] ?>
                 </div>
             </div>
-
-            <!-- <div class="form-group">
-                <label>Select profile photo</label>
-                <input name="profile_image" type="file" class="form-control-file" aria-describedby="fileHelp">
-                <small id="fileHelp" class="form-text text-muted"><?= $profile_image ?></small>
-            </div> -->
-
         </div>
         <div class="col-lg-8 text-left">
             <div class="form-group">
@@ -30,31 +23,25 @@
                 <input class="form-control" name="name" value="<?= $mentor['name'] ?>" readonly>
             </div>
             <div class="form-group">
-                <label>Position</label>
-                <input class="form-control" name="name" value="<?= $mentor['position'] ?>" readonly>
-            </div>
-            <div class="form-group">
                 <label>Email</label>
-                <input class="form-control" name="name" value="<?= $mentor['email'] ?>" readonly>
+                <input class="form-control" name="email" value="<?= $mentor['email'] ?>" readonly>
             </div>
-
-            <div class="form-group">
-                <label>SIG</label>
-                <select name="sig_id" class="form-control" readonly>
-                    <option value="<?= $mentor['sig_id'] ?>"><?= $mentor['signame'] ?></option>
-                </select>
-            </div>
-
             <div class="form-group">
                 <label>Role in SIG</label>
-                <select name="sigrole_id" class="form-control" readonly>
-                    <option value="<?= $mentor['role_id'] ?>"><?= $mentor['role'] ?></option>
+                <select name="role_id" class="form-control" required>
+                    <option value="" disabled selected>Select a role in SIG</option>
+                    <?php foreach ($roles as $role) : ?>
+                    <option value="<?= $role['id'] ?>"><?= $role['role'] ?></option>
+                    <?php endforeach ?>
                 </select>
             </div>
-
+            <div class="form-group">
+                <label>Position</label>
+                <input class="form-control" name="position" value="<?= $mentor['position'] ?>" placeholder="e.g: lecturer" required>
+            </div>
             <div class="form-group">
                 <label>Room Number</label>
-                <input class="form-control" name="roomnum" value="<?= $mentor['roomnum'] ?>">
+                <input class="form-control" name="roomnum" value="<?= $mentor['roomnum'] ?>" placeholder="e.g: E-01-01" required>
             </div>
             <br>
             <button type="submit" class="btn btn-primary">Update profile</button>

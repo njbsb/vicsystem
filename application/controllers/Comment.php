@@ -18,13 +18,18 @@ class Comment extends CI_Controller
             $user_id = $this->session->userdata('username');
             $commentdata = array(
                 'activity_id' => $activity_id,
-                'student_matric' => $user_id,
-                'comment' => $this->input->post('comment'),
-                'category_id' => $this->input->post('category_id')
+                'user_id' => $user_id,
+                'comment' => $this->input->post('comment')
             );
             $this->comment_model->create_comment($commentdata);
             redirect('activity/' . $slug);
         }
+    }
+
+    public function delete($slug, $comment_id)
+    {
+        $this->comment_model->delete_comment($comment_id);
+        redirect('activity/' . $slug);
     }
 
     public function pagination($activity_id)

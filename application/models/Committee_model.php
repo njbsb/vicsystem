@@ -68,17 +68,19 @@ class Committee_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_activityroles($id)
+    public function get_activityroles($student_id)
     {
         # used in profile page
         # shows specific student's role(s) in activities
-        $this->db->select("act.id, act.title as activity_name, act.slug, user.name, role.role, actcom.description")
+        $this->db->select("act.id, act.title as activity_name, acy.*, acs.*, act.slug, user.name, role.role, actcom.description")
             ->from('committee_activity as actcom')
             ->where(array(
-                'actcom.student_id' => $id
+                'actcom.student_id' => $student_id
             ))
             ->join('user', 'user.id = actcom.student_id')
             ->join('activity as act', 'act.id = actcom.activity_id')
+            ->join('academicsession as acs', 'acs.id = act.acadsession_id')
+            ->join('academicyear as acy', 'acy.id = acs.acadyear_id')
             ->join('role_activity as role', 'role.id = actcom.role_id');
         $query = $this->db->get();
         return $query->result_array();
@@ -119,16 +121,6 @@ class Committee_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_roles_activity()
-    {
-        $this->db->select('*')
-            ->from('role')
-            ->like('keyword', 'activity')
-            ->not_like('keyword', 'highcom');
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-
     public function register_org_committee($comdata)
     {
         $this->db->set($comdata)
@@ -139,16 +131,18 @@ class Committee_model extends CI_Model
     public function register_act_committee($comdata)
     {
         $this->db->set($comdata);
-        $this->db->insert('activity_committee');
+        $this->db->insert('committee_activity');
         return true;
     }
 
     public function get_acthighcoms_id()
     {
         $this->db->select('id')
-            ->from('role')
-            ->like('keyword', 'activity')
-            ->like('keyword', 'highcom');
+            ->from('role_activity')
+            ->where(array(
+                'level' => 'student',
+                'description' => 'highcom'
+            ));
         $query = $this->db->get();
         $highcom_id = array();
         foreach ($query->result_array() as $highcom) {

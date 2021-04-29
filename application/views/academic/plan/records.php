@@ -52,7 +52,7 @@
         <?php if ($academicplans) : ?>
         <?php foreach ($academicplans as $acp) : ?>
         <tr>
-            <td><?= $acp['student_matric'] ?></td>
+            <td><?= $acp['student_id'] ?></td>
             <td><?= $acp['name'] ?></td>
             <!-- <td><?= $acp['acadyear'] . ' Semester ' . $acp['semester_id'] ?></td> -->
             <td><?= $acp['gpa_target'] ?></td>

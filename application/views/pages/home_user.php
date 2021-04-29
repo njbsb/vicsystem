@@ -1,9 +1,13 @@
-<!-- <h2><?= $title ?></h2> -->
+<!-- <h2><?= $profileComplete ?></h2> -->
+
 <!-- <p>Welcome to SIG Integrated System</p> -->
 <div class="jumbotron bg-white" style="padding-bottom: 0px;">
     <h5 class="text-right text-muted"><b>Today is <?= date("jS F Y (l)") ?></b></h5>
-    <h1 class="display-3">Welcome to VIC Web, <?= $user_name ?>!</h1>
+    <h1 class="display-3">Welcome, <?= $user_name ?>!</h1>
     <p class="lead">This is a website to manage VIC Information and Activities</p>
+    <?php if (!$profileComplete) : ?>
+    <p>We have detected that you have not completed your profile. Update your profile information <a href="<?= base_url("/profile/update") ?>">here</a></p>
+    <?php endif ?>
     <hr class="my-4">
     <p class="lead">
     </p>
@@ -36,8 +40,8 @@
                 <hr class="my-2">
                 <p>Celebrating our <b><?= date("F") ?></b> babies! &#127874; &#127873;</p>
                 <p>
-                    <?php foreach($birthdaymembers as $index=>$member): ?>
-                    <?= $index+1 ?>. <?= $member['name'] ?> (<?= date_format(date_create($member['dob']),'j/n') ?>)<br>
+                    <?php foreach ($birthdaymembers as $index => $member) : ?>
+                    <?= $index + 1 ?>. <?= $member['name'] ?> (<?= date_format(date_create($member['dob']), 'j/n') ?>)<br>
                     <?php endforeach ?>
                 </p>
                 <p class="lead">
@@ -53,8 +57,8 @@
                 <hr class="my-2">
                 <p>Upcoming activities this semester:</p>
                 <!-- <p>
-                    <?php foreach($upcomingactivities as $key => $activity): ?>
-                    <?= $key+1 ?>. <?= $activity['activity_name'] ?> (<?= date_format(date_create($activity['datetime_start']),'j/n') ?>) <br>
+                    <?php foreach ($upcomingactivities as $key => $activity) : ?>
+                    <?= $key + 1 ?>. <?= $activity['title'] ?> (<?= date_format(date_create($activity['datetime_start']), 'j/n') ?>) <br>
                     <?php endforeach ?>
                 </p> -->
                 <table class="table table-hover">
@@ -67,11 +71,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($upcomingactivities as $key => $activity): ?>
+                        <?php foreach ($upcomingactivities as $key => $activity) : ?>
                         <tr>
-                            <td><?= $key+1 ?></td>
-                            <td><?= $activity['activity_name'] ?></td>
-                            <td><?= date_format(date_create($activity['datetime_start']),'j-n-Y') ?></td>
+                            <td><?= $key + 1 ?></td>
+                            <td><?= $activity['title'] ?></td>
+                            <td><?= date_format(date_create($activity['datetime_start']), 'j-n-Y') ?></td>
                             <td><?= $activity['diff'] ?></td>
                         </tr>
                         <?php endforeach ?>

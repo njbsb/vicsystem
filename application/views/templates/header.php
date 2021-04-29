@@ -97,7 +97,7 @@
 
                             <?php if ($usertype == 'student') : ?>
                             <a class="dropdown-item" href="<?= site_url('mentor') ?>">Mentors</a>
-                            <?php else: ?>
+                            <?php else : ?>
                             <a class="dropdown-item" href="<?= site_url('student') ?>">Students</a>
                             <?php endif ?>
 
@@ -135,21 +135,6 @@
                         </div>
                     </li>
                     <?php endif ?>
-                    <!-- <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">Dropdown</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Name</a></li>
-                            <li><a class="dropdown-item" href="#">Action Next</a></li>
-                            <li class="dropdown dropdown-submenu">
-                                <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">Lower Dropdown</a>
-                                <ul class="dropdown-submenu">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <div class="dropdown-divider"></div>
-                                    <li><a class="dropdown-item" href="#">Action2</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li> -->
                 </ul>
             </div>
             <?php endif ?>
@@ -176,7 +161,7 @@
 
     <div class="container">
         <br>
-        <?php if ($this->session->flashdata('login_failed')) : ?>
+        <!-- <?php if ($this->session->flashdata('login_failed')) : ?>
         <div class="alert alert-dismissible alert-danger">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <strong>Oh snap!</strong> <?= $this->session->flashdata('login_failed') ?>
@@ -193,4 +178,4 @@
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <strong></strong> <?= $this->session->flashdata('logged_out') ?>
         </div>
-        <?php endif ?>
+        <?php endif ?> -->

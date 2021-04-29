@@ -53,7 +53,7 @@
         <?php $text = ($acp['gpa_achieved'] > $acp['gpa_target']) ? 'Passed' : 'Not pass' ?>
         <?php $textclass = ($acp['gpa_achieved'] > $acp['gpa_target']) ? 'text-success' : 'text-warning' ?>
         <tr>
-            <td><?= $acp['student_matric'] ?></td>
+            <td><?= $acp['student_id'] ?></td>
             <td><?= $acp['name'] ?></td>
             <td><?= $acp['gpa_target'] ?></td>
             <td><?= $acp['gpa_achieved'] ?></td>

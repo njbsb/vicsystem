@@ -38,16 +38,21 @@ class User extends CI_Controller
             $this->load->view('templates/header');
             $this->load->view('user/login', $data);
         } else {
-
             # user clicked on Login
             $username = $this->input->post('username');
             $password = md5($this->input->post('password'));
+            $usertype = $this->user_model->get_usertype($username);
+            $user = $this->user_model->get_user($username);
+            if ($user['userstatus'] != 'active') {
+                $this->session->set_flashdata('login_failed', 'Login is invalid');
+                redirect('login');
+            }
             $user_id = $this->user_model->login($username, $password);
             if ($user_id) {
                 # successful login
                 $user_data = array(
                     'username' => $user_id,
-                    'user_type' => $this->user_model->get_usertype($user_id),
+                    'user_type' => $usertype,
                     'logged_in' => true
                 );
                 $this->session->set_userdata($user_data);
@@ -129,11 +134,48 @@ class User extends CI_Controller
         }
     }
 
+    public function validate($id)
+    {
+        # user = user to be validated
+        $data = array(
+            'title' => 'Validate: ' . $id,
+            'user' => $this->user_model->get_user($id),
+            'userstatus' => $this->user_model->get_userstatus(),
+            'mentors' => $this->mentor_model->get_mentor()
+        );
+        // validate
+        $this->form_validation->set_rules('id', 'ID', 'required');
+        $this->form_validation->set_rules('name', 'Name', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'required');
+        $this->form_validation->set_rules('dob', 'date of birth', 'required');
+        $this->form_validation->set_rules('userstatus', 'user status', 'required');
+
+        if ($this->form_validation->run() === FALSE) {
+            # ADMIN VALIDATES THE NEW USER
+            $this->load->view('templates/header');
+            $this->load->view('user/validate', $data);
+        } else {
+            # ADMIN SUBMITS FORM
+            $superior_id = $this->input->post('superior_id');
+            if (!isset($superior_id)) {
+                $superior_id = NULL;
+            }
+            $userdata = array(
+                'name' => $this->input->post('name'),
+                'email' => $this->input->post('email'),
+                'dob' => $this->input->post('dob'),
+                'userstatus' => $this->input->post('userstatus'),
+                'superior_id' => $superior_id
+            );
+            $this->user_model->update_user($id, $userdata);
+            redirect('user');
+        }
+    }
+
     public function profile()
     {
         $id = $this->session->userdata('username');
         $user = $this->user_model->get_user($id);
-        $sig_id = $user['sig_id'];
         $usertype = $user['usertype'];
         $this->load->view('templates/header');
         switch ($usertype) {
@@ -146,10 +188,18 @@ class User extends CI_Controller
                 $this->load->view('user/admin/profile', $data);
                 break;
             case 'mentor':
+                $mentor = $this->mentor_model->get_mentor($id);
+                if (!isset($mentor)) {
+                    $mentor = array(
+                        'matric' => '',
+                        'position' => '',
+                        'roomnum' => ''
+                    );
+                }
                 $data = array(
                     'title' => 'User Profile',
                     'user' => $user,
-                    'mentor' => $this->mentor_model->get_mentor($id),
+                    'mentor' => $mentor,
                     'activity_roles' => $this->committee_model->get_activityroles($id)
                 );
                 $this->load->view('user/mentor/profile', $data);
@@ -185,11 +235,11 @@ class User extends CI_Controller
         $usertype = $user['usertype'];
         $data = array(
             'title' => 'Update Profile',
-            'sigs' => $this->sig_model->get_sig(),
             'programs' => $this->program_model->get_programs(),
-            'mentors' => $this->mentor_model->get_mentor(),
+            'superior' => $this->user_model->get_user_superior($id),
             'usertype' => $usertype
         );
+        // print_r($data['superior']);
         $this->load->view('templates/header');
         switch ($usertype) {
             case 'admin':
@@ -198,6 +248,7 @@ class User extends CI_Controller
                 break;
             case 'mentor':
                 $data['mentor'] = $this->mentor_model->get_mentor($id);
+                $data['roles'] = $this->role_model->get_mentor_roles();
                 $this->load->view('user/mentor/update', $data);
                 break;
             case 'student':
@@ -216,11 +267,23 @@ class User extends CI_Controller
                 //
                 break;
             case 'mentor':
-                $mentordata = array('roomnum' => $this->input->post('roomnum'));
+                $mentordata = array(
+                    'matric' => $user_id,
+                    'role_id' => $this->input->post('role_id'),
+                    'roomnum' => $this->input->post('roomnum'),
+                    'position' => $this->input->post('position')
+                );
                 $this->mentor_model->update_mentor($user_id, $mentordata);
                 break;
             case 'student':
-                $studentdata = array('phonenum' => $this->input->post('phonenum'));
+                $studentdata = array(
+                    'matric' => $user_id,
+                    'program_id' => $this->input->post('program_id'),
+                    'phonenum' => $this->input->post('phonenum'),
+                    'parent_num1' => $this->input->post('parent1'),
+                    'parent_num2' => $this->input->post('parent2'),
+                    'address' => $this->input->post('address')
+                );
                 $this->student_model->update_student($user_id, $studentdata);
                 break;
         }
@@ -278,84 +341,6 @@ class User extends CI_Controller
             return FALSE;
         } else {
             return TRUE;
-        }
-    }
-
-    public function validate($id)
-    {
-        $data['title'] = 'Validate: ' . $id;
-        $data['user'] = $this->user_model->get_user($id);
-        $usertype = $data['user']['usertype'];
-        // validate
-        $this->form_validation->set_rules('id', 'ID', 'required');
-        $this->form_validation->set_rules('name', 'Name', 'required');
-        $this->form_validation->set_rules('email', 'Email', 'required');
-        $this->form_validation->set_rules('sig_id', 'SIG', 'required');
-        if ($usertype == 'mentor') {
-            $this->form_validation->set_rules('position', 'Position', 'required');
-            $this->form_validation->set_rules('roomnum', 'Room Number', 'required');
-            $this->form_validation->set_rules('orgrole_id', 'SIG Role', 'required');
-        } elseif ($usertype == 'student') {
-            $this->form_validation->set_rules('phonenum', 'Phone Number', 'required');
-            $this->form_validation->set_rules('program_code', 'Program Code', 'required');
-            $this->form_validation->set_rules('mentor_matric', 'Mentor Matric', 'required');
-        }
-
-        if ($this->form_validation->run() === FALSE) {
-
-            $data['sigs'] = $this->sig_model->get_sig();
-            $data['userstatuses'] = $this->user_model->get_userstatus();
-            $this->load->view('templates/header');
-            $this->load->view('user/validate', $data);
-
-            if ($usertype == 'mentor') {
-                # IF MENTOR
-                $data['mentorroles'] = $this->role_model->get_mentor_roles();
-                $data['mentor'] = $this->mentor_model->get_mentor($id);
-                $this->load->view('user/mentor/validate_mentor', $data);
-            } elseif ($usertype == 'student') {
-                # IF STUDENT
-                $data['sigmentors'] = $this->mentor_model->get_sigmentors($data['user']['sig_id']);
-                $data['programs'] = $this->program_model->get_programs();
-                $data['student'] = $this->student_model->get_student($id);
-                $this->load->view('user/student/validate_student', $data);
-            }
-            $this->load->view('templates/footer');
-        } else {
-            # FORM SUBMISSION HERE
-            $userdata = array(
-                'name' => $this->input->post('name'),
-                'email' => $this->input->post('email'),
-                'sig_id' => $this->input->post('sig_id'),
-                'dob' => $this->input->post('dob'),
-                'userstatus' => $this->input->post('userstatus_id')
-            );
-            if ($usertype == 'mentor') {
-                $mentordata = array(
-                    'position' => $this->input->post('position'),
-                    'roomnum' => $this->input->post('roomnum'),
-                    'role_id' => $this->input->post('orgrole_id'),
-                );
-                if ($this->mentor_model->mentor_exist($id)) {
-                    $this->mentor_model->update_mentor($id, $mentordata);
-                } else {
-                    $this->mentor_model->register_mentor($mentordata);
-                }
-            } elseif ($usertype == 'student') {
-                $studentdata = array(
-                    'matric' => $id,
-                    'phonenum' => $this->input->post('phonenum'),
-                    'program_id' => $this->input->post('program_code'),
-                    'mentor_id' => $this->input->post('mentor_matric')
-                );
-                if ($this->student_model->student_exist($id)) {
-                    $this->student_model->update_student($id, $studentdata);
-                } else {
-                    $this->student_model->register_student($studentdata);
-                }
-            }
-            $this->user_model->update_user($id, $userdata);
-            redirect('user');
         }
     }
 }

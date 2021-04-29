@@ -9,10 +9,10 @@
         <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacademicsession" style="float: right;">Add Academic Session</button>
     </div>
 </div>
-<table id="acs_table" class="table text-center">
+<table id="acs_table" class="table">
     <thead class="table-dark">
         <tr>
-            <th>ID</th>
+            <!-- <th>ID</th> -->
             <th>Academic Year</th>
             <th>Semester</th>
             <th>Status</th>
@@ -24,7 +24,7 @@
         <?php $textclass = ($acs['status'] == 'active') ? 'text-success' : 'text-muted' ?>
         <?php $disabled = ($acs['status'] == 'active') ? 'disabled' : '' ?>
         <tr>
-            <td><?= $acs['id'] ?></td>
+            <!-- <td><?= $acs['id'] ?></td> -->
             <td><?= $acs['academicyear'] ?></td>
             <td><?= $acs['semester'] ?></td>
             <td class="<?= $textclass ?>"><?= $acs['status'] ?></td>
@@ -44,10 +44,10 @@
         <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacadyear" style="float: right;">Add Academic Year</button>
     </div>
 </div>
-<table id="acy_table" class="table text-center">
+<table id="acy_table" class="table">
     <thead class="table-dark">
         <tr>
-            <th>ID</th>
+            <!-- <th>ID</th> -->
             <th>Academic Year</th>
             <th>Status</th>
             <th></th>
@@ -58,7 +58,7 @@
         <?php $textclass = ($acy['status'] == 'active') ? 'text-success' : 'text-muted' ?>
         <?php $disabled = ($acy['status'] == 'active') ? 'disabled' : '' ?>
         <tr>
-            <td><?= $acy['id'] ?></td>
+            <!-- <td><?= $acy['id'] ?></td> -->
             <td><?= $acy['acadyear'] ?></td>
             <td class="<?= $textclass ?>"><?= $acy['status'] ?></td>
             <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acy" data-string="<?= $acy['acadyear'] ?>" data-acyid="<?= $acy['id'] ?>"

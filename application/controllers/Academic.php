@@ -22,7 +22,6 @@ class Academic extends CI_Controller
                 'title' => 'Academic Control Page',
                 'new_year' => $suggested_year
             );
-            // print_r($data['semesters']);
             $this->load->view('templates/header');
             $this->load->view('academic/index', $data);
         }
@@ -194,7 +193,7 @@ class Academic extends CI_Controller
     {
         $acadsession_id = $this->input->post('activeacadsession_id');
         $acpdata = array(
-            'student_matric' => $student_id,
+            'student_id' => $student_id,
             'acadsession_id' => $acadsession_id,
             'gpa_target' => $this->input->post('gpa_target')
         );
@@ -246,7 +245,7 @@ class Academic extends CI_Controller
     public function set_gpatarget()
     {
         $where = array(
-            'student_matric' => $this->input->post('student_id'),
+            'student_id' => $this->input->post('student_id'),
             'acadsession_id' => $this->input->post('acadsession_id')
         );
         $gpa = array('gpa_target' => $this->input->post('gpa_target'));

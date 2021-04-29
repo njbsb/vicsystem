@@ -10,24 +10,22 @@ class Student_model extends CI_Model
     {
         if ($student_id === FALSE and $sig_id === FALSE) {
             $this->db->select('user.id')
-                ->from('user as user')
-                ->where(array('userstatus_id' => '2', 'usertype_id' => '3'))
+                ->from('user')
+                ->where(array('userstatus' => 'active', 'usertype' => 'student'))
                 ->order_by('user.id');
             $query = $this->db->get();
             return $query->result_array();
         }
         if ($student_id) {
             # returns specific user
-            $this->db->select("user.id, user.name, user.email, user.dob, user.sig_id,
-        std.phonenum, std.program_id, std.mentor_id, std.yearjoined,
-        mtr.name as mentor_name, prg.program as program_name, 
+            $this->db->select("user.*, std.*, mtr.name as mentor_name, prg.program as program_name, 
         sig.code as sigcode, sig.name as signame, concat(sig.name, ' (', sig.code, ')') as signamecode")
                 ->from('user as user')
                 ->where(array('user.id' => $student_id))
                 ->join('student as std', 'std.matric = user.id', 'left')
                 ->join('program as prg', 'prg.code = std.program_id', 'left')
                 ->join('sig as sig', 'sig.code = user.sig_id', 'left')
-                ->join('user as mtr', 'mtr.id = std.mentor_id', 'left');
+                ->join('user as mtr', 'user.superior_id = mtr.id', 'left');
             $query = $this->db->get();
             return $query->row_array();
         }
@@ -44,6 +42,14 @@ class Student_model extends CI_Model
             $query = $this->db->get();
             return $query->result_array();
         }
+    }
+
+    public function get_student_profile($id)
+    {
+        $query = $this->db->get_where('student', array(
+            'matric' => $id
+        ));
+        return $query->row_array();
     }
 
     public function get_studentbycourse($sig_id)
@@ -70,19 +76,23 @@ class Student_model extends CI_Model
 
     public function get_mentor_matric($student_id)
     {
-        $query = $this->db->get_where('student', array('matric' => $student_id));
-        return $query->row()->mentor_id;
+        $query = $this->db->get_where('user', array('id' => $student_id));
+        return $query->row()->superior_id;
     }
 
     public function get_sigstudents($sig_id)
     {
+        $currentyear = intval(date('Y'));
+        $limityear = $currentyear - 4;
         $this->db->select('user.id, user.name')
             ->from('user as user')
             ->where(array(
                 'sig_id' => $sig_id,
                 'usertype' => 'student',
-                'userstatus' => 'active' #active
-            ));
+                'userstatus' => 'active'
+            ))
+            ->join('student', 'student.matric = user.id')
+            ->where('student.yearjoined >=', $limityear);
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -122,18 +132,29 @@ class Student_model extends CI_Model
         return $this->db->insert('student', $studentdata);
     }
 
-    public function update_student($student_id, $studentdata)
+    public function update_student($id, $studentdata)
     {
-        $this->db->where('matric', $student_id);
-        return $this->db->update('student', $studentdata);
+        $firstquery = $this->db->get_where('student', array('matric' => $id));
+        if ($firstquery->num_rows() > 0) {
+            unset($studentdata['matric']);
+            return $this->db->where('matric', $id)
+                ->update('student', $studentdata);
+        } else {
+            return $this->db->where('matric', $id)
+                ->set($studentdata)
+                ->insert('student');
+        }
+
+        // $this->db->where('matric', $id);
+        // return $this->db->update('student', $studentdata);
     }
 
     public function update_activity_highcoms($activity_id, $highcoms)
     {
         foreach ($highcoms as $hc) {
-            $change = array('student_matric' => $hc['student_matric']);
+            $change = array('student_id' => $hc['student_id']);
             $this->db->where(array('activity_id' => $activity_id, 'role_id' => $hc['role_id']));
-            $this->db->update('activity_committee', $change);
+            $this->db->update('committee_activity', $change);
         }
         return true;
     }

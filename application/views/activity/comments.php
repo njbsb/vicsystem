@@ -7,39 +7,12 @@
 
 <div id="comments">
     <h4>Comments</h4>
-    <!-- <div id="comment_content">
-        <div>
-            <ul class="pagination pagination-sm">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">&laquo;</a>
-                </li>
-                <li class="page-item active">
-                    <a class="page-link" href="#">1</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">3</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">4</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">5</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">&raquo;</a>
-                </li>
-            </ul>
-        </div>
-    </div> -->
-    <?php if($comments): ?>
-    <?php foreach($comments as $com): ?>
+    <?php if ($comments) : ?>
+    <?php foreach ($comments as $com) : ?>
     <div class="alert alert-dismissible alert-light comment-box" style="margin-bottom: 4px; padding-bottom:4px;padding-top:4px; border-radius:12px;">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <small><b><?= $com['commented_at'] ?></b></small><br>
-        <b><?= $com['student_matric'] ?>:</b> <?= $com['comment'] ?>
+        <small><b><?= $com['created_at'] ?></b></small><br>
+        <b><?= $com['user_id'] ?>:</b> <?= $com['comment'] ?>
         <!-- <button class="btn"><i class="fa fa-trash"></i></button> -->
     </div>
     <?php endforeach ?>
@@ -57,7 +30,7 @@
     <div class="form-group">
         <textarea name="comment" class="form-control" rows="3" required="required"></textarea>
     </div>
-    <div class="form-group">
+    <!-- <div class="form-group">
         <label for="comment_category">Select a category</label>
         <select name="category_id" id="category_id" class="form-control">
             <option value="" selected disabled hidden>Choose category</option>
@@ -67,10 +40,11 @@
             </option>
             <?php endforeach ?>
         </select>
-    </div>
+    </div> -->
     <input type="hidden" name="slug" value="<?php echo $activity['slug']; ?>">
     <button class="btn btn-primary" type="submit">Submit</button>
     <?= form_close() ?>
+    <br><br>
 </div>
 
 <script type="text/javascript">
@@ -123,9 +97,7 @@ function buildComments(array) {
 $(document).ready(function() {
     $('#checkbox_comments').click(function() {
         function load_comment(page) {
-            $.ajax({
-
-            })
+            $.ajax({})
         }
         $('#comments').toggle();
     });

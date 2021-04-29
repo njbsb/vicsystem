@@ -79,9 +79,9 @@ class Academic_model extends CI_Model
     public function get_count_academicsession($id)
     {
         $this->db->distinct()
-            ->select('student_matric, acadsession_id')
+            ->select('student_id, acadsession_id')
             ->from('academicsession')
-            ->where(array('student_matric' => $id));
+            ->where(array('student_id' => $id));
         $query = $this->db->get();
         return $query->num_rows();
     }
@@ -205,7 +205,7 @@ class Academic_model extends CI_Model
     {
         $academicplan = array(
             'acadsession_id' => $acadsession_id,
-            'student_matric' => $student_id
+            'student_id' => $student_id
         );
         $this->db->insert('academicplan', $academicplan);
     }
@@ -214,7 +214,7 @@ class Academic_model extends CI_Model
     {
         $this->db->where(array(
             'acadsession_id' => $acadsession_id,
-            'student_matric' => $student_id
+            'student_id' => $student_id
         ));
         return $this->db->delete('academicplan');
     }

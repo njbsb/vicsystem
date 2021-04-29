@@ -47,10 +47,6 @@
 
             </select>
         </div>
-        <!-- <?php if ($user['userstatus_id'] == 1) : ?>
-        <?php elseif ($user['userstatus'] == 2) : ?>
-        <?php elseif ($user['userstatus'] == 3) : ?>
-        <?php endif ?> -->
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </div>

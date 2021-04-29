@@ -1,5 +1,4 @@
 <h2 class="text-center"><?= $title; ?></h2>
-
 <?php $hidden = array(
     'author_id' => $this->session->userdata('username'),
     'activitycategory_id' => $activitycategory['code'],
@@ -11,29 +10,35 @@
         <h3><?= $activitycategory['categorycode'] ?></h3>
     </div>
     <div class="form-group">
-        <label>Activity Name</label>
-        <input name="activityname" type="text" class="form-control" placeholder="Activity Name" required>
+        <label><?= $activitycategory['category'] ?> Title</label>
+        <input name="activityname" type="text" class="form-control" placeholder="<?= $activitycategory['category'] ?> Title" required>
     </div>
-
-    <!-- <div class="form-group">
-        <label for="activitytype_id">Activity type</label>
-        <select name="activitytype_id" class="form-control" required>
-            <option value="" selected disabled hidden>Select activity type</option>
-            <?php foreach ($activitytype as $acttype) : ?>
-                <option value="<?= $acttype['id'] ?>"><?= $acttype['type'] ?></option>
-            <?php endforeach ?>
-        </select>
-    </div> -->
     <div class="form-group">
         <label>Select academic session</label>
         <input value="<?= $activesession['academicsession'] ?>" readonly type="text" class="form-control">
     </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="datetime_start">Start date</label>
+                <input type="datetime-local" name="datetime_start" class="form-control" id="">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="datetime_end">End date</label>
+                <input type="datetime-local" name="datetime_end" class="form-control" id="">
+            </div>
+        </div>
+    </div>
+    <hr>
+    <h4><b>Committee</b></h4>
     <div class="form-group">
         <label>Select activity advisor</label>
-        <select name="advisor_matric" class="form-control" required>
+        <select name="advisor_id" class="form-control" required>
             <option value="" selected disabled hidden>Choose Advisor</option>
             <?php foreach ($mentors as $mentor) : ?>
-            <option value="<?php echo $mentor['id']; ?>">
+            <option value="<?= $mentor['id'] ?>">
                 <?= $mentor['name'] . ' (' . $mentor['id'] . ')' ?>
             </option>
             <?php endforeach ?>
@@ -56,9 +61,9 @@
         </div>
         <?php endforeach ?>
     </div>
+    <hr>
     <div class="form-group">
         <button type="submit" class="btn btn-outline-primary">Submit</button>
     </div>
-
 </fieldset>
 <?= form_close() ?>

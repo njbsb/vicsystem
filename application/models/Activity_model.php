@@ -11,38 +11,37 @@ class Activity_model extends CI_Model
     {
         if ($slug === FALSE && $activity_id === FALSE) {
             // this code will get all activities
-            $this->db->select("act.id, act.title, act.slug, act.datetime_start, act.activitycategory_id,
+            $this->db->select("act.id, act.title, act.slug, act.datetime_start, act.activitycategory_id, act.created_at,
             concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, sig.code, mtr.name as advisorname")
                 ->from('activity as act')
                 ->join('academicsession as acs', 'act.acadsession_id = acs.id', 'left')
                 ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
                 // ->join('user as mtr', 'act.advisor_matric = mtr.id', 'left')
                 ->join('sig as sig', 'act.sig_id = sig.code')
-                // ->join('activity_type as acttype', 'act.activitytype_id = acttype.id')
                 ->order_by('act.id', 'DESC');
             $query = $this->db->get();
             return $query->result_array();
         } else {
             // this will get specific activity
             if (!$slug === FALSE) {
-                $this->db->select('act.*, mtr.name as advisorname, sig.signame')
+                $this->db->select('act.*, mtr.name as advisorname, sig.name as signame')
                     ->from('activity as act')
                     ->where(array('slug' => $slug))
-                    ->join('user as mtr', 'mtr.id = act.advisor_matric')
-                    ->join('sig as sig', 'sig.id = act.sig_id');
+                    ->join('user as mtr', 'mtr.id = act.advisor_id')
+                    ->join('sig as sig', 'sig.code = act.sig_id');
                 $query = $this->db->get();
             } else if (!$activity_id === FALSE) {
                 $this->db->select('act.*, mtr.name as advisorname')
                     ->from('activity as act')
                     ->where(array('id' => $activity_id))
-                    ->join('user as mtr', 'mtr.id = act.advisor_matric');
+                    ->join('user as mtr', 'mtr.id = act.advisor_id');
                 $query = $this->db->get();
             } else {
                 // both are not null
                 $this->db->select('act.*, mtr.name as advisorname')
                     ->from('activity as act')
                     ->where(array('id' => $activity_id, 'slug' => $slug))
-                    ->join('user as mtr', 'mtr.id = act.advisor_matric');
+                    ->join('user as mtr', 'mtr.id = act.advisor_id');
                 $query = $this->db->get();
             }
             return $query->row_array();
@@ -62,13 +61,13 @@ class Activity_model extends CI_Model
 
     public function get_sig_activity($sig_id)
     {
-        $this->db->select("act.id, act.title, act.description, act.slug, act.activitycategory_id, 
+        $this->db->select("act.id, act.title, act.description, act.slug, act.activitycategory_id, act.created_at, mtr.name as advisorname,
         act.datetime_start, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession, sig.code")
             ->from('activity as act')
             ->where('act.sig_id', $sig_id)
             ->join('academicsession as acs', 'act.acadsession_id = acs.id', 'left')
             ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
-            // ->join('user as mtr', 'act.advisor_matric = mtr.id', 'left')
+            ->join('user as mtr', 'act.advisor_id = mtr.id', 'left')
             ->join('sig as sig', 'act.sig_id = sig.code')
             // ->join('activity_type as acttype', 'act.activitytype_id = acttype.id')
             ->order_by('act.id', 'DESC');
@@ -80,9 +79,9 @@ class Activity_model extends CI_Model
     {
         $highcoms_id = $this->committee_model->get_acthighcoms_id(); # array
         $this->db->select('*')
-            ->from('activity_committee')
+            ->from('committee_activity')
             ->where(array(
-                'student_matric' => $user_id,
+                'student_id' => $user_id,
                 'activity_id' => $activity_id,
             ))
             ->where_in('role_id', $highcoms_id);
@@ -103,9 +102,7 @@ class Activity_model extends CI_Model
 
     public function delete_activity($activity_id)
     {
-        $this->db->where('id', $activity_id);
-        $this->db->delete('activity');
-        return true;
+        return $this->db->where('id', $activity_id)->delete('activity');
     }
 
     public function update_activity($activity_id, $activitydata)
@@ -117,12 +114,12 @@ class Activity_model extends CI_Model
     public function get_highcoms($activity_id)
     {
         $highcom_id = $this->committee_model->get_acthighcoms_id();
-        $this->db->select('actcom.student_matric as id, user.name, actcom.role_id, role.rolename')
-            ->from('activity_committee as actcom')
+        $this->db->select('actcom.student_id as id, user.name, actcom.role_id, role.role')
+            ->from('committee_activity as actcom')
             ->where(array('actcom.activity_id' => $activity_id))
             ->where_in('actcom.role_id', $highcom_id)
-            ->join('user as user', 'user.id = actcom.student_matric')
-            ->join('role as role', 'role.id = actcom.role_id');
+            ->join('user as user', 'user.id = actcom.student_id')
+            ->join('role_activity as role', 'role.id = actcom.role_id');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -143,11 +140,11 @@ class Activity_model extends CI_Model
 
     public function get_committees($activity_id)
     {
-        $this->db->select('actcom.*, std.name, role.rolename')
-            ->from('activity_committee as actcom')
+        $this->db->select('actcom.*, std.name, role.role')
+            ->from('committee_activity as actcom')
             ->where('activity_id', $activity_id)
-            ->join('user as std', 'actcom.student_matric = std.id')
-            ->join('role as role', 'actcom.role_id = role.id');
+            ->join('user as std', 'actcom.student_id = std.id')
+            ->join('role_activity as role', 'actcom.role_id = role.id');
         $query = $this->db->get();
         return $query->result_array();
     }

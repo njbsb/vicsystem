@@ -1,7 +1,7 @@
 <h2><?= $sig['name'], "'s ", $title ?></h2>
 <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
 <br>
-<button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#activity_type">Create Activity</button>
+<button class="btn btn-primary" data-toggle="modal" data-target="#activity_type">New Activity</button>
 <?php endif ?>
 <hr>
 <table id="activitytable" class="table table-hover" style="text-align:left;">
@@ -10,9 +10,6 @@
             <th scope="col">Activity</th>
             <th scope="col">Date</th>
             <th scope="col">Academic Session</th>
-            <?php if ($this->session->userdata('user_type') == 'admin') : ?>
-            <th scope="col">SIG</th>
-            <?php endif ?>
             <th scope="col">No of Committees</th>
             <th scope="col">Advisor</th>
         </tr>
@@ -20,12 +17,9 @@
     <tbody class="list">
         <?php foreach ($activities as $activity) : ?>
         <tr>
-            <td class="Activity" scope="row"><a href="<?= site_url('/activity/' . $activity['slug']) ?>"><?= $activity['activity_name'] ?></a></t>
+            <td class="Activity" scope="row"><a href="<?= site_url('/activity/' . $activity['slug']) ?>"><?= $activity['title'] ?></a></t>
             <td class="Date"><?= date('d/m/Y', strtotime($activity['datetime_start'])) ?></td>
             <td><?= $activity['academicsession'] ?></td>
-            <?php if ($this->session->userdata('user_type') == 'admin') : ?>
-            <td><?= $activity['code'] ?></td>
-            <?php endif ?>
             <td><?= $activity['committeenum'] ?></td>
             <td><?= $activity['advisorname'] ?></td>
         </tr>
@@ -36,7 +30,6 @@
             <th scope="col">Activity</th>
             <th scope="col">Date</th>
             <th scope="col">Academic Session</th>
-            <th scope="col">SIG</th>
             <th scope="col">No of Committees</th>
             <th scope="col">Advisor</th>
         </tr>
@@ -48,13 +41,13 @@
 
 <div class="row">
     <div class="col-md-3">
-        <?php $photo = ($act['photo_path']) ? $act['photo_path'] : 'default_2.jpg' ?>
+        <?php $photo = (isset($act['photo_path'])) ? $act['photo_path'] : 'default_2.jpg' ?>
         <img src="<?= base_url('assets/images/activity/' . $photo) ?>" alt="" style="max-width:280px; display: block; object-fit:cover; padding:10px;">
     </div>
     <div class="col-md-9">
-        <h3><a href="<?= site_url('activity/' . $act['slug']) ?>"><?= $act['activity_name'] ?></a></h3>
-        <small class="post-date">Created on: <?= date('d/m/Y', strtotime($act['datetime_start'])) ?> in category: <strong><?= $act['type'] ?></strong></small>
-        <p><?= word_limiter($act['activity_desc'], 60) ?></p>
+        <h3><a href="<?= site_url('activity/' . $act['slug']) ?>"><?= $act['title'] ?></a></h3>
+        <small class="post-date">Created on: <?= date('d/m/Y', strtotime($act['created_at'])) ?></small>
+        <p><?= word_limiter($act['description'], 60) ?></p>
     </div>
 </div>
 

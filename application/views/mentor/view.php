@@ -36,12 +36,12 @@
         <?php foreach ($activity_roles as $actrole) : ?>
         <div class="col-md-4">
             <div class="card text-white bg-dark mb-3">
-                <!-- <div class="card-header"><a class="text-white" href="<?= site_url('activity/' . $actrole['slug']) ?>"><?= $actrole['activity_name'] ?></a></div> -->
+                <!-- <div class="card-header"><a class="text-white" href="<?= site_url('activity/' . $actrole['slug']) ?>"><?= $actrole['title'] ?></a></div> -->
                 <div class="card-header"><?= $actrole['academicsession'] ?></div>
                 <div class="card-body">
                     <!-- <h4 class="card-title">Activity Advisor</h4>
                             <p class="card-text"><small class="text-muted"><?= $actrole['academicsession'] ?></small></p> -->
-                    <h5 class="card-title"><a class="text-white" href="<?= site_url('activity/' . $actrole['slug']) ?>"><?= $actrole['activity_name'] ?></a></h5>
+                    <h5 class="card-title"><a class="text-white" href="<?= site_url('activity/' . $actrole['slug']) ?>"><?= $actrole['title'] ?></a></h5>
                     <p class="card-text"><small class="text-muted">Activity Advisor</small></p>
                 </div>
             </div>

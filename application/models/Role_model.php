@@ -16,4 +16,16 @@ class Role_model extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    public function get_roles_activity()
+    {
+        $this->db->select('*')
+            ->from('role_activity')
+            ->where(array(
+                'level' => 'student',
+                'description' => NULL
+            ));
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }

@@ -33,7 +33,7 @@ class Citra_model extends CI_Model
                     // both id and acadsession_id
                     $this->db->select('citreg.*, citra.name_en as citraname, acadsess.semester_id, acadyear.acadyear')
                         ->from('citra_registration as citreg')
-                        ->where(array('citreg.student_matric' => $id, 'acadsession_id' => $acadsession_id))
+                        ->where(array('citreg.student_id' => $id, 'acadsession_id' => $acadsession_id))
                         ->join('citra', 'citra.code = citreg.citra_code')
                         ->join('academicsession as acadsess', 'citreg.acadsession_id = acadsess.id')
                         ->join('academicyear as acadyear', 'acadsess.acadyear_id = acadyear.id');
@@ -42,7 +42,7 @@ class Citra_model extends CI_Model
                 } else {
                     $this->db->select('citreg.*, acadsess.semester_id, acadyear.acadyear')
                         ->from('citra_registration as citreg')
-                        ->where(array('citreg.student_matric' => $id))
+                        ->where(array('citreg.student_id' => $id))
                         ->join('academicsession as acadsess', 'citreg.acadsession_id = acadsess.id')
                         ->join('academicyear as acadyear', 'acadsess.acadyear_id = acadyear.id');
                     $query = $this->db->get();
@@ -64,7 +64,7 @@ class Citra_model extends CI_Model
     {
         $this->db->select('citreg.citra_code')
             ->from('citra_registration as citreg')
-            ->where(array('student_matric' => $id, 'acadsession_id' => $acadsession_id));
+            ->where(array('student_id' => $id, 'acadsession_id' => $acadsession_id));
         $query = $this->db->get();
         return $query->result_array();
     }

@@ -30,9 +30,6 @@ class Student extends CI_Controller
 
     public function view($student_id)
     {
-        if ($this->session->userdata('user_type') == 'student') {
-            redirect(site_url());
-        }
         $student = $this->student_model->get_student($student_id);
         if (!array_filter($student)) {
             show_404();
@@ -49,6 +46,7 @@ class Student extends CI_Controller
             'activity_roles' => $this->committee_model->get_activityroles($student_id),
             'org_roles' => $this->committee_model->get_orgroles($student_id)
         );
+
         $this->load->view('templates/header');
         $this->load->view('student/view', $data);
         $this->load->view('templates/footer');
