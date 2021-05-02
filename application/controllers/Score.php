@@ -63,15 +63,15 @@ class Score extends CI_Controller
         $this->load->view('score/viewacs', $data);
     }
 
-    public function view($acadsession_slug = NULL, $student_id)
+    public function view($acadsession_slug, $student_id)
     {
-        if (!$this->session->userdata('user_type') == 'mentor') {
+        if ($this->session->userdata('user_type') != 'mentor') {
             redirect(site_url());
         }
-        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
+        // $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         $student = $this->student_model->get_student($student_id);
         $thisacadsession = $this->academic_model->get_academicsession(FALSE, $acadsession_slug);
-        $scoreplans = $this->score_model->get_scoreplan($sig_id, $thisacadsession['id'], FALSE);
+        $scoreplans = $this->score_model->get_scoreplan($thisacadsession['id'], FALSE);
         $scorecomps = array('scores' => $this->score_model->get_scoreplan_scorecomp($student_id, $thisacadsession['id']));
         # SCORE LEVELS
         $scoreleveltotal = $this->score_model->get_scoreleveltotal();
@@ -145,13 +145,15 @@ class Score extends CI_Controller
             $academicsession = $this->academic_model->get_academicsession(FALSE, $slug);
             $activitycategories = $this->activity_model->get_activitycategory();
             foreach ($activitycategories as $i => $actcat) {
-                $activitycategories[$i]['scoreplan'] = $this->score_model->get_scoreplan($sig_id, $academicsession['id'], $actcat['code']);
+                // $activitycategories[$i]['scoreplan'] = $this->score_model->get_scoreplan($sig_id, $academicsession['id'], $actcat['code']);
                 $activitycategories[$i]['unregistered'] = $this->activity_model->get_category_unregisteredactivity($academicsession['id'], $actcat['code']);
             }
+            print_r($activitycategories);
             $data = array(
                 'acslug' => $slug,
                 'activitycategories' => $activitycategories,
-                'acadsession' => $academicsession
+                'acadsession' => $academicsession,
+                'scoreplans' => $this->score_model->get_scoreplan($academicsession['id'])
             );
             $this->load->view('templates/header');
             $this->load->view('score/scoreplan/view', $data);
@@ -254,19 +256,4 @@ class Score extends CI_Controller
         $this->score_model->update_scorecompdata($where, $scorecompdata);
         redirect('score/' . $acslug . '/' . $student_id);
     }
-
-    // public function setscorecomp($student_id)
-    // {
-    //     $where = array(
-    //         'acadsession_id' => $this->input->post('acadsession_id'),
-    //         'student_id' => $student_id
-    //     );
-    //     $score_comp = array(
-    //         'digitalcv' => $this->input->post('digitalcv'),
-    //         'leadership' => $this->input->post('digitalcv'),
-    //         'volunteer' => $this->input->post('volunteer')
-    //     );
-    //     $this->score_model->setscorecomp($where, $score_comp);
-    //     redirect('score/' . $student_id);
-    // }
 }

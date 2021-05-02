@@ -63,11 +63,15 @@ class Organization extends CI_Controller
 
     public function register_committee()
     {
+        $description = $this->input->post('description');
+        if ($this->input->post('description') == '') {
+            $description = NULL;
+        }
         $comdata = array(
             'acadyear_id' => $this->input->post('acadyear_id'),
             'student_id' => $this->input->post('student_id'),
             'role_id' => $this->input->post('role_id'),
-            'description' => $this->input->post('description'),
+            'description' => $description
         );
         $this->committee_model->register_org_committee($comdata);
         redirect('organization');

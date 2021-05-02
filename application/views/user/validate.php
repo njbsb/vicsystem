@@ -1,3 +1,8 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item"><a href="<?= site_url('user') ?>">User</a></li>
+    <li class="breadcrumb-item active"><?= $user['id'] ?></li>
+</ol>
 <?php if (validation_errors()) : ?>
 <div class="alert alert-dismissible alert-warning">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -6,8 +11,9 @@
 </div>
 <?php endif ?>
 <h2 class="text-center"><?= $user['id'] ?></h2>
-<?php $hidden = array('mentor_id' => $superior['id']) ?>
-<?= form_open('user/validate/' . $user['id'], '', $hidden) ?>
+<?php // $hidden = array('superior_id' => $superior['id']) 
+?>
+<?= form_open('user/validate/' . $user['id']) ?>
 <div class="row">
     <div class="col-lg-4 text-center">
         <div class="card border mb-3 text-center" style="max-width: 20rem;">
@@ -44,7 +50,7 @@
         <!-- MENTOR ID -->
         <?php if ($user['usertype'] == 'student') : ?>
         <div class="form-group">
-            <label for="superior_id">Mentor/Superior</label>
+            <label class="text-danger" for="superior_id">*Mentor/Superior</label>
             <select name="superior_id" id="" class="form-control" required>
                 <option value="" disabled selected>Select a mentor</option>
                 <?php foreach ($mentors as $mentor) : ?>

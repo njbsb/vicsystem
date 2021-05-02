@@ -1,5 +1,9 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item active">Users</li>
+    <!-- <li class="breadcrumb-item active"><?= $acadsession['academicsession'] ?></li> -->
+</ol>
 <h2 class="text-primary"><?= $title ?></h2>
-
 <div>
     <table id="usertable" class="table table-hover">
         <thead class="table-primary">

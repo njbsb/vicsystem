@@ -4,21 +4,25 @@ class Student extends CI_Controller
 
     public function index()
     {
-        if (!$this->session->userdata('username')) {
+        $usertype = $this->session->userdata('user_type');
+        $username = $this->session->userdata('username');
+        if (!$username) {
             redirect(site_url());
         }
-        if ($this->session->userdata('user_type') == 'student') {
-            redirect(site_url());
-        }
-        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
+        $sig_id = $this->sig_model->get_sig_id($username);
         $sig = $this->sig_model->get_sig($sig_id);
-        if ($this->session->userdata('user_type') == 'mentor') {
-            $students = $this->student_model->get_student('', $sig_id);
-            $title = $sig['code'] . ' Students';
-        }
-        if ($this->session->userdata('user_type') == 'admin') {
-            $students = $this->student_model->get_student();
-            $title = 'All Students';
+        switch ($usertype) {
+            case 'student':
+                redirect(site_url());
+                break;
+            case 'mentor':
+                $students = $this->student_model->get_student('', $sig_id);
+                $title = $sig['code'] . ' Students';
+                break;
+            case 'admin':
+                $students = $this->student_model->get_student();
+                $title = 'All Students';
+                break;
         }
         $data = array(
             'title' => $title,

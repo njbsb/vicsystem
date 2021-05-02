@@ -6,6 +6,10 @@ class Score_model extends CI_Model
         $this->load->database();
     }
 
+    public function get_scorelevels($acadsession_id)
+    {
+    }
+
     public function get_levelscore($id = NULL)
     {
         if ($id == FALSE) {
@@ -225,7 +229,7 @@ class Score_model extends CI_Model
         return $this->db->update('score_plan', $scoreplandata);
     }
 
-    public function get_scoreplan($sig_id, $acadsession_id = NULL, $category_id = NULL)
+    public function get_scoreplan($acadsession_id = NULL, $category_id = NULL)
     {
         if ($acadsession_id == FALSE && $category_id == FALSE) {
             # returns all scoreplans of specific sig

@@ -10,9 +10,8 @@
     </div>
 </div>
 <table id="acs_table" class="table">
-    <thead class="table-dark">
-        <tr>
-            <!-- <th>ID</th> -->
+    <thead>
+        <tr class="table-dark">
             <th>Academic Year</th>
             <th>Semester</th>
             <th>Status</th>
@@ -23,7 +22,7 @@
         <?php foreach ($academicsession as $acs) : ?>
         <?php $textclass = ($acs['status'] == 'active') ? 'text-success' : 'text-muted' ?>
         <?php $disabled = ($acs['status'] == 'active') ? 'disabled' : '' ?>
-        <tr>
+        <tr class="table-light">
             <!-- <td><?= $acs['id'] ?></td> -->
             <td><?= $acs['academicyear'] ?></td>
             <td><?= $acs['semester'] ?></td>
@@ -45,9 +44,8 @@
     </div>
 </div>
 <table id="acy_table" class="table">
-    <thead class="table-dark">
-        <tr>
-            <!-- <th>ID</th> -->
+    <thead>
+        <tr class="table-dark">
             <th>Academic Year</th>
             <th>Status</th>
             <th></th>
@@ -57,7 +55,7 @@
         <?php foreach ($academicyear as $acy) : ?>
         <?php $textclass = ($acy['status'] == 'active') ? 'text-success' : 'text-muted' ?>
         <?php $disabled = ($acy['status'] == 'active') ? 'disabled' : '' ?>
-        <tr>
+        <tr class="table-light">
             <!-- <td><?= $acy['id'] ?></td> -->
             <td><?= $acy['acadyear'] ?></td>
             <td class="<?= $textclass ?>"><?= $acy['status'] ?></td>

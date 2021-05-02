@@ -11,7 +11,10 @@ class Student_model extends CI_Model
         if ($student_id === FALSE and $sig_id === FALSE) {
             $this->db->select('user.id')
                 ->from('user')
-                ->where(array('userstatus' => 'active', 'usertype' => 'student'))
+                ->where(array(
+                    'userstatus' => 'active',
+                    'usertype' => 'student'
+                ))
                 ->order_by('user.id');
             $query = $this->db->get();
             return $query->result_array();
@@ -32,11 +35,12 @@ class Student_model extends CI_Model
         if ($sig_id) {
             # returns active students under specific sig
             $this->db->select('user.id')
-                ->from('student as std')
-                ->join('user', 'user.id = std.matric')
+                ->from('user')
+                ->join('student as std', 'user.id = std.matric', 'left')
                 ->where(array(
                     'user.userstatus' => 'active',
-                    'user.sig_id' => $sig_id
+                    'user.sig_id' => $sig_id,
+                    'user.usertype' => 'student'
                 ))
                 ->order_by('user.id');
             $query = $this->db->get();
@@ -65,10 +69,16 @@ class Student_model extends CI_Model
 
     public function get_studentbyintake($sig_id)
     {
-        $this->db->select('yearjoined, count(*) as intake_count')
-            ->from('student')
-            ->join('user', 'user.id = student.matric')
-            ->where('user.sig_id', $sig_id)
+        $currentyear = intval(date('Y'));
+        $limityear = $currentyear - 4;
+        $this->db->select('user.yearjoined, count(*) as intake_count')
+            ->from('user')
+            ->join('student', 'user.id = student.matric', 'left')
+            ->where(array(
+                'user.usertype' => 'student',
+                'user.sig_id' => $sig_id,
+                'user.yearjoined >' => $limityear
+            ))
             ->group_by('yearjoined');
         $query = $this->db->get();
         return $query->result();
@@ -91,7 +101,8 @@ class Student_model extends CI_Model
                 'usertype' => 'student',
                 'userstatus' => 'active'
             ))
-            ->join('student', 'student.matric = user.id')
+            ->join('student', 'student.matric = user.id', 'left')
+            ->join('academicplan as acp', 'user.id = acp.student_id')
             ->where('student.yearjoined >=', $limityear);
         $query = $this->db->get();
         return $query->result_array();

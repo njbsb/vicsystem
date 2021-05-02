@@ -17,7 +17,6 @@ class User extends CI_Controller
             'title' => 'Manage Users',
             'users' => $users
         );
-        print_r($data['users']);
         $this->load->view('templates/header');
         $this->load->view('user/index', $data);
         // $this->load->view('templates/footer');
@@ -141,7 +140,8 @@ class User extends CI_Controller
             'title' => 'Validate: ' . $id,
             'user' => $this->user_model->get_user($id),
             'userstatus' => $this->user_model->get_userstatus(),
-            'mentors' => $this->mentor_model->get_mentor()
+            'mentors' => $this->mentor_model->get_mentor(),
+            'superior' => $this->user_model->get_user_superior($id)
         );
         // validate
         $this->form_validation->set_rules('id', 'ID', 'required');

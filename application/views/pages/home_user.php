@@ -1,6 +1,6 @@
-<!-- <h2><?= $profileComplete ?></h2> -->
-
-<!-- <p>Welcome to SIG Integrated System</p> -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item active">Home</li>
+</ol>
 <div class="jumbotron bg-white" style="padding-bottom: 0px;">
     <h5 class="text-right text-muted"><b>Today is <?= date("jS F Y (l)") ?></b></h5>
     <h1 class="display-3">Welcome, <?= $user_name ?>!</h1>

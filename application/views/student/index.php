@@ -2,13 +2,13 @@
 <div class="container-fluid text-center">
     <?php if ($students) : ?>
     <div class="row" id="">
-        <?php foreach($students as $student): ?>
+        <?php foreach ($students as $student) : ?>
         <div class="col-md-2">
             <div class="card mb2">
                 <?php $profileimage = 'default.jpg' ?>
-                <img class="card-img-top" src="<?= base_url() . 'assets/images/profile/'.$profileimage ?>" style="padding:6px;" alt="">
+                <img class="card-img-top" src="<?= base_url() . 'assets/images/profile/' . $profileimage ?>" style="padding:6px;" alt="">
                 <div class="card-footer text-muted">
-                    <a href="<?= site_url('/student/'). $student['id'] ?>"><?= $student['id'] ?></a>
+                    <a href="<?= site_url('/student/') . $student['id'] ?>"><?= $student['id'] ?></a>
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
     No students data
     <?php endif ?>
 </div>
-
+<small>Student that has not been validated won't show here</small>
 
 <script type="text/javascript">
 var studentarray = <?= json_encode($students) ?>;

@@ -61,6 +61,7 @@
         </div>
         <?php endforeach ?>
     </div>
+    <small>If you don't see any specific student, you might have not enrolled them into the current academic session.</small>
     <hr>
     <div class="form-group">
         <button type="submit" class="btn btn-outline-primary">Submit</button>

@@ -32,9 +32,11 @@ $(document).ready(function() {
     // });
 });
 </script>
-<script src=""></script>
 <script>
 $('#navbar').bootnavbar();
+$(function() {
+    $('#breadcrumbs').breadcrumbsGenerator();
+})
 </script>
 </body>
 

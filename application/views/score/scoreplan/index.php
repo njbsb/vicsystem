@@ -1,3 +1,7 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item active">Scoreplan</li>
+</ol>
 <h2><?= $title ?></h2>
 <br>
 <div class="">
@@ -20,7 +24,7 @@
         </thead>
         <tbody>
             <?php foreach ($academicsessions as $acs) : ?>
-            <tr>
+            <tr class="table-light">
                 <td><?= $acs['academicsession'] ?></td>
                 <!-- <td><?= $acs['academicyear'] ?></td> -->
                 <?php foreach ($acs['activitycategories'] as $cat) : ?>
