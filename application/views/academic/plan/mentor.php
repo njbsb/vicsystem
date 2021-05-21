@@ -1,3 +1,8 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item active">Academic Plan</li>
+</ol>
+
 <h2><?= $title ?></h2>
 <h4>Academic Session: <?= $activesession['academicsession'] ?></h4>
 <hr>
@@ -28,15 +33,28 @@
 </div>
 
 
-<!-- ACADEMIC PLAN -->
-<!-- <div class="row justify-content-between">
-    <div class="col-4">
-        <h3>Academic Plan</h3>
-    </div>
-    <div class="col-4">
-        <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacademicplan" style="float: right;">Add Academic Plan</button>
-    </div>
-</div> -->
+<?php if ($this->session->flashdata('message')) : ?>
+<?= $this->session->flashdata('message') ?>
+<?php endif ?>
+
+
+<?php if ($activesession['endofsession'] == true) : ?>
+<hr>
+<?= form_open_multipart('academic/import_result') ?>
+<div class="form-group">
+    <!-- <p>It's end of academic session. Upload the students' result here</p> -->
+    <label for="formFile" class="form-label mt-4">It's end of academic session. Upload the students' result here</label>
+    <input class="form-control" type="file" name="upload_file" id="upload_file">
+</div>
+<div class="form-group">
+    <button class="btn btn-info" type="submit">Upload</button>
+</div>
+<?= form_close() ?>
+<hr>
+<?php else : ?>
+<p>You can only upload students' result once it is end of academic session. Set it <a href="<?= site_url('academic') ?>">here</a></p>
+<?php endif ?>
+
 <table id="acp_table" class="table display">
     <thead class="table-dark">
         <tr>

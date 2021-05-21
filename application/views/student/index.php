@@ -1,3 +1,8 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item active">Student</li>
+</ol>
+
 <h2 class="text-center"><?= $title ?></h2>
 <div class="container-fluid text-center">
     <?php if ($students) : ?>

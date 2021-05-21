@@ -1,6 +1,18 @@
 <?php
+defined('BASEPATH') or exit('No direct script access allowed!');
+require FCPATH . 'vendor\autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class User extends CI_Controller
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index()
     {
         $usertype = $this->session->userdata('user_type');
@@ -342,5 +354,23 @@ class User extends CI_Controller
         } else {
             return TRUE;
         }
+    }
+
+    public function download()
+    {
+        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
+        $users = $this->user_model->get_user('', $sig_id);
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="hello.xlsx"');
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        foreach ($users as $i => $user) {
+            $sheet->setCellValue('A' . $i + 1, $user['id']);
+            $sheet->setCellValue('B' . $i + 1, $user['name']);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
     }
 }

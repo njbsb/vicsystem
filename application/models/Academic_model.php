@@ -55,7 +55,7 @@ class Academic_model extends CI_Model
                 'acadyear_id' => $acadyear_id,
                 'semester' => $semester
             ))
-            ->join('academicyear as acy', 'acy.id = acs.acadyear_id');
+            ->join('academicyear as acy', 'acy.id = acs.acadyear_id', 'left');
         $query = $this->db->get();
         return $query->row_array();
     }
@@ -243,5 +243,31 @@ class Academic_model extends CI_Model
     public function set_gpa($where, $gpa)
     {
         return $this->db->where($where)->update('academicplan', $gpa);
+    }
+
+    public function import_gpa_achieved($data)
+    {
+        $rowaffectedcount = 0;
+        foreach ($data as $d) {
+            $this->db->set('gpa_achieved', $d['gpa_achieved'])
+                ->where(array(
+                    'acadsession_id' => $d['acadsession_id'],
+                    'student_id' => $d['student_id']
+                ))
+                ->update('academicplan');
+            if ($this->db->affected_rows() > 0) {
+                $rowaffectedcount += 1;
+            }
+        }
+        return $rowaffectedcount;
+    }
+
+    public function set_endsession($acadsession_id)
+    {
+        $status = $this->db->get_where('academicsession', array('id' => $acadsession_id))->row()->endofsession;
+        return $this->db->where('id', $acadsession_id)
+            ->update('academicsession', array(
+                'endofsession' => !$status
+            ));
     }
 }

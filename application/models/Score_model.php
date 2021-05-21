@@ -37,6 +37,22 @@ class Score_model extends CI_Model
 
     public function get_scoreplan_scorelevel($student_id, $scoreplan_id)
     {
+        $this->db->select('position.score as position, meeting.score as meeting, attendance.score as attendance, involvement.score as involvement')
+            ->from('score_level as sc')
+            ->where(array(
+                'student_id' => $student_id,
+                'scoreplan_id' => $scoreplan_id
+            ))
+            ->join('level_position as position', 'position.id = sc.position')
+            ->join('level_meeting as meeting', 'meeting.id = sc.meeting')
+            ->join('level_attendance as attendance', 'attendance.id = sc.attendance')
+            ->join('level_involvement as involvement', 'involvement.id = sc.involvement');
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+
+    public function get_scoreplan_level($student_id, $scoreplan_id)
+    {
         $this->db->select('position, meeting, attendance, involvement')
             ->from('score_level')
             ->where(array(
@@ -142,7 +158,7 @@ class Score_model extends CI_Model
     public function get_guidedigitalcv()
     {
         $this->db->select("sc.*, concat(sc.score, ' - ', sc.description) as concat")
-            ->from('scdigitalcv as sc');
+            ->from('comp_digitalcv as sc');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -150,7 +166,7 @@ class Score_model extends CI_Model
     public function get_guideleadership()
     {
         $this->db->select("sc.*, concat(sc.score, ' - ', sc.description) as concat")
-            ->from('scleadership as sc');
+            ->from('comp_leadership as sc');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -242,13 +258,14 @@ class Score_model extends CI_Model
         } else {
             if ($category_id == FALSE) {
                 # returns scoreplan under specific category
-                $this->db->select('scp.*, act.title')
+                $this->db->select('scp.*, act.title, actcat.category')
                     ->from('score_plan as scp')
                     ->where(array(
                         // 'scp.sig_id' => $sig_id,
                         'scp.acadsession_id' => $acadsession_id
                     ))
-                    ->join('activity as act', 'scp.activity_id = act.id');
+                    ->join('activitycategory as actcat', 'actcat.code = scp.activitycategory_id', 'left')
+                    ->join('activity as act', 'scp.activity_id = act.id', 'left');
             } elseif ($acadsession_id == FALSE) {
                 # returns scoreplan under specific acs
                 $this->db->select('scp.*, act.title')

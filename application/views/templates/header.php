@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/flatly.bootstrap.min.css') ?>" media="screen">
     <link rel="stylesheet" href="<?= base_url('assets/css/jquery.dataTables.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/dataTables.bootstrap.css') ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/sticky-footer.css') ?>" rel="stylesheet">
-    <link rel="stylesheet" href="<?= base_url('assets/css/sigcustom.css') ?>" rel="stylesheet">
+    <link rel="stylesheet" href="<?= base_url('assets/css/sticky-footer.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/sigcustom.css') ?>">
     <!-- <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.min.css"> -->
     <script src="https://kit.fontawesome.com/dff01397e8.js" crossorigin="anonymous"></script>
 

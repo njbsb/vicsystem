@@ -1,3 +1,8 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item active">Collaborator</li>
+</ol>
+
 <h2><?= $title ?></h2>
 <br>
 <a class="btn btn-outline-primary btn-sm" href="<?= base_url('collaborator/create') ?>">Create new collaborator</a>

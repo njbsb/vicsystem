@@ -1,7 +1,12 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item active">Activity</li>
+</ol>
+
 <h2><?= $sig['name'], "'s ", $title ?></h2>
 <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
 <br>
-<button class="btn btn-primary" data-toggle="modal" data-target="#activity_type">New Activity</button>
+<button class="btn btn-info" data-toggle="modal" data-target="#activity_type">New Activity</button>
 <?php endif ?>
 <hr>
 <table id="activitytable" class="table table-hover" style="text-align:left;">

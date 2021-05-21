@@ -1,3 +1,9 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item"><a href="<?= site_url('activity') ?>">Activity</a></li>
+    <li class="breadcrumb-item active"><?= $activity['title'] ?></li>
+</ol>
+
 <div class="container">
     <p class="text-right">Created on <?= date('jS F Y', strtotime($activity['created_at'])) ?><br>By: <?= $activity['signame'] ?></p>
     <div class="container-fluid text-center">

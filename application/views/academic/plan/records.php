@@ -1,3 +1,10 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item"><a href="<?= site_url('academicplan/mentor') ?>">Academic Plan</a></li>
+    <li class="breadcrumb-item active">Records</li>
+</ol>
+
+
 <h2><?= $title ?></h2>
 <h4>Academic Session: <?= $academicsession['academicsession'] ?></h4>
 <hr>

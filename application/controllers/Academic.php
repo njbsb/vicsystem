@@ -1,4 +1,11 @@
 <?php
+require FCPATH . 'vendor\autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
+
 class Academic extends CI_Controller
 {
     # pages
@@ -46,7 +53,7 @@ class Academic extends CI_Controller
             'academicsessions' => $this->academic_model->get_academicsession(),
             'academicyears' => $this->academic_model->get_academicyear(),
             'semesters' => $this->semester_model->get_semesters(),
-            'title' => 'Student Academic Plan: ' . $student['name'],
+            'title' => 'Academic Plan: ' . $student['name'],
             'academicplans' => $this->scoretable->get_arraytable_academicplan(
                 $this->academic_model->get_academicplan($student_id)
             ),
@@ -70,6 +77,7 @@ class Academic extends CI_Controller
             'semesters' => $this->semester_model->get_semesters(),
             'activesession' => $activesession
         );
+        // print_r($activesession);
         $this->load->view('templates/header');
         $this->load->view('academic/plan/mentor', $data);
     }
@@ -79,8 +87,9 @@ class Academic extends CI_Controller
         $acadyear_id = $this->input->post('acadyear_id');
         $semester = $this->input->post('semester');
         $academicsession = $this->academic_model->get_academicsession_byyearsem($acadyear_id, $semester);
-        if (empty($academicsession)) {
+        if (!isset($academicsession)) {
             $this->load->view('templates/header');
+            $this->load->view('academic/plan/norecord');
         } else {
             $academicplans = $this->academic_model->get_academicplan(FALSE, $academicsession['id']);
             $data = array(
@@ -108,7 +117,8 @@ class Academic extends CI_Controller
         if ($selected_academicsession) {
             $total_all = 0;
             $scoreleveltotal = $this->score_model->get_maxscore_position() + $this->score_model->get_maxscore_meeting() + $this->score_model->get_maxscore_attendance() + $this->score_model->get_maxscore_involvement();
-            $scoreplans = $this->score_model->get_scoreplan($student['sig_id'], $selected_academicsession['id'], FALSE);
+            $scoreplans = $this->score_model->get_scoreplan($selected_academicsession['id'], FALSE);
+            // print_r($scoreplans);
             foreach ($scoreplans as $i => $scoreplan) {
                 $scores = $this->score_model->get_scoreplan_scorelevel($student_id = $student_id, $scoreplan['id']);
                 $total = $scores ? array_sum($scores) : 0;
@@ -119,21 +129,36 @@ class Academic extends CI_Controller
                 $total_all += $totalpercent;
             }
             $scorecomp = $this->score_model->get_student_scorecomp($student_id, $selected_academicsession['id']);
+            $scorecomps = array('scores' => $this->score_model->get_scoreplan_scorecomp($student_id, $selected_academicsession['id']));
+            $scorecomps['totalpercent'] = (!empty($scorecomps['scores'])) ? array_sum($scorecomps['scores']) : 0;
+            $totalcomp = 0;
+            $totalcomp += $scorecomps['totalpercent'];
             if (!is_null($scorecomp)) {
                 $scorecomp['total'] = $scorecomp['digitalcv'] + $scorecomp['leadership'] + $scorecomp['volunteer'];
                 $total_all += $scorecomp['total'];
             }
             $data = array(
-                'title' => 'Record: ' . $student['name'],
+                'title' => 'Academic Record: ' . $student['name'],
                 'student' => $student,
                 'academicsession' => $selected_academicsession,
                 // 'citras' => $this->citra_model->get_citra_registered($student_id, $selected_academicsession['id']),
                 'academicplan' => $this->academic_model->get_academicplan($student_id, $selected_academicsession['id']),
                 'levelrubrics' => $this->scoretable->get_level_rubrics(),
                 'scoreplans' => $scoreplans,
-                'scorecomp' => $scorecomp,
-                'total_all' => $total_all
+                'scorecomps' => $scorecomps,
+                'totalcomp' => $totalcomp,
+                'total_all' => $total_all,
+                'scoreleveltotal' => $this->score_model->get_scoreleveltotal(),
+                'guide' => array(
+                    'position' => $this->score_model->get_guideposition(),
+                    'meeting' => $this->score_model->get_guidemeeting(),
+                    'involvement' => $this->score_model->get_guideinvolvement(),
+                    'attendance' => $this->score_model->get_guideattendance(),
+                    'digitalcv' => $this->score_model->get_guidedigitalcv(),
+                    'leadership' => $this->score_model->get_guideleadership()
+                )
             );
+            print_r($data['scoreplans']);
             $this->load->view('templates/header');
             $this->load->view('academic/records', $data);
         } else {
@@ -205,12 +230,12 @@ class Academic extends CI_Controller
     public function create_academicsession()
     {
         $acy = $this->academic_model->get_academicyear($this->input->post('acadyear_id'));
-        $academicsessiontitle = $acy['acadyear'] . '-' . $this->input->post('semester_id');
+        $academicsessiontitle = $acy['acadyear'] . '-' . $this->input->post('semester');
         $acs_slug = url_title($academicsessiontitle);
 
         $acsdata = array(
             'acadyear_id' => $this->input->post('acadyear_id'),
-            'semester_id' => $this->input->post('semester_id'),
+            'semester' => $this->input->post('semester'),
             'slug' => $acs_slug,
             'status' => 'inactive'
         );
@@ -235,6 +260,13 @@ class Academic extends CI_Controller
         redirect('academic');
     }
 
+    public function set_endsession()
+    {
+        $acadsession_id = $this->input->post('session_id');
+        $this->academic_model->set_endsession($acadsession_id);
+        redirect('academic');
+    }
+
     public function set_activeyear()
     {
         $id = $this->input->post('acadyear_id');
@@ -251,5 +283,44 @@ class Academic extends CI_Controller
         $gpa = array('gpa_target' => $this->input->post('gpa_target'));
         $this->academic_model->set_gpa($where, $gpa);
         redirect('academicplan/student');
+    }
+
+    public function import_result()
+    {
+        $upload_file = $_FILES['upload_file']['name'];
+        $extension = pathinfo($upload_file, PATHINFO_EXTENSION);
+        switch ($extension) {
+            case 'xlsx':
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+                break;
+            case 'xls':
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+                break;
+            case 'csv':
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+                break;
+        }
+        $spreadsheet = $reader->load($_FILES['upload_file']['tmp_name']);
+        $sheetdata = $spreadsheet->getActiveSheet()->toArray();
+        $sheetcount = count($sheetdata);
+        if ($sheetcount > 1) {
+            for ($i = 1; $i < $sheetcount; $i++) {
+                $acadsession_id = $sheetdata[$i][0];
+                $student_id = $sheetdata[$i][1];
+                $gpa_achieved = $sheetdata[$i][2];
+                $data[] = array(
+                    'acadsession_id' => $acadsession_id,
+                    'student_id' => $student_id,
+                    'gpa_achieved' => $gpa_achieved
+                );
+            }
+            $rowaffected = $this->academic_model->import_gpa_achieved($data);
+            if ($rowaffected > 0) {
+                $this->session->set_flashdata('message', '<div class="alert alert-success">' . $rowaffected . ' rows affected</div>');
+            } else {
+                $this->session->set_flashdata('message', '<div class="alert alert-warning">' . $rowaffected . ' rows affected</div>');
+            }
+            redirect(site_url('academicplan/mentor'));
+        }
     }
 }

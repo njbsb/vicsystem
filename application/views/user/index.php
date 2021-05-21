@@ -1,7 +1,6 @@
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
-    <li class="breadcrumb-item active">Users</li>
-    <!-- <li class="breadcrumb-item active"><?= $acadsession['academicsession'] ?></li> -->
+    <li class="breadcrumb-item active">User</li>
 </ol>
 <h2 class="text-primary"><?= $title ?></h2>
 <div>
@@ -49,6 +48,8 @@
         </tfoot>
     </table>
 </div>
+<a class="btn btn-info" href="<?= site_url('user/download') ?>" target="_blank">Download</a>
+
 
 <div id="confirmDelete" class="modal fade">
     <div class="modal-dialog" role="document">

@@ -1,3 +1,8 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item active">Score</li>
+</ol>
+
 <h2 class="margin text-primary"><?= $title ?></h2>
 <small>*Click view on any academic session below to view students' score in each session</small>
 <!-- <hr> -->

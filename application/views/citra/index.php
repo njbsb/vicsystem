@@ -1,3 +1,8 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item active">Citra</li>
+</ol>
+
 <h2 class="text-center margin"><?= $title ?></h2>
 <div class="row text-center ">
     <?php foreach ($citras as $citra) : ?>
@@ -13,10 +18,10 @@
             <div class="card-body">
                 <h5 class="card-title">
                     <a href="<?= site_url('/citra/' . $citra['code']); ?>">
-                        <?= $citra['name_bm'] ?>
+                        <?= $citra['name_en'] ?>
                     </a>
                 </h5>
-                <h6 class="card-subtitle text-muted"><?= $citra['name_en'] ?></h6>
+                <h6 class="card-subtitle text-muted"><?= $citra['name_bm'] ?></h6>
             </div>
             <div class="card-footer text-muted">
                 <?= $citra['level'] ?>

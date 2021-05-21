@@ -1,3 +1,9 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item"><a href="<?= site_url('student') ?>">Student</a></li>
+    <li class="breadcrumb-item active"><?= $student['id'] ?></li>
+</ol>
+
 <div class="container-fluid ">
     <div class="row text-center">
         <div class="col-lg-4">
@@ -34,55 +40,52 @@
         <h4 class="text-secondary"><b>Activity Level</b></h4>
         <br>
     </div>
-    <div class="row justify-content-center">
-        <?php if ($activity_roles) : ?>
-        <table class="table">
-            <thead>
-                <tr class="table-primary">
-                    <th>Year</th>
-                    <th>Activity</th>
-                    <th>Role</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($activity_roles as $actrole) : ?>
-                <?php $desc = (isset($actrole['description'])) ? ' (' . $actrole['description'] . ')' : '' ?>
-                <tr class="table-light">
-                    <td><?= $actrole['acadyear'] . ' Semester ' . $actrole['semester'] ?></td>
-                    <td><?= $actrole['activity_name'] ?></td>
-                    <td><?= $actrole['role'] . $desc ?></td>
-                </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
-        <?php else : ?>
-        <p>No data of roles in activity found</p>
-        <?php endif ?>
-    </div>
+    <?php if ($activity_roles) : ?>
+    <table id="acttable" class="table">
+        <thead>
+            <tr class="table-primary">
+                <th>Year</th>
+                <th>Activity</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($activity_roles as $actrole) : ?>
+            <?php $desc = (isset($actrole['description'])) ? ' (' . $actrole['description'] . ')' : '' ?>
+            <tr class="table-light">
+                <td><?= $actrole['acadyear'] . ' Semester ' . $actrole['semester'] ?></td>
+                <td><?= $actrole['activity_name'] ?></td>
+                <td><?= $actrole['role'] . $desc ?></td>
+            </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+    <?php else : ?>
+    <p>No data of roles in activity found</p>
+    <?php endif ?>
     <hr>
     <h4 class="text-secondary text-center"><b>Organization Level</b></h4>
     <br>
-    <div class="row justify-content-center">
-        <?php if ($org_roles) : ?>
-        <table class="table">
-            <thead>
-                <tr class="table-primary">
-                    <th>Academic Year</th>
-                    <th>Role</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($org_roles as $orgrole) : ?>
-                <?php $desc = (isset($orgrole['description']) or $orgrole['description'] == NULL or $orgrole['description'] == '') ? ' (' . $orgrole['description'] . ')' : '' ?>
-                <tr class="table-light">
-                    <td><?= $orgrole['acadyear'] ?></td>
-                    <td><?= $orgrole['role'] . $desc ?></td>
-                </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
+    <?php if ($org_roles) : ?>
+    <table id="orgtable" class="table">
+        <thead>
+            <tr class="table-primary">
+                <th>Academic Year</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($org_roles as $orgrole) : ?>
+            <?php $desc = (isset($orgrole['description']) or $orgrole['description'] != NULL or $orgrole['description'] != '') ? sprintf(' (%s)', $orgrole['description']) : '' ?>
+            <tr class="table-light">
+                <td><?= $orgrole['acadyear'] ?></td>
+                <td><?= $orgrole['role'] . $desc ?></td>
+            </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
 
-        <!-- <div class="col-md-4">
+    <!-- <div class="col-md-4">
             <div class="card text-white bg-dark mb-3">
                 <div class="card-header text-warning"></div>
                 <div class="card-body">
@@ -91,8 +94,15 @@
                 </div>
             </div>
         </div> -->
-        <?php else : ?>
-        <p>No data of roles in SIG found</p>
-        <?php endif ?>
-    </div>
+    <?php else : ?>
+    <p>No data of roles in SIG found</p>
+    <?php endif ?>
 </div>
+
+
+<script>
+$(document).ready(function() {
+    $('#acttable').DataTable();
+    $('#orgtable').DataTable();
+});
+</script>

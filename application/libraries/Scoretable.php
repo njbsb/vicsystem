@@ -14,11 +14,11 @@ class Scoretable
         $acadplans = array();
         for ($i = 0; $i < count($academicplans); $i++) {
             $acp = $academicplans[$i];
-            $citrarow = $this->CI->citra_model->get_students_registeredcitra($acp['student_id'], $acp['acadsession_id']);
-            $citrastring = '';
-            foreach ($citrarow as $cr) {
-                $citrastring .= $cr['citra_code'] . ' ';
-            }
+            // $citrarow = $this->CI->citra_model->get_students_registeredcitra($acp['student_id'], $acp['acadsession_id']);
+            // $citrastring = '';
+            // foreach ($citrarow as $cr) {
+            //     $citrastring .= $cr['citra_code'] . ' ';
+            // }
 
             if (floatval($acp['gpa_achieved']) == 0 or floatval($acp['gpa_achieved']) == null) {
                 $difference = 'No data';
@@ -33,7 +33,7 @@ class Scoretable
             $acparray = array(
                 'acadsession_id' => $acp['acadsession_id'],
                 'academicsession' => $acp['academicsession'],
-                'citra_reg' => $citrastring,
+                // 'citra_reg' => $citrastring,
                 'gpa_target' => $acp['gpa_target'],
                 'gpa_achieved' => $gpa_achieved,
                 'difference' => $difference

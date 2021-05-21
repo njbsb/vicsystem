@@ -1,4 +1,8 @@
-<!-- <h2><?= 'Mentor: ' . $mentor['name'] ?></h2> -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item"><a href="<?= site_url('mentor') ?>">Mentor</a></li>
+    <li class="breadcrumb-item active"><?= $mentor['name'] ?></li>
+</ol>
 
 <div class="container-fluid text-center">
     <div class="row">

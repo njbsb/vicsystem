@@ -34,7 +34,11 @@ class Score extends CI_Controller
         $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         $academicsession = $this->academic_model->get_academicsession(FALSE, $acadsession_slug);
         $enrolling = $this->student_model->get_enrolling_students($academicsession['id'], $sig_id);
-        $scoreplans = $this->score_model->get_scoreplan($sig_id, $academicsession['id'], FALSE);
+        $scoreplans = $this->score_model->get_scoreplan($academicsession['id']);
+        $fullscore = 15; # fixed value of components
+        foreach ($scoreplans as $scoreplan) {
+            $fullscore += $scoreplan['percentweightage'];
+        }
         $scoreleveltotal = $this->score_model->get_scoreleveltotal();
         foreach ($enrolling as $i => $std) {
             $score = 0;
@@ -57,7 +61,8 @@ class Score extends CI_Controller
         }
         $data = array(
             'academicsession' => $academicsession,
-            'enrolling' => $enrolling
+            'enrolling' => $enrolling,
+            'fullscore' => $fullscore
         );
         $this->load->view('templates/header');
         $this->load->view('score/viewacs', $data);
@@ -77,6 +82,7 @@ class Score extends CI_Controller
         $scoreleveltotal = $this->score_model->get_scoreleveltotal();
         $totalwhole = 0;
         foreach ($scoreplans as  $i => $scoreplan) {
+            # to recalculate scores bcs now using id
             $scores = $this->score_model->get_scoreplan_scorelevel($student_id, $scoreplan['id']);
             $scoreplans[$i]['totalpercent'] =  $scores ? (array_sum($scores) / $scoreleveltotal) * $scoreplan['percentweightage'] : 0;
             $totalwhole += $scoreplans[$i]['totalpercent'];
@@ -148,7 +154,7 @@ class Score extends CI_Controller
                 // $activitycategories[$i]['scoreplan'] = $this->score_model->get_scoreplan($sig_id, $academicsession['id'], $actcat['code']);
                 $activitycategories[$i]['unregistered'] = $this->activity_model->get_category_unregisteredactivity($academicsession['id'], $actcat['code']);
             }
-            print_r($activitycategories);
+            // print_r($activitycategories);
             $data = array(
                 'acslug' => $slug,
                 'activitycategories' => $activitycategories,

@@ -1,3 +1,8 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item active">Academic Enrollment</li>
+</ol>
+
 <h2><?= $title ?></h2>
 
 <?php if (validation_errors()) : ?>
@@ -9,10 +14,7 @@
 <?php endif ?>
 <hr>
 <div class="form-group">
-    <legend>Active Session</legend>
-    <select name="acadsession_id" class="form-control">
-        <option value="<?= $activesession['id'] ?>"><?= $activesession['academicsession'] ?></option>
-    </select>
+    <legend>Active Session: <?= $activesession['academicsession'] ?></legend>
     <small>You can only enroll students in an active academic session!</small>
 </div>
 <hr>
@@ -52,7 +54,7 @@
         </tr>
     </tfoot>
 </table>
-<button class="btn btn-outline-primary" type="submit">Add Students</button>
+<button class="btn btn-outline-primary" type="submit">Enroll</button>
 <?= form_close() ?>
 <hr>
 

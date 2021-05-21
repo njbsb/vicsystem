@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
-    <li class="breadcrumb-item"><a href="<?= site_url('scoreplan') ?>">Scoreplan</a></li>
+    <li class="breadcrumb-item"><a href="<?= site_url('scoreplan') ?>">Score Plan</a></li>
     <li class="breadcrumb-item active"><?= $acadsession['academicsession'] ?></li>
 </ol>
 <h2>Score Plan: <?= $acadsession['academicsession'] ?></h2>
@@ -16,6 +16,9 @@
     </div>
 </div>
 <br>
+<p>Cannot see any available activity? Create a new one <a href="<?= site_url('activity') ?>">here</a><br><small>You can only add a new score plan from activities created on the same academic
+        session.</small></p>
+
 <table class="table">
     <thead>
         <tr class="table-primary">
@@ -87,7 +90,7 @@ foreach ($scoreplans as $plan) : $index++; ?>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Update</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
         </div>
@@ -140,8 +143,9 @@ foreach ($scoreplans as $plan) : $index++; ?>
             </div>
             <div class="modal-footer">
                 <!-- BUTTON -->
-                <button type="submit" class="btn btn-primary">Add</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                <?php $disabledbutton = ($category['unregistered']) ? '' : 'disabled' ?>
+                <button type="submit" class="btn btn-primary" <?= $disabledbutton ?>>Add</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
         </div>

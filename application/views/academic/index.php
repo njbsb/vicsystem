@@ -1,3 +1,8 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item active">Academic Control</li>
+</ol>
+
 <h2 class="text-center"><?= $title ?></h2>
 <hr>
 <!-- ACADEMIC SESSION -->
@@ -12,9 +17,11 @@
 <table id="acs_table" class="table">
     <thead>
         <tr class="table-dark">
+            <th>ID</th>
             <th>Academic Year</th>
             <th>Semester</th>
             <th>Status</th>
+            <th>Progress</th>
             <th></th>
         </tr>
     </thead>
@@ -22,13 +29,19 @@
         <?php foreach ($academicsession as $acs) : ?>
         <?php $textclass = ($acs['status'] == 'active') ? 'text-success' : 'text-muted' ?>
         <?php $disabled = ($acs['status'] == 'active') ? 'disabled' : '' ?>
+        <?php $enddisabled = ($acs['endofsession'] == true) ? 'disabled' : '' ?>
         <tr class="table-light">
-            <!-- <td><?= $acs['id'] ?></td> -->
+            <td><?= $acs['id'] ?></td>
             <td><?= $acs['academicyear'] ?></td>
             <td><?= $acs['semester'] ?></td>
-            <td class="<?= $textclass ?>"><?= $acs['status'] ?></td>
+            <td class="<?= $textclass ?>"><?= ucfirst($acs['status']) ?></td>
+            <?php $progress = ($acs['endofsession']) ? 'Ending' : 'On Going' ?>
+            <td><?= $progress ?></td>
             <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acs" data-string="<?= $acs['academicsession'] ?>" data-acsid="<?= $acs['id'] ?>"
-                    class="btn btn-outline-primary btn-sm">Toggle Active</button></td>
+                    class="btn btn-outline-primary btn-sm">Toggle Active</button>&nbsp;<button <?= '' ?> data-toggle="modal" data-target="#setendsession" data-string="<?= $acs['academicsession'] ?>"
+                    data-acsid="<?= $acs['id'] ?>" class="btn btn-outline-primary btn-sm">Toggle
+                    End</button></td>
+            <!-- <td></td> -->
         </tr>
         <?php endforeach ?>
     </tbody>
@@ -58,7 +71,7 @@
         <tr class="table-light">
             <!-- <td><?= $acy['id'] ?></td> -->
             <td><?= $acy['acadyear'] ?></td>
-            <td class="<?= $textclass ?>"><?= $acy['status'] ?></td>
+            <td class="<?= $textclass ?>"><?= ucfirst($acy['status']) ?></td>
             <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acy" data-string="<?= $acy['acadyear'] ?>" data-acyid="<?= $acy['id'] ?>"
                     class="btn btn-outline-primary btn-sm">Toggle Active</button></td>
         </tr>
@@ -90,7 +103,7 @@
                 </div>
                 <div class="form-group">
                     <label for="semester">Select semester</label>
-                    <select name="semester_id" id="semester_id" class="form-control" required>
+                    <select name="semester" id="semester" class="form-control" required>
                         <option value="" selected disabled hidden>Select semester</option>
                         <?php foreach ($semesters as $sem) : ?>
                         <option value="<?= $sem ?>"><?= $sem ?></option>
@@ -100,7 +113,7 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Add</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
         </div>
@@ -125,7 +138,7 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Add</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
         </div>
@@ -156,7 +169,36 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Set active</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
+            </div>
+            <?= form_close() ?>
+        </div>
+    </div>
+</div>
+<div id="setendsession" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <?= form_open('academic/set_endsession') ?>
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm action</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmtext">This will set this academic session to end. Mentor will be able to update students' academic plans with their actual result.</p>
+                <div class="form-group">
+                    <label hidden>ID</label>
+                    <input name="session_id" readonly type="text" class="form-control" hidden>
+                </div>
+                <div class="form-group">
+                    <h5 id="academicsession" class="text-center text-lg-center"></h5>
+                </div>
+                <small>You will be able to change this once. Please be careful</small>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">End Session</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
         </div>
@@ -187,7 +229,7 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Set active</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
         </div>
@@ -200,6 +242,7 @@ $(document).ready(function() {
     $('#acs_table').DataTable();
     $('#acy_table').DataTable();
     var confirmtext = document.getElementById('confirmtext');
+    var academicsession = document.getElementById('academicsession');
     $('#setactive_acs').on('show.bs.modal', function(e) {
         var userid = $(e.relatedTarget).data('acsid');
         var acads = $(e.relatedTarget).data('string');
@@ -209,7 +252,7 @@ $(document).ready(function() {
     });
     $('#setactive_acs').on('hide.bs.modal', function(e) {
         confirmtext.innerHTML = 'This will set this academic session to active.';
-    });
+    }); // required to set the value back
     $('#setactive_acy').on('show.bs.modal', function(e) {
         var id = $(e.relatedTarget).data('acyid');
         var years = $(e.relatedTarget).data('string');
@@ -219,6 +262,16 @@ $(document).ready(function() {
     });
     $('#setactive_acy').on('hide.bs.modal', function(e) {
         confirmtext.innerHTML = 'This will set this academic year to active.';
+    }); // required to set the value back
+    $('#setendsession').on('show.bs.modal', function(e) {
+        var acsid = $(e.relatedTarget).data('acsid');
+        var acads = $(e.relatedTarget).data('string');
+        confirmtext.innerHTML += ' <b>(' + acads + ')</b>';
+        academicsession.innerHTML = ' <b>(' + acads + ')</b>';
+        $(e.currentTarget).find('input[name="session_id"]').val(acsid);
+    });
+    $('#setendsession').on('hide.bs.modal', function(e) {
+        confirmtext.innerHTML = '';
     });
 });
 </script>

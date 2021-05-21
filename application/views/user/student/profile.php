@@ -1,3 +1,8 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item active">Profile</li>
+</ol>
+
 <h2 class="text-center"><?= $title; ?></h2>
 
 <div class="container-fluid text-center">
@@ -30,8 +35,8 @@
             <div class="card text-white bg-dark mb-3">
                 <div class="card-header"><a class="text-white" href="<?= site_url('activity/' . $actrole['slug']) ?>"><?= $actrole['activity_name'] ?></a></div>
                 <div class="card-body">
-                    <h4 class="card-title"><?= $actrole['rolename'] ?></h4>
-                    <p class="card-text"><?= $actrole['role_desc'] ?></p>
+                    <h4 class="card-title"><?= $actrole['role'] ?></h4>
+                    <p class="card-text"><?= $actrole['description'] ?></p>
                 </div>
             </div>
         </div>
