@@ -24,11 +24,11 @@
             <label><b>VIC Intake by Year</b></label>
             <canvas id="barChart" responsive="true"></canvas>
         </div>
-        <div class="col-sm-6">
+        <!-- <div class="col-sm-6">
             <div id="apexchart">
 
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 

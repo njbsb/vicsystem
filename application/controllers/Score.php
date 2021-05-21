@@ -1,4 +1,9 @@
 <?php
+require FCPATH . 'vendor\autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Score extends CI_Controller
 {
     ###
@@ -166,6 +171,27 @@ class Score extends CI_Controller
         }
     }
 
+    public function scoreboard()
+    {
+        $students = $this->student_model->get_student();
+        foreach ($students as $i => $student) {
+            $academicbadge = $this->scoretable->calculate_academicbadge($student['id']);
+            $activitybadge = $this->scoretable->calculate_activitybadge($student['id']);
+            $externalbadge = 0;
+            $students[$i]['academicbadge'] = $academicbadge;
+            $students[$i]['activitybadge'] = $activitybadge;
+            $students[$i]['externalbadge'] = $externalbadge;
+            $students[$i]['totalbadge'] = $academicbadge + $activitybadge + $externalbadge;
+            # external badge idk also
+        }
+        $data = array(
+            'thisacademicsession' => $this->academic_model->get_activeacademicsession(),
+            'students' => $students
+        );
+        $this->load->view('templates/header');
+        $this->load->view('score/scoreboard', $data);
+    }
+
     ###
     # Controller Functions
     ###
@@ -261,5 +287,47 @@ class Score extends CI_Controller
         }
         $this->score_model->update_scorecompdata($where, $scorecompdata);
         redirect('score/' . $acslug . '/' . $student_id);
+    }
+
+    public function download()
+    {
+        $students = $this->student_model->get_student();
+        foreach ($students as $i => $student) {
+            $academicbadge = $this->scoretable->calculate_academicbadge($student['id']);
+            $activitybadge = $this->scoretable->calculate_activitybadge($student['id']);
+            $externalbadge = 0;
+            $students[$i]['academicbadge'] = $academicbadge;
+            $students[$i]['activitybadge'] = $activitybadge;
+            $students[$i]['externalbadge'] = $externalbadge;
+            $students[$i]['totalbadge'] = $academicbadge + $activitybadge + $externalbadge;
+            # external badge idk also
+        }
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Scoreboard.xlsx"');
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'Matric');
+        $sheet->setCellValue('B1', 'Name');
+        $sheet->setCellValue('C1', 'Academic Badge');
+        $sheet->setCellValue('D1', 'Activity Badge');
+        $sheet->setCellValue('E1', 'External Badge');
+        $sheet->setCellValue('F1', 'Total Badge');
+        foreach ($students as $i => $student) {
+            $i += 1;
+            $sheet->setCellValue('A' . $i + 1, $student['id']);
+            $sheet->setCellValue('B' . $i + 1, $student['name']);
+            $sheet->setCellValue('C' . $i + 1, $student['academicbadge']);
+            $sheet->setCellValue('D' . $i + 1, $student['activitybadge']);
+            $sheet->setCellValue('E' . $i + 1, $student['externalbadge']);
+            $sheet->setCellValue('F' . $i + 1, $student['totalbadge']);
+            // $sheet->setCellValue('E' . $i + 1, $student['externalbadge']);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        // redirect(site_url('scoreboard'));
     }
 }

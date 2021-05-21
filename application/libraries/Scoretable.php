@@ -53,4 +53,32 @@ class Scoretable
         );
         return $levelrubrics;
     }
+
+    public function calculate_academicbadge($student_id)
+    {
+        $academicplans = $this->CI->academic_model->get_academicplan($student_id, FALSE);
+        $badgecount = 0;
+        foreach ($academicplans as $plan) {
+            $target = $plan['gpa_target'];
+            $achieved = $plan['gpa_achieved'];
+            $difference = $achieved - $target;
+            if ($difference > 0 or $achieved >= 3.67) {
+                $badgecount += 1;
+            }
+        }
+        return $badgecount;
+    }
+
+    public function calculate_activitybadge($student_id)
+    {
+        $badgecount = 0;
+        $activityscores = $this->CI->score_model->get_scoreplan_scorelevel($student_id);
+        foreach ($activityscores as $score) {
+            $sum = array_sum($score);
+            if ($sum >= 18) {
+                $badgecount += 1;
+            }
+        }
+        return $badgecount;
+    }
 }

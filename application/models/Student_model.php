@@ -9,7 +9,7 @@ class Student_model extends CI_Model
     public function get_student($student_id = FALSE, $sig_id = FALSE)
     {
         if ($student_id === FALSE and $sig_id === FALSE) {
-            $this->db->select('user.id')
+            $this->db->select('user.id, user.name')
                 ->from('user')
                 ->where(array(
                     'userstatus' => 'active',
@@ -133,7 +133,10 @@ class Student_model extends CI_Model
             ->from('academicplan as acp')
             ->join('user', 'user.id = acp.student_id')
             // ->join('user', array('user.id' => 'acp.student_id', 'user.sig_id' => $sig_id))
-            ->where(array('acp.acadsession_id' => $acadsession_id, 'user.sig_id' => $sig_id));
+            ->where(array(
+                'acp.acadsession_id' => $acadsession_id,
+                'user.sig_id' => $sig_id
+            ));
         $query = $this->db->get();
         return $query->result_array();
     }

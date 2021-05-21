@@ -112,8 +112,9 @@
                             <?php if ($usertype == 'mentor') : ?>
                             <a class="dropdown-item" href="<?= site_url('academicplan/mentor') ?>">Academic Plan</a>
                             <a class="dropdown-item" href="<?= site_url('enroll') ?>">Enroll Students</a>
-                            <a class="dropdown-item" href="<?= site_url('scoreplan') ?>">Scoring Plan</a>
                             <a class="dropdown-item" href="<?= site_url('score') ?>">Student's Score</a>
+                            <a class="dropdown-item" href="<?= site_url('scoreplan') ?>">Score Plan</a>
+                            <a class="dropdown-item" href="<?= site_url('scoreboard') ?>">Score Board</a>
                             <?php else : ?>
                             <a class="dropdown-item" href="<?= site_url('academicplan/student') ?>">Academic Plan</a>
                             <?php endif ?>

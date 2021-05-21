@@ -51,7 +51,9 @@ $route['mentor/update'] = 'mentor/update';
 $route['mentor/(:any)'] = 'mentor/view/$1';
 
 $route['score'] = 'score/index';
+$route['score/download'] = 'score/download';
 $route['scoreplan'] = 'score/scoreplan';
+$route['scoreboard'] = 'score/scoreboard';
 $route['scoreplan/(:any)'] = 'score/scoreplan/$1';
 $route['score/addscore'] = 'score/addscore';
 
