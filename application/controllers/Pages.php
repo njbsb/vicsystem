@@ -44,6 +44,7 @@ class Pages extends CI_Controller
             }
             $data = array(
                 'user_name' => $user['name'],
+                'user' => $user,
                 'profileComplete' => $profileComplete,
                 'activesession' => $this->academic_model->get_activeacademicsession(),
                 'birthdaymembers' => $this->user_model->get_birthdaymembers($user['sig_id']),
@@ -59,6 +60,20 @@ class Pages extends CI_Controller
             $data['title'] = ucfirst($page);
             $this->load->view('templates/header');
             $this->load->view('pages/' . $page, $data);
+        }
+    }
+
+    public function template()
+    {
+        if ($this->session->userdata('logged_in') and $this->session->userdata('user_type') != 'student') {
+            $data = array(
+                'title' => 'File Upload Template',
+                'templates' => $this->file_model->get_template()
+            );
+            $this->load->view('templates/header');
+            $this->load->view('pages/template', $data);
+        } else {
+            redirect('home');
         }
     }
 }

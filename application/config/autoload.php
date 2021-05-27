@@ -137,6 +137,7 @@ $autoload['model'] = array(
     'mentor_model',
     'activity_model',
     'academic_model',
+    'file_model',
     'sig_model',
     'role_model',
     'program_model',
