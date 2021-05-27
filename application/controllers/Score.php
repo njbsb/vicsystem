@@ -178,7 +178,7 @@ class Score extends CI_Controller
         foreach ($students as $i => $student) {
             $academicbadge = $this->scoretable->calculate_academicbadge($student['id']);
             $activitybadge = $this->scoretable->calculate_activitybadge($student['id']);
-            $externalbadge = 0;
+            $externalbadge = $this->scoretable->calculate_externalbadge($student['id']);
             $students[$i]['academicbadge'] = $academicbadge;
             $students[$i]['activitybadge'] = $activitybadge;
             $students[$i]['externalbadge'] = $externalbadge;

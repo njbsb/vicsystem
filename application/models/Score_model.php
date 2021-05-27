@@ -140,6 +140,15 @@ class Score_model extends CI_Model
         return $query->result_array();
     }
 
+    public function get_student_scoreexternal($student_id)
+    {
+        $this->db->select('sc.*')
+            ->from('score_external as sc')
+            ->where('sc.student_id', $student_id);
+        $query =  $this->db->get();
+        return $query->result_array();
+    }
+
     public function get_guideposition()
     {
         $this->db->select("sc.*, concat(sc.score, ' - ', sc.description) as concat")

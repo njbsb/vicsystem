@@ -83,6 +83,8 @@ class Scoretable
 
     public function calculate_externalbadge($student_id)
     {
+        $score_externals = $this->CI->score_model->get_student_scoreexternal($student_id);
+        return count($score_externals);
     }
 
     public function calculate_activityscore($student_id, $acadsession_id)
