@@ -58,7 +58,7 @@
         &nbsp;
         <?php $disabled = ($this->session->userdata('user_type') == 'mentor') ? '' : 'disabled' ?>
         <button data-toggle="modal" data-target="#confirmdelete" class="btn btn-outline-danger" <?= $disabled ?>>
-            Delete activity <i class="fa fa-trash"></i>
+            Delete <i class="fa fa-trash"></i>
         </button>
         <?php endif ?>
 

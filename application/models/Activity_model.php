@@ -48,6 +48,42 @@ class Activity_model extends CI_Model
         }
     }
 
+    public function get_externalactivity($slug = FALSE)
+    {
+        $this->db->select('ext.*, level.level, mentor.name as mentorname')
+            ->from('activityexternal as ext')
+            ->join('academicsession as acs', 'acs.id = ext.acadsession_id', 'left')
+            ->join('activitylevel as level', 'level.id = ext.activitylevel_id', 'left')
+            ->join('user as mentor', 'mentor.id = ext.mentor_id')
+            ->order_by('id', 'desc');
+        if ($slug === FALSE) {
+            $query = $this->db->get();
+            return $query->result_array();
+        } else {
+            $this->db->where(array('ext.slug' => $slug));
+            // ->join('academicsession as acs', 'acs.id = ext.acadsession_id', 'left')
+            // ->join('activitylevel as level', 'level.id = ext.activitylevel_id', 'left');
+            $query = $this->db->get();
+            return $query->row_array();
+        }
+    }
+
+    public function get_externalactivity_participants($activity_id)
+    {
+        $this->db->select('sext.*, student.id, student.name, student.userphoto')
+            ->from('score_external as sext')
+            ->where(array('activityexternal_id' => $activity_id))
+            ->join('user as student', 'student.id = sext.student_id');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function get_activitylevels()
+    {
+        return $this->db->get('activitylevel')
+            ->result_array();
+    }
+
     public function get_upcomingactivities($sig_id, $acadsession_id)
     {
         $this->db->select('*')
@@ -98,6 +134,11 @@ class Activity_model extends CI_Model
         $this->db->insert('activity', $activity_data);
         $insert_id = $this->db->insert_id();
         return $insert_id;
+    }
+
+    public function create_externalactivity($activitydata)
+    {
+        return $this->db->insert('activityexternal', $activitydata);
     }
 
     public function delete_activity($activity_id)

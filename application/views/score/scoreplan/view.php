@@ -47,7 +47,7 @@
         </tr>
     </tbody>
     <tfoot>
-        <tr class="table-light">
+        <tr class="table-dark">
             <th>Total</th>
             <td></td>
             <th><?= $totalpercent + 15 ?> %</th>

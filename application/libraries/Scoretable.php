@@ -14,11 +14,6 @@ class Scoretable
         $acadplans = array();
         for ($i = 0; $i < count($academicplans); $i++) {
             $acp = $academicplans[$i];
-            // $citrarow = $this->CI->citra_model->get_students_registeredcitra($acp['student_id'], $acp['acadsession_id']);
-            // $citrastring = '';
-            // foreach ($citrarow as $cr) {
-            //     $citrastring .= $cr['citra_code'] . ' ';
-            // }
 
             if (floatval($acp['gpa_achieved']) == 0 or floatval($acp['gpa_achieved']) == null) {
                 $difference = 'No data';
@@ -84,6 +79,10 @@ class Scoretable
             }
         }
         return $badgecount;
+    }
+
+    public function calculate_externalbadge($student_id)
+    {
     }
 
     public function calculate_activityscore($student_id, $acadsession_id)

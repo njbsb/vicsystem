@@ -144,6 +144,47 @@ class Activity extends CI_Controller
         $this->load->view('activity/edit', $data);
     }
 
+    public function external()
+    {
+        if (!$this->session->userdata('username')) {
+            redirect(site_url());
+        }
+        $externals = $this->activity_model->get_externalactivity();
+        foreach ($externals as $i => $external) {
+            $externals[$i]['participants'] = $this->activity_model->get_externalactivity_participants($external['id']);
+        }
+        $data = array(
+            'externals' => $externals,
+            'academicsession' => $this->academic_model->get_activeacademicsession(),
+            'mentors' => $this->mentor_model->get_mentor(),
+            'activitylevels' => $this->activity_model->get_activitylevels()
+        );
+        $this->load->view('templates/header');
+        $this->load->view('activity/external', $data);
+    }
+
+    public function create_external()
+    {
+        $this->form_validation->set_rules('title', 'Activity Title', 'required');
+        $this->form_validation->set_rules('description', 'Description', 'required');
+        $this->form_validation->set_rules('acadsession_id', 'academic session', 'required');
+        if ($this->form_validation->run() == FALSE) {
+        } else {
+            $slug = url_title($this->input->post('title'));
+            $data = array(
+                'title' => $this->input->post('title'),
+                'description' => $this->input->post('description'),
+                'acadsession_id' => $this->input->post('acadsession_id'),
+                'slug' => $slug,
+                'date' => $this->input->post('date'),
+                'mentor_id' => $this->input->post('mentor_id'),
+                'activitylevel_id' => $this->input->post('activitylevel_id')
+            );
+            $this->activity_model->create_externalactivity($data);
+        }
+        redirect('activity/external');
+    }
+
     public function update()
     {
         $id = $this->input->post('id');

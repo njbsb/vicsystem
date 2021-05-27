@@ -76,7 +76,9 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <img class="" style="object-fit:cover;" height="40px" width="40px" src="<?= base_url('assets/images/logo.png') ?>" alt="">
+            <?php if ($this->session->userdata('logged_in')) : ?>
             <a class="navbar-brand" href="<?= site_url() ?>">VIC System</a>
+            <?php endif ?>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -89,15 +91,13 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">SIG</a>
                         <div class="dropdown-menu">
-
                             <a class="dropdown-item" href="<?= site_url('organization') ?>">Organization</a>
-
                             <?php if ($usertype == 'student') : ?>
                             <a class="dropdown-item" href="<?= site_url('mentor') ?>">Mentors</a>
                             <?php else : ?>
                             <a class="dropdown-item" href="<?= site_url('student') ?>">Students</a>
+                            <a class="dropdown-item" href="<?= site_url('activity/external') ?>">External Activity</a>
                             <?php endif ?>
-
                             <a class="dropdown-item" href="<?= site_url('activity') ?>">Activities</a>
                         </div>
                     </li>

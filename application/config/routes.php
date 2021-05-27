@@ -14,6 +14,8 @@ $route['unenroll'] = 'academic/unenroll';
 $route['activity'] = 'activity/index';
 $route['activity/update'] = 'activity/update';
 $route['activity/create'] = 'activity/create';
+$route['activity/create_external'] = 'activity/create_external';
+$route['activity/external'] = 'activity/external';
 $route['activity/(:any)'] = 'activity/view/$1';
 $route['activity/committee/(:any)'] = 'activity/committee/$1';
 

@@ -192,8 +192,6 @@ class Score extends CI_Controller
             $students[$i]['workshopscore'] = $workshopscore;
             $students[$i]['componentscore'] = $componentscore;
             $students[$i]['totalscore'] = $activityscore + $workshopscore + $componentscore;
-
-            # external badge idk also
         }
         $data = array(
             'thisacademicsession' => $academicsession,
@@ -334,12 +332,10 @@ class Score extends CI_Controller
             $sheet->setCellValue('D' . $i + 1, $student['activitybadge']);
             $sheet->setCellValue('E' . $i + 1, $student['externalbadge']);
             $sheet->setCellValue('F' . $i + 1, $student['totalbadge']);
-            // $sheet->setCellValue('E' . $i + 1, $student['externalbadge']);
         }
 
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
-        // redirect(site_url('scoreboard'));
     }
 
     public function download_scoreboard()
@@ -347,14 +343,6 @@ class Score extends CI_Controller
         $academicsession = $this->academic_model->get_activeacademicsession();
         $students = $this->student_model->get_student();
         foreach ($students as $i => $student) {
-            $academicbadge = $this->scoretable->calculate_academicbadge($student['id']);
-            $activitybadge = $this->scoretable->calculate_activitybadge($student['id']);
-            $externalbadge = 0;
-            $students[$i]['academicbadge'] = $academicbadge;
-            $students[$i]['activitybadge'] = $activitybadge;
-            $students[$i]['externalbadge'] = $externalbadge;
-            $students[$i]['totalbadge'] = $academicbadge + $activitybadge + $externalbadge;
-
             $activityscore = $this->scoretable->calculate_activityscore($student['id'], $academicsession['id']);
             $workshopscore = $this->scoretable->calculate_workshopscore($student['id'], $academicsession['id']);
             $componentscore = $this->scoretable->calculate_componentscore($student['id'], $academicsession['id']);
@@ -363,7 +351,6 @@ class Score extends CI_Controller
             $students[$i]['workshopscore'] = $workshopscore;
             $students[$i]['componentscore'] = $componentscore;
             $students[$i]['totalscore'] = $activityscore + $workshopscore + $componentscore;
-            # external badge idk also
         }
 
         header('Content-Type: application/vnd.ms-excel');
@@ -374,19 +361,18 @@ class Score extends CI_Controller
 
         $sheet->setCellValue('A1', 'Matric');
         $sheet->setCellValue('B1', 'Name');
-        $sheet->setCellValue('C1', 'Academic Badge');
-        $sheet->setCellValue('D1', 'Activity Badge');
-        $sheet->setCellValue('E1', 'External Badge');
-        $sheet->setCellValue('F1', 'Total Badge');
+        $sheet->setCellValue('C1', 'Academic Score');
+        $sheet->setCellValue('D1', 'Activity Score');
+        $sheet->setCellValue('E1', 'External Score');
+        $sheet->setCellValue('F1', 'Total Score (55%)');
         foreach ($students as $i => $student) {
             $i += 1;
             $sheet->setCellValue('A' . $i + 1, $student['id']);
             $sheet->setCellValue('B' . $i + 1, $student['name']);
-            $sheet->setCellValue('C' . $i + 1, $student['academicbadge']);
-            $sheet->setCellValue('D' . $i + 1, $student['activitybadge']);
-            $sheet->setCellValue('E' . $i + 1, $student['externalbadge']);
-            $sheet->setCellValue('F' . $i + 1, $student['totalbadge']);
-            // $sheet->setCellValue('E' . $i + 1, $student['externalbadge']);
+            $sheet->setCellValue('C' . $i + 1, $student['activityscore']);
+            $sheet->setCellValue('D' . $i + 1, $student['workshopscore']);
+            $sheet->setCellValue('E' . $i + 1, $student['componentscore']);
+            $sheet->setCellValue('F' . $i + 1, $student['totalscore']);
         }
 
         $writer = new Xlsx($spreadsheet);

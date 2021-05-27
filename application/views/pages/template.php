@@ -6,5 +6,5 @@
 <h4><?= $title ?></h4>
 
 <?php foreach ($templates as $template) : ?>
-<li><a href=""><?= $template['name'] ?></a></li>
+<li><a href="<?= $template['path'] ?>" target="_blank"><?= $template['name'] ?></a></li>
 <?php endforeach ?>

@@ -16,8 +16,6 @@
 
 <div class="row">
     <div class="col-md-3">
-        <!-- <h3 class="text-center">Profile</h3> -->
-        <!-- <br> -->
         <div class="card" style="border-radius: 12px">
             <div class="card-body">
                 <div class="d-flex flex-column align-items-center text-center">
@@ -40,10 +38,15 @@
         <p class="text-center text-warning"><b>Attention</b></p>
         <p>We have detected that you have not completed your <?= $this->session->userdata('user_type') ?> profile. Go to Profile -> Edit to update.</p>
         <?php endif ?>
+        <br>
+        <div class="card" style="border-radius: 12px">
+            <div class="card-body text-center">
+                <p>Link to VIC SharePoint site</p>
+                <a class="btn btn-success" target="_blank" href="https://ukmedumy.sharepoint.com/sites/vicftsm">SharePoint</a>
+            </div>
+        </div>
     </div>
     <div class="col-md-9">
-        <!-- <h3>Information Analytics</h3>
-        <br> -->
         <div class="jumbotron bg-muted" style="border-radius: 12px">
             <div class="row">
                 <div class="col-sm-6">
@@ -54,11 +57,6 @@
                     <label><b>VIC Intake by Year</b></label>
                     <canvas id="barChart" responsive="true"></canvas>
                 </div>
-                <!-- <div class="col-sm-6">
-            <div id="apexchart">
-
-            </div>
-        </div> -->
             </div>
         </div>
 
@@ -77,6 +75,10 @@
                         <p class="lead">
                             <a class="btn btn-primary btn-sm" href="#" role="button">Send a wish!</a>
                         </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
                     </div>
                 </div>
             </div>
