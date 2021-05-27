@@ -11,7 +11,7 @@
         <h3>Academic Session</h3>
     </div>
     <div class="col-4">
-        <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacademicsession" style="float: right;">Add Academic Session</button>
+        <button class="btn btn-outline-info margin" data-toggle="modal" data-target="#addacademicsession" style="float: right;">Add Academic Session</button>
     </div>
 </div>
 <table id="acs_table" class="table">
@@ -53,7 +53,7 @@
         <h3>Academic Year</h3>
     </div>
     <div class="col-4">
-        <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacadyear" style="float: right;">Add Academic Year</button>
+        <button class="btn btn-outline-info margin" data-toggle="modal" data-target="#addacadyear" style="float: right;">Add Academic Year</button>
     </div>
 </div>
 <table id="acy_table" class="table">

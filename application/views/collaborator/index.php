@@ -26,4 +26,6 @@
         <p>No collaborators data found.</p>
         <?php endif ?>
     </div>
+
 </div>
+<small>This feature has not been made available yet.</small>

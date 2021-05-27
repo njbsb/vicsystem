@@ -30,6 +30,8 @@ $route['committee/(:any)'] = 'committee/view/$1';
 $route['collaborator'] = 'collaborator/index';
 
 $route['user'] = 'user/index';
+$route['user/download'] = 'user/download';
+$route['user/upload'] = 'user/upload';
 $route['register'] = 'user/register';
 $route['login'] = 'user/login';
 $route['logout'] = 'user/logout';
@@ -51,7 +53,8 @@ $route['mentor/update'] = 'mentor/update';
 $route['mentor/(:any)'] = 'mentor/view/$1';
 
 $route['score'] = 'score/index';
-$route['score/download'] = 'score/download';
+$route['score/download_badgeboard'] = 'score/download_badgeboard';
+$route['score/download_scoreboard'] = 'score/download_scoreboard';
 $route['scoreplan'] = 'score/scoreplan';
 $route['scoreboard'] = 'score/scoreboard';
 $route['scoreplan/(:any)'] = 'score/scoreplan/$1';
@@ -67,6 +70,8 @@ $route['score/edit_scorelevel'] = 'score/edit_scorelevel';
 
 $route['score/(:any)'] = 'score/viewacs/$1';
 $route['score/(:any)/(:any)'] = 'score/view/$1/$2';
+
+$route['template'] = 'pages/template';
 
 $route['default_controller'] = 'pages/view';
 $route['(:any)'] = 'pages/view/$1';

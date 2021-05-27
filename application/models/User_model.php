@@ -27,7 +27,7 @@ class User_model extends CI_Model
     {
         if ($user_id === FALSE and $sig_id === FALSE) {
             # return array of users
-            $this->db->select('id, name, userstatus, usertype, sig_id')
+            $this->db->select('id, name, userstatus, usertype, sig_id, userphoto')
                 ->from('user as user');
             $query = $this->db->get();
             return $query->result_array();
@@ -45,7 +45,7 @@ class User_model extends CI_Model
         }
         if ($sig_id) {
             # returns user with specific sig
-            $this->db->select('id, name, userstatus, usertype')
+            $this->db->select('id, name, userstatus, usertype, userphoto')
                 ->from('user')
                 ->where('sig_id', $sig_id);
             $query = $this->db->get();
@@ -191,5 +191,22 @@ class User_model extends CI_Model
         } else {
             return true;
         }
+    }
+
+    public function import_user($data)
+    {
+        $rowaffectedcount = 0;
+        foreach ($data as $d) {
+            $query = $this->db->get_where('user', array(
+                'id' => $d['id']
+            ));
+            if ($query->num_rows() < 1) {
+                $this->db->insert('user', $d);
+                if ($this->db->affected_rows() > 0) {
+                    $rowaffectedcount += 1;
+                }
+            }
+        }
+        return $rowaffectedcount;
     }
 }

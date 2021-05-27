@@ -53,15 +53,16 @@
             <th>GPA Target</th>
             <th>GPA Achieved</th>
             <th>Status</th>
+            <th>Increment</th>
         </tr>
     </thead>
     <tbody>
         <?php if ($academicplans) : ?>
         <?php foreach ($academicplans as $acp) : ?>
-        <tr>
+        <!-- <tr>
             <td><?= $acp['student_id'] ?></td>
             <td><?= $acp['name'] ?></td>
-            <!-- <td><?= $acp['acadyear'] . ' Semester ' . $acp['semester_id'] ?></td> -->
+            <td><?= $acp['acadyear'] . ' Semester ' . $acp['semester_id'] ?></td>
             <td><?= $acp['gpa_target'] ?></td>
             <td><?= $acp['gpa_achieved'] ?></td>
 
@@ -74,6 +75,15 @@
                 Not Pass
             </td>
             <?php endif ?>
+        </tr> -->
+        <?php $resultclass = ($acp['gpa_achieved'] < 2.3) ? 'text-danger' : '' ?>
+        <tr>
+            <td><?= $acp['student_id'] ?></td>
+            <td><?= $acp['name'] ?></td>
+            <td><?= $acp['gpa_target'] ?></td>
+            <td class="<?= $resultclass ?>"><?= $acp['gpa_achieved'] ?></td>
+            <td class="<?= $acp['textclass'] ?>"><?= $acp['status'] ?></td>
+            <td class="<?= $acp['textclass'] ?>"><?= $acp['difference'] ?></td>
         </tr>
         <?php endforeach ?>
         <?php else : ?>

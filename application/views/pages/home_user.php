@@ -1,94 +1,124 @@
 <ol class="breadcrumb">
     <li class="breadcrumb-item active">Home</li>
 </ol>
-<div class="jumbotron bg-white" style="padding-bottom: 0px;">
+
+<div class="jumbotron bg-white" style="padding-bottom: 0px; padding-top: 1rem;">
     <h5 class="text-right text-muted"><b>Today is <?= date("jS F Y (l)") ?></b></h5>
     <h1 class="display-3">Welcome, <?= $user_name ?>!</h1>
     <p class="lead">This is a website to manage VIC Information and Activities</p>
-    <?php if (!$profileComplete) : ?>
+    <!-- <?php if (!$profileComplete) : ?>
     <p>We have detected that you have not completed your profile. Update your profile information <a href="<?= base_url("/profile/update") ?>">here</a></p>
-    <?php endif ?>
+    <?php endif ?> -->
     <hr class="my-4">
     <p class="lead">
     </p>
 </div>
-<h3 class="text-center">Information Analytics</h3>
-<br>
-<div class="jumbotron bg-muted" style="border-radius: 16px">
-    <div class="row">
-        <div class="col-sm-6">
-            <label for=""><b>VIC Member Count: <?= $total_count ?></b></label>
-            <canvas responsive="true" id="pieChart"></canvas>
+
+<div class="row">
+    <div class="col-md-3">
+        <!-- <h3 class="text-center">Profile</h3> -->
+        <!-- <br> -->
+        <div class="card" style="border-radius: 12px">
+            <div class="card-body">
+                <div class="d-flex flex-column align-items-center text-center">
+                    <img class="rounded-circle" style="object-fit:cover;" src="<?= $user['userphoto'] ?>" alt="" width="150" height="150">
+                    <div class="mt-3">
+                        <!-- <h5 class="card-title">Hello</h5>
+                        <p class="card-subtitle">World</p> -->
+                        <h4><?= $this->session->userdata('username') ?></h4>
+                        <p class="text-secondary mb-1"><?= $user_name ?></p>
+                        <p class="text-muted font-size-sm">Video Innovation Club</p>
+                        <a class="btn btn-primary" href="<?= site_url('profile') ?>">Profile</a>
+                        <a class="btn btn-outline-primary" href="<?= site_url('profile/update') ?>">Edit</a>
+                    </div>
+
+                </div>
+            </div>
         </div>
-        <div class="col-sm-6">
-            <label><b>VIC Intake by Year</b></label>
-            <canvas id="barChart" responsive="true"></canvas>
-        </div>
-        <!-- <div class="col-sm-6">
+        <?php if (!$profileComplete) : ?>
+        <br>
+        <p class="text-center text-warning"><b>Attention</b></p>
+        <p>We have detected that you have not completed your <?= $this->session->userdata('user_type') ?> profile. Go to Profile -> Edit to update.</p>
+        <?php endif ?>
+    </div>
+    <div class="col-md-9">
+        <!-- <h3>Information Analytics</h3>
+        <br> -->
+        <div class="jumbotron bg-muted" style="border-radius: 12px">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for=""><b>VIC Member Count: <?= $total_count ?></b></label>
+                    <canvas responsive="true" id="pieChart"></canvas>
+                </div>
+                <div class="col-sm-6">
+                    <label><b>VIC Intake by Year</b></label>
+                    <canvas id="barChart" responsive="true"></canvas>
+                </div>
+                <!-- <div class="col-sm-6">
             <div id="apexchart">
 
             </div>
         </div> -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="jumbotron jumbotron-fluid" style="border-radius: 12px; padding-top: 20px; padding-bottom: 20px;">
+                    <div class="container">
+                        <h5 class="text-center text-primary"><b>&#127881; &#127882; Birthdays &#127874; &#127873;</b></h5>
+                        <hr class="my-2">
+                        <p>Celebrating our <b><?= date("F") ?></b> babies! &#127874; &#127873;</p>
+                        <p>
+                            <?php foreach ($birthdaymembers as $index => $member) : ?>
+                            <?= $index + 1 ?>. <?= $member['name'] ?> (<?= date_format(date_create($member['dob']), 'j/n') ?>)<br>
+                            <?php endforeach ?>
+                        </p>
+                        <p class="lead">
+                            <a class="btn btn-primary btn-sm" href="#" role="button">Send a wish!</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="jumbotron jumbotron-fluid" style="border-radius: 12px; padding-top: 20px; padding-bottom: 20px;">
+                    <div class="container">
+                        <h5 class="text-left text-primary"><b>Current Academic Session: <?= $activesession['academicsession'] ?></b></h5>
+                        <hr class="my-2">
+                        <p>Upcoming activities this semester:</p>
+                        <table class="table table-hover">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Activity</th>
+                                    <th>Date</th>
+                                    <th>Days left</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($upcomingactivities as $key => $activity) : ?>
+                                <tr>
+                                    <td><?= $key + 1 ?></td>
+                                    <td><?= $activity['title'] ?></td>
+                                    <td><?= date_format(date_create($activity['datetime_start']), 'j-n-Y') ?></td>
+                                    <td><?= $activity['diff'] ?></td>
+                                </tr>
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
+                        <br>
+                        <p class="lead">
+                            <a class="btn btn-primary btn-md btn-hover" href="activity" role="button">Go to activities</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="jumbotron jumbotron-fluid" style="border-radius: 12px; padding-top: 20px; padding-bottom: 20px;">
-            <div class="container">
-                <h5 class="text-center text-primary"><b>&#127881; &#127882; Member's Birthday &#127874; &#127873;</b></h5>
-                <hr class="my-2">
-                <p>Celebrating our <b><?= date("F") ?></b> babies! &#127874; &#127873;</p>
-                <p>
-                    <?php foreach ($birthdaymembers as $index => $member) : ?>
-                    <?= $index + 1 ?>. <?= $member['name'] ?> (<?= date_format(date_create($member['dob']), 'j/n') ?>)<br>
-                    <?php endforeach ?>
-                </p>
-                <p class="lead">
-                    <a class="btn btn-primary btn-sm" href="#" role="button">Send a wish!</a>
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-8">
-        <div class="jumbotron jumbotron-fluid" style="border-radius: 12px; padding-top: 20px; padding-bottom: 20px;">
-            <div class="container">
-                <h5 class="text-left text-primary"><b>Current Academic Session: <?= $activesession['academicsession'] ?></b></h5>
-                <hr class="my-2">
-                <p>Upcoming activities this semester:</p>
-                <!-- <p>
-                    <?php foreach ($upcomingactivities as $key => $activity) : ?>
-                    <?= $key + 1 ?>. <?= $activity['title'] ?> (<?= date_format(date_create($activity['datetime_start']), 'j/n') ?>) <br>
-                    <?php endforeach ?>
-                </p> -->
-                <table class="table table-hover">
-                    <thead class="table-primary">
-                        <tr>
-                            <th>No</th>
-                            <th>Activity</th>
-                            <th>Date</th>
-                            <th>Days left</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($upcomingactivities as $key => $activity) : ?>
-                        <tr>
-                            <td><?= $key + 1 ?></td>
-                            <td><?= $activity['title'] ?></td>
-                            <td><?= date_format(date_create($activity['datetime_start']), 'j-n-Y') ?></td>
-                            <td><?= $activity['diff'] ?></td>
-                        </tr>
-                        <?php endforeach ?>
-                    </tbody>
-                </table>
-                <br>
-                <p class="lead">
-                    <a class="btn btn-primary btn-md btn-hover" href="activity" role="button">Go to activities</a>
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
+
+
 
 <script>
 var pieC = document.getElementById('pieChart').getContext('2d');

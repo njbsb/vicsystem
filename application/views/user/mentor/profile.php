@@ -1,10 +1,12 @@
-<h2 class="text-center"><?php echo $title; ?></h2>
-
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item active">Profile</li>
+</ol>
 <div class="container-fluid text-center">
     <div class="row">
         <div class="col-lg-4">
             <div class="card border-dark mb-3" style="max-width: 20rem;">
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/default.jpg') ?>">
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= $mentor['userphoto'] ?>">
                 <div class="card-footer text-muted">
                     <?= $mentor['id'] ?>
                 </div>
@@ -12,11 +14,22 @@
         </div>
         <div class="col-lg-8 text-left">
             <h3><b><?= $mentor['name'] ?></b></h3>
-            <h6><b>Email:</b> <a href="mailto:<?= $mentor['email'] ?>"><?= $mentor['email'] ?></a></h6>
-            <h6><b>Position:</b> <?= $mentor['position'] ?></h6>
-            <h6><b>Role:</b> <?= $mentor['role'] ?></h6>
-            <h6><b>Room Num:</b> <?= $mentor['roomnum'] ?></h6>
-
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6><b>Email</b></h6>
+                    <h6><b>Position:</b></h6>
+                    <h6><b>Role:</b></h6>
+                    <h6><b>Room Num:</b></h6>
+                    <h6><b>Phone Num:</b></h6>
+                </div>
+                <div class="col-sm-9">
+                    <h6><a href="mailto:<?= $mentor['email'] ?>"><?= $mentor['email'] ?></a></h6>
+                    <h6><?= $mentor['position'] ?></h6>
+                    <h6><?= $mentor['role'] ?></h6>
+                    <h6><?= $mentor['roomnum'] ?></h6>
+                    <h6><?= $mentor['phonenum'] ?></h6>
+                </div>
+            </div>
         </div>
     </div>
     <hr>

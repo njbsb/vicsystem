@@ -4,12 +4,11 @@
     <li class="breadcrumb-item active"><?= $student['id'] ?></li>
 </ol>
 
-<div class="container-fluid ">
+<div class="container-fluid">
     <div class="row text-center">
         <div class="col-lg-4">
             <div class="card border-dark mb-3" style="max-width: 20rem;">
-                <?php $profile_image = 'default.jpg' ?>
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $profile_image) ?>">
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= $student['userphoto'] ?>">
                 <div class="card-footer text-muted">
                     Joined <?= $student['sigcode'] ?>: <?= $student['yearjoined'] ?>
                 </div>
@@ -17,13 +16,39 @@
         </div>
         <div class="col-lg-8 text-left">
             <h3><b><?= $student['name'] ?></b></h3>
-            <h6><b>Matric:</b> <?= $student['id'] ?></h6>
-            <h6><b>Program:</b> <?= $student['program_name'] ?></h6>
-            <h6><b>Year:</b> <?= $student['year'] ?></h6>
-            <h6><b>Phone Num:</b> <?= $student['phonenum'] ?></h6>
-            <h6><b>Email:</b> <a href="mailto:<?= $student['email'] ?>"><?= $student['email'] ?></a></h6>
-            <h6><b>Mentor:</b> <?= $student['mentor_name'] ?></h6>
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6><b>Matric:</b></h6>
+                    <h6><b>Program:</b></h6>
+                    <h6><b>Year:</b></h6>
+                    <h6><b>Phone Num:</b></h6>
+                    <h6><b>Email:</b></h6>
+                    <h6><b>Mentor:</b></h6>
+                </div>
+                <div class="col-sm-9">
+                    <h6><?= $student['id'] ?></h6>
+                    <h6><?= $student['program_name'] ?></h6>
+                    <h6><?= $student['year'] ?></h6>
+                    <h6><?= $student['phonenum'] ?></h6>
+                    <h6><a href="mailto:<?= $student['email'] ?>"><?= $student['email'] ?></a></h6>
+                    <h6><?= $student['mentor_name'] ?></h6>
+                </div>
+            </div>
             <hr>
+            <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6><b>Parent Contact 1</b></h6>
+                    <h6><b>Parent Contact 2</b></h6>
+                    <h6><b>Address</b></h6>
+                </div>
+                <div class="col-sm-9">
+                    <h6><?= $student['parent_num1'] ?></h6>
+                    <h6><?= $student['parent_num2'] ?></h6>
+                    <h6><?= $student['address'] ?></h6>
+                </div>
+            </div>
+            <?php endif ?>
         </div>
         <?php if (!$this->session->userdata('user_type') == 'mentor') : ?>
         <div class="col-lg-4">
@@ -51,7 +76,7 @@
         </thead>
         <tbody>
             <?php foreach ($activity_roles as $actrole) : ?>
-            <?php $desc = (isset($actrole['description'])) ? ' (' . $actrole['description'] . ')' : '' ?>
+            <?php $desc = (isset($actrole['description'])) ? sprintf(' (%s)', $actrole['description']) : '' ?>
             <tr class="table-light">
                 <td><?= $actrole['acadyear'] . ' Semester ' . $actrole['semester'] ?></td>
                 <td><?= $actrole['activity_name'] ?></td>
@@ -61,7 +86,7 @@
         </tbody>
     </table>
     <?php else : ?>
-    <p>No data of roles in activity found</p>
+    <p class="text-center">No data found</p>
     <?php endif ?>
     <hr>
     <h4 class="text-secondary text-center"><b>Organization Level</b></h4>
@@ -76,7 +101,7 @@
         </thead>
         <tbody>
             <?php foreach ($org_roles as $orgrole) : ?>
-            <?php $desc = (isset($orgrole['description']) or $orgrole['description'] != NULL or $orgrole['description'] != '') ? sprintf(' (%s)', $orgrole['description']) : '' ?>
+            <?php $desc = (isset($orgrole['description']) or $orgrole['description']) ? sprintf(' (%s)', $orgrole['description']) : '' ?>
             <tr class="table-light">
                 <td><?= $orgrole['acadyear'] ?></td>
                 <td><?= $orgrole['role'] . $desc ?></td>
@@ -84,18 +109,8 @@
             <?php endforeach ?>
         </tbody>
     </table>
-
-    <!-- <div class="col-md-4">
-            <div class="card text-white bg-dark mb-3">
-                <div class="card-header text-warning"></div>
-                <div class="card-body">
-                    <h4 class="card-title"></h4>
-                    <p class="card-text"><?= $orgrole['description'] ?></p>
-                </div>
-            </div>
-        </div> -->
     <?php else : ?>
-    <p>No data of roles in SIG found</p>
+    <p class="text-center">No data found</p>
     <?php endif ?>
 </div>
 

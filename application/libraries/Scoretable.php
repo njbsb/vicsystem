@@ -62,7 +62,10 @@ class Scoretable
             $target = $plan['gpa_target'];
             $achieved = $plan['gpa_achieved'];
             $difference = $achieved - $target;
-            if ($difference > 0 or $achieved >= 3.67) {
+            if ($difference > 0) {
+                $badgecount += 1;
+            }
+            if ($achieved >= 3.67) {
                 $badgecount += 1;
             }
         }
@@ -74,11 +77,58 @@ class Scoretable
         $badgecount = 0;
         $activityscores = $this->CI->score_model->get_scoreplan_scorelevel($student_id);
         foreach ($activityscores as $score) {
+            // if($score[''])
             $sum = array_sum($score);
             if ($sum >= 18) {
                 $badgecount += 1;
             }
         }
         return $badgecount;
+    }
+
+    public function calculate_activityscore($student_id, $acadsession_id)
+    {
+        $scoreplans = $this->CI->score_model->get_scoreplan($acadsession_id, 'A');
+        $activityscore = 0; # percent
+        $scoreleveltotal = $this->CI->score_model->get_scoreleveltotal();
+        foreach ($scoreplans as $i => $scoreplan) {
+            $percentweightage = $scoreplan['percentweightage'];
+            $scorelevel = $this->CI->score_model->get_scoreplan_scorelevel($student_id, $scoreplan['id']);
+            # $scorelevel already specific to one score plan
+
+            $sum = (isset($scorelevel)) ? array_sum($scorelevel) : 0;
+            $score = ($sum / $scoreleveltotal) * $percentweightage;
+            $activityscore += $score;
+        }
+        return $activityscore;
+        # first to get scoreplans of $acadsession_id, filter by activitycategory_id
+        # foreach scoreplans, get corresponding score_level
+    }
+
+    public function calculate_workshopscore($student_id, $acadsession_id)
+    {
+        $scoreplans = $this->CI->score_model->get_scoreplan($acadsession_id, 'B');
+        $activityscore = 0; # percent
+        $scoreleveltotal = $this->CI->score_model->get_scoreleveltotal();
+        foreach ($scoreplans as $i => $scoreplan) {
+            $percentweightage = $scoreplan['percentweightage'];
+            $scorelevel = $this->CI->score_model->get_scoreplan_scorelevel($student_id, $scoreplan['id']);
+            # $scorelevel already specific to one score plan
+
+            $sum = (isset($scorelevel)) ? array_sum($scorelevel) : 0;
+            $score = ($sum / $scoreleveltotal) * $percentweightage;
+            $activityscore += $score;
+        }
+        return $activityscore;
+    }
+
+    public function calculate_componentscore($student_id, $acadsession_id)
+    {
+        $componentscore = 0;
+        $scorecomps = array('scores' => $this->CI->score_model->get_scoreplan_scorecomp($student_id, $acadsession_id));
+        if ($scorecomps['scores']) {
+            $componentscore += array_sum($scorecomps['scores']);
+        }
+        return $componentscore;
     }
 }

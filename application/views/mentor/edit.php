@@ -5,9 +5,9 @@
         <div class="col-lg-4">
             <div class="card border-dark mb-3" style="max-width: 20rem;">
                 <?php if ($mentor['profile_image']) : ?>
-                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/') . $mentor['profile_image'] ?>">
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/') . $mentor['profile_image'] ?>">
                 <?php else : ?>
-                    <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/') . 'default.jpg' ?>">
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/') . 'default.jpg' ?>">
                 <?php endif ?>
                 <div class="card-footer text-muted">
                     <?= $mentor['id'] ?>
@@ -40,12 +40,10 @@
                     <select name="sig_id" class="form-control form-control-sm">
                         <option value="" selected disabled hidden>Choose mentor</option>
                         <?php foreach ($sigs as $sig) : ?>
-                            <option value="<?= $sig['id'] ?>" <?php
-                                                                if ($sig['id'] == $mentor['sig_id']) {
-                                                                    echo 'selected';
-                                                                } ?>>
-                                <?= $sig['signame'] . ' (' . $sig['code'] . ')'; ?>
-                            </option>
+                        <?php $selected = ($sig['id'] == $mentor['sig_id']) ? 'selected' : '' ?>
+                        <option value="<?= $sig['id'] ?>" <?= $selected ?>>
+                            <?= $sig['signame'] . ' (' . $sig['code'] . ')'; ?>
+                        </option>
                         <?php endforeach ?>
                     </select>
                 </div>
@@ -53,12 +51,10 @@
                     <label>Role</label>
                     <select name="orgrole_id" class="form-control form-control-sm">
                         <?php foreach ($roles as $role) : ?>
-                            <option value="<?= $role['id'] ?>" <?php
-                                                                if ($role['id'] == $mentor['orgrole_id']) {
-                                                                    echo 'selected';
-                                                                } ?>>
-                                <?= $role['rolename'] ?>
-                            </option>
+                        <?php $selected = ($role['id'] == $mentor['orgrole_id']) ? 'selected' : '' ?>
+                        <option value="<?= $role['id'] ?>" <?= $selected ?>>
+                            <?= $role['rolename'] ?>
+                        </option>
                         <?php endforeach ?>
                     </select>
                 </div>

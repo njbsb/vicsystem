@@ -5,6 +5,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
+use SebastianBergmann\Diff\Diff;
 
 class Academic extends CI_Controller
 {
@@ -70,9 +71,26 @@ class Academic extends CI_Controller
             redirect('home');
         }
         $activesession = $this->academic_model->get_activeacademicsession();
+        $academicplans = $this->academic_model->get_academicplan(FALSE, $activesession['id']);
+        foreach ($academicplans as $i => $acp) {
+            $diff = $acp['gpa_achieved'] - $acp['gpa_target'];
+            $academicplans[$i]['difference'] = $diff;
+            if ($diff > 0) {
+                $status = 'Passed';
+                $textclass = 'text-success';
+            } elseif ($diff < 0) {
+                $status = 'Not Pass';
+                $textclass = 'text-warning';
+            } else {
+                $status = 'Constant';
+                $textclass = '';
+            }
+            $academicplans[$i]['status'] = $status;
+            $academicplans[$i]['textclass'] = $textclass;
+        }
         $data = array(
             'title' => "Student's academic plan",
-            'academicplans' => $this->academic_model->get_academicplan(FALSE, $activesession['id']),
+            'academicplans' => $academicplans,
             'academicyears' => $this->academic_model->get_academicyear(),
             'semesters' => $this->semester_model->get_semesters(),
             'activesession' => $activesession
@@ -92,6 +110,22 @@ class Academic extends CI_Controller
             $this->load->view('academic/plan/norecord');
         } else {
             $academicplans = $this->academic_model->get_academicplan(FALSE, $academicsession['id']);
+            foreach ($academicplans as $i => $acp) {
+                $diff = $acp['gpa_achieved'] - $acp['gpa_target'];
+                $academicplans[$i]['difference'] = $diff;
+                if ($diff > 0) {
+                    $status = 'Passed';
+                    $textclass = 'text-success';
+                } elseif ($diff < 0) {
+                    $status = 'Not Pass';
+                    $textclass = 'text-warning';
+                } else {
+                    $status = 'Constant';
+                    $textclass = '';
+                }
+                $academicplans[$i]['status'] = $status;
+                $academicplans[$i]['textclass'] = $textclass;
+            }
             $data = array(
                 'title' => 'Academic Plan Records',
                 'academicyears' => $this->academic_model->get_academicyear(),

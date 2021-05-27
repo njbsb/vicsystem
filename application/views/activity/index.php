@@ -3,7 +3,7 @@
     <li class="breadcrumb-item active">Activity</li>
 </ol>
 
-<h2><?= $sig['name'], "'s ", $title ?></h2>
+<!-- <h2><?= $sig['name'], "'s ", $title ?></h2> -->
 <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
 <br>
 <button class="btn btn-info" data-toggle="modal" data-target="#activity_type">New Activity</button>

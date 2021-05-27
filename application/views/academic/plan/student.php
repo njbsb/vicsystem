@@ -18,8 +18,8 @@
 <?php else : ?>
 <h6>You have registered this session's GPA target!</h6>
 <?php if ($activeacadsession['endofsession'] == true) : ?>
-<small>It's end of academic session. You have to fill actual target</small><br>
-<button class="btn btn-info">Set Result</button>
+<small>It's end of academic session. Your result will soon be updated by your mentor</small><br>
+<!-- <button class="btn btn-info">Set Result</button> -->
 <?php else : ?>
 <small>Long way to go, sir</small>
 <?php endif ?>
@@ -38,8 +38,8 @@
     <tbody>
         <?php if ($academicplans) : ?>
         <?php foreach ($academicplans as $acp) : ?>
-        <?php $sign = (is_int($acp['difference']) && $acp['difference'] > 0) ? '+' : '' ?>
-        <?php $textclass = (is_int($acp['difference']) && $acp['difference'] > 0) ? 'text-success' : 'text-danger' ?>
+        <?php $sign = ($acp['difference'] > 0) ? '+' : '' ?>
+        <?php $textclass = ($acp['difference'] > 0) ? 'text-success' : 'text-danger' ?>
         <tr>
             <td><?= $acp['academicsession'] ?></td>
             <td><?= $acp['gpa_target'] ?></td>

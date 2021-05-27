@@ -22,7 +22,7 @@
         <tr>
             <td><?= $academicsession['academicsession'] ?></td>
             <?php foreach ($scoreplans as $scoreplan) : ?>
-            <?php $badge = (array_sum($scoreplan['scores']) > 18) ? '<i class="fas fa-award"></i>' : '' ?>
+            <?php $badge = (array_sum($scoreplan['scores']) > 18 and $scoreplan['activitycategory_id'] == 'A') ? '<i class="fas fa-award"></i>' : '' ?>
             <td class=""><?= $scoreplan['totalpercent'] ?> % <?= $badge ?></td>
             <?php endforeach ?>
             <td><?= $scorecomps['totalpercent'] ?> % </td>
@@ -41,11 +41,8 @@
                 <div class="form-group">
                     <!-- <h6>Total:</h6> -->
                     <?php $textclass = (array_sum($scoreplan['scores']) > 18) ? 'text-info' : '' ?>
-                    <?php $scpbadge = (array_sum($scoreplan['scores']) > 18) ? '<i class="fas fa-award" style="color: #3498db;"></i>' : '' ?>
+                    <?php $scpbadge = (array_sum($scoreplan['scores']) > 18 and $scoreplan['activitycategory_id'] == 'A') ? '<i class="fas fa-award" style="color: #3498db;"></i>' : '' ?>
                     <h3 class="<?= $textclass ?> text-center"><?= array_sum($scoreplan['scores']) ?>/<?= $scoreleveltotal ?> <?= $scpbadge ?></h3>
-                    <!-- <?php if (array_sum($scoreplan['scores']) > 18) : ?>
-                    <small><?= $student['name'] ?> earned a badge!</small>
-                    <?php endif ?> -->
                 </div>
                 <div class="form-group">
                     <h6 for="activity"><?= $scoreplan['category'] . ': ' . $scoreplan['title'] ?></h6>

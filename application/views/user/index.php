@@ -48,7 +48,17 @@
         </tfoot>
     </table>
 </div>
-<a class="btn btn-info" href="<?= site_url('user/download') ?>" target="_blank">Download</a>
+<?= form_open_multipart('user/upload') ?>
+<div class="form-group">
+    <!-- <p>It's end of academic session. Upload the students' result here</p> -->
+    <label for="formFile" class="form-label mt-4">Upload new users/students by batch</label>
+    <input class="form-control" type="file" name="upload_file" id="upload_file">
+</div>
+<div class="form-group">
+    <button class="btn btn-info" type="submit">Upload</button>
+</div>
+<?= form_close() ?>
+<!-- <a class="btn btn-info" href="<?= site_url('user/download') ?>" target="_blank">Download</a> -->
 
 
 <div id="confirmDelete" class="modal fade">

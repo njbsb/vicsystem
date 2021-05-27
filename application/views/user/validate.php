@@ -21,7 +21,7 @@
                 <b><?= ucfirst($user['usertype']) ?></b>
             </h4>
             <?php $profileimage = 'default.jpg' ?>
-            <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . $profileimage) ?>">
+            <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= $user['userphoto'] ?>">
 
             <div class="card-footer text-muted">
                 Applied: <?= $user['code'] ?>
@@ -86,7 +86,7 @@
         </div>
         <small>Please select user status to active to validate as active user</small>
         <br><br>
-        <button type="submit" class="btn btn-outline-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </div>
 <?= form_close() ?>

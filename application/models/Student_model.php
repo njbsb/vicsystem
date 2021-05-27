@@ -9,7 +9,7 @@ class Student_model extends CI_Model
     public function get_student($student_id = FALSE, $sig_id = FALSE)
     {
         if ($student_id === FALSE and $sig_id === FALSE) {
-            $this->db->select('user.id, user.name')
+            $this->db->select('user.*')
                 ->from('user')
                 ->where(array(
                     'userstatus' => 'active',
@@ -34,7 +34,7 @@ class Student_model extends CI_Model
         }
         if ($sig_id) {
             # returns active students under specific sig
-            $this->db->select('user.id')
+            $this->db->select('user.*')
                 ->from('user')
                 ->join('student as std', 'user.id = std.matric', 'left')
                 ->where(array(

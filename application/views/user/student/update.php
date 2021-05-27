@@ -2,25 +2,26 @@
     <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
     <li class="breadcrumb-item"><a href="<?= site_url('profile') ?>">Profile</a></li>
     <li class="breadcrumb-item active">Update</li>
-
 </ol>
-
-<h2 class="text-center"><?= $title ?></h2>
 
 <div class="container-fluid text-center">
     <?php $hidden = array('usertype_id' => $usertype) ?>
     <?= form_open_multipart('user/update/' . $student['id'], '', $hidden) ?>
     <div class="row">
         <div class="col-lg-4">
-
             <div class="card border-primary mb-3" style="max-width: 20rem;">
                 <h4 class="card-header text-primary">
                     <b><?= ucfirst($student['usertype']) ?></b>
                 </h4>
-                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/' . 'default.jpg') ?>">
+                <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= $student['userphoto'] ?>">
                 <div class="card-footer text-muted">
                     <?= $student['id'] ?>
                 </div>
+            </div>
+            <div class="form-group">
+                <label for="formFile" class="form-label mt-4">Upload photo</label>
+                <input name="userphoto" class="form-control" type="file" id="userphoto">
+                <small>Please use square cropped photo less than 200kb</small>
             </div>
         </div>
         <div class="col-lg-8 text-left">
@@ -69,8 +70,19 @@
                 <label for="address">Home address</label>
                 <textarea name="address" class="form-control" id="" cols="30" rows="6" placeholder="Enter address" required><?= $student['address'] ?></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Update profile</button>
+            <button type="submit" class="btn btn-primary">Update</button>
         </div>
     </div>
     <?= form_close() ?>
 </div>
+
+<script>
+var uploadField = document.getElementById("userphoto");
+
+uploadField.onchange = function() {
+    if (this.files[0].size > 209715) {
+        alert("File exceeds 200kb!");
+        this.value = "";
+    };
+};
+</script>

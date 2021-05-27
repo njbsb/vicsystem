@@ -6,8 +6,9 @@ class Score_model extends CI_Model
         $this->load->database();
     }
 
-    public function get_scorelevels($acadsession_id)
+    public function get_activityworkshopscore($student_id, $acadsession_id, $activitycategory_id)
     {
+        $this->db->select();
     }
 
     public function get_levelscore($id = NULL)
@@ -40,8 +41,10 @@ class Score_model extends CI_Model
         if ($scoreplan_id === FALSE) {
             $this->db->select('position.score as position, meeting.score as meeting, attendance.score as attendance, involvement.score as involvement')
                 ->from('score_level as sc')
+                ->join('score_plan as scp', 'scp.id = sc.scoreplan_id')
                 ->where(array(
-                    'student_id' => $student_id,
+                    'sc.student_id' => $student_id,
+                    'scp.activitycategory_id' => 'A'
                 ))
                 ->join('level_position as position', 'position.id = sc.position')
                 ->join('level_meeting as meeting', 'meeting.id = sc.meeting')
@@ -67,6 +70,7 @@ class Score_model extends CI_Model
 
     public function get_scoreplan_level($student_id, $scoreplan_id)
     {
+        # UNUSED
         $this->db->select('position, meeting, attendance, involvement')
             ->from('score_level')
             ->where(array(
@@ -79,12 +83,14 @@ class Score_model extends CI_Model
 
     public function get_scoreplan_scorecomp($student_id, $acadsession_id)
     {
-        $this->db->select('digitalcv, leadership, volunteer')
+        $this->db->select('digitalcv.score as digitalcv, leadership.score as leadership, volunteer')
             ->from('score_comp')
             ->where(array(
                 'student_id' => $student_id,
                 'acadsession_id' => $acadsession_id
-            ));
+            ))
+            ->join('comp_digitalcv as digitalcv', 'digitalcv.id = score_comp.digitalcv', 'left')
+            ->join('comp_leadership as leadership', 'leadership.id = score_comp.leadership', 'left');
         $query = $this->db->get();
         return $query->row_array();
     }
@@ -103,11 +109,8 @@ class Score_model extends CI_Model
 
     public function get_students_scorebylevels($student_id)
     {
-        $this->db->select("scl.*, 
-        acy.acadyear, acs.semester_id, 
-        concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, 
-        act.title, 
-        ")
+        $this->db->select("scl.*, acy.acadyear, acs.semester_id, 
+        concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, act.title")
             ->from('score_level as scl')
             ->where(array(
                 'scl.student_id' => $student_id
@@ -281,7 +284,7 @@ class Score_model extends CI_Model
                     ->join('activitycategory as actcat', 'actcat.code = scp.activitycategory_id', 'left')
                     ->join('activity as act', 'scp.activity_id = act.id', 'left');
             } elseif ($acadsession_id == FALSE) {
-                # returns scoreplan under specific acs
+                # returns scoreplan under specific academic session
                 $this->db->select('scp.*, act.title')
                     ->from('score_plan as scp')
                     ->where(array(
@@ -293,11 +296,12 @@ class Score_model extends CI_Model
                 # returns scoreplan of specific sig under specific acadsession and category
                 $this->db->select('scp.*, act.title')
                     ->from('score_plan as scp')
-                    ->where(array(
-                        // 'scp.sig_id' => $sig_id,
-                        'scp.acadsession_id' => $acadsession_id,
-                        'scp.activitycategory_id' => $category_id
-                    ))
+                    ->where(
+                        array(
+                            'scp.acadsession_id' => $acadsession_id,
+                            'scp.activitycategory_id' => $category_id
+                        )
+                    )
                     ->join('activity as act', 'scp.activity_id = act.id');
             }
         }

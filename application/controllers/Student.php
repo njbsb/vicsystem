@@ -50,7 +50,6 @@ class Student extends CI_Controller
             'activity_roles' => $this->committee_model->get_activityroles($student_id),
             'org_roles' => $this->committee_model->get_orgroles($student_id)
         );
-
         $this->load->view('templates/header');
         $this->load->view('student/view', $data);
         $this->load->view('templates/footer');

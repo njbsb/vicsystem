@@ -22,7 +22,7 @@ class Mentor_model extends CI_Model
             $query = $this->db->get();
             return $query->result_array();
         }
-        $this->db->select('user.id, user.name, user.email, user.sig_id, mtr.role_id, role.role, mtr.position, mtr.roomnum, sig.code as sigcode, sig.name as signame')
+        $this->db->select('user.id, user.name, user.email, user.sig_id, user.userphoto, user.phonenum, mtr.role_id, role.role, mtr.position, mtr.roomnum, sig.code as sigcode, sig.name as signame')
             ->from('user')
             ->where(array(
                 'user.id' => $matric
@@ -32,14 +32,6 @@ class Mentor_model extends CI_Model
             ->join('sig', 'sig.code = user.sig_id', 'left');
         // ->join('role_organization as role', 'role.id = mtr.orgrole_id', 'left');
         $query = $this->db->get();
-        // if (!$query->num_rows()) {
-        //     $default = array(
-        //         'position' => '',
-        //         'roomnum' => '',
-        //         'role_id' => ''
-        //     );
-        //     return $default;
-        // }
         return $query->row_array();
     }
 
@@ -51,7 +43,7 @@ class Mentor_model extends CI_Model
 
     public function get_sigmentors($sig_id)
     {
-        $this->db->select('user.id, user.name, user.email, user.sig_id, mtr.position, mtr.roomnum, role.role, sig.code as sigcode, sig.name as signame')
+        $this->db->select('user.*, mtr.position, mtr.roomnum, role.role, sig.code as sigcode, sig.name as signame')
             ->from('mentor as mtr')
             ->join('user', 'mtr.matric = user.id', 'left')
             ->where(array(
@@ -72,11 +64,13 @@ class Mentor_model extends CI_Model
 
     public function update_mentor($id, $mentordata)
     {
-        return $this->db->where('matric', $id)
-            ->set($mentordata)
-            ->insert('mentor');
-        // $this->db->where('matric', $id);
-        // return $this->db->update('mentor', $mentordata);
+        $this->db->where('matric', $id)
+            ->set($mentordata);
+        if ($this->db->get_where('mentor', array('matric' => $id))->num_rows() > 0) {
+            return $this->db->update('mentor');
+        } else {
+            return $this->db->insert('mentor');
+        }
     }
 
     public function delete_mentor($matric)

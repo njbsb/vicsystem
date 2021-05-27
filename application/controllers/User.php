@@ -4,6 +4,9 @@ require FCPATH . 'vendor\autoload.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
+use SebastianBergmann\Diff\Diff;
 
 class User extends CI_Controller
 {
@@ -64,7 +67,8 @@ class User extends CI_Controller
                 $user_data = array(
                     'username' => $user_id,
                     'user_type' => $usertype,
-                    'logged_in' => true
+                    'logged_in' => true,
+                    'userphoto' => $user['userphoto']
                 );
                 $this->session->set_userdata($user_data);
                 $this->session->set_flashdata('user_loggedin', 'You are now logged in as ' . $user_id);
@@ -251,7 +255,6 @@ class User extends CI_Controller
             'superior' => $this->user_model->get_user_superior($id),
             'usertype' => $usertype
         );
-        // print_r($data['superior']);
         $this->load->view('templates/header');
         switch ($usertype) {
             case 'admin':
@@ -274,11 +277,38 @@ class User extends CI_Controller
     {
         $usertype = $this->user_model->get_usertype($user_id);
         $usertype = $this->session->userdata('user_type');
+        # upload photo logics
+        $upload_file = $_FILES['userphoto']['tmp_name'];
+        if ($upload_file) {
+            $data = file_get_contents($upload_file);
+            $type = pathinfo($_FILES["userphoto"]["name"], PATHINFO_EXTENSION);
+            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+            $userdata = array(
+                'userphoto' => $base64
+            );
+            $this->user_model->update_user($user_id, $userdata);
+        }
+        # specific for each user
         switch ($usertype) {
             case 'admin':
                 //
                 break;
             case 'mentor':
+                // $upload_file = $_FILES['userphoto']['tmp_name'];
+                // if ($upload_file) {
+                //     $data = file_get_contents($upload_file);
+                //     $type = pathinfo($_FILES["userphoto"]["name"], PATHINFO_EXTENSION);
+                //     $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                //     $userdata = array(
+                //         'userphoto' => $base64
+                //     );
+                //     $this->user_model->update_user($user_id, $userdata);
+                // }
+                $role_id = $this->input->post('role_id');
+                $roomnum = $this->input->post('roomnum');
+                $position = $this->input->post('position');
+                if ($role_id and $roomnum and $position) {
+                }
                 $mentordata = array(
                     'matric' => $user_id,
                     'role_id' => $this->input->post('role_id'),
@@ -288,6 +318,7 @@ class User extends CI_Controller
                 $this->mentor_model->update_mentor($user_id, $mentordata);
                 break;
             case 'student':
+
                 $studentdata = array(
                     'matric' => $user_id,
                     'program_id' => $this->input->post('program_id'),
@@ -372,5 +403,52 @@ class User extends CI_Controller
 
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
+    }
+
+    public function upload()
+    {
+        $upload_file = $_FILES['upload_file']['name'];
+        $extension = pathinfo($upload_file, PATHINFO_EXTENSION);
+        switch ($extension) {
+            case 'xlsx':
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+                break;
+            case 'xls':
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+                break;
+            case 'csv':
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+                break;
+        }
+        $spreadsheet = $reader->load($_FILES['upload_file']['tmp_name']);
+        $sheetdata = $spreadsheet->getActiveSheet()->toArray();
+        $sheetcount = count($sheetdata);
+        if ($sheetcount > 1) {
+            for ($i = 1; $i < $sheetcount; $i++) {
+                $id = $sheetdata[$i][0];
+                $name = $sheetdata[$i][1];
+                $usertype = $sheetdata[$i][2];
+                $phonenum = $sheetdata[$i][3];
+                $dob = $sheetdata[$i][4];
+                $gender = $sheetdata[$i][5];
+                $email = $sheetdata[$i][6];
+                $data[] = array(
+                    'id' => $id,
+                    'name' => $name,
+                    'usertype' => $usertype,
+                    'phonenum' => $phonenum,
+                    'dob' => $dob,
+                    'gender' => $gender,
+                    'email' => $email,
+                );
+            }
+            $rowaffected = $this->user_model->import_user($data);
+            if ($rowaffected > 0) {
+                $this->session->set_flashdata('message', '<div class="alert alert-success">' . $rowaffected . ' rows affected</div>');
+            } else {
+                $this->session->set_flashdata('message', '<div class="alert alert-warning">' . $rowaffected . ' rows affected</div>');
+            }
+            redirect(site_url('academicplan/mentor'));
+        }
     }
 }
