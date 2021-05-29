@@ -11,24 +11,22 @@
 <div class="row text-center">
     <div class="col-md-4 offset-md-4">
         <div class="card mb-4">
-            <h4 class="card-header text-white bg-dark">
+            <h6 class="card-header text-white bg-dark">
                 <?= $president['role'] ?>
-            </h4>
-            <?php // $profileimage = ($president['profile_image'] == '') ? '' : base_url('assets/images/profile/' . 'default.jpg') 
-                ?>
-            <!-- <img style="max-height:240px; max-width:auto; display: block; object-fit:cover;  padding:10px;" src="<?= $profileimage ?>"> -->
-            <div class="card-body">
-                <h5 class="card-title">
+            </h6>
+            <div class="card-body" style="padding-top:0.5rem; padding-bottom:0.5rem;">
+                <?php if ($president['userphoto']) : ?>
+                <a data-toggle="tooltip" title="<?= $president['name'] ?>" href="<?= site_url('student/' . $president['student_id']) ?>"><img class="rounded-circle" style="object-fit:cover;"
+                        src="<?= $president['userphoto'] ?>" alt="" width="150" height="150"></a>
+                <?php endif ?>
+                <h5 class="card-title" style="margin-bottom: 0.3rem; margin-top:0.4rem;">
                     <?php if ($president['name'] == '-') : ?>
                     <a href="#"><?= $president['name'] ?></a>
                     <?php else : ?>
                     <a href="<?= site_url('/student/' . $president['student_id']) ?>"><?= $president['name'] ?></a>
                     <?php endif ?>
                 </h5>
-                <h6 class="card-subtitle text-muted"><?= $president['student_id']; ?></h6>
-            </div>
-            <div class="card-footer text-muted">
-                <?= $president['email'] ?>
+                <p class="card-subtitle text-muted">Year <?= $president['year'] ?></p>
             </div>
         </div>
     </div>
@@ -39,29 +37,28 @@
     <?php foreach ($secondrows as $rows) : ?>
     <div class="col-md-4">
         <div class="card mb-4">
-            <h4 class="card-header text-white bg-dark">
+            <h6 class="card-header text-white bg-dark">
                 <?= $rows['role'] ?>
-            </h4>
-            <!-- <img style="max-height:240px; max-width:auto; display: block; object-fit:cover;  padding:10px;" src="<?= base_url('assets/images/profile/' . $rows['profile_image']); ?>"
-                alt="<?= $rows['profile_image']; ?>"> -->
-            <div class="card-body">
-                <h5 class="card-title">
+            </h6>
+            <div class="card-body" style="padding-top:0.5rem; padding-bottom:0.5rem;">
+                <?php if ($rows['userphoto']) : ?>
+                <a data-toggle="tooltip" title="<?= $rows['name'] ?>" href="<?= site_url('student/' . $rows['student_id']) ?>"><img class="rounded-circle" style="object-fit:cover;"
+                        src="<?= $rows['userphoto'] ?>" alt="" width="150" height="150"></a>
+                <?php endif ?>
+                <h5 class="card-title" style="margin-bottom: 0.3rem; margin-top:0.4rem;">
                     <?php if ($rows['name'] != '-') : ?>
                     <a href="<?= site_url('/student/' . $rows['student_id']) ?>"><?= $rows['name'] ?></a>
                     <?php else : ?>
                     <a href="#"><?= $rows['name'] ?></a>
                     <?php endif ?>
-
                 </h5>
-                <h6 class="card-subtitle text-muted"><?= $rows['student_id']; ?></h6>
-            </div>
-            <div class="card-footer text-muted">
-                <?= $rows['email'] ?>
+                <?php if ($rows['year'] != '') : ?>
+                <p class="card-subtitle text-muted">Year <?= $rows['year']; ?></p>
+                <?php endif ?>
             </div>
         </div>
     </div>
     <?php endforeach ?>
-
 </div>
 <hr>
 <div class="row text-center justify-content-center">
@@ -69,24 +66,22 @@
     <?php foreach ($orgajks as $ajk) : ?>
     <div class="col-md-3">
         <div class="card mb-3">
-            <div class="card-header bg-dark">
-                <h4 class="text-white ">
-                    <?= $ajk['role']; ?>
-                </h4>
-                <span class="badge badge-pill badge-light"><?= $ajk['description'] ?></span>
+            <div class="card-header bg-dark text-white">
+                <h6><?= $ajk['description'] ?> AJK</h6>
             </div>
-            <!-- <img style="max-height:240px; max-width:auto; display: block; object-fit:cover;  padding:10px;" src="<?= base_url('assets/images/profile/' . $ajk['profile_image']); ?>"
-                alt="<?= $ajk['profile_image']; ?>"> -->
-            <div class="card-body">
-                <h5 class="card-title">
+            <div class="card-body" style="padding-top:0.5rem; padding-bottom:0.5rem;">
+                <?php if ($ajk['userphoto']) : ?>
+                <a data-toggle="tooltip" title="<?= $ajk['name'] ?>" href="<?= site_url('student/' . $ajk['student_id']) ?>"><img class="rounded-circle" style="object-fit:cover;"
+                        src="<?= $ajk['userphoto'] ?>" alt="" width="100" height="100"></a>
+                <?php endif ?>
+                <h5 class="card-title" style="margin-bottom: 0.3rem; margin-top:0.4rem;">
                     <a href="<?= site_url('/student/' . $ajk['student_id']) ?>">
                         <?= $ajk['name'] ?>
                     </a>
                 </h5>
-                <h6 class="card-subtitle text-muted"><?= $ajk['student_id']; ?></h6>
-            </div>
-            <div class="card-footer text-muted">
-                <?= $ajk['email'] ?>
+                <?php if ($ajk['year'] != '') : ?>
+                <p class="card-subtitle text-muted">Year <?= $ajk['year']; ?></p>
+                <?php endif ?>
             </div>
         </div>
     </div>
@@ -101,36 +96,40 @@
 <div class="row justify-content-center">
     <!-- insert members here -->
 </div>
-<?php if ($isMentor) : ?>
-<button data-toggle="modal" data-target="#registercommittee" class="btn btn-outline-primary margin">Add new committee</button>
-<?php endif ?>
-<table id="orgcom_table" class="table table-hover">
-    <thead class="table-dark">
-        <tr>
-            <th>Matric</th>
-            <th>Name</th>
-            <th>Role</th>
-            <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
-            <th>Action</th>
-            <?php endif ?>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($sigcommittees as $sigcom) : ?>
-        <tr>
-            <td><?= $sigcom['student_id'] ?></td>
-            <td><?= $sigcom['name'] ?></td>
-            <td><?= $sigcom['role'] ?></td>
-            <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
-            <td><a class="btn btn-outline-warning btn-sm" data-stdrole="<?= $sigcom['role'] ?>" data-stdname="<?= $sigcom['name'] ?>" data-stdmatric="<?= $sigcom['student_id'] ?>" data-toggle="modal"
-                    data-target="#delete_orgcom">Delete</a></td>
-            <?php endif ?>
-        </tr>
-        <?php endforeach ?>
-    </tbody>
-</table>
+<div class="card">
+    <div class="card-body">
+        <?php if ($isMentor) : ?>
+        <button data-toggle="modal" data-target="#registercommittee" class="btn btn-info margin"><i class='fas fa-user-plus'></i> Committee</button>
+        <?php endif ?>
+        <table id="orgcom_table" class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Matric</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
+                    <th>Action</th>
+                    <?php endif ?>
+                </tr>
+            </thead>
+            <tbody class="table-active">
+                <?php foreach ($sigcommittees as $sigcom) : ?>
+                <tr>
+                    <td><?= $sigcom['student_id'] ?></td>
+                    <td><?= $sigcom['name'] ?></td>
+                    <td><?= $sigcom['role'] ?></td>
+                    <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
+                    <td><a class="btn btn-outline-danger btn-sm" data-stdrole="<?= $sigcom['role'] ?>" data-roleid="<?= $sigcom['role_id'] ?>" data-stdname="<?= $sigcom['name'] ?>"
+                            data-stdmatric="<?= $sigcom['student_id'] ?>" data-toggle="modal" data-target="#delete_orgcom"><i class="fa fa-trash"></i></a></td>
+                    <?php endif ?>
+                </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<div id="delete_orgcom" class="modal fade">
+<div id="delete_orgcom" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <?php $hidden = array('acadyear_id' => $activeacadyear['id']) ?>
@@ -153,6 +152,7 @@
                 <div class="form-group">
                     <label>Position/Role</label>
                     <input name="stdrole" type="text" class="form-control" readonly>
+                    <input name="role_id" type="text" class="form-control" hidden>
                 </div>
                 <p>Confirm to delete this committee?</p>
             </div>
@@ -165,7 +165,7 @@
     </div>
 </div>
 
-<div id="registercommittee" class="modal fade">
+<div id="registercommittee" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <?php $hidden = array(
@@ -204,6 +204,7 @@
                         <option value="<?= $sm['id'] ?>"><?= $sm['name'] ?></option>
                         <?php endforeach ?>
                     </select>
+                    <small>You can only select students who joined 4 years back</small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -217,15 +218,25 @@
 
 <script>
 $(document).ready(function() {
-    $('#orgcom_table').DataTable();
+    $('#orgcom_table').DataTable({
+        "order": []
+    });
 });
 var confirmtext = document.getElementById('confirmtext');
 $('#delete_orgcom').on('show.bs.modal', function(e) {
     var matric = $(e.relatedTarget).data('stdmatric');
     var name = $(e.relatedTarget).data('stdname');
     var rolename = $(e.relatedTarget).data('stdrole');
+    var roleid = $(e.relatedTarget).data('roleid');
     $(e.currentTarget).find('input[name="stdmatric"]').val(matric);
     $(e.currentTarget).find('input[name="stdname"]').val(name);
     $(e.currentTarget).find('input[name="stdrole"]').val(rolename);
+    $(e.currentTarget).find('input[name="role_id"]').val(roleid);
+});
+
+$('a[data-toggle="tooltip"]').tooltip({
+    animated: 'fade',
+    placement: 'bottom',
+    html: true
 });
 </script>

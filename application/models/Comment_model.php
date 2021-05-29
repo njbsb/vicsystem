@@ -13,9 +13,10 @@ class Comment_model extends CI_Model
 
     public function get_comments($activity_id)
     {
-        $this->db->select('*')
+        $this->db->select('cmt.*, user.name, user.userphoto')
             ->from('comment as cmt')
-            ->where(array('cmt.activity_id' => $activity_id));
+            ->where(array('cmt.activity_id' => $activity_id))
+            ->join('user', 'user.id = cmt.user_id', 'left');
         // ->join('comment_category as cmtcat', 'cmt.category_id = cmtcat.id', 'left');
         $query = $this->db->get();
         return $query->result_array();

@@ -39,7 +39,7 @@
         <?php if ($academicplans) : ?>
         <?php foreach ($academicplans as $acp) : ?>
         <?php $sign = ($acp['difference'] > 0) ? '+' : '' ?>
-        <?php $textclass = ($acp['difference'] > 0) ? 'text-success' : 'text-danger' ?>
+        <?php $textclass = ($acp['difference'] >= 0) ? 'text-success' : 'text-danger' ?>
         <tr>
             <td><?= $acp['academicsession'] ?></td>
             <td><?= $acp['gpa_target'] ?></td>
@@ -91,7 +91,7 @@
 <hr>
 <?= form_close() ?>
 
-<div id="setGPA" class="modal fade">
+<div id="setGPA" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

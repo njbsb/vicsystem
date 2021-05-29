@@ -3,16 +3,8 @@
 <div class="container-fluid text-center">
     <div class="row">
         <div class="col-lg-4">
-            <!-- <div class="card mb-3"> -->
             <div class="card border-secondary mb-3" style="max-width: 20rem;">
-                <!-- <div class="card-header">Student</div> -->
-                <!-- <h3 class="card-header">
-                    Header
-                </h3> -->
                 <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= base_url('assets/images/profile/justin.jpg') ?>">
-                <!-- <div class="card-body">
-
-                </div> -->
                 <div class="card-footer text-muted">
                     Joined VIC: 2016
                 </div>

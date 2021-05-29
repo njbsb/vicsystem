@@ -9,28 +9,30 @@
 <a class="btn btn-primary" href="<?= site_url('activity/external') ?>">External</a>
 <?php endif ?>
 <hr>
-<table id="activitytable" class="table table-hover" style="text-align:left;">
-    <thead class="table-dark">
-        <tr>
-            <th scope="col">Activity</th>
-            <th scope="col">Date</th>
-            <th scope="col">Academic Session</th>
-            <th scope="col">No of Committees</th>
-            <th scope="col">Advisor</th>
-        </tr>
-    </thead>
-    <tbody class="list">
-        <?php foreach ($activities as $activity) : ?>
-        <tr>
-            <td class="Activity" scope="row"><a href="<?= site_url('/activity/' . $activity['slug']) ?>"><?= $activity['title'] ?></a></t>
-            <td class="Date"><?= date('d/m/Y', strtotime($activity['datetime_start'])) ?></td>
-            <td><?= $activity['academicsession'] ?></td>
-            <td><?= $activity['committeenum'] ?></td>
-            <td><?= $activity['advisorname'] ?></td>
-        </tr>
-        <?php endforeach ?>
-    </tbody>
-    <!-- <tfoot>
+<div class="card">
+    <div class="card-body">
+        <table id="activitytable" class="table table-hover" style="text-align:left;">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Activity</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Academic Session</th>
+                    <th scope="col">No of Committees</th>
+                    <th scope="col">Advisor</th>
+                </tr>
+            </thead>
+            <tbody class="list table-active">
+                <?php foreach ($activities as $activity) : ?>
+                <tr>
+                    <td class="Activity" scope="row"><a href="<?= site_url('/activity/' . $activity['slug']) ?>"><?= $activity['title'] ?></a></t>
+                    <td class="Date"><?= date('d/m/Y', strtotime($activity['datetime_start'])) ?></td>
+                    <td><?= $activity['academicsession'] ?></td>
+                    <td><?= $activity['committeenum'] ?></td>
+                    <td><?= $activity['advisorname'] ?></td>
+                </tr>
+                <?php endforeach ?>
+            </tbody>
+            <!-- <tfoot>
         <tr>
             <th scope="col">Activity</th>
             <th scope="col">Date</th>
@@ -39,8 +41,10 @@
             <th scope="col">Advisor</th>
         </tr>
     </tfoot> -->
-</table>
-
+        </table>
+    </div>
+</div>
+<br>
 <?php if ($activities) : ?>
 <?php foreach ($activities as $act) : ?>
 
@@ -51,7 +55,7 @@
     </div>
     <div class="col-md-9">
         <h3><a href="<?= site_url('activity/' . $act['slug']) ?>"><?= $act['title'] ?></a></h3>
-        <small class="post-date">Created on: <?= date('d/m/Y', strtotime($act['created_at'])) ?></small>
+        <small class="">Created on: <?= date('d/m/Y', strtotime($act['created_at'])) ?></small>
         <p><?= word_limiter($act['description'], 60) ?></p>
     </div>
 </div>
@@ -60,7 +64,7 @@
 <?php endforeach ?>
 <?php endif ?>
 
-<div id="activity_type" class="modal fade">
+<div id="activity_type" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -83,6 +87,8 @@
 
 <script>
 $(document).ready(function() {
-    $('#activitytable').DataTable();
+    $('#activitytable').DataTable({
+        "order": []
+    });
 });
 </script>

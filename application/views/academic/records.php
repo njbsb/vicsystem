@@ -22,7 +22,7 @@
             <td><?= $academicplan['academicsession'] ?></td>
             <td><?= $academicplan['gpa_target'] ?></td>
             <td><?= $academicplan['gpa_achieved'] ?></td>
-            <?php $class = ($academicplan['increment'] > 0) ? 'text-success' : 'text-danger' ?>
+            <?php $class = ($academicplan['increment'] >= 0) ? 'text-success' : 'text-danger' ?>
             <td class="<?= $class ?>"><?= $academicplan['increment'] ?></td>
         </tr>
         <?php else : ?>
@@ -39,7 +39,6 @@
 <hr>
 <div class="jumbotron" style="border-radius: 12px; padding-top: 20px; padding-bottom: 20px;">
     <div class="container">
-
     </div>
     <h4>Citra Registered</h4>
     <?php if (isset($citras)) : ?>
@@ -93,9 +92,8 @@
             <div class="container">
                 <h5 class="text-primary text-center"><b><?= sprintf('%s (%s)', $scoreplan['title'], $scoreplan['label']) ?></b></h5>
                 <div class="form-group">
-                    <!-- <h6>Total:</h6> -->
                     <?php $textclass = (array_sum($scoreplan['scores']) > 18) ? 'text-info' : '' ?>
-                    <?php $scpbadge = (array_sum($scoreplan['scores']) > 18) ? '<i class="fas fa-award" style="color: #3498db;"></i>' : '' ?>
+                    <?php $scpbadge = (array_sum($scoreplan['scores']) > 18 and $scoreplan['activitycategory_id'] == 'A') ? '<i class="fas fa-award" style="color: #3498db;"></i>' : '' ?>
                     <h3 class="<?= $textclass ?> text-center"><?= array_sum($scoreplan['scores']) ?>/<?= $scoreleveltotal ?> <?= $scpbadge ?></h3>
                     <!-- <?php if (array_sum($scoreplan['scores']) > 18) : ?>
                     <small><?= $student['name'] ?> earned a badge!</small>

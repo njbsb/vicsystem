@@ -141,6 +141,12 @@ class Activity_model extends CI_Model
         return $this->db->insert('activityexternal', $activitydata);
     }
 
+    public function update_external($external_id, $data)
+    {
+        return $this->db->where('id', $external_id)
+            ->update('activityexternal', $data);
+    }
+
     public function delete_activity($activity_id)
     {
         return $this->db->where('id', $activity_id)->delete('activity');

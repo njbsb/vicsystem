@@ -8,6 +8,7 @@
 <hr>
 <div class="form-group">
     <?= form_open('academicplan/records') ?>
+    <label for="">Search records</label>
     <div class="row">
         <div class="col-md-3">
             <select name="acadyear_id" id="" class="form-control" required>
@@ -26,7 +27,7 @@
             </select>
         </div>
         <div class="col-md-4">
-            <button type="submit" class="btn btn-outline-primary">Search record</button>
+            <button type="submit" class="btn btn-outline-primary"><i class='fas fa-search'></i> Search</button>
         </div>
     </div>
     <?= form_close() ?>
@@ -44,10 +45,10 @@
 <div class="form-group">
     <!-- <p>It's end of academic session. Upload the students' result here</p> -->
     <label for="formFile" class="form-label mt-4">It's end of academic session. Upload the students' result here</label>
-    <input class="form-control" type="file" name="upload_file" id="upload_file">
+    <input class="form-control" type="file" name="upload_file" id="upload_file" required>
 </div>
 <div class="form-group">
-    <button class="btn btn-info" type="submit">Upload</button>
+    <button class="btn btn-info" type="submit"><i class='fas fa-upload'></i> Upload</button>
 </div>
 <?= form_close() ?>
 <hr>
@@ -66,7 +67,7 @@
             <th>Increment</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-light">
         <?php if ($academicplans) : ?>
         <?php foreach ($academicplans as $acp) : ?>
         <?php $resultclass = ($acp['gpa_achieved'] < 2.3) ? 'text-danger' : '' ?>

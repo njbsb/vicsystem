@@ -23,7 +23,7 @@
     </div>
 </div>
 
-<div id="chooseUser" class="modal fade">
+<div id="chooseUser" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

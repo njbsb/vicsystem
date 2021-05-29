@@ -103,7 +103,8 @@ class Student_model extends CI_Model
             ))
             ->join('student', 'student.matric = user.id', 'left')
             ->join('academicplan as acp', 'user.id = acp.student_id')
-            ->where('student.yearjoined >=', $limityear);
+            ->where('user.yearjoined >=', $limityear)
+            ->order_by('user.yearjoined', 'desc');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -126,7 +127,7 @@ class Student_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_enrolling_students($acadsession_id, $sig_id)
+    public function get_enrolling_students($acadsession_id, $sig_id = NULL)
     {
         # those that has data in the academicplan
         $this->db->select('acp.student_id as matric, user.name, acp.gpa_target, acp.gpa_achieved')
@@ -134,8 +135,8 @@ class Student_model extends CI_Model
             ->join('user', 'user.id = acp.student_id')
             // ->join('user', array('user.id' => 'acp.student_id', 'user.sig_id' => $sig_id))
             ->where(array(
-                'acp.acadsession_id' => $acadsession_id,
-                'user.sig_id' => $sig_id
+                'acp.acadsession_id' => $acadsession_id
+                // 'user.sig_id' => $sig_id
             ));
         $query = $this->db->get();
         return $query->result_array();

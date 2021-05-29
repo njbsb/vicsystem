@@ -64,7 +64,16 @@ class Score_model extends CI_Model
                 ->join('level_attendance as attendance', 'attendance.id = sc.attendance')
                 ->join('level_involvement as involvement', 'involvement.id = sc.involvement');
             $query = $this->db->get();
-            return $query->row_array();
+            if ($query->num_rows() > 0) {
+                return $query->row_array();
+            } else {
+                // return array(
+                //     'position' => 0,
+                //     'meeting' => 0,
+                //     'attendance' => 0,
+                //     'involvement' => 0
+                // );
+            }
         }
     }
 
@@ -254,11 +263,21 @@ class Score_model extends CI_Model
             ->update('score_comp', $scoredata);
     }
 
-    // public function setscorecomp($where, $score_comp)
-    // {
-    //     return $this->db->where($where)
-    //         ->update('scorecomp', $score_comp);
-    // }
+    # SCORE EXTERNAL
+    public function add_externalparticipant($data)
+    {
+        $query = $this->db->get_where('score_external', $data);
+        if ($query->num_rows() > 0) {
+            return false;
+        } else {
+            return $this->db->insert('score_external', $data);
+        }
+    }
+
+    public function delete_externalparticipant($data)
+    {
+        return $this->db->delete('score_external', $data);
+    }
 
     public function add_scoringplan($scoreplandata)
     {
@@ -291,7 +310,8 @@ class Score_model extends CI_Model
                         'scp.acadsession_id' => $acadsession_id
                     ))
                     ->join('activitycategory as actcat', 'actcat.code = scp.activitycategory_id', 'left')
-                    ->join('activity as act', 'scp.activity_id = act.id', 'left');
+                    ->join('activity as act', 'scp.activity_id = act.id', 'left')
+                    ->order_by('scp.activitycategory_id', 'asc');
             } elseif ($acadsession_id == FALSE) {
                 # returns scoreplan under specific academic session
                 $this->db->select('scp.*, act.title')

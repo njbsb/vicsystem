@@ -14,21 +14,36 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 text-left">
+        <div class="col-lg-8 text-left">
             <h3><b><?= $mentor['name'] ?></b></h3>
-            <h6><b>Position: </b><?= $mentor['position'] ?></h6>
-            <h6><b>Email:</b> <a href="mailto:<?= $mentor['email'] ?>"><?= $mentor['email'] ?></a></h6>
-            <h6><b>Club name:</b> <?= $mentor['signame'] ?></h6>
-            <h6><b>Role:</b> <?= $mentor['role'] ?></h6>
-            <h6><b>Room:</b> <?= $mentor['roomnum'] ?></h6>
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6><b>Position</b></h6>
+                    <h6><b>Email</b></h6>
+                    <!-- <h6><b>Club name</b></h6> -->
+                    <h6><b>Role</b></h6>
+                    <h6><b>Room No</b></h6>
+                    <h6><b>Phone No</b></h6>
+                </div>
+                <div class="col-sm-9">
+                    <h6><?= $mentor['position'] ?></h6>
+                    <h6><a href="mailto:<?= $mentor['email'] ?>"><?= $mentor['email'] ?></a></h6>
+                    <!-- <h6><?= $mentor['signame'] ?></h6> -->
+                    <h6><?= $mentor['role'] ?></h6>
+                    <h6><?= $mentor['roomnum'] ?></h6>
+                    <h6><?= $mentor['phonenum'] ?></h6>
+                </div>
+            </div>
+
+
         </div>
-        <?php if ($isMentor) : ?>
+        <!-- <?php if ($isMentor) : ?>
         <div class="col-lg-4">
             <?= form_open('/mentor/edit/' . $mentor['id']) ?>
             <input type="submit" value="Edit Mentor" class="btn btn-outline-secondary">
             <?= form_close() ?>
         </div>
-        <?php endif ?>
+        <?php endif ?> -->
 
     </div>
     <hr>

@@ -7,14 +7,16 @@
 <hr>
 <!-- ACADEMIC SESSION -->
 <div class="row justify-content-between">
-    <div class="col-4">
+    <div class="col-8">
         <h3>Academic Session</h3>
     </div>
     <div class="col-4">
-        <button class="btn btn-outline-info margin" data-toggle="modal" data-target="#addacademicsession" style="float: right;">Add Academic Session</button>
+        <button class="btn btn-info margin" data-toggle="modal" data-target="#addacademicsession" style="float: right;">
+            <i class='far fa-calendar-plus'></i> New Session
+        </button>
     </div>
 </div>
-<table id="acs_table" class="table">
+<table id="acs_table" class="table table-hover">
     <thead>
         <tr class="table-dark">
             <th>ID</th>
@@ -22,14 +24,16 @@
             <th>Semester</th>
             <th>Status</th>
             <th>Progress</th>
-            <th></th>
+            <th>Active</th>
+            <th>End</th>
         </tr>
     </thead>
     <tbody>
         <?php foreach ($academicsession as $acs) : ?>
         <?php $textclass = ($acs['status'] == 'active') ? 'text-success' : 'text-muted' ?>
-        <?php $disabled = ($acs['status'] == 'active') ? 'disabled' : '' ?>
-        <?php $enddisabled = ($acs['endofsession'] == true) ? 'disabled' : '' ?>
+        <?php $activedisabled = ($acs['status'] == 'active') ? 'disabled' : '' ?>
+        <?php $btnclass = ($acs['status'] == 'active') ? 'btn btn-outline-success btn-sm' : 'btn btn-outline-info btn-sm' ?>
+        <?php $enddisabled = ($acs['endofsession'] == 1) ? 'disabled' : '' ?>
         <tr class="table-light">
             <td><?= $acs['id'] ?></td>
             <td><?= $acs['academicyear'] ?></td>
@@ -37,51 +41,54 @@
             <td class="<?= $textclass ?>"><?= ucfirst($acs['status']) ?></td>
             <?php $progress = ($acs['endofsession']) ? 'Ending' : 'On Going' ?>
             <td><?= $progress ?></td>
-            <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acs" data-string="<?= $acs['academicsession'] ?>" data-acsid="<?= $acs['id'] ?>"
-                    class="btn btn-outline-primary btn-sm">Toggle Active</button>&nbsp;<button <?= '' ?> data-toggle="modal" data-target="#setendsession" data-string="<?= $acs['academicsession'] ?>"
-                    data-acsid="<?= $acs['id'] ?>" class="btn btn-outline-primary btn-sm">Toggle
-                    End</button></td>
-            <!-- <td></td> -->
+            <td><button <?= $activedisabled ?> data-toggle="modal" data-toggle="tooltip" data-placement="top" title="Hooray!" data-target="#setactive_acs" data-string="<?= $acs['academicsession'] ?>"
+                    data-acsid="<?= $acs['id'] ?>" class="<?= $btnclass ?>">Activate <i class='fas fa-power-off'></i></button>&nbsp;</td>
+            <td><button <?= $enddisabled ?> data-toggle="modal" data-target="#setendsession" data-string="<?= $acs['academicsession'] ?>" data-acsid="<?= $acs['id'] ?>"
+                    class="btn btn-outline-primary btn-sm">End <i class='fas fa-stop'></i></button></td>
         </tr>
         <?php endforeach ?>
     </tbody>
 </table>
+<small>End session enables you to upload student's academic result in academic page</small>
 <hr>
 <!-- ACADEMIC YEAR -->
 <div class="row justify-content-between">
-    <div class="col-4">
+    <div class="col-8">
         <h3>Academic Year</h3>
     </div>
     <div class="col-4">
-        <button class="btn btn-outline-info margin" data-toggle="modal" data-target="#addacadyear" style="float: right;">Add Academic Year</button>
+        <button class="btn btn-info margin" data-toggle="modal" data-target="#addacadyear" style="float: right;">
+            <i class='far fa-calendar-plus'></i> New Year
+        </button>
     </div>
+    <hr>
 </div>
-<table id="acy_table" class="table">
-    <thead>
-        <tr class="table-dark">
+
+<table id="acy_table" class="table table-hover">
+    <thead class="table-dark">
+        <tr>
             <th>Academic Year</th>
             <th>Status</th>
-            <th></th>
+            <th>Active</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-light">
         <?php foreach ($academicyear as $acy) : ?>
         <?php $textclass = ($acy['status'] == 'active') ? 'text-success' : 'text-muted' ?>
         <?php $disabled = ($acy['status'] == 'active') ? 'disabled' : '' ?>
-        <tr class="table-light">
+        <tr>
             <!-- <td><?= $acy['id'] ?></td> -->
             <td><?= $acy['acadyear'] ?></td>
             <td class="<?= $textclass ?>"><?= ucfirst($acy['status']) ?></td>
             <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acy" data-string="<?= $acy['acadyear'] ?>" data-acyid="<?= $acy['id'] ?>"
-                    class="btn btn-outline-primary btn-sm">Toggle Active</button></td>
+                    class="btn btn-outline-primary btn-sm">Activate <i class='fas fa-power-off'></i></button></td>
         </tr>
         <?php endforeach ?>
     </tbody>
 </table>
-<hr>
+<small>You should only add and activate a year when it's the new academic year.</small>
 
-
-<div id="addacademicsession" class="modal fade">
+<div id="addacademicsession" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -120,7 +127,7 @@
     </div>
 </div>
 
-<div id="addacadyear" class="modal fade">
+<div id="addacadyear" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <?= form_open('academic/create_academicyear') ?>
@@ -145,7 +152,7 @@
     </div>
 </div>
 
-<div id="setactive_acs" class="modal fade">
+<div id="setactive_acs" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <?= form_open('academic/set_activesession') ?>
@@ -175,7 +182,7 @@
         </div>
     </div>
 </div>
-<div id="setendsession" class="modal fade">
+<div id="setendsession" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <?= form_open('academic/set_endsession') ?>
@@ -194,7 +201,7 @@
                 <div class="form-group">
                     <h5 id="academicsession" class="text-center text-lg-center"></h5>
                 </div>
-                <small>You will be able to change this once. Please be careful</small>
+                <small>You will be able to change this only once. Please be careful</small>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">End Session</button>
@@ -205,7 +212,7 @@
     </div>
 </div>
 
-<div id="setactive_acy" class="modal fade">
+<div id="setactive_acy" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <?= form_open('academic/set_activeyear') ?>
@@ -239,8 +246,12 @@
 <script>
 var tables = ['#acs_table', '#acy_table', '#acp_table'];
 $(document).ready(function() {
-    $('#acs_table').DataTable();
-    $('#acy_table').DataTable();
+    $('#acs_table').DataTable({
+        "order": []
+    });
+    $('#acy_table').DataTable({
+        "order": []
+    });
     var confirmtext = document.getElementById('confirmtext');
     var academicsession = document.getElementById('academicsession');
     $('#setactive_acs').on('show.bs.modal', function(e) {

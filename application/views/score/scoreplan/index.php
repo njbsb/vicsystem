@@ -3,39 +3,41 @@
     <li class="breadcrumb-item active">Score Plan</li>
 </ol>
 <h2><?= $title ?></h2>
-<div class="">
-    <br>
-    <table id="scoreplanindex" class="table">
-        <thead class="table-dark">
-            <tr>
-                <th>Session</th>
-                <!-- <th>Year</th> -->
-                <?php foreach ($activitycategory as $actcat) : ?>
-                <!-- <th data-toggle="tooltip" data-placement="top" title="" data-original-title="<?= $actcat['category'] ?> Count"><?= $actcat['category'] ?></th> -->
-                <th data-toggle="tooltip" data-placement="top" title="Percent (Count)"><?= $actcat['category'] ?> %</th>
-                <?php endforeach ?>
-                <th>Component Default</th>
-                <th data-toggle="tooltip" data-placement="top" title="55% Max">Total %</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($academicsessions as $acs) : ?>
-            <tr class="table-light">
-                <td><?= $acs['academicsession'] ?></td>
-                <!-- <td><?= $acs['academicyear'] ?></td> -->
-                <?php foreach ($acs['activitycategories'] as $cat) : ?>
-                <!-- <td><?= $cat['categorycount'] ?></td> -->
-                <td><?= sprintf('%s%% (%s)', $cat['categorytotalpercent'], $cat['categorycount']) ?></td>
-                <?php endforeach ?>
-                <?php $textclass = ($acs['total'] == 40) ? 'text-success' : 'text-danger' ?>
-                <td>15%</td>
-                <td class="<?= $textclass ?>"><?= $acs['total'] + 15 ?>%</td>
-                <td><a href="<?= site_url('scoreplan/' . $acs['slug']) ?>" class="badge badge-pill badge-dark">view</a></td>
-            </tr>
-            <?php endforeach ?>
-        </tbody>
-        <!-- <tfoot class="table-dark">
+<div class="card">
+    <div class="card-body">
+        <div class="">
+            <br>
+            <table id="scoreplanindex" class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Session</th>
+                        <!-- <th>Year</th> -->
+                        <?php foreach ($activitycategory as $actcat) : ?>
+                        <!-- <th data-toggle="tooltip" data-placement="top" title="" data-original-title="<?= $actcat['category'] ?> Count"><?= $actcat['category'] ?></th> -->
+                        <th data-toggle="tooltip" data-placement="top" title="Percent (Count)"><?= $actcat['category'] ?> %</th>
+                        <?php endforeach ?>
+                        <th>Component Default</th>
+                        <th data-toggle="tooltip" data-placement="top" title="55% Max">Total %</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="table-light">
+                    <?php foreach ($academicsessions as $acs) : ?>
+                    <tr>
+                        <td><?= $acs['academicsession'] ?></td>
+                        <!-- <td><?= $acs['academicyear'] ?></td> -->
+                        <?php foreach ($acs['activitycategories'] as $cat) : ?>
+                        <!-- <td><?= $cat['categorycount'] ?></td> -->
+                        <td><?= sprintf('%s%% (%s)', $cat['categorytotalpercent'], $cat['categorycount']) ?></td>
+                        <?php endforeach ?>
+                        <?php $textclass = ($acs['total'] == 40) ? 'text-success' : 'text-danger' ?>
+                        <td>15%</td>
+                        <td class="<?= $textclass ?>"><?= $acs['total'] + 15 ?>%</td>
+                        <td><a href="<?= site_url('scoreplan/' . $acs['slug']) ?>" class="btn btn-sm btn-outline-primary"><i class='fas fa-pen'></i></a></td>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+                <!-- <tfoot class="table-dark">
             <tr>
                 <td>Session</td>
                 <td>Year</td>
@@ -47,13 +49,15 @@
                 <td></td>
             </tr>
         </tfoot> -->
-    </table>
+            </table>
 
+        </div>
+        <small>Please make sure total score plans mark percentages add up to 55</small><br>
+        <small>*Note: new scoreplan template will only show when you register new academic session</small>
+    </div>
 </div>
-<small>Please make sure total score plans mark percentages add up to 55</small><br>
-<small>*Note: new scoreplan template will only show when you register new academic session</small>
 <!-- MODAL -->
-<div id="addscoreplan" class="modal fade">
+<div id="addscoreplan" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <?= form_open('score/addscoreplan') ?>

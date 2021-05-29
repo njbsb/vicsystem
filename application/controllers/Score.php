@@ -120,6 +120,7 @@ class Score extends CI_Controller
         # since each score plans will carry 1 score by level
         $this->load->view('templates/header');
         $this->load->view('score/view', $data);
+        $this->load->view('templates/footer');
     }
 
     public function scoreplan($slug = NULL)

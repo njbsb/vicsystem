@@ -5,60 +5,64 @@
 </ol>
 <h2>Score Plan: <?= $acadsession['academicsession'] ?></h2>
 <br>
-<div class="dropdown">
-    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        New Scoreplan
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <?php foreach ($activitycategories as $category) : ?>
-        <button class="dropdown-item" data-toggle="modal" data-target="#addscoreplan<?= $category['code'] ?>" href="#"><?= $category['category'] ?></button>
-        <?php endforeach ?>
+<div class="card">
+    <div class="card-body">
+        <div class="dropdown">
+            <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                New Scoreplan
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <?php foreach ($activitycategories as $category) : ?>
+                <button class="dropdown-item" data-toggle="modal" data-target="#addscoreplan<?= $category['code'] ?>" href="#"><?= $category['category'] ?></button>
+                <?php endforeach ?>
+            </div>
+        </div>
+        <br>
+        <p>Cannot see any available activity? Create a new one <a href="<?= site_url('activity') ?>">here</a><br><small>You can only add a new score plan from activities created on the same academic
+                session.</small></p>
+
+        <table class="table table-hover">
+            <thead class="table-primary">
+                <tr>
+                    <th>Label</th>
+                    <th>Activity/Workshop Title</th>
+                    <th>Percent Weightage</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody class="table-active">
+                <?php $totalpercent = 0; ?>
+                <?php foreach ($scoreplans as $plan) :
+                    $totalpercent += $plan['percentweightage'] ?>
+                <tr>
+                    <td><?= $plan['label'] ?></td>
+                    <td><?= $plan['title'] ?></td>
+                    <td><?= $plan['percentweightage'] ?> %</td>
+                    <td><a type="button" data-toggle="modal" data-target="#editscoreplan<?= $plan['id'] ?>" class="btn btn-outline-primary btn-sm"><i class='fas fa-pen'></i> Edit</a></td>
+                </tr>
+                <?php endforeach ?>
+                <tr>
+                    <td>C</td>
+                    <td>Components (default)</td>
+                    <td>15 %</td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tfoot class="table-active">
+                <tr>
+                    <th>Total</th>
+                    <td></td>
+                    <th><?= $totalpercent + 15 ?> %</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 </div>
-<br>
-<p>Cannot see any available activity? Create a new one <a href="<?= site_url('activity') ?>">here</a><br><small>You can only add a new score plan from activities created on the same academic
-        session.</small></p>
-
-<table class="table">
-    <thead>
-        <tr class="table-primary">
-            <th>Label</th>
-            <th>Activity/Workshop Title</th>
-            <th>Percent Weightage</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php $totalpercent = 0; ?>
-        <?php foreach ($scoreplans as $plan) :
-            $totalpercent += $plan['percentweightage'] ?>
-        <tr class="table-light">
-            <td><?= $plan['label'] ?></td>
-            <td><?= $plan['title'] ?></td>
-            <td><?= $plan['percentweightage'] ?> %</td>
-            <td><a type="button" data-toggle="modal" data-target="#editscoreplan<?= $plan['id'] ?>" class="btn btn-outline-primary btn-sm">Edit</a></td>
-        </tr>
-        <?php endforeach ?>
-        <tr class="table-light">
-            <td>C</td>
-            <td>Components (default)</td>
-            <td>15%</td>
-            <td></td>
-        </tr>
-    </tbody>
-    <tfoot>
-        <tr class="table-dark">
-            <th>Total</th>
-            <td></td>
-            <th><?= $totalpercent + 15 ?> %</th>
-            <th></th>
-        </tr>
-    </tfoot>
-</table>
 
 <?php $index = 0;
 foreach ($scoreplans as $plan) : $index++; ?>
-<div id="editscoreplan<?= $plan['id'] ?>" class="modal fade">
+<div id="editscoreplan<?= $plan['id'] ?>" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -99,7 +103,7 @@ foreach ($scoreplans as $plan) : $index++; ?>
 <?php endforeach ?>
 
 <?php foreach ($activitycategories as $category) : ?>
-<div id="addscoreplan<?= $category['code'] ?>" class="modal fade">
+<div id="addscoreplan<?= $category['code'] ?>" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

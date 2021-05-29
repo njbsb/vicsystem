@@ -27,17 +27,18 @@ class Organization extends CI_Controller
             if (!$secondrows[$name]) {
                 $secondrows[$name] = array(
                     'role' => $secondrownames[$key],
-                    'profile_image' => '',
+                    'userphoto' => '',
                     'student_id' => 'no data',
                     'name' => '-',
-                    'email' => '-'
+                    'email' => '-',
+                    'year' => ''
                 );
             }
         }
         if (!$president) {
             $president = array(
                 'role' => 'President',
-                'profile_image' => '',
+                'userphoto' => '',
                 'student_id' => 'no data',
                 'name' => '-',
                 'email' => '-'
@@ -81,9 +82,11 @@ class Organization extends CI_Controller
     {
         $acadyear_id = $this->input->post('acadyear_id');
         $student_id = $this->input->post('stdmatric');
+        $role_id = $this->input->post('role_id');
         $deluser = array(
             'acadyear_id' => $acadyear_id,
-            'student_id' => $student_id
+            'student_id' => $student_id,
+            'role_id' => $role_id
         );
         $this->committee_model->delete_orgcommittee($deluser);
         redirect('organization');

@@ -32,6 +32,7 @@ class Academic extends CI_Controller
             );
             $this->load->view('templates/header');
             $this->load->view('academic/index', $data);
+            $this->load->view('templates/footer');
         }
     }
 
@@ -154,10 +155,10 @@ class Academic extends CI_Controller
             $scoreplans = $this->score_model->get_scoreplan($selected_academicsession['id'], FALSE);
             // print_r($scoreplans);
             foreach ($scoreplans as $i => $scoreplan) {
-                $scores = $this->score_model->get_scoreplan_scorelevel($student_id = $student_id, $scoreplan['id']);
+                $scores = $this->score_model->get_scoreplan_scorelevel($student_id, $scoreplan['id']);
                 $total = $scores ? array_sum($scores) : 0;
                 $totalpercent = ($total / $scoreleveltotal) * $scoreplan['percentweightage'];
-                $scoreplans[$i]['scores'] = $scores ? $scores : array(0, 0, 0, 0);
+                $scoreplans[$i]['scores'] = $scores ? $scores : array('position' => '-', 'involvement' => '-', 'meeting' => '-', 'attendance' => '-');
                 $scoreplans[$i]['total'] = $total;
                 $scoreplans[$i]['totalpercent'] = $totalpercent;
                 $total_all += $totalpercent;
@@ -192,7 +193,7 @@ class Academic extends CI_Controller
                     'leadership' => $this->score_model->get_guideleadership()
                 )
             );
-            print_r($data['scoreplans']);
+            // print_r($data['scoreplans']);
             $this->load->view('templates/header');
             $this->load->view('academic/records', $data);
         } else {
@@ -223,6 +224,7 @@ class Academic extends CI_Controller
             );
             $this->load->view('templates/header');
             $this->load->view('academic/enroll', $data);
+            $this->load->view('templates/footer');
         } else {
             # data is submitted
             $acadsession_id = $this->input->post('acadsession_id');

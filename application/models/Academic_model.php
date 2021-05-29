@@ -11,7 +11,8 @@ class Academic_model extends CI_Model
         if ($id == FALSE && $slug == FALSE) {
             $this->db->select("acs.*, acy.acadyear as academicyear, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
                 ->from('academicsession as acs')
-                ->join('academicyear as acy', 'acs.acadyear_id = acy.id');
+                ->join('academicyear as acy', 'acs.acadyear_id = acy.id')
+                ->order_by('acs.id', 'DESC');
             $query = $this->db->get();
             return $query->result_array();
         } else {
@@ -99,7 +100,10 @@ class Academic_model extends CI_Model
     public function get_academicyear($academicyear_id = NULL)
     {
         if ($academicyear_id == FALSE) {
-            $query = $this->db->get('academicyear');
+            $this->db->select('*')
+                ->from('academicyear')
+                ->order_by('id', 'desc');
+            $query = $this->db->get();
             return $query->result_array();
         }
         $query = $this->db->get_where('academicyear', array('id' => $academicyear_id));

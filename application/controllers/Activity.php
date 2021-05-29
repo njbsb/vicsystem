@@ -58,7 +58,9 @@ class Activity extends CI_Controller
         if ($data['committees']) {
             $this->load->view('activity/committee', $data);
         }
-        $this->load->view('activity/comments');
+        if (isset($data['comments'])) {
+            $this->load->view('activity/comments');
+        }
     }
 
     public function create()
@@ -153,12 +155,15 @@ class Activity extends CI_Controller
         foreach ($externals as $i => $external) {
             $externals[$i]['participants'] = $this->activity_model->get_externalactivity_participants($external['id']);
         }
+        $academicsession = $this->academic_model->get_activeacademicsession();
         $data = array(
             'externals' => $externals,
-            'academicsession' => $this->academic_model->get_activeacademicsession(),
+            'academicsession' => $academicsession,
             'mentors' => $this->mentor_model->get_mentor(),
-            'activitylevels' => $this->activity_model->get_activitylevels()
+            'activitylevels' => $this->activity_model->get_activitylevels(),
+            'students' => $this->student_model->get_enrolling_students($academicsession['id'])
         );
+        // print_r($externals);
         $this->load->view('templates/header');
         $this->load->view('activity/external', $data);
     }
@@ -185,43 +190,65 @@ class Activity extends CI_Controller
         redirect('activity/external');
     }
 
+    public function update_external()
+    {
+        $id = $this->input->post('editid');
+        $title = $this->input->post('edittitle');
+        $description = $this->input->post('editdescription');
+        $date = $this->input->post('editdate');
+
+        $data = array(
+            'title' => $title,
+            'description' => $description,
+            'date' => $date
+        );
+        $this->activity_model->update_external($id, $data);
+        redirect('activity/external');
+    }
+
+    public function add_externalparticipant()
+    {
+        $activityexternal_id = $this->input->post('external_id');
+        $student_id = $this->input->post('student_id');
+        $data = array(
+            'activityexternal_id' => $activityexternal_id,
+            'student_id' => $student_id
+        );
+        $this->score_model->add_externalparticipant($data);
+        redirect('activity/external');
+    }
+
+    public function delete_externalparticipant()
+    {
+        $student_id = $this->input->post('deleteuserid');
+        $activityexternal_id = $this->input->post('deleteexternalid');
+        $data = array(
+            'activityexternal_id' => $activityexternal_id,
+            'student_id' => $student_id
+        );
+        $this->score_model->delete_externalparticipant($data);
+        redirect('activity/external');
+    }
+
     public function update()
     {
         $id = $this->input->post('id');
-        $slug = url_title($this->input->post('activityname'));
-
-        # Photo
-        // $config_photo = array(
-        //     'upload_path' => './assets/images/activity',
-        //     'allowed_types' => 'gif|jpg|png',
-        //     'max_size' => 1000,
-        //     'max_width' => 2048,
-        //     'max_height' => 1024,
-        //     'file_name' => $slug . '-' . substr(md5(rand()), 0, 10),
-        // );
-        // $this->load->library('upload', $config_photo);
-
-        // if (@$_FILES['photo_path']['name'] != NULL) {
-        //     if ($this->upload->do_upload('photo_path')) {
-        //         $photo_path = $this->upload->data('file_name');
-        //     } else {
-        //         $photo_path = 'default.jpg';
-        //     }
-        // } else {
-        //     $photo_path = $this->input->post('photo_path_hidden');
-        // }
-
+        $slug = url_title($this->input->post('title'));
+        $datestart = $this->input->post('datetime_start');
+        $dateend = $this->input->post('datetime_end');
         $activitydata = array(
-            'title' => $this->input->post('activityname'),
-            'description' => $this->input->post('activitydesc'),
+            'title' => $this->input->post('title'),
+            'description' => $this->input->post('description'),
             'venue' => $this->input->post('venue'),
             'theme' => $this->input->post('theme'),
             'advisor_id' => $this->input->post('advisor_id'),
-            'datetime_start' => $this->input->post('datetime_start'),
-            'datetime_end' => $this->input->post('datetime_end'),
             'slug' => $slug,
             'sp_link' => $this->input->post('sp_link')
         );
+        if ($datestart != '0000-00-00 00:00:00' and $dateend != '0000-00-00 00:00:00') {
+            $data['datetime_start'] = $datestart;
+            $data['datetime_end'] = $dateend;
+        }
 
         $this->activity_model->update_activity($id, $activitydata);
         redirect('activity/' . $slug);
@@ -247,6 +274,21 @@ class Activity extends CI_Controller
             'description' => $this->input->post('role_desc')
         );
         $this->committee_model->register_act_committee($comdata);
+        redirect('activity/' . $slug);
+    }
+
+    public function delete_committee()
+    {
+        $slug = $this->input->post('slug');
+        $activity_id = $this->input->post('activity_id');
+        $student_id = $this->input->post('deletestudentid');
+        $role_id = $this->input->post('deleteroleid');
+        $data = array(
+            'activity_id' => $activity_id,
+            'student_id' => $student_id,
+            'role_id' => $role_id
+        );
+        $this->committee_model->delete_actcommittee($data);
         redirect('activity/' . $slug);
     }
 

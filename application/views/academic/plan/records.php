@@ -28,7 +28,7 @@
             </select>
         </div>
         <div class="col-md-4">
-            <button type="submit" class="btn btn-outline-primary">Search record</button>
+            <button type="submit" class="btn btn-outline-primary"><i class='fas fa-search'></i> Search</button>
         </div>
     </div>
     <?= form_close() ?>
@@ -44,7 +44,7 @@
         <button class="btn btn-outline-primary margin" data-toggle="modal" data-target="#addacademicplan" style="float: right;">Add Academic Plan</button>
     </div>
 </div> -->
-<table id="acp_table" class="table display">
+<table id="acp_table" class="table">
     <thead class="table-dark">
         <tr>
             <th>Matric</th>
@@ -56,7 +56,7 @@
             <th>Increment</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-light">
         <?php if ($academicplans) : ?>
         <?php foreach ($academicplans as $acp) : ?>
         <!-- <tr>

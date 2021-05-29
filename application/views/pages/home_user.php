@@ -2,21 +2,23 @@
     <li class="breadcrumb-item active">Home</li>
 </ol>
 
-<div class="jumbotron bg-white" style="padding-bottom: 0px; padding-top: 1rem;">
-    <h5 class="text-right text-muted"><b>Today is <?= date("jS F Y (l)") ?></b></h5>
-    <h1 class="display-3">Welcome, <?= $user_name ?>!</h1>
-    <p class="lead">This is a website to manage VIC Information and Activities</p>
-    <!-- <?php if (!$profileComplete) : ?>
+<div class="card" style="padding-bottom: 0px; padding-top: 1rem;">
+    <div class="card-body">
+        <h5 class="text-right text-muted"><b>Today is <?= date("jS F Y (l)") ?></b></h5>
+        <h1 class="display-3">Welcome, <?= $user_name ?>!</h1>
+        <p class="lead">This is a website to manage VIC Information and Activities</p>
+        <!-- <?php if (!$profileComplete) : ?>
     <p>We have detected that you have not completed your profile. Update your profile information <a href="<?= base_url("/profile/update") ?>">here</a></p>
     <?php endif ?> -->
-    <hr class="my-4">
-    <p class="lead">
-    </p>
+        <hr class="my-4">
+        <p class="lead">
+        </p>
+    </div>
 </div>
-
+<br>
 <div class="row">
     <div class="col-md-3">
-        <div class="card" style="border-radius: 12px">
+        <div class="card">
             <div class="card-body">
                 <div class="d-flex flex-column align-items-center text-center">
                     <img class="rounded-circle" style="object-fit:cover;" src="<?= $user['userphoto'] ?>" alt="" width="150" height="150">
@@ -24,8 +26,8 @@
                         <!-- <h5 class="card-title">Hello</h5>
                         <p class="card-subtitle">World</p> -->
                         <h4><?= $this->session->userdata('username') ?></h4>
-                        <p class="text-secondary mb-1"><?= $user_name ?></p>
-                        <p class="text-muted font-size-sm">Video Innovation Club</p>
+                        <p class="text-primary mb-1"><?= $user_name ?></p>
+                        <p class="text-primary font-size-sm">Video Innovation Club</p>
                         <a class="btn btn-primary" href="<?= site_url('profile') ?>">Profile</a>
                         <a class="btn btn-outline-primary" href="<?= site_url('profile/update') ?>">Edit</a>
                     </div>
@@ -47,23 +49,25 @@
         </div>
     </div>
     <div class="col-md-9">
-        <div class="jumbotron bg-muted" style="border-radius: 12px">
-            <div class="row">
-                <div class="col-sm-6">
-                    <label for=""><b>VIC Member Count: <?= $total_count ?></b></label>
-                    <canvas responsive="true" id="pieChart"></canvas>
-                </div>
-                <div class="col-sm-6">
-                    <label><b>VIC Intake by Year</b></label>
-                    <canvas id="barChart" responsive="true"></canvas>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label for=""><b>VIC Member Count: <?= $total_count ?></b></label>
+                        <canvas responsive="true" id="pieChart"></canvas>
+                    </div>
+                    <div class="col-sm-6">
+                        <label><b>VIC Intake by Year</b></label>
+                        <canvas id="barChart" responsive="true"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
-
+        <br>
         <div class="row">
             <div class="col-md-4">
-                <div class="jumbotron jumbotron-fluid" style="border-radius: 12px; padding-top: 20px; padding-bottom: 20px;">
-                    <div class="container">
+                <div class="card">
+                    <div class="card-body">
                         <h5 class="text-center text-primary"><b>&#127881; &#127882; Birthdays &#127874; &#127873;</b></h5>
                         <hr class="my-2">
                         <p>Celebrating our <b><?= date("F") ?></b> babies! &#127874; &#127873;</p>
@@ -77,14 +81,15 @@
                         </p>
                     </div>
                 </div>
+                <br>
                 <div class="card">
                     <div class="card-body">
                     </div>
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="jumbotron jumbotron-fluid" style="border-radius: 12px; padding-top: 20px; padding-bottom: 20px;">
-                    <div class="container">
+                <div class="card">
+                    <div class="card-body">
                         <h5 class="text-left text-primary"><b>Current Academic Session: <?= $activesession['academicsession'] ?></b></h5>
                         <hr class="my-2">
                         <p>Upcoming activities this semester:</p>
@@ -224,33 +229,32 @@ $(function() {
     });
 
 });
-</script>
-<script>
-var apexoptions = {
-    series: [44, 55, 41, 17, 15],
-    chart: {
-        type: 'donut',
-    },
-    colors: ['rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)'
-    ],
-    responsive: [{
-        breakpoint: 480,
-        options: {
-            chart: {
-                width: 200
-            },
-            legend: {
-                position: 'bottom'
-            }
-        }
-    }]
-};
 
-var apexchart = new ApexCharts(document.querySelector("#apexchart"), apexoptions);
-apexchart.render();
+// var apexoptions = {
+//     series: [44, 55, 41, 17, 15],
+//     chart: {
+//         type: 'donut',
+//     },
+//     colors: ['rgba(255, 99, 132, 0.2)',
+//         'rgba(54, 162, 235, 0.2)',
+//         'rgba(255, 206, 86, 0.2)',
+//         'rgba(75, 192, 192, 0.2)',
+//         'rgba(153, 102, 255, 0.2)',
+//         'rgba(255, 159, 64, 0.2)'
+//     ],
+//     responsive: [{
+//         breakpoint: 480,
+//         options: {
+//             chart: {
+//                 width: 200
+//             },
+//             legend: {
+//                 position: 'bottom'
+//             }
+//         }
+//     }]
+// };
+
+// var apexchart = new ApexCharts(document.querySelector("#apexchart"), apexoptions);
+// apexchart.render();
 </script>

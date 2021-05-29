@@ -18,82 +18,92 @@
     <small>You can only enroll students in an active academic session!</small>
 </div>
 <hr>
+<div class="card">
+    <div class="card-body">
 
-<?php $hidden = array('acadsession_id' => $activesession['id']); ?>
-<?= form_open('enroll', '', $hidden) ?>
-<h3>Non Enrolled Students</h3>
-<table id="studenttable" class="table" style="text-align:center;">
-    <thead class="table-dark">
-        <tr>
-            <th>Pick</th>
-            <th>Intake</th>
-            <th>Matric</th>
-            <th>Name</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($availablestudents as $std) : ?>
-        <?php $checked = 'selected'; ?>
-        <tr>
-            <td><input name="students[]" value="<?= $std['matric'] ?>" type="checkbox" /></td>
-            <td><?= $std['yearjoined'] ?></td>
-            <td><?= $std['matric'] ?></td>
-            <td><?= $std['name'] ?></td>
-            <td></td>
-        </tr>
-        <?php endforeach ?>
-    </tbody>
-    <tfoot>
-        <tr>
-            <td></td>
-            <td>Joined Year</td>
-            <td>Matric</td>
-            <td>Name</td>
-            <td>Status</td>
-        </tr>
-    </tfoot>
-</table>
-<button class="btn btn-outline-primary" type="submit">Enroll</button>
-<?= form_close() ?>
-<hr>
-
-<h3 class="margin">Enrolled Students</h3>
-<?php $hidden = array('acadsession_id' => $activesession['id']) ?>
-<?= form_open('unenroll', '', $hidden) ?>
-<table id="enrolledtable" class="table" style="text-align:center;">
-    <thead class="table-success">
-        <tr>
-            <th>Pick</th>
-            <th>Matric</th>
-            <th>Name</th>
-            <th>GPA Target</th>
-            <th>GPA Achieved</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if ($enrolledstudents) : ?>
-        <?php foreach ($enrolledstudents as $std) : ?>
-        <tr>
-            <td><input name="students[]" value="<?= $std['matric'] ?>" type="checkbox" /></td>
-            <td><?= $std['matric'] ?></td>
-            <td><?= $std['name'] ?></td>
-            <td><?= $std['gpa_target'] ?></td>
-            <td><?= $std['gpa_achieved'] ?></td>
-        </tr>
-        <?php endforeach ?>
-        <?php else : ?>
-        <tr>
-            <td>No data</td>
-        </tr>
-        <?php endif ?>
-    </tbody>
-</table>
-<div class="form-group">
-    <button class="btn btn-outline-danger">Un-Enroll</button>
+        <?php $hidden = array('acadsession_id' => $activesession['id']); ?>
+        <?= form_open('enroll', '', $hidden) ?>
+        <h3>Non Enrolled Students</h3>
+        <table id="studenttable" class="table table-hover" style="text-align:center;">
+            <thead class="table-dark">
+                <tr>
+                    <th>Pick</th>
+                    <th>Intake</th>
+                    <th>Matric</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody class="table-active">
+                <?php foreach ($availablestudents as $std) : ?>
+                <?php $checked = 'selected'; ?>
+                <tr>
+                    <td><input name="students[]" value="<?= $std['matric'] ?>" type="checkbox" /></td>
+                    <td><?= $std['yearjoined'] ?></td>
+                    <td><?= $std['matric'] ?></td>
+                    <td><?= $std['name'] ?></td>
+                    <td></td>
+                </tr>
+                <?php endforeach ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td>Joined Year</td>
+                    <td>Matric</td>
+                    <td>Name</td>
+                    <td>Status</td>
+                </tr>
+            </tfoot>
+        </table>
+        <br>
+        <button class="btn btn-outline-primary" type="submit"><i class='fas fa-upload'></i> Enroll</button>
+        <?= form_close() ?>
+    </div>
 </div>
-<?= form_close() ?>
+<hr>
+<div class="card">
+    <div class="card-body">
 
+        <h3 class="margin">Enrolled Students</h3>
+        <?php $hidden = array('acadsession_id' => $activesession['id']) ?>
+        <?= form_open('unenroll', '', $hidden) ?>
+        <table id="enrolledtable" class="table table-hover" style="text-align:center;">
+            <thead class="table-success">
+                <tr>
+                    <th>Pick</th>
+                    <th>Matric</th>
+                    <th>Name</th>
+                    <th>GPA Target</th>
+                    <th>GPA Achieved</th>
+                </tr>
+            </thead>
+            <tbody class="table-active">
+                <?php if ($enrolledstudents) : ?>
+                <?php foreach ($enrolledstudents as $std) : ?>
+                <tr>
+                    <td><input name="students[]" value="<?= $std['matric'] ?>" type="checkbox" /></td>
+                    <td><?= $std['matric'] ?></td>
+                    <td><?= $std['name'] ?></td>
+                    <td><?= $std['gpa_target'] ?></td>
+                    <td><?= $std['gpa_achieved'] ?></td>
+                </tr>
+                <?php endforeach ?>
+                <?php else : ?>
+                <tr>
+                    <td>No data</td>
+                </tr>
+                <?php endif ?>
+            </tbody>
+        </table>
+        <br>
+        <div class="form-group">
+            <button class="btn btn-outline-danger"><i class='fas fa-download'></i> Un-Enroll</button>
+        </div>
+        <?= form_close() ?>
+
+    </div>
+</div>
 <script>
 $(document).ready(function() {
     $('#studenttable').DataTable({

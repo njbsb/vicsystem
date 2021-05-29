@@ -1,3 +1,4 @@
+<hr>
 <div class="form-group">
     <div class="custom-control custom-switch">
         <input type="checkbox" class="custom-control-input" id="checkbox_comments" checked="">
@@ -6,18 +7,6 @@
 </div>
 
 <div id="comments">
-    <h4>Comments</h4>
-    <?php if ($comments) : ?>
-    <?php foreach ($comments as $com) : ?>
-    <div class="alert alert-dismissible alert-light comment-box" style="margin-bottom: 4px; padding-bottom:4px;padding-top:4px; border-radius:12px;">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <small><b><?= $com['created_at'] ?></b></small><br>
-        <b><?= $com['user_id'] ?>:</b> <?= $com['comment'] ?>
-        <!-- <button class="btn"><i class="fa fa-trash"></i></button> -->
-    </div>
-    <?php endforeach ?>
-    <?php endif ?>
-    <hr>
 
     <h4>Add comment</h4>
     <?php if (validation_errors()) : ?>
@@ -30,24 +19,52 @@
     <div class="form-group">
         <textarea name="comment" class="form-control" rows="3" required="required"></textarea>
     </div>
-    <!-- <div class="form-group">
-        <label for="comment_category">Select a category</label>
-        <select name="category_id" id="category_id" class="form-control">
-            <option value="" selected disabled hidden>Choose category</option>
-            <?php foreach ($categories as $cat) : ?>
-            <option value="<?= $cat['id'] ?>">
-                <?= $cat['category'] ?>
-            </option>
-            <?php endforeach ?>
-        </select>
-    </div> -->
     <input type="hidden" name="slug" value="<?php echo $activity['slug']; ?>">
-    <button class="btn btn-primary" type="submit">Submit</button>
+    <button class="btn btn-primary" type="submit"><i class='fas fa-paper-plane'></i> Submit</button>
     <?= form_close() ?>
-    <br><br>
+    <br>
+    <!-- <h4>Comments</h4> -->
+    <?php if ($comments) : ?>
+    <?php foreach ($comments as $com) : ?>
+    <div class="alert alert-dismissible alert-light card" style="margin-bottom: 4px; padding-bottom:4px;padding-top:4px; border-radius:12px;">
+        <?php $textclass = ($this->session->userdata('username') == $com['user_id']) ? 'text-pink' : 'text-primary' ?>
+        <div class="row">
+            <div class="col-sm-10">
+                <?php $userid = ($this->session->userdata('user_type') == 'student') ? substr($com['user_id'], 0, -4) . '****' : $com['user_id'] ?>
+                <?php $datatitle = ($this->session->userdata('user_type') != 'student') ? $com['name'] : '' ?>
+                <b data-toggle="tooltip" data-title="<?= $datatitle ?>" class="<?= $textclass ?>"><?= $userid ?>:</b> <?= $com['comment'] ?>
+                <br><small><?= $com['created_at'] ?></small><br>
+            </div>
+            <div class="col-sm-2">
+                <?php if ($this->session->userdata('username') == $com['user_id']) : ?>
+                <a href="#" class="btn btn-sm" style="float: right;"><i class="fa fa-trash"></i></a>
+                <?php endif ?>
+            </div>
+        </div>
+    </div>
+    <?php endforeach ?>
+    <table class="table" id="tablecomment">
+        <tbody class="table-active">
+            <?php foreach ($comments as $comment) : ?>
+            <tr>
+                <td><img class="rounded-circle" src="<?= $comment['userphoto'] ?>" width="30px" height="30px" alt=""></td>
+                <td><?= $comment['comment'] ?></td>
+            </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+    <?php endif ?>
+    <hr>
+
+
 </div>
 
+
 <script type="text/javascript">
+$(document).ready(function() {
+    $('#tablecomment').DataTable();
+});
+
 var commentarray = <?= json_encode($comments) ?>;
 buildComments(commentarray);
 var limit = 3;
@@ -93,6 +110,10 @@ function buildComments(array) {
     //     </ul>`
     // }
 }
+$(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
 
 $(document).ready(function() {
     $('#checkbox_comments').click(function() {
