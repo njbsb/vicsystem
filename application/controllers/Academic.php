@@ -63,6 +63,7 @@ class Academic extends CI_Controller
         );
         $this->load->view('templates/header');
         $this->load->view('academic/plan/student', $data);
+        $this->load->view('templates/footer');
     }
 
     public function academicplanmentor()
@@ -128,6 +129,17 @@ class Academic extends CI_Controller
                 $academicplans[$i]['status'] = $status;
                 $academicplans[$i]['textclass'] = $textclass;
             }
+            # create chart from academicplans
+            $barData = [];
+            $barData['label'] = ['1 - 1.5', '1.5 - 2', '2 - 2.5', '2.5 - 3', '3 - 3.5', '3.5 - 4'];
+            $barData['threshold'] = [1, 1.5, 2, 2.5, 3, 3.5, 4];
+            foreach ($barData['label'] as $i => $group) {
+                foreach ($academicplans as $plan) {
+                    $gpa = $plan['gpa_achieved'];
+                    if ($gpa > $group['threshold']) {
+                    }
+                }
+            }
             $data = array(
                 'title' => 'Academic Plan Records',
                 'academicyears' => $this->academic_model->get_academicyear(),
@@ -135,8 +147,10 @@ class Academic extends CI_Controller
                 'academicsession' => $academicsession,
                 'academicplans' => $academicplans
             );
+
             $this->load->view('templates/header');
             $this->load->view('academic/plan/records', $data);
+            $this->load->view('templates/footer');
         }
     }
 
@@ -197,6 +211,7 @@ class Academic extends CI_Controller
             // print_r($data['scoreplans']);
             $this->load->view('templates/header');
             $this->load->view('academic/records', $data);
+            $this->load->view('templates/footer');
         } else {
             # put error message
             redirect('academicplan/student');

@@ -250,8 +250,8 @@ class Activity extends CI_Controller
             'sp_link' => $this->input->post('sp_link')
         );
         if ($datestart != '0000-00-00 00:00:00' and $dateend != '0000-00-00 00:00:00') {
-            $data['datetime_start'] = $datestart;
-            $data['datetime_end'] = $dateend;
+            $activitydata['datetime_start'] = $datestart;
+            $activitydata['datetime_end'] = $dateend;
         }
 
         $this->activity_model->update_activity($id, $activitydata);

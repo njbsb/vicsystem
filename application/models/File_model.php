@@ -14,12 +14,29 @@ class File_model extends CI_Model
     public function get_template($id = null)
     {
         if ($id === false) {
-            $query = $this->db->get_where('filetemplate', array('id' => $id));
+            $query = $this->db->get_where('filelink', array('id' => $id));
             return $query->row_array();
         } else {
-            $query = $this->db->get('filetemplate');
+            $query = $this->db->get('filelink');
             return $query->result_array();
         }
+    }
+
+    public function update_link($id, $data)
+    {
+        return $this->db->where('id', $id)
+            ->update('filelink', $data);
+    }
+
+    public function create_link($data)
+    {
+        return $this->db->insert('filelink', $data);
+    }
+
+    public function delete_link($id)
+    {
+        return $this->db->where('id', $id)
+            ->delete('filelink');
     }
 
     // public function get_collaborators($collab_id = NULL)

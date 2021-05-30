@@ -102,7 +102,7 @@ class Student_model extends CI_Model
                 'userstatus' => 'active'
             ))
             ->join('student', 'student.matric = user.id', 'left')
-            ->join('academicplan as acp', 'user.id = acp.student_id')
+            // ->join('academicplan as acp', 'user.id = acp.student_id', 'left')
             ->where('user.yearjoined >=', $limityear)
             ->order_by('user.yearjoined', 'desc');
         $query = $this->db->get();

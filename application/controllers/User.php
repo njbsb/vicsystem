@@ -74,10 +74,10 @@ class User extends CI_Controller
                 $this->session->set_flashdata('user_loggedin', 'You are now logged in as ' . $user_id);
                 if (md5($username) == $password) {
                     # check if default password is equal to username
-                    redirect('passwordreset');
+                    // redirect('changepassword');
                 } else {
-                    redirect(site_url());
                 }
+                redirect(site_url());
             } else {
                 $this->session->set_flashdata('login_failed', 'Login is invalid');
                 redirect('login');
