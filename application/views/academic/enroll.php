@@ -22,8 +22,9 @@
     <div class="card-body">
 
         <?php $hidden = array('acadsession_id' => $activesession['id']); ?>
-        <?= form_open('enroll', '', $hidden) ?>
-        <h3>Non Enrolled Students</h3>
+        <?php $attribute = array('id' => 'enrollform') ?>
+        <?= form_open('enroll', $attribute, $hidden) ?>
+        <h3 class="margin">Non Enrolled Students</h3>
         <table id="studenttable" class="table table-hover" style="text-align:center;">
             <thead class="table-dark">
                 <tr>
@@ -38,7 +39,7 @@
                 <?php foreach ($availablestudents as $std) : ?>
                 <?php $checked = 'selected'; ?>
                 <tr>
-                    <td><input name="students[]" value="<?= $std['matric'] ?>" type="checkbox" /></td>
+                    <td><input id="enrollstudents" name="unenrollstudents[]" value="<?= $std['matric'] ?>" type="checkbox" /></td>
                     <td><?= $std['yearjoined'] ?></td>
                     <td><?= $std['matric'] ?></td>
                     <td><?= $std['name'] ?></td>
@@ -57,17 +58,17 @@
             </tfoot>
         </table>
         <br>
-        <button class="btn btn-outline-primary" type="submit"><i class='fas fa-upload'></i> Enroll</button>
+        <a data-toggle="modal" id="enrollbtn" data-target="#enrollconfirm" class="btn btn-outline-primary"><i class='fas fa-upload'></i> Enroll</a>
         <?= form_close() ?>
     </div>
 </div>
 <hr>
 <div class="card">
     <div class="card-body">
-
         <h3 class="margin">Enrolled Students</h3>
         <?php $hidden = array('acadsession_id' => $activesession['id']) ?>
-        <?= form_open('unenroll', '', $hidden) ?>
+        <?php $attribute = array('id' => 'unenrollform') ?>
+        <?= form_open('unenroll', $attribute, $hidden) ?>
         <table id="enrolledtable" class="table table-hover" style="text-align:center;">
             <thead class="table-success">
                 <tr>
@@ -82,7 +83,7 @@
                 <?php if ($enrolledstudents) : ?>
                 <?php foreach ($enrolledstudents as $std) : ?>
                 <tr>
-                    <td><input name="students[]" value="<?= $std['matric'] ?>" type="checkbox" /></td>
+                    <td><input id="unenrollstudents" name="enrollstudents[]" value="<?= $std['matric'] ?>" type="checkbox" /></td>
                     <td><?= $std['matric'] ?></td>
                     <td><?= $std['name'] ?></td>
                     <td><?= $std['gpa_target'] ?></td>
@@ -98,12 +99,53 @@
         </table>
         <br>
         <div class="form-group">
-            <button class="btn btn-outline-danger"><i class='fas fa-download'></i> Un-Enroll</button>
+            <a data-toggle="modal" id="unenrollbtn" data-target="#unenrollconfirm" class="btn btn-outline-danger"><i class='fas fa-download'></i> Un-Enroll</a>
         </div>
         <?= form_close() ?>
-
     </div>
 </div>
+
+<div id="enrollconfirm" class="modal fade card">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Action check!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="enrollconfirmtext"></p>
+                <small>Enrolling students would create default academic plan for this semester.</small>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="enrollconfirmbtn" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="unenrollconfirm" class="modal fade card">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Action check!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="unenrollconfirmtext"></p>
+                <small>Un-enroll students would delete their academic plan and GPA target if exist.</small>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="unenrollconfirmbtn" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 $(document).ready(function() {
     $('#studenttable').DataTable({
@@ -124,7 +166,8 @@ $(document).ready(function() {
                     select.append('<option value="' + d + '">' + d + '</option>')
                 });
             });
-        }
+        },
+        "order": []
     });
     $('#enrolledtable').DataTable({
         initComplete: function() {
@@ -144,7 +187,36 @@ $(document).ready(function() {
                     select.append('<option value="' + d + '">' + d + '</option>')
                 });
             });
-        }
+        },
+        "order": []
     });
+});
+var enrollconfirmtext = document.getElementById('enrollconfirmtext');
+var unenrollconfirmtext = document.getElementById('unenrollconfirmtext');
+$('#enrollbtn').click(function() {
+    var count = $('input[name="unenrollstudents[]"]:checked').length;
+    if (count < 1) {
+        enrollconfirmtext.innerHTML = 'You did not choose any student. Please check some students first!';
+        document.getElementById("enrollconfirmbtn").disabled = true;
+    } else {
+        enrollconfirmtext.innerHTML = 'You are about to enroll ' + $("input[type='checkbox']:checked").length + ' students. Proceed?';
+        document.getElementById("enrollconfirmbtn").disabled = false;
+    }
+});
+$('#enrollconfirmbtn').click(function() {
+    $('#enrollform').submit();
+});
+$('#unenrollbtn').click(function() {
+    var count = $('input[name="enrollstudents[]"]:checked').length;
+    if (count < 1) {
+        unenrollconfirmtext.innerHTML = 'You did not choose any student. Please check some students first!';
+        document.getElementById("unenrollconfirmbtn").disabled = true;
+    } else {
+        unenrollconfirmtext.innerHTML = 'You are about to unenroll ' + $("input[type='checkbox']:checked").length + ' students. Proceed?';
+        document.getElementById("unenrollconfirmbtn").disabled = false;
+    }
+});
+$('#unenrollconfirmbtn').click(function() {
+    $('#unenrollform').submit();
 });
 </script>
