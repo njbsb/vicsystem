@@ -11,28 +11,28 @@
 <hr>
 <div id="tableview" class="card">
     <div class="card-body">
-        <table id="activitytable" class="table table-hover" style="text-align:left;">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">Activity</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Academic Session</th>
-                    <th scope="col">No of Committees</th>
-                    <th scope="col">Advisor</th>
-                </tr>
-            </thead>
-            <tbody class="list table-active">
-                <?php foreach ($activities as $activity) : ?>
-                <tr>
-                    <td class="Activity" scope="row"><a href="<?= site_url('/activity/' . $activity['slug']) ?>"><?= $activity['title'] ?></a></t>
-                    <td class="Date"><?= date('d/m/Y', strtotime($activity['datetime_start'])) ?></td>
-                    <td><?= $activity['academicsession'] ?></td>
-                    <td><?= $activity['committeenum'] ?></td>
-                    <td><?= $activity['advisorname'] ?></td>
-                </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="activitytable" class="table table-hover" style="text-align:left;">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Activity/Workshop</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Academic Session</th>
+                        <th scope="col">No of Committees</th>
+                    </tr>
+                </thead>
+                <tbody class="list table-active">
+                    <?php foreach ($activities as $activity) : ?>
+                    <tr>
+                        <td class="Activity" scope="row"><a href="<?= site_url('/activity/' . $activity['slug']) ?>"><?= $activity['title'] ?></a></t>
+                        <td class="Date"><?= date('d/m/Y', strtotime($activity['datetime_start'])) ?></td>
+                        <td><?= $activity['academicsession'] ?></td>
+                        <td><?= $activity['committeenum'] ?></td>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <br>

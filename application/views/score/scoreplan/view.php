@@ -21,42 +21,44 @@
         <p>Cannot see any available activity? Create a new one <a href="<?= site_url('activity') ?>">here</a><br><small>You can only add a new score plan from activities created on the same academic
                 session.</small></p>
 
-        <table class="table table-hover">
-            <thead class="table-primary">
-                <tr>
-                    <th>Label</th>
-                    <th>Activity/Workshop Title</th>
-                    <th>Percent Weightage</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody class="table-active">
-                <?php $totalpercent = 0; ?>
-                <?php foreach ($scoreplans as $plan) :
-                    $totalpercent += $plan['percentweightage'] ?>
-                <tr>
-                    <td><?= $plan['label'] ?></td>
-                    <td><?= $plan['title'] ?></td>
-                    <td><?= $plan['percentweightage'] ?> %</td>
-                    <td><a type="button" data-toggle="modal" data-target="#editscoreplan<?= $plan['id'] ?>" class="btn btn-outline-primary btn-sm"><i class='fas fa-pen'></i> Edit</a></td>
-                </tr>
-                <?php endforeach ?>
-                <tr>
-                    <td>C</td>
-                    <td>Components (default)</td>
-                    <td>15 %</td>
-                    <td></td>
-                </tr>
-            </tbody>
-            <tfoot class="table-active">
-                <tr>
-                    <th>Total</th>
-                    <td></td>
-                    <th><?= $totalpercent + 15 ?> %</th>
-                    <th></th>
-                </tr>
-            </tfoot>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Label</th>
+                        <th>Activity/Workshop Title</th>
+                        <th>Percent Weightage</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="table-active">
+                    <?php $totalpercent = 0; ?>
+                    <?php foreach ($scoreplans as $plan) :
+                        $totalpercent += $plan['percentweightage'] ?>
+                    <tr>
+                        <td><?= $plan['label'] ?></td>
+                        <td><?= $plan['title'] ?></td>
+                        <td><?= $plan['percentweightage'] ?> %</td>
+                        <td><a type="button" data-toggle="modal" data-target="#editscoreplan<?= $plan['id'] ?>" class="btn btn-outline-primary btn-sm"><i class='fas fa-pen'></i> Edit</a></td>
+                    </tr>
+                    <?php endforeach ?>
+                    <tr>
+                        <td>C</td>
+                        <td>Components (default)</td>
+                        <td>15 %</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+                <tfoot class="table-active">
+                    <tr>
+                        <th>Total</th>
+                        <td></td>
+                        <th><?= $totalpercent + 15 ?> %</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
 </div>
 

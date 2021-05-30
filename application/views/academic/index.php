@@ -16,39 +16,41 @@
         </button>
     </div>
 </div>
-<table id="acs_table" class="table table-hover">
-    <thead>
-        <tr class="table-dark">
-            <th>ID</th>
-            <th>Academic Year</th>
-            <th>Semester</th>
-            <th>Status</th>
-            <th>Progress</th>
-            <th>Active</th>
-            <th>End</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($academicsession as $acs) : ?>
-        <?php $textclass = ($acs['status'] == 'active') ? 'text-success' : 'text-muted' ?>
-        <?php $activedisabled = ($acs['status'] == 'active') ? 'disabled' : '' ?>
-        <?php $btnclass = ($acs['status'] == 'active') ? 'btn btn-outline-success btn-sm' : 'btn btn-outline-info btn-sm' ?>
-        <?php $enddisabled = ($acs['endofsession'] == 1) ? 'disabled' : '' ?>
-        <tr class="table-light">
-            <td><?= $acs['id'] ?></td>
-            <td><?= $acs['academicyear'] ?></td>
-            <td><?= $acs['semester'] ?></td>
-            <td class="<?= $textclass ?>"><?= ucfirst($acs['status']) ?></td>
-            <?php $progress = ($acs['endofsession']) ? 'Ending' : 'On Going' ?>
-            <td><?= $progress ?></td>
-            <td><button <?= $activedisabled ?> data-toggle="modal" data-toggle="tooltip" data-placement="top" title="Hooray!" data-target="#setactive_acs" data-string="<?= $acs['academicsession'] ?>"
-                    data-acsid="<?= $acs['id'] ?>" class="<?= $btnclass ?>">Activate <i class='fas fa-power-off'></i></button>&nbsp;</td>
-            <td><button <?= $enddisabled ?> data-toggle="modal" data-target="#setendsession" data-string="<?= $acs['academicsession'] ?>" data-acsid="<?= $acs['id'] ?>"
-                    class="btn btn-outline-primary btn-sm">End <i class='fas fa-stop'></i></button></td>
-        </tr>
-        <?php endforeach ?>
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table id="acs_table" class="table table-hover">
+        <thead>
+            <tr class="table-dark">
+                <th>ID</th>
+                <th>Academic Year</th>
+                <th>Semester</th>
+                <th>Status</th>
+                <th>Progress</th>
+                <th>Active</th>
+                <th>End</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($academicsession as $acs) : ?>
+            <?php $textclass = ($acs['status'] == 'active') ? 'text-success' : 'text-muted' ?>
+            <?php $activedisabled = ($acs['status'] == 'active') ? 'disabled' : '' ?>
+            <?php $btnclass = ($acs['status'] == 'active') ? 'btn btn-outline-success btn-sm' : 'btn btn-outline-info btn-sm' ?>
+            <?php $enddisabled = ($acs['endofsession'] == 1) ? 'disabled' : '' ?>
+            <tr class="table-light">
+                <td><?= $acs['id'] ?></td>
+                <td><?= $acs['academicyear'] ?></td>
+                <td><?= $acs['semester'] ?></td>
+                <td class="<?= $textclass ?>"><?= ucfirst($acs['status']) ?></td>
+                <?php $progress = ($acs['endofsession']) ? 'Ending' : 'On Going' ?>
+                <td><?= $progress ?></td>
+                <td><button <?= $activedisabled ?> data-toggle="modal" data-toggle="tooltip" data-placement="top" title="Hooray!" data-target="#setactive_acs"
+                        data-string="<?= $acs['academicsession'] ?>" data-acsid="<?= $acs['id'] ?>" class="<?= $btnclass ?>">Activate <i class='fas fa-power-off'></i></button>&nbsp;</td>
+                <td><button <?= $enddisabled ?> data-toggle="modal" data-target="#setendsession" data-string="<?= $acs['academicsession'] ?>" data-acsid="<?= $acs['id'] ?>"
+                        class="btn btn-outline-primary btn-sm">End <i class='fas fa-stop'></i></button></td>
+            </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+</div>
 <small>End session enables you to upload student's academic result in academic page</small>
 <hr>
 <!-- ACADEMIC YEAR -->
@@ -64,28 +66,30 @@
     <hr>
 </div>
 
-<table id="acy_table" class="table table-hover">
-    <thead class="table-dark">
-        <tr>
-            <th>Academic Year</th>
-            <th>Status</th>
-            <th>Active</th>
-        </tr>
-    </thead>
-    <tbody class="table-light">
-        <?php foreach ($academicyear as $acy) : ?>
-        <?php $textclass = ($acy['status'] == 'active') ? 'text-success' : 'text-muted' ?>
-        <?php $disabled = ($acy['status'] == 'active') ? 'disabled' : '' ?>
-        <tr>
-            <!-- <td><?= $acy['id'] ?></td> -->
-            <td><?= $acy['acadyear'] ?></td>
-            <td class="<?= $textclass ?>"><?= ucfirst($acy['status']) ?></td>
-            <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acy" data-string="<?= $acy['acadyear'] ?>" data-acyid="<?= $acy['id'] ?>"
-                    class="btn btn-outline-primary btn-sm">Activate <i class='fas fa-power-off'></i></button></td>
-        </tr>
-        <?php endforeach ?>
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table id="acy_table" class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Academic Year</th>
+                <th>Status</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody class="table-light">
+            <?php foreach ($academicyear as $acy) : ?>
+            <?php $textclass = ($acy['status'] == 'active') ? 'text-success' : 'text-muted' ?>
+            <?php $disabled = ($acy['status'] == 'active') ? 'disabled' : '' ?>
+            <tr>
+                <!-- <td><?= $acy['id'] ?></td> -->
+                <td><?= $acy['acadyear'] ?></td>
+                <td class="<?= $textclass ?>"><?= ucfirst($acy['status']) ?></td>
+                <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acy" data-string="<?= $acy['acadyear'] ?>" data-acyid="<?= $acy['id'] ?>"
+                        class="btn btn-outline-primary btn-sm">Activate <i class='fas fa-power-off'></i></button></td>
+            </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+</div>
 <small>You should only add and activate a year when it's the new academic year.</small>
 
 <div id="addacademicsession" class="modal fade card">

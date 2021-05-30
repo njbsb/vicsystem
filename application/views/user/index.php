@@ -5,49 +5,51 @@
 <h2 class="text-primary text-center margin"><?= $title ?></h2>
 <div class="card">
     <div class="card-body">
-        <table id="usertable" class="table table-hover">
-            <thead class="table-primary">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>User type</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody class="table-active">
-                <?php foreach ($users as $user) : ?>
-                <tr>
-                    <td><?= $user['id'] ?></td>
-                    <td><?= $user['name'] ?></td>
-                    <td><?= $user['usertype'] ?></td>
-                    <?php if ($user['userstatus'] == 'pending') : ?>
-                    <td class="text-warning"><?= $user['userstatus'] ?></td>
-                    <?php elseif ($user['userstatus'] == 'active') : ?>
-                    <td class="text-success"><?= $user['userstatus'] ?></td>
-                    <?php else : ?>
-                    <td class="text-secondary"><?= $user['userstatus'] ?></td>
-                    <?php endif ?>
-                    <td>
-                        <a class="btn btn-sm btn-outline-primary" href="<?= site_url('validate/') . $user['id'] ?>"><i class='fas fa-pen'></i></a>
-                        <?php if ($user['id'] != $this->session->userdata('username')) : ?>
-                        <a class="btn btn-sm btn-outline-danger" data-toggle="modal" data-userid="<?= $user['id'] ?>"
-                            onclick="$('#confirmDelete #formDelete').attr('action', '<?= site_url('user/delete/' . $user['id']) ?>')" href="#confirmDelete"><i class='fas fa-trash-alt'></i></a>
+        <div class="table-responsive">
+            <table id="usertable" class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>User type</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="table-active">
+                    <?php foreach ($users as $user) : ?>
+                    <tr>
+                        <td><?= $user['id'] ?></td>
+                        <td><?= $user['name'] ?></td>
+                        <td><?= $user['usertype'] ?></td>
+                        <?php if ($user['userstatus'] == 'pending') : ?>
+                        <td class="text-warning"><?= $user['userstatus'] ?></td>
+                        <?php elseif ($user['userstatus'] == 'active') : ?>
+                        <td class="text-success"><?= $user['userstatus'] ?></td>
+                        <?php else : ?>
+                        <td class="text-secondary"><?= $user['userstatus'] ?></td>
                         <?php endif ?>
-                    </td>
-                </tr>
-                <?php endforeach ?>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td>ID</td>
-                    <td>Name</td>
-                    <td>User type</td>
-                    <td>Status</td>
-                    <td></td>
-                </tr>
-            </tfoot>
-        </table>
+                        <td>
+                            <a class="btn btn-sm btn-outline-primary" href="<?= site_url('validate/') . $user['id'] ?>"><i class='fas fa-pen'></i></a>
+                            <?php if ($user['id'] != $this->session->userdata('username')) : ?>
+                            <a class="btn btn-sm btn-outline-danger" data-toggle="modal" data-userid="<?= $user['id'] ?>"
+                                onclick="$('#confirmDelete #formDelete').attr('action', '<?= site_url('user/delete/' . $user['id']) ?>')" href="#confirmDelete"><i class='fas fa-trash-alt'></i></a>
+                            <?php endif ?>
+                        </td>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>ID</td>
+                        <td>Name</td>
+                        <td>User type</td>
+                        <td>Status</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
         <a class="btn btn-success" href="<?= site_url('user/download') ?>" target="_blank"><i class='fas fa-file-excel'></i> Download</a>
     </div>
 </div>

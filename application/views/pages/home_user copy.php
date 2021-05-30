@@ -68,26 +68,28 @@
                     <?= $key + 1 ?>. <?= $activity['title'] ?> (<?= date_format(date_create($activity['datetime_start']), 'j/n') ?>) <br>
                     <?php endforeach ?>
                 </p> -->
-                <table class="table table-hover">
-                    <thead class="table-primary">
-                        <tr>
-                            <th>No</th>
-                            <th>Activity</th>
-                            <th>Date</th>
-                            <th>Days left</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($upcomingactivities as $key => $activity) : ?>
-                        <tr>
-                            <td><?= $key + 1 ?></td>
-                            <td><?= $activity['title'] ?></td>
-                            <td><?= date_format(date_create($activity['datetime_start']), 'j-n-Y') ?></td>
-                            <td><?= $activity['diff'] ?></td>
-                        </tr>
-                        <?php endforeach ?>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>No</th>
+                                <th>Activity</th>
+                                <th>Date</th>
+                                <th>Days left</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($upcomingactivities as $key => $activity) : ?>
+                            <tr>
+                                <td><?= $key + 1 ?></td>
+                                <td><?= $activity['title'] ?></td>
+                                <td><?= date_format(date_create($activity['datetime_start']), 'j-n-Y') ?></td>
+                                <td><?= $activity['diff'] ?></td>
+                            </tr>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
+                </div>
                 <br>
                 <p class="lead">
                     <a class="btn btn-primary btn-md btn-hover" href="activity" role="button">Go to activities</a>

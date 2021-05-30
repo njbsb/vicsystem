@@ -69,25 +69,27 @@
             <h4 class="text-secondary text-center"><b>Activity Level</b></h4>
             <br>
             <?php if ($activity_roles) : ?>
-            <table id="acttable" class="table table-hover">
-                <thead>
-                    <tr class="table-primary">
-                        <th>Year</th>
-                        <th>Activity</th>
-                        <th>Role</th>
-                    </tr>
-                </thead>
-                <tbody class="table-active">
-                    <?php foreach ($activity_roles as $actrole) : ?>
-                    <?php $desc = (isset($actrole['description'])) ? sprintf(' (%s)', $actrole['description']) : '' ?>
-                    <tr>
-                        <td><?= $actrole['acadyear'] . ' Semester ' . $actrole['semester'] ?></td>
-                        <td><?= $actrole['activity_name'] ?></td>
-                        <td><?= $actrole['role'] . $desc ?></td>
-                    </tr>
-                    <?php endforeach ?>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table id="acttable" class="table table-hover">
+                    <thead>
+                        <tr class="table-primary">
+                            <th>Year</th>
+                            <th>Activity</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-active">
+                        <?php foreach ($activity_roles as $actrole) : ?>
+                        <?php $desc = (isset($actrole['description'])) ? sprintf(' (%s)', $actrole['description']) : '' ?>
+                        <tr>
+                            <td><?= $actrole['acadyear'] . ' Semester ' . $actrole['semester'] ?></td>
+                            <td><?= $actrole['activity_name'] ?></td>
+                            <td><?= $actrole['role'] . $desc ?></td>
+                        </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
+            </div>
             <?php else : ?>
             <p class="text-center">No data found</p>
             <?php endif ?>
@@ -99,23 +101,25 @@
             <h4 class="text-secondary text-center"><b>Organization Level</b></h4>
             <br>
             <?php if ($org_roles) : ?>
-            <table id="orgtable" class="table table-hover">
-                <thead>
-                    <tr class="table-primary">
-                        <th>Academic Year</th>
-                        <th>Role</th>
-                    </tr>
-                </thead>
-                <tbody class="table-active">
-                    <?php foreach ($org_roles as $orgrole) : ?>
-                    <?php $desc = (isset($orgrole['description']) or $orgrole['description']) ? sprintf(' (%s)', $orgrole['description']) : '' ?>
-                    <tr>
-                        <td><?= $orgrole['acadyear'] ?></td>
-                        <td><?= $orgrole['role'] . $desc ?></td>
-                    </tr>
-                    <?php endforeach ?>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table id="orgtable" class="table table-hover">
+                    <thead>
+                        <tr class="table-primary">
+                            <th>Academic Year</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-active">
+                        <?php foreach ($org_roles as $orgrole) : ?>
+                        <?php $desc = (isset($orgrole['description']) or $orgrole['description']) ? sprintf(' (%s)', $orgrole['description']) : '' ?>
+                        <tr>
+                            <td><?= $orgrole['acadyear'] ?></td>
+                            <td><?= $orgrole['role'] . $desc ?></td>
+                        </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
+            </div>
             <?php else : ?>
             <p class="text-center">No data found</p>
             <?php endif ?>

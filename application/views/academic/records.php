@@ -7,31 +7,33 @@
 <h4><?= $title ?></h4>
 <br>
 <!-- <h1><?= $academicsession['academicsession'] ?></h1> -->
-<table class="table">
-    <thead class="table-dark">
-        <tr>
-            <th>Academic Session</th>
-            <th>GPA Target</th>
-            <th>GPA Achieved</th>
-            <th>Increment</th>
-        </tr>
-    </thead>
-    <tbody class="table-light">
-        <?php if ($academicplan) : ?>
-        <tr>
-            <td><?= $academicplan['academicsession'] ?></td>
-            <td><?= $academicplan['gpa_target'] ?></td>
-            <td><?= $academicplan['gpa_achieved'] ?></td>
-            <?php $class = ($academicplan['increment'] >= 0) ? 'text-success' : 'text-danger' ?>
-            <td class="<?= $class ?>"><?= $academicplan['increment'] ?></td>
-        </tr>
-        <?php else : ?>
-        <tr>
-            <td>No data of academic plan in record</td>
-        </tr>
-        <?php endif ?>
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th>Academic Session</th>
+                <th>GPA Target</th>
+                <th>GPA Achieved</th>
+                <th>Increment</th>
+            </tr>
+        </thead>
+        <tbody class="table-light">
+            <?php if ($academicplan) : ?>
+            <tr>
+                <td><?= $academicplan['academicsession'] ?></td>
+                <td><?= $academicplan['gpa_target'] ?></td>
+                <td><?= $academicplan['gpa_achieved'] ?></td>
+                <?php $class = ($academicplan['increment'] >= 0) ? 'text-success' : 'text-danger' ?>
+                <td class="<?= $class ?>"><?= $academicplan['increment'] ?></td>
+            </tr>
+            <?php else : ?>
+            <tr>
+                <td>No data of academic plan in record</td>
+            </tr>
+            <?php endif ?>
+        </tbody>
+    </table>
+</div>
 <?php if (!$academicplan['gpa_target']) : ?>
 <small class="text-warning">Attention!</small>
 <small>You have not registered your target GPA for this semester yet! Set your current target GPA in Academic Plan page.</small>
@@ -54,36 +56,38 @@
 <hr>
 <h3>Activity Records</h3>
 <br>
-<table class="table">
-    <thead class="table-dark">
-        <tr>
-            <th>Academic Session</th>
-            <?php if ($scoreplans) : ?>
-            <?php foreach ($scoreplans as $scoreplan) : ?>
-            <th><?= sprintf('%s (%s%%)', $scoreplan['label'], $scoreplan['percentweightage']) ?></th>
-            <?php endforeach ?>
-            <?php endif ?>
-            <th>Components (15%)</th>
-            <th>Total (55%)</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr class="table-light">
-            <td><?= $academicsession['academicsession'] ?></td>
-            <?php if ($scoreplans) : ?>
-            <?php foreach ($scoreplans as $scoreplan) : ?>
-            <td><?= $scoreplan['totalpercent'] ?></td>
-            <?php endforeach ?>
-            <?php endif ?>
-            <?php if ($totalcomp) : ?>
-            <td><?= $totalcomp ?> %</td>
-            <?php else : ?>
-            <td>?</td>
-            <?php endif ?>
-            <td><?= $total_all ?> %</td>
-        </tr>
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th>Academic Session</th>
+                <?php if ($scoreplans) : ?>
+                <?php foreach ($scoreplans as $scoreplan) : ?>
+                <th><?= sprintf('%s (%s%%)', $scoreplan['label'], $scoreplan['percentweightage']) ?></th>
+                <?php endforeach ?>
+                <?php endif ?>
+                <th>Components (15%)</th>
+                <th>Total (55%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-light">
+                <td><?= $academicsession['academicsession'] ?></td>
+                <?php if ($scoreplans) : ?>
+                <?php foreach ($scoreplans as $scoreplan) : ?>
+                <td><?= $scoreplan['totalpercent'] ?></td>
+                <?php endforeach ?>
+                <?php endif ?>
+                <?php if ($totalcomp) : ?>
+                <td><?= $totalcomp ?> %</td>
+                <?php else : ?>
+                <td>?</td>
+                <?php endif ?>
+                <td><?= $total_all ?> %</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 <div class="row">
     <?php foreach ($scoreplans as $scoreplan) : ?>

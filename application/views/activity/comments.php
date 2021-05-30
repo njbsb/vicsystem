@@ -43,16 +43,18 @@
         </div>
     </div>
     <?php endforeach ?>
-    <table class="table" id="tablecomment">
-        <tbody class="table-active">
-            <?php foreach ($comments as $comment) : ?>
-            <tr>
-                <td><img class="rounded-circle" src="<?= $comment['userphoto'] ?>" width="30px" height="30px" alt=""></td>
-                <td><?= $comment['comment'] ?></td>
-            </tr>
-            <?php endforeach ?>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table" id="tablecomment">
+            <tbody class="table-active">
+                <?php foreach ($comments as $comment) : ?>
+                <tr>
+                    <td><img class="rounded-circle" src="<?= $comment['userphoto'] ?>" width="30px" height="30px" alt=""></td>
+                    <td><?= $comment['comment'] ?></td>
+                </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
     <?php endif ?>
     <hr>
 

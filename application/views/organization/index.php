@@ -101,31 +101,33 @@
         <?php if ($isMentor) : ?>
         <button data-toggle="modal" data-target="#registercommittee" class="btn btn-info margin"><i class='fas fa-user-plus'></i> Committee</button>
         <?php endif ?>
-        <table id="orgcom_table" class="table table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>Matric</th>
-                    <th>Name</th>
-                    <th>Role</th>
-                    <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
-                    <th>Action</th>
-                    <?php endif ?>
-                </tr>
-            </thead>
-            <tbody class="table-active">
-                <?php foreach ($sigcommittees as $sigcom) : ?>
-                <tr>
-                    <td><?= $sigcom['student_id'] ?></td>
-                    <td><?= $sigcom['name'] ?></td>
-                    <td><?= $sigcom['role'] ?></td>
-                    <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
-                    <td><a class="btn btn-outline-danger btn-sm" data-stdrole="<?= $sigcom['role'] ?>" data-roleid="<?= $sigcom['role_id'] ?>" data-stdname="<?= $sigcom['name'] ?>"
-                            data-stdmatric="<?= $sigcom['student_id'] ?>" data-toggle="modal" data-target="#delete_orgcom"><i class="fa fa-trash"></i></a></td>
-                    <?php endif ?>
-                </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="orgcom_table" class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Matric</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
+                        <th>Action</th>
+                        <?php endif ?>
+                    </tr>
+                </thead>
+                <tbody class="table-active">
+                    <?php foreach ($sigcommittees as $sigcom) : ?>
+                    <tr>
+                        <td><?= $sigcom['student_id'] ?></td>
+                        <td><?= $sigcom['name'] ?></td>
+                        <td><?= $sigcom['role'] ?></td>
+                        <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
+                        <td><a class="btn btn-outline-danger btn-sm" data-stdrole="<?= $sigcom['role'] ?>" data-roleid="<?= $sigcom['role_id'] ?>" data-stdname="<?= $sigcom['name'] ?>"
+                                data-stdmatric="<?= $sigcom['student_id'] ?>" data-toggle="modal" data-target="#delete_orgcom"><i class="fa fa-trash"></i></a></td>
+                        <?php endif ?>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

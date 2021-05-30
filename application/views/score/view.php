@@ -9,29 +9,31 @@
 <hr>
 <div class="card">
     <div class="card-body">
-        <table class="table text-center table-hover">
-            <thead class="table-primary">
-                <tr>
-                    <td>Academic Session</td>
-                    <?php foreach ($scoreplans as $scoreplan) : ?>
-                    <td class="text-warning" data-toggle="tooltip" data-placement="top" title="<?= $scoreplan['percentweightage'] ?>%">Level <?= ucfirst($scoreplan['label']) ?></td>
-                    <?php endforeach ?>
-                    <td class="text-info" data-toggle="tooltip" data-placement="top" title="15%">Components</td>
-                    <td data-toggle="tooltip" data-placement="top" title="55%">Total</td>
-                </tr>
-            </thead>
-            <tbody class="table-active">
-                <tr>
-                    <td><?= $academicsession['academicsession'] ?></td>
-                    <?php foreach ($scoreplans as $scoreplan) : ?>
-                    <?php $badge = (array_sum($scoreplan['scores']) > 18 and $scoreplan['activitycategory_id'] == 'A') ? '<i class="fas fa-award"></i>' : '' ?>
-                    <td class=""><?= $scoreplan['totalpercent'] ?> % <?= $badge ?></td>
-                    <?php endforeach ?>
-                    <td><?= $scorecomps['totalpercent'] ?> % </td>
-                    <td><?= $totalwhole ?> %</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table text-center table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <td>Academic Session</td>
+                        <?php foreach ($scoreplans as $scoreplan) : ?>
+                        <td class="text-warning" data-toggle="tooltip" data-placement="top" title="<?= $scoreplan['percentweightage'] ?>%">Level <?= ucfirst($scoreplan['label']) ?></td>
+                        <?php endforeach ?>
+                        <td class="text-info" data-toggle="tooltip" data-placement="top" title="15%">Components</td>
+                        <td data-toggle="tooltip" data-placement="top" title="55%">Total</td>
+                    </tr>
+                </thead>
+                <tbody class="table-active">
+                    <tr>
+                        <td><?= $academicsession['academicsession'] ?></td>
+                        <?php foreach ($scoreplans as $scoreplan) : ?>
+                        <?php $badge = (array_sum($scoreplan['scores']) > 18 and $scoreplan['activitycategory_id'] == 'A') ? '<i class="fas fa-award"></i>' : '' ?>
+                        <td class=""><?= $scoreplan['totalpercent'] ?> % <?= $badge ?></td>
+                        <?php endforeach ?>
+                        <td><?= $scorecomps['totalpercent'] ?> % </td>
+                        <td><?= $totalwhole ?> %</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <hr>

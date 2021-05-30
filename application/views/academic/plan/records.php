@@ -38,39 +38,41 @@
         <div class="form-group">
             <a class="btn btn-success" href="<?= site_url('score/download_record') ?>" target="_blank"><i class='fas fa-file-excel'></i> Download</a>
         </div>
-        <table id="acp_table" class="table">
-            <thead class="table-dark">
-                <tr>
-                    <th>Matric</th>
-                    <th>Name</th>
-                    <!-- <td>Academic Session</td> -->
-                    <th>GPA Target</th>
-                    <th>GPA Achieved</th>
-                    <th>Status</th>
-                    <th>Increment</th>
-                </tr>
-            </thead>
-            <tbody class="table-light">
-                <?php if ($academicplans) : ?>
-                <?php foreach ($academicplans as $acp) : ?>
-                <?php $resultclass = ($acp['gpa_achieved'] < 2.3) ? 'text-danger' : '' ?>
-                <tr>
-                    <td><?= $acp['student_id'] ?></td>
-                    <td><?= $acp['name'] ?></td>
-                    <td><?= $acp['gpa_target'] ?></td>
-                    <td class="<?= $resultclass ?>"><?= $acp['gpa_achieved'] ?></td>
-                    <td class="<?= $acp['textclass'] ?>"><?= $acp['status'] ?></td>
-                    <td class="<?= $acp['textclass'] ?>"><?= $acp['difference'] ?></td>
-                </tr>
-                <?php endforeach ?>
-                <?php else : ?>
-                <tr>
-                    <td>No data</td>
-                </tr>
-                <?php endif ?>
+        <div class="table-responsive">
+            <table id="acp_table" class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Matric</th>
+                        <th>Name</th>
+                        <!-- <td>Academic Session</td> -->
+                        <th>GPA Target</th>
+                        <th>GPA Achieved</th>
+                        <th>Status</th>
+                        <th>Increment</th>
+                    </tr>
+                </thead>
+                <tbody class="table-light">
+                    <?php if ($academicplans) : ?>
+                    <?php foreach ($academicplans as $acp) : ?>
+                    <?php $resultclass = ($acp['gpa_achieved'] < 2.3) ? 'text-danger' : '' ?>
+                    <tr>
+                        <td><?= $acp['student_id'] ?></td>
+                        <td><?= $acp['name'] ?></td>
+                        <td><?= $acp['gpa_target'] ?></td>
+                        <td class="<?= $resultclass ?>"><?= $acp['gpa_achieved'] ?></td>
+                        <td class="<?= $acp['textclass'] ?>"><?= $acp['status'] ?></td>
+                        <td class="<?= $acp['textclass'] ?>"><?= $acp['difference'] ?></td>
+                    </tr>
+                    <?php endforeach ?>
+                    <?php else : ?>
+                    <tr>
+                        <td>No data</td>
+                    </tr>
+                    <?php endif ?>
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
 
     </div>
 </div>

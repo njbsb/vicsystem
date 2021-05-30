@@ -66,25 +66,27 @@
         <div class="card-body">
             <h4 class="text-secondary text-center"><b>Activity Level</b></h4>
             <br>
-            <table id="acttable" class="table">
-                <thead>
-                    <tr class="table-primary">
-                        <th>Year</th>
-                        <th>Activity</th>
-                        <th>Role</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($activity_roles as $actrole) : ?>
-                    <?php $desc = (isset($actrole['description'])) ? sprintf(' (%s)', $actrole['description']) : '' ?>
-                    <tr class="table-light">
-                        <td><?= $actrole['acadyear'] . ' Semester ' . $actrole['semester'] ?></td>
-                        <td><?= $actrole['activity_name'] ?></td>
-                        <td><?= $actrole['role'] . $desc ?></td>
-                    </tr>
-                    <?php endforeach ?>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table id="acttable" class="table">
+                    <thead>
+                        <tr class="table-primary">
+                            <th>Year</th>
+                            <th>Activity</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($activity_roles as $actrole) : ?>
+                        <?php $desc = (isset($actrole['description'])) ? sprintf(' (%s)', $actrole['description']) : '' ?>
+                        <tr class="table-light">
+                            <td><?= $actrole['acadyear'] . ' Semester ' . $actrole['semester'] ?></td>
+                            <td><?= $actrole['activity_name'] ?></td>
+                            <td><?= $actrole['role'] . $desc ?></td>
+                        </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <?php else : ?>
@@ -98,25 +100,27 @@
         <div class="card-body">
             <h4 class="text-secondary text-center"><b>Organization Level</b></h4>
             <br>
-            <table id="orgtable" class="table">
-                <thead>
-                    <tr class="table-primary">
-                        <th>Academic Year</th>
-                        <th>Role</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($org_roles as $orgrole) : ?>
-                    <?php $desc = (isset($orgrole['description']) or $orgrole['description']) ? sprintf(' (%s)', $orgrole['description']) : '' ?>
-                    <tr class="table-light">
-                        <td><?= $orgrole['acadyear'] ?></td>
-                        <td><?= $orgrole['role'] ?></td>
-                        <td><?= $orgrole['description'] ?></td>
-                    </tr>
-                    <?php endforeach ?>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table id="orgtable" class="table">
+                    <thead>
+                        <tr class="table-primary">
+                            <th>Academic Year</th>
+                            <th>Role</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($org_roles as $orgrole) : ?>
+                        <?php $desc = (isset($orgrole['description']) or $orgrole['description']) ? sprintf(' (%s)', $orgrole['description']) : '' ?>
+                        <tr class="table-light">
+                            <td><?= $orgrole['acadyear'] ?></td>
+                            <td><?= $orgrole['role'] ?></td>
+                            <td><?= $orgrole['description'] ?></td>
+                        </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <?php else : ?>

@@ -26,34 +26,36 @@
 <br>
 <div class="card">
     <div class="card-body">
-        <table id="tableacademicplan" class="table display table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>Academic Session</th>
-                    <th>GPA Target</th>
-                    <th>GPA Achieved</th>
-                    <th>Increment</th>
-                </tr>
-            </thead>
-            <tbody class="">
-                <?php if ($academicplans) : ?>
-                <?php foreach ($academicplans as $acp) : ?>
-                <?php $sign = ($acp['difference'] > 0) ? '+' : '' ?>
-                <?php $textclass = ($acp['difference'] >= 0) ? 'text-success' : 'text-danger' ?>
-                <tr>
-                    <td><?= $acp['academicsession'] ?></td>
-                    <td><?= $acp['gpa_target'] ?></td>
-                    <td><?= $acp['gpa_achieved'] ?></td>
-                    <td class="<?= $textclass ?>"><?= $sign ?><?= $acp['difference'] ?></td>
-                </tr>
-                <?php endforeach ?>
-                <?php else : ?>
-                <tr>
-                    <td>No data found</td>
-                </tr>
-                <?php endif ?>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="tableacademicplan" class="table display table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Academic Session</th>
+                        <th>GPA Target</th>
+                        <th>GPA Achieved</th>
+                        <th>Increment</th>
+                    </tr>
+                </thead>
+                <tbody class="table-active">
+                    <?php if ($academicplans) : ?>
+                    <?php foreach ($academicplans as $acp) : ?>
+                    <?php $sign = ($acp['difference'] > 0) ? '+' : '' ?>
+                    <?php $textclass = ($acp['difference'] >= 0) ? 'text-success' : 'text-danger' ?>
+                    <tr>
+                        <td><?= $acp['academicsession'] ?></td>
+                        <td><?= $acp['gpa_target'] ?></td>
+                        <td><?= $acp['gpa_achieved'] ?></td>
+                        <td class="<?= $textclass ?>"><?= $sign ?><?= $acp['difference'] ?></td>
+                    </tr>
+                    <?php endforeach ?>
+                    <?php else : ?>
+                    <tr>
+                        <td>No data found</td>
+                    </tr>
+                    <?php endif ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <hr>
