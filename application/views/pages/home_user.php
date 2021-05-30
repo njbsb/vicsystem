@@ -46,28 +46,31 @@
                 <a class="btn btn-success" target="_blank" href="https://ukmedumy.sharepoint.com/sites/vicftsm">SharePoint</a>
             </div>
         </div>
+        <hr>
     </div>
     <div class="col-md-9">
         <div class="card">
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-6">
-                        <label for=""><b>VIC Member Count: <?= $total_count ?></b></label>
+                        <label for="">VIC Member Count: <?= $total_count ?></label>
                         <canvas responsive="true" id="pieChart"></canvas>
+                        <small>*All students in record</small>
                     </div>
                     <div class="col-sm-6">
-                        <label><b>VIC Intake by Year</b></label>
+                        <label>VIC Intake by Year</label>
                         <canvas id="barChart" responsive="true"></canvas>
+                        <small>*4 years back only</small>
                     </div>
                 </div>
             </div>
         </div>
         <br>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-12 col-lg-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="text-center text-primary"><b>&#127881; &#127882; Birthdays &#127874; &#127873;</b></h5>
+                        <h5 class="text-center text-primary"><b>&#127881; Birthdays &#127873;</b></h5>
                         <hr class="my-2">
                         <p>Celebrating our <b><?= date("F") ?></b> babies! &#127874; &#127873;</p>
                         <p>
@@ -81,12 +84,8 @@
                     </div>
                 </div>
                 <br>
-                <div class="card">
-                    <div class="card-body">
-                    </div>
-                </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-12 col-lg-8">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="text-left text-primary"><b>Current Academic Session: <?= $activesession['academicsession'] ?></b></h5>
@@ -125,12 +124,32 @@
     </div>
 </div>
 
-
-
+<div id="defaultpassword" class="modal fade card">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Welcome!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- <h5 class="text-warning">But Warning</h5> -->
+                <p>You just logged in using the default password. Kindly proceed to change your password first.</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" href="<?= site_url('changepassword') ?>" class="btn btn-primary">Change my password</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
+var defaultpassword = <?= json_encode($defaultpassword) ?>;
+if (defaultpassword) {
+    $("#defaultpassword").modal()
+}
 var pieC = document.getElementById('pieChart').getContext('2d');
-
 var bData = JSON.parse(`<?php echo $barchart_data; ?>`);
 var btx = document.getElementById('barChart').getContext('2d');
 var barChart = new Chart(btx, {
@@ -230,32 +249,4 @@ $(function() {
     });
 
 });
-
-// var apexoptions = {
-//     series: [44, 55, 41, 17, 15],
-//     chart: {
-//         type: 'donut',
-//     },
-//     colors: ['rgba(255, 99, 132, 0.2)',
-//         'rgba(54, 162, 235, 0.2)',
-//         'rgba(255, 206, 86, 0.2)',
-//         'rgba(75, 192, 192, 0.2)',
-//         'rgba(153, 102, 255, 0.2)',
-//         'rgba(255, 159, 64, 0.2)'
-//     ],
-//     responsive: [{
-//         breakpoint: 480,
-//         options: {
-//             chart: {
-//                 width: 200
-//             },
-//             legend: {
-//                 position: 'bottom'
-//             }
-//         }
-//     }]
-// };
-
-// var apexchart = new ApexCharts(document.querySelector("#apexchart"), apexoptions);
-// apexchart.render();
 </script>

@@ -42,6 +42,7 @@ class Pages extends CI_Controller
                 $barData['label'][] = $intake->yearjoined;
                 $barData['data'][] = $intake->intake_count;
             }
+            $defaultpassword = (md5($username) == $user['password']) ? true : false;
             $data = array(
                 'user_name' => $user['name'],
                 'user' => $user,
@@ -51,7 +52,8 @@ class Pages extends CI_Controller
                 'upcomingactivities' => $activities,
                 'chart_data' => json_encode($pieData),
                 'total_count' => $totalmembercount,
-                'barchart_data' => json_encode($barData)
+                'barchart_data' => json_encode($barData),
+                'defaultpassword' => $defaultpassword
             );
             $this->load->view('templates/header');
             $this->load->view('pages/home_user', $data);
@@ -60,6 +62,7 @@ class Pages extends CI_Controller
             $data['title'] = ucfirst($page);
             $this->load->view('templates/header');
             $this->load->view('pages/' . $page, $data);
+            $this->load->view('templates/footer');
         }
     }
 
@@ -72,6 +75,7 @@ class Pages extends CI_Controller
             );
             $this->load->view('templates/header');
             $this->load->view('pages/template', $data);
+            $this->load->view('templates/footer');
         } else {
             redirect('home');
         }
