@@ -99,6 +99,7 @@ class Academic extends CI_Controller
         // print_r($activesession);
         $this->load->view('templates/header');
         $this->load->view('academic/plan/mentor', $data);
+        $this->load->view('templates/footer');
     }
 
     public function academicplanrecords()
@@ -202,6 +203,7 @@ class Academic extends CI_Controller
         }
     }
 
+    # controller functions
     public function enroll()
     {
         # to enroll students into new academic session
@@ -228,7 +230,7 @@ class Academic extends CI_Controller
         } else {
             # data is submitted
             $acadsession_id = $this->input->post('acadsession_id');
-            $students = $this->input->post('students');
+            $students = $this->input->post('unenrollstudents');
             foreach ($students as $std_id) {
                 $this->academic_model->create_academicplan($acadsession_id, $std_id);
             }
@@ -236,13 +238,11 @@ class Academic extends CI_Controller
         }
     }
 
-    # controller functions
-
     # unenroll
     public function unenroll()
     {
         $acadsession_id = $this->input->post('acadsession_id');
-        $students = $this->input->post('students');
+        $students = $this->input->post('enrollstudents');
         foreach ($students as $std) {
             $this->academic_model->delete_academicplan($acadsession_id, $std);
         }
@@ -268,24 +268,37 @@ class Academic extends CI_Controller
         $acy = $this->academic_model->get_academicyear($this->input->post('acadyear_id'));
         $academicsessiontitle = $acy['acadyear'] . '-' . $this->input->post('semester');
         $acs_slug = url_title($academicsessiontitle);
-
-        $acsdata = array(
-            'acadyear_id' => $this->input->post('acadyear_id'),
-            'semester' => $this->input->post('semester'),
-            'slug' => $acs_slug,
-            'status' => 'inactive'
+        $acadyear_id = $this->input->post('acadyear_id');
+        $semester = $this->input->post('semester');
+        $where = array(
+            'acadyear_id' => $acadyear_id,
+            'semester' => $semester
         );
-        $this->academic_model->create_acs($acsdata);
+        $sessionexist = $this->academic_model->check_academicsession_exist($where);
+        if (!$sessionexist) {
+            $acsdata = array(
+                'acadyear_id' => $acadyear_id,
+                'semester' => $semester,
+                'slug' => $acs_slug,
+                'status' => 'inactive'
+            );
+            $this->academic_model->create_acs($acsdata);
+        }
         redirect('academic');
     }
 
     public function create_academicyear()
     {
-        $acydata = array(
-            'acadyear' => $this->input->post('acadyear'),
-            'status' => 'inactive'
-        );
-        $this->academic_model->create_acy($acydata);
+        $acadyear = $this->input->post('acadyear');
+        $where = array('acadyear' => $acadyear);
+        $yearexist = $this->academic_model->check_academicyear_exist($where);
+        if (!$yearexist) {
+            $acydata = array(
+                'acadyear' => $acadyear,
+                'status' => 'inactive'
+            );
+            $this->academic_model->create_acy($acydata);
+        }
         redirect('academic');
     }
 

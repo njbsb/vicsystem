@@ -33,19 +33,6 @@ class Academic_model extends CI_Model
                 return $query->row_array();
             }
         }
-        // if ($id == FALSE) {
-        //     $this->db->select("acs.*, acy.acadyear as academicyear, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
-        //         ->from('academicsession as acs')
-        //         ->join('academicyear as acy', 'acs.acadyear_id = acy.id');
-        //     $query = $this->db->get();
-        //     return $query->result_array();
-        // }
-        // $this->db->select("acs.*, acy.acadyear as academicyear, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
-        //     ->from('academicsession as acs')
-        //     ->where(array('acs.id' => $id))
-        //     ->join('academicyear as acy', 'acs.acadyear_id = acy.id');
-        // $query = $this->db->get();
-        // return $query->row_array();
     }
 
     public function get_academicsession_byyearsem($acadyear_id, $semester)
@@ -273,5 +260,24 @@ class Academic_model extends CI_Model
             ->update('academicsession', array(
                 'endofsession' => !$status
             ));
+    }
+
+    public function check_academicsession_exist($where)
+    {
+        $query = $this->db->get_where('academicsession', $where);
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function check_academicyear_exist($where)
+    {
+        $query = $this->db->get_where('academicyear', $where);
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
