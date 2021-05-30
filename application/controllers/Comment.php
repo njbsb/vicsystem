@@ -19,8 +19,10 @@ class Comment extends CI_Controller
         redirect('activity/' . $slug);
     }
 
-    public function delete($slug, $comment_id)
+    public function delete()
     {
+        $comment_id = $this->input->post('deletecommentid');
+        $slug = $this->input->post('slug');
         $this->comment_model->delete_comment($comment_id);
         redirect('activity/' . $slug);
     }
