@@ -6,13 +6,13 @@
 
 <div class="">
     <p class="text-right">Created on <?= date('jS F Y', strtotime($activity['created_at'])) ?><br>By: <?= $activity['signame'] ?></p>
-    <div class="container-fluid text-center">
-        <?php $photopath = (isset($activity['photo_path'])) ? $activity['photo_path'] : 'default_2.jpg' ?>
-        <img style="max-width: 100%; object-fit: cover; object-position: center; border: 1.5px solid #B1B1B1; box-sizing: border-box; border-radius: 12px; background-position: center center;
-  background-repeat: no-repeat;" width="1280" height="330" src="<?= base_url('assets/images/activity/') . $photopath ?>" alt="">
-    </div>
     <div class="card">
         <div class="card-body">
+            <div class="text-center">
+                <img style="max-width: 100%; object-fit: cover; object-position: center; box-sizing: border-box; border-radius: 12px; background-position: center center;
+  background-repeat: no-repeat;" width="50%" height="100%" src="<?= base_url('assets/images/activity.png') ?>" alt="">
+            </div>
+            <br>
             <h2 class="text-primary"><b><?= $activity['title'] ?></b></h2>
             <p class="text-justify"><?= $activity['description'] ?></p>
             <!-- <div class="container h-100"> -->
@@ -46,27 +46,24 @@
             <div class="form-group">
                 <a class="btn btn-success btn-sm" target="_blank" href="<?= $activity['sp_link'] ?>"><i class='fas fa-box-open'></i> SharePoint</a>
             </div>
+            <hr>
             <?php endif ?>
         </div>
-    </div>
+        <div class="card-footer">
+            <div class="row">
+                <?php if ($this->session->userdata('user_type') == 'mentor' or $isHighcom) : ?>
+                <?= form_open('activity/edit/' . $activity['slug']) ?>
+                <button type="submit" class="btn btn-primary"><i class='fas fa-edit'></i> Update</button>
+                <?= form_close() ?>
+                &nbsp;
+                <?php $disabled = ($this->session->userdata('user_type') == 'mentor') ? '' : 'disabled' ?>
+                <button data-toggle="modal" data-target="#confirmdelete" class="btn btn-outline-danger" <?= $disabled ?>>
+                    <i class="fa fa-trash"></i> Delete
+                </button>
+                <?php endif ?>
 
-</div>
-<hr>
-<!-- <hr> -->
-<div class="container d-flex justify-content-start">
-    <div class="row">
-        <?php if ($this->session->userdata('user_type') == 'mentor' or $isHighcom) : ?>
-        <?= form_open('activity/edit/' . $activity['slug']) ?>
-        <!-- <input type="submit" value="Update" class="btn btn-outline-primary"> -->
-        <button type="submit" class="btn btn-primary"><i class='fas fa-edit'></i> Update</button>
-        <?= form_close() ?>
-        &nbsp;
-        <?php $disabled = ($this->session->userdata('user_type') == 'mentor') ? '' : 'disabled' ?>
-        <button data-toggle="modal" data-target="#confirmdelete" class="btn btn-outline-danger" <?= $disabled ?>>
-            <i class="fa fa-trash"></i> Delete
-        </button>
-        <?php endif ?>
-
+            </div>
+        </div>
     </div>
 </div>
 <hr>

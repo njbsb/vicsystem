@@ -7,14 +7,7 @@ class Comment extends CI_Controller
         $slug = $this->input->post('slug');
         $data['activity'] = $this->activity_model->get_activity($slug);
         $this->form_validation->set_rules('comment', 'Comment', 'required');
-
-        if ($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/header');
-            $this->load->view('activity/view', $data);
-            $this->load->view('activity/committee');
-            $this->load->view('activity/comments');
-            $this->load->view('templates/footer');
-        } else {
+        if ($this->form_validation->run() != FALSE) {
             $user_id = $this->session->userdata('username');
             $commentdata = array(
                 'activity_id' => $activity_id,
@@ -22,8 +15,8 @@ class Comment extends CI_Controller
                 'comment' => $this->input->post('comment')
             );
             $this->comment_model->create_comment($commentdata);
-            redirect('activity/' . $slug);
         }
+        redirect('activity/' . $slug);
     }
 
     public function delete($slug, $comment_id)

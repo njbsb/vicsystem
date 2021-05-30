@@ -97,7 +97,7 @@ class Activity_model extends CI_Model
 
     public function get_sig_activity($sig_id)
     {
-        $this->db->select("act.id, act.title, act.description, act.slug, act.activitycategory_id, act.created_at, mtr.name as advisorname,
+        $this->db->select("act.id, act.title, act.description, act.slug, act.activitycategory_id, act.created_at, actcat.category, mtr.name as advisorname,
         act.datetime_start, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession, sig.code")
             ->from('activity as act')
             ->where('act.sig_id', $sig_id)
@@ -105,7 +105,7 @@ class Activity_model extends CI_Model
             ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
             ->join('user as mtr', 'act.advisor_id = mtr.id', 'left')
             ->join('sig as sig', 'act.sig_id = sig.code')
-            // ->join('activity_type as acttype', 'act.activitytype_id = acttype.id')
+            ->join('activitycategory as actcat', 'act.activitycategory_id = actcat.code', 'left')
             ->order_by('act.id', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
@@ -187,7 +187,7 @@ class Activity_model extends CI_Model
 
     public function get_committees($activity_id)
     {
-        $this->db->select('actcom.*, std.name, role.role')
+        $this->db->select('actcom.*, std.id, std.name, std.userphoto, role.role')
             ->from('committee_activity as actcom')
             ->where('activity_id', $activity_id)
             ->join('user as std', 'actcom.student_id = std.id')

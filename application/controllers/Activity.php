@@ -13,6 +13,7 @@ class Activity extends CI_Controller
         foreach ($activities as $i => $activity) {
             $committee = $this->activity_model->get_committees($activity['id']);
             $activities[$i]['committeenum'] = count($committee);
+            $activities[$i]['committees'] = $committee;
         }
         $data = array(
             'title' => 'Activities',
@@ -22,7 +23,7 @@ class Activity extends CI_Controller
         );
         $this->load->view('templates/header');
         $this->load->view('activity/index', $data);
-        // $this->load->view('templates/footer');
+        $this->load->view('templates/footer');
     }
 
     public function view($slug = NULL)
@@ -61,6 +62,7 @@ class Activity extends CI_Controller
         if (isset($data['comments'])) {
             $this->load->view('activity/comments');
         }
+        $this->load->view('templates/footer');
     }
 
     public function create()
@@ -87,7 +89,7 @@ class Activity extends CI_Controller
             );
             $this->load->view('templates/header');
             $this->load->view('activity/mentor/create', $data);
-            // $this->load->view('templates/footer');
+            $this->load->view('templates/footer');
         } else {
             $slug = url_title($this->input->post('activityname'));
             $activity_data = array(
@@ -144,6 +146,7 @@ class Activity extends CI_Controller
         );
         $this->load->view('templates/header');
         $this->load->view('activity/edit', $data);
+        $this->load->view('templates/footer');
     }
 
     public function external()
@@ -166,6 +169,7 @@ class Activity extends CI_Controller
         // print_r($externals);
         $this->load->view('templates/header');
         $this->load->view('activity/external', $data);
+        $this->load->view('templates/footer');
     }
 
     public function create_external()
@@ -262,6 +266,7 @@ class Activity extends CI_Controller
         );
         $this->load->view('templates/header');
         $this->load->view('activity/committee/index', $data);
+        $this->load->view('templates/footer');
     }
 
     public function addcommittee($activity_id)

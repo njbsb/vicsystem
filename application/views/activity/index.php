@@ -5,10 +5,20 @@
 
 <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
 <br>
-<button class="btn btn-info" data-toggle="modal" data-target="#activity_type">New Activity</button>
-<a class="btn btn-primary" href="<?= site_url('activity/external') ?>">External</a>
+<button class="btn btn-info" data-toggle="modal" data-target="#activity_type"><i class='far fa-calendar-plus'></i> New Activity</button>
+<!-- <a class="btn btn-primary" href="<?= site_url('activity/external') ?>">External</a> -->
 <?php endif ?>
+
+<?php if ($this->session->userdata('user_type') != 'student') : ?>
 <hr>
+<div class="text-center">
+    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+        <label class="btn btn-outline-primary" for="btnradio1">
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked=""> Table</label>
+        <label class="btn btn-outline-primary" for="btnradio2">
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked=""> Posts</label>
+    </div>
+</div>
 <div id="tableview" class="card">
     <div class="card-body">
         <div class="table-responsive">
@@ -35,18 +45,37 @@
         </div>
     </div>
 </div>
+<?php endif ?>
 <br>
 <?php if ($activities) : ?>
 <?php foreach ($activities as $act) : ?>
 <div class="row">
-    <div class="col-md-3">
-        <?php $photo = (isset($act['photo_path'])) ? $act['photo_path'] : 'default_2.jpg' ?>
-        <img src="<?= base_url('assets/images/activity/' . $photo) ?>" alt="" style="max-width:280px; display: block; object-fit:cover; padding:10px;">
+    <div class="col-lg-4 col-md-6 col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h4><a href="<?= site_url('activity/' . $act['slug']) ?>"><?= $act['title'] ?></a></h4>
+                <span class="badge rounded-pill bg-warning"><?= $act['category'] ?></span><small class="post-date">Date: <?= date('d/m/Y', strtotime($act['datetime_start'])) ?></small>
+                <p><?= word_limiter($act['description'], 10) ?></p>
+            </div>
+        </div>
     </div>
-    <div class="col-md-9">
-        <h3><a href="<?= site_url('activity/' . $act['slug']) ?>"><?= $act['title'] ?></a></h3>
-        <small class="">Created on: <?= date('d/m/Y', strtotime($act['created_at'])) ?></small>
-        <p><?= word_limiter($act['description'], 60) ?></p>
+    <div class="col-lg-8 col-md-6 col-sm-6">
+        <div class="container">
+            <h6>Committees: <?= $act['committeenum'] ?></h6>
+            <div class="row">
+                <?php if ($act['committees']) : ?>
+                <?php foreach ($act['committees'] as $committee) : ?>
+                <div class="col-auto text-center">
+                    <div class="img-wrap">
+                        <a data-name="<?= $committee['name'] ?>" data-toggle="tooltip" data-placement="bottom" title="<?= $committee['role'] ?>"
+                            href="<?= site_url('student/' . $committee['id']) ?>"><img class="rounded-circle" style="object-fit:cover;" src="<?= $committee['userphoto'] ?>"
+                                alt="<?= $committee['name'] ?>" width="60px" height="60px"></a>
+                    </div>
+                </div>
+                <?php endforeach ?>
+                <?php endif ?>
+            </div>
+        </div>
     </div>
 </div>
 <hr>
@@ -75,9 +104,22 @@
 </div>
 
 <script>
+$(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+});
 $(document).ready(function() {
     $('#activitytable').DataTable({
         "order": []
     });
 });
+var tableradio = document.getElementById('btnradio1');
+var postradio = document.getElementById('btnradio2');
+
+var radios = document.getElementsByName('btnradio');
+
+for (var i = 0; i < radios.length; i++) {
+    radios[i].onchange = function() {
+        radios[i].className = 'btn btn-primary';
+    }
+}
 </script>
