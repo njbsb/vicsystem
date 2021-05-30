@@ -138,8 +138,6 @@
         margin-bottom: 25px;
     }
     </style>
-
-
 </head>
 
 <body>
@@ -222,7 +220,7 @@
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><?= $this->session->userdata('username') ?></a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="<?= site_url('profile') ?>">Profile <span class="sr-only">(current)</span></a>
-                    <a class="dropdown-item" href="<?= site_url('profile/update') ?>">Update Profile</a>
+                    <a class="dropdown-item" href="<?= site_url('changepassword') ?>">Change Password</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="<?= site_url('logout') ?>">Log Out</a>
                 </div>

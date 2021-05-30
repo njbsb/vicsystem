@@ -4,8 +4,13 @@
     <li class="breadcrumb-item active">External</li>
 </ol>
 
+<?php $usertype =  $this->session->userdata('user_type') ?>
+
+<?php if ($usertype != 'student') : ?>
 <button class="btn btn-info" data-toggle="modal" data-target="#newexternal"><i class='far fa-calendar-plus'></i> New</button>
-<br><br>
+<br>
+<?php endif ?>
+<br>
 <?php if ($externals) : ?>
 <?php foreach ($externals as $i => $ext) : ?>
 <div class="row">
@@ -15,13 +20,12 @@
                 <h4><a href="<?= site_url('activity/external/' . $ext['slug']) ?>"><?= $ext['title'] ?></a></h4>
                 <span class="badge rounded-pill bg-warning"><?= $ext['level'] ?></span><small class="post-date">Endorsed by: <?= $ext['mentorname'] ?></small>
                 <p><?= sprintf('%s: %s', '<b>' . date_format(date_create($ext['date']), 'M d, Y') . '</b>', $ext['description']) ?></p>
+                <?php if ($usertype != 'student') : ?>
                 <a data-toggle="modal" data-toggle="tooltip" title="Edit Activity" data-target="#editexternal" data-id="<?= $ext['id'] ?>" data-title="<?= $ext['title'] ?>"
                     data-description="<?= $ext['description'] ?>" data-date="<?= $ext['date'] ?>" class="btn btn-primary btn-sm" href=""><i class='fas fa-pen'></i></a>
                 <a data-toggle="modal" data-toggle="tooltip" title="Add Participant" data-target="#addparticipant" data-externalid="<?= $ext['id'] ?>" data-title="<?= $ext['title'] ?>"
                     class="btn btn-primary btn-sm" href=""><i class='fas fa-user-plus'></i></a>
-                <!-- <a data-toggle="modal" data-toggle="tooltip" title="Edit Participant" data-index="<?= str_replace('"', "'", json_encode($ext['participants'])); ?>" data-title="<?= $ext['title'] ?>"
-                    data-target="#editparticipant" class="btn btn-primary btn-sm" href=""><i class='fas fa-user-edit'></i></a> -->
-                <!-- <?= var_dump(json_encode($ext['participants'])) ?> -->
+                <?php endif ?>
             </div>
         </div>
     </div>
@@ -32,12 +36,13 @@
                 <?php if ($ext['participants']) : ?>
                 <?php foreach ($ext['participants'] as $participant) : ?>
                 <div class="img-wrap">
+                    <?php if ($usertype != 'student') : ?>
                     <a data-toggle="modal" data-target="#deleteparticipant" data-title="<?= $ext['title'] ?>" data-name="<?= $participant['name'] ?>" data-userid="<?= $participant['id'] ?>"
                         data-externalid="<?= $ext['id'] ?>" class="close">&times;</a>
+                    <?php endif ?>
                     <a data-name="<?= $participant['name'] ?>" data-toggle="tooltip" title="<?= $participant['name'] ?>" href="<?= site_url('student/' . $participant['id']) ?>"><img
                             class="rounded-circle" style="object-fit:cover;" src="<?= $participant['userphoto'] ?>" alt="<?= $participant['name'] ?>" width="60px" height="60px"></a>
                 </div>
-
                 <?php endforeach ?>
                 <?php endif ?>
             </div>
@@ -50,6 +55,7 @@
 <?php endforeach ?>
 <?php endif ?>
 
+<?php if ($usertype != 'student') : ?>
 <div id="newexternal" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -93,7 +99,7 @@
                         <?php endforeach ?>
                     </select>
                 </div>
-                <small>You can later add students to be awarded with this badge <a href="">here</a></small>
+                <small>You can only add external activity in the current academic session</small>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" type="submit">Submit</button>
@@ -204,6 +210,9 @@
         </div>
     </div>
 </div>
+<?php endif ?>
+
+
 
 <script>
 $('#editexternal').on('show.bs.modal', function(e) {

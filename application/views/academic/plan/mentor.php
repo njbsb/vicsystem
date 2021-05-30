@@ -41,53 +41,61 @@
 
 <?php if ($activesession['endofsession'] == true) : ?>
 <hr>
-<?= form_open_multipart('academic/import_result') ?>
-<div class="form-group">
-    <!-- <p>It's end of academic session. Upload the students' result here</p> -->
-    <label for="formFile" class="form-label mt-4">It's end of academic session. Upload the students' result here</label>
-    <input class="form-control" type="file" name="upload_file" id="upload_file" required>
+<div class="card">
+    <div class="container">
+        <?= form_open_multipart('academic/import_result') ?>
+        <div class="form-group">
+            <!-- <p>It's end of academic session. Upload the students' result here</p> -->
+            <label for="formFile" class="form-label mt-4">It's end of academic session. Upload the students' result here</label>
+            <input class="form-control" type="file" name="upload_file" id="upload_file" required accept=".csv,.xls,.xlsx">
+        </div>
+        <div class="form-group">
+            <button class="btn btn-info" type="submit"><i class='fas fa-upload'></i> Upload</button>
+        </div>
+        <?= form_close() ?>
+    </div>
 </div>
-<div class="form-group">
-    <button class="btn btn-info" type="submit"><i class='fas fa-upload'></i> Upload</button>
-</div>
-<?= form_close() ?>
 <hr>
 <?php else : ?>
 <p>You can only upload students' result once it is end of academic session. Set it <a href="<?= site_url('academic') ?>">here</a></p>
 <?php endif ?>
 
-<table id="acp_table" class="table display">
-    <thead class="table-dark">
-        <tr>
-            <th>Matric</th>
-            <th>Name</th>
-            <th>GPA Target</th>
-            <th>GPA Achieved</th>
-            <th>Status</th>
-            <th>Increment</th>
-        </tr>
-    </thead>
-    <tbody class="table-light">
-        <?php if ($academicplans) : ?>
-        <?php foreach ($academicplans as $acp) : ?>
-        <?php $resultclass = ($acp['gpa_achieved'] < 2.3) ? 'text-danger' : '' ?>
-        <tr>
-            <td><?= $acp['student_id'] ?></td>
-            <td><?= $acp['name'] ?></td>
-            <td><?= $acp['gpa_target'] ?></td>
-            <td class="<?= $resultclass ?>"><?= $acp['gpa_achieved'] ?></td>
-            <td class="<?= $acp['textclass'] ?>"><?= $acp['status'] ?></td>
-            <td class="<?= $acp['textclass'] ?>"><?= $acp['difference'] ?></td>
-        </tr>
-        <?php endforeach ?>
-        <?php else : ?>
-        <tr>
-            <td>No data</td>
-        </tr>
-        <?php endif ?>
+<div class="card">
+    <div class="card-body">
+        <table id="acp_table" class="table display">
+            <thead class="table-dark">
+                <tr>
+                    <th>Matric</th>
+                    <th>Name</th>
+                    <th>GPA Target</th>
+                    <th>GPA Achieved</th>
+                    <th>Status</th>
+                    <th>Increment</th>
+                </tr>
+            </thead>
+            <tbody class="table-light">
+                <?php if ($academicplans) : ?>
+                <?php foreach ($academicplans as $acp) : ?>
+                <?php $resultclass = ($acp['gpa_achieved'] < 2.3) ? 'text-danger' : '' ?>
+                <tr>
+                    <td><?= $acp['student_id'] ?></td>
+                    <td><?= $acp['name'] ?></td>
+                    <td><?= $acp['gpa_target'] ?></td>
+                    <td class="<?= $resultclass ?>"><?= $acp['gpa_achieved'] ?></td>
+                    <td class="<?= $acp['textclass'] ?>"><?= $acp['status'] ?></td>
+                    <td class="<?= $acp['textclass'] ?>"><?= $acp['difference'] ?></td>
+                </tr>
+                <?php endforeach ?>
+                <?php else : ?>
+                <tr>
+                    <td>No data</td>
+                </tr>
+                <?php endif ?>
 
-    </tbody>
-</table>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <script>
 $(document).ready(function() {

@@ -14,46 +14,48 @@
 <small>Seems that you have not set your GPA for the current semester. Please set it first.</small>
 <br>
 <button class="btn btn-primary" data-toggle="modal" data-target="#setGPA">Set GPA</button>
-
 <?php else : ?>
 <h6>You have registered this session's GPA target!</h6>
 <?php if ($activeacadsession['endofsession'] == true) : ?>
 <small>It's end of academic session. Your result will soon be updated by your mentor</small><br>
-<!-- <button class="btn btn-info">Set Result</button> -->
 <?php else : ?>
 <small>Long way to go, sir</small>
 <?php endif ?>
 <?php endif ?>
 <?php endif ?>
-<br><br>
-<table id="tableacademicplan" class="table display">
-    <thead class="table-dark">
-        <tr>
-            <th>Academic Session</th>
-            <th>GPA Target</th>
-            <th>GPA Achieved</th>
-            <th>Increment</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if ($academicplans) : ?>
-        <?php foreach ($academicplans as $acp) : ?>
-        <?php $sign = ($acp['difference'] > 0) ? '+' : '' ?>
-        <?php $textclass = ($acp['difference'] >= 0) ? 'text-success' : 'text-danger' ?>
-        <tr>
-            <td><?= $acp['academicsession'] ?></td>
-            <td><?= $acp['gpa_target'] ?></td>
-            <td><?= $acp['gpa_achieved'] ?></td>
-            <td class="<?= $textclass ?>"><?= $sign ?><?= $acp['difference'] ?></td>
-        </tr>
-        <?php endforeach ?>
-        <?php else : ?>
-        <tr>
-            <td>No data found</td>
-        </tr>
-        <?php endif ?>
-    </tbody>
-</table>
+<br>
+<div class="card">
+    <div class="card-body">
+        <table id="tableacademicplan" class="table display table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Academic Session</th>
+                    <th>GPA Target</th>
+                    <th>GPA Achieved</th>
+                    <th>Increment</th>
+                </tr>
+            </thead>
+            <tbody class="">
+                <?php if ($academicplans) : ?>
+                <?php foreach ($academicplans as $acp) : ?>
+                <?php $sign = ($acp['difference'] > 0) ? '+' : '' ?>
+                <?php $textclass = ($acp['difference'] >= 0) ? 'text-success' : 'text-danger' ?>
+                <tr>
+                    <td><?= $acp['academicsession'] ?></td>
+                    <td><?= $acp['gpa_target'] ?></td>
+                    <td><?= $acp['gpa_achieved'] ?></td>
+                    <td class="<?= $textclass ?>"><?= $sign ?><?= $acp['difference'] ?></td>
+                </tr>
+                <?php endforeach ?>
+                <?php else : ?>
+                <tr>
+                    <td>No data found</td>
+                </tr>
+                <?php endif ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 <hr>
 
 <h3>Score Records</h3>
@@ -84,7 +86,7 @@
     </div>
     <div class="col-md-4">
         <div class="form-group">
-            <button type="submit" class="btn btn-outline-primary">Get score record</button>
+            <button type="submit" class="btn btn-outline-primary"><i class='fas fa-search'></i> Record</button>
         </div>
     </div>
 </div>
@@ -128,7 +130,9 @@
 
 <script>
 $(document).ready(function() {
-    $('#tableacademicplan').DataTable();
+    $('#tableacademicplan').DataTable({
+        "order": []
+    });
     $(function() {
         $('[data-toggle="tooltip"]').tooltip();
     });

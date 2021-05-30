@@ -5,18 +5,25 @@
 
 <!-- <h2 class="text-center"><?= $title; ?></h2> -->
 
-<div class="container-fluid text-center">
+<div class="container-fluid">
     <div class="row">
         <div class="col-lg-4">
             <div class="card border-dark mb-3" style="max-width: 20rem;">
                 <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= $student['userphoto'] ?>">
-                <div class="card-footer text-muted">
+                <div class="card-footer text-muted text-center">
                     <?= $student['id'] ?>
                 </div>
             </div>
         </div>
         <div class="col-lg-8 text-left">
-            <h3><b><?= $student['name'] ?></b></h3>
+            <div class="row">
+                <div class="col-6">
+                    <h3><b><?= $student['name'] ?></b></h3>
+                </div>
+                <div class="col-6">
+                    <a href="<?= site_url('profile/update') ?>" class="btn btn-outline-primary" style="float:right;"><i class='fas fa-edit'></i> Edit</a>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-3">
                     <h6><b>Club name</b></h6>
@@ -52,67 +59,78 @@
         </div>
     </div>
     <hr>
-    <div class="text-center">
-        <h2>Previous Activity and Roles</h2>
-        <br>
-        <h4 class="text-secondary"><b>Activity Level</b></h4>
-        <br>
-    </div>
+    <h2 class="text-center">Previous Activity and Roles</h2>
+    <br>
     <?php if ($activity_roles) : ?>
-    <table id="acttable" class="table">
-        <thead>
-            <tr class="table-primary">
-                <th>Year</th>
-                <th>Activity</th>
-                <th>Role</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($activity_roles as $actrole) : ?>
-            <?php $desc = (isset($actrole['description'])) ? sprintf(' (%s)', $actrole['description']) : '' ?>
-            <tr class="table-light">
-                <td><?= $actrole['acadyear'] . ' Semester ' . $actrole['semester'] ?></td>
-                <td><?= $actrole['activity_name'] ?></td>
-                <td><?= $actrole['role'] . $desc ?></td>
-            </tr>
-            <?php endforeach ?>
-        </tbody>
-    </table>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="text-secondary text-center"><b>Activity Level</b></h4>
+            <br>
+            <table id="acttable" class="table">
+                <thead>
+                    <tr class="table-primary">
+                        <th>Year</th>
+                        <th>Activity</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($activity_roles as $actrole) : ?>
+                    <?php $desc = (isset($actrole['description'])) ? sprintf(' (%s)', $actrole['description']) : '' ?>
+                    <tr class="table-light">
+                        <td><?= $actrole['acadyear'] . ' Semester ' . $actrole['semester'] ?></td>
+                        <td><?= $actrole['activity_name'] ?></td>
+                        <td><?= $actrole['role'] . $desc ?></td>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <?php else : ?>
-    <p>No data of roles in activity found</p>
+    <p class="text-center">No data of roles in activity found</p>
     <?php endif ?>
 
     <hr>
-    <h4 class="text-secondary text-center"><b>Organization Level</b></h4>
-    <br>
+
     <?php if ($org_roles) : ?>
-    <table id="orgtable" class="table">
-        <thead>
-            <tr class="table-primary">
-                <th>Academic Year</th>
-                <th>Role</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($org_roles as $orgrole) : ?>
-            <?php $desc = (isset($orgrole['description']) or $orgrole['description']) ? sprintf(' (%s)', $orgrole['description']) : '' ?>
-            <tr class="table-light">
-                <td><?= $orgrole['acadyear'] ?></td>
-                <td><?= $orgrole['role'] ?></td>
-                <td><?= $orgrole['description'] ?></td>
-            </tr>
-            <?php endforeach ?>
-        </tbody>
-    </table>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="text-secondary text-center"><b>Organization Level</b></h4>
+            <br>
+            <table id="orgtable" class="table">
+                <thead>
+                    <tr class="table-primary">
+                        <th>Academic Year</th>
+                        <th>Role</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($org_roles as $orgrole) : ?>
+                    <?php $desc = (isset($orgrole['description']) or $orgrole['description']) ? sprintf(' (%s)', $orgrole['description']) : '' ?>
+                    <tr class="table-light">
+                        <td><?= $orgrole['acadyear'] ?></td>
+                        <td><?= $orgrole['role'] ?></td>
+                        <td><?= $orgrole['description'] ?></td>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <?php else : ?>
-    <p>No data of roles in SIG found</p>
+    <p class="text-center">No data of roles in SIG found</p>
     <?php endif ?>
 </div>
 
 <script>
 $(document).ready(function() {
-    $('#acttable').DataTable();
-    $('#orgtable').DataTable();
+    $('#acttable').DataTable({
+        "order": []
+    });
+    $('#orgtable').DataTable({
+        "order": []
+    });
 });
 </script>

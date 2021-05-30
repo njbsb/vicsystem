@@ -9,7 +9,7 @@
 <a class="btn btn-primary" href="<?= site_url('activity/external') ?>">External</a>
 <?php endif ?>
 <hr>
-<div class="card">
+<div id="tableview" class="card">
     <div class="card-body">
         <table id="activitytable" class="table table-hover" style="text-align:left;">
             <thead class="table-dark">
@@ -32,22 +32,12 @@
                 </tr>
                 <?php endforeach ?>
             </tbody>
-            <!-- <tfoot>
-        <tr>
-            <th scope="col">Activity</th>
-            <th scope="col">Date</th>
-            <th scope="col">Academic Session</th>
-            <th scope="col">No of Committees</th>
-            <th scope="col">Advisor</th>
-        </tr>
-    </tfoot> -->
         </table>
     </div>
 </div>
 <br>
 <?php if ($activities) : ?>
 <?php foreach ($activities as $act) : ?>
-
 <div class="row">
     <div class="col-md-3">
         <?php $photo = (isset($act['photo_path'])) ? $act['photo_path'] : 'default_2.jpg' ?>
@@ -59,7 +49,6 @@
         <p><?= word_limiter($act['description'], 60) ?></p>
     </div>
 </div>
-
 <hr>
 <?php endforeach ?>
 <?php endif ?>

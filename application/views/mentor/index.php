@@ -7,7 +7,7 @@
         <?php foreach ($mentors as $mentor) : ?>
         <div class="col-md-3">
             <div class="card mb-3">
-                <?php $bg = ($mentor['id'] == $mentor_matric) ? 'bg-info' : 'bg-dark'; ?>
+                <?php $bg = ($mentor['id'] == $mentor_matric) ? 'text-pink' : 'text-dark'; ?>
                 <h4 class="card-header text-white <?= $bg ?>">
                     <?= ($mentor['id'] == $mentor_matric) ? 'My ' . $mentor['sigcode'] . ' Mentor' : $mentor['sigcode'] ?>
                 </h4>
@@ -21,9 +21,9 @@
                     <h6 class="card-subtitle text-muted"><?= $mentor['role'] ?></h6>
                 </div>
 
-                <div class="card-footer text-muted">
+                <!-- <div class="card-footer">
                     <?= $mentor['email'] ?>
-                </div>
+                </div> -->
             </div>
         </div>
         <?php endforeach ?>

@@ -13,7 +13,7 @@
             </h3>
             <!-- object-fit:cover for square crop or max-width:100%;
                     border-radius:50%; for circle crop -->
-            <img style="max-height:300px; display: block; object-fit:cover;  padding:10px;" src="<?= base_url('assets/images/citra/' . $citra['code'] . '.jpg') ?>">
+            <img style="max-height:200px; display: block; object-fit:cover;  padding:10px;" src="<?= base_url('assets/images/citra/' . $citra['code'] . '.jpg') ?>">
 
             <div class="card-body">
                 <h5 class="card-title">

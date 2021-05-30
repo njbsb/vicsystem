@@ -103,7 +103,7 @@
                     <label for="acadyear">Select academic year</label>
                     <select name="acadyear_id" id="acadyear_id" class="form-control" required>
                         <option value="" selected disabled hidden>Select academic year</option>
-                        <?php foreach ($academicyear as $acadyear) : ?>
+                        <?php foreach (array_slice($academicyear, 0, 5) as $acadyear) : ?>
                         <option value="<?= $acadyear['id'] ?>"><?= $acadyear['acadyear'] ?></option>
                         <?php endforeach ?>
                     </select>

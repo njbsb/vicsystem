@@ -18,12 +18,12 @@
             <h3><b><?= $student['name'] ?></b></h3>
             <div class="row">
                 <div class="col-sm-3">
-                    <h6><b>Matric:</b></h6>
-                    <h6><b>Program:</b></h6>
-                    <h6><b>Year:</b></h6>
-                    <h6><b>Phone Num:</b></h6>
-                    <h6><b>Email:</b></h6>
-                    <h6><b>Mentor:</b></h6>
+                    <h6><b>Matric</b></h6>
+                    <h6><b>Program</b></h6>
+                    <h6><b>Year</b></h6>
+                    <h6><b>Phone Num</b></h6>
+                    <h6><b>Email</b></h6>
+                    <h6><b>Mentor</b></h6>
                 </div>
                 <div class="col-sm-9">
                     <h6><?= $student['id'] ?></h6>
@@ -126,7 +126,11 @@
 
 <script>
 $(document).ready(function() {
-    $('#acttable').DataTable();
-    $('#orgtable').DataTable();
+    $('#acttable').DataTable({
+        "order": []
+    });
+    $('#orgtable').DataTable({
+        "order": []
+    });
 });
 </script>
