@@ -432,6 +432,7 @@ class User extends CI_Controller
                 $dob = $sheetdata[$i][4];
                 $gender = $sheetdata[$i][5];
                 $email = $sheetdata[$i][6];
+                $password = md5($id);
                 $data[] = array(
                     'id' => $id,
                     'name' => $name,
@@ -440,6 +441,7 @@ class User extends CI_Controller
                     'dob' => $dob,
                     'gender' => $gender,
                     'email' => $email,
+                    'password' => $password
                 );
             }
             $rowaffected = $this->user_model->import_user($data);
