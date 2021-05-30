@@ -70,7 +70,7 @@ class Pages extends CI_Controller
     {
         if ($this->session->userdata('logged_in') and $this->session->userdata('user_type') != 'student') {
             $data = array(
-                'title' => 'File Upload Template',
+                'title' => 'File Links',
                 'templates' => $this->file_model->get_template()
             );
             $this->load->view('templates/header');
@@ -79,5 +79,36 @@ class Pages extends CI_Controller
         } else {
             redirect('home');
         }
+    }
+
+    public function updatelink()
+    {
+        $id = $this->input->post('editid');
+        $name = $this->input->post('editname');
+        $path = $this->input->post('editpath');
+        if ($id && $name && $path) {
+            $this->file_model->update_link($id, array('name' => $name, 'path' => $path));
+        }
+
+        redirect('template');
+    }
+
+    public function createlink()
+    {
+        $name = $this->input->post('newname');
+        $path = $this->input->post('newpath');
+        $data = array(
+            'name' => $name,
+            'path' => $path
+        );
+        $this->file_model->create_link($data);
+        redirect('template');
+    }
+
+    public function deletelink()
+    {
+        $id = $this->input->post('deleteid');
+        $this->file_model->delete_link($id);
+        redirect('template');
     }
 }

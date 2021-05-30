@@ -81,6 +81,9 @@ $route['score/(:any)'] = 'score/viewacs/$1';
 $route['score/(:any)/(:any)'] = 'score/view/$1/$2';
 
 $route['template'] = 'pages/template';
+$route['updatelink'] = 'pages/updatelink';
+$route['createlink'] = 'pages/createlink';
+$route['deletelink'] = 'pages/deletelink';
 
 $route['default_controller'] = 'pages/view';
 $route['(:any)'] = 'pages/view/$1';
