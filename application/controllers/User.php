@@ -72,7 +72,12 @@ class User extends CI_Controller
                 );
                 $this->session->set_userdata($user_data);
                 $this->session->set_flashdata('user_loggedin', 'You are now logged in as ' . $user_id);
-                redirect(site_url());
+                if (md5($username) == $password) {
+                    # check if default password is equal to username
+                    redirect('passwordreset');
+                } else {
+                    redirect(site_url());
+                }
             } else {
                 $this->session->set_flashdata('login_failed', 'Login is invalid');
                 redirect('login');
@@ -271,6 +276,82 @@ class User extends CI_Controller
                 $this->load->view('user/student/update', $data);
                 break;
         }
+        $this->load->view('templates/footer');
+    }
+
+    public function changepassword()
+    {
+        if (!$this->session->userdata('username')) {
+            redirect(site_url());
+        }
+        $username = $this->session->userdata('username');
+        $this->form_validation->set_rules('password1', 'password 1', 'required');
+        $this->form_validation->set_rules('password2', 'password 2', 'required');
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('templates/header');
+            $this->load->view('user/passwordchange');
+        } else {
+            $password1 = $this->input->post('password1');
+            $password2 = $this->input->post('password2');
+            if ($password1 != $password2) {
+                $this->session->set_flashdata('password_changed', 'Password unmatch');
+                redirect('passwordreset');
+            } else {
+                # tukaq password
+                $password = md5($password1);
+                $this->user_model->change_password($username, $password);
+                $this->session->set_flashdata('password_changed', 'Password changed successfully');
+                redirect('home');
+            }
+        }
+    }
+
+    public function resetpassword()
+    {
+        $userid = $this->input->post('user_id');
+        $securitycode = $this->input->post('securitycode');
+        if (!$userid or !$securitycode) {
+            redirect('login');
+        }
+        $passwordnew = $this->input->post('password1');
+        $passwordconfirm = $this->input->post('password2');
+        if ($passwordnew && $passwordconfirm) {
+            $this->form_validation->set_rules('password1', 'new password', 'required');
+            $this->form_validation->set_rules('password2', 'confirm password', 'required');
+        }
+        if ($this->form_validation->run() === FALSE) {
+            $user = $this->user_model->get_user($userid);
+            $this->load->view('templates/header');
+            $errorcode = '';
+            $erroruser = '';
+            $errorstring = '';
+            $validated = true;
+            if ($user) {
+                if ($securitycode != substr($user['phonenum'], -4)) {
+                    $errorcode = "wrong security code.";
+                    $validated = false;
+                }
+            } else {
+                $erroruser = "user not found";
+            }
+            $errorstring .= $erroruser;
+            $errorstring .= ($errorstring != '' && $errorcode != '') ? $errorstring .= ' & ' . $errorcode : $errorcode;
+            $data = array(
+                'userid' => $userid,
+                'user' => $user,
+                'securitycode' => $securitycode,
+                'errormessage' => $errorstring,
+                'validated' => $validated
+            );
+            $this->load->view('user/passwordreset', $data);
+        } else {
+            if ($passwordnew == $passwordconfirm) {
+                $encrypted = md5($passwordnew);
+                $this->user_model->reset_password($userid, $encrypted);
+                print "<script type=\"text/javascript\">alert('Password has been reset. Please login using your new password');</script>";
+                redirect('login');
+            }
+        }
     }
 
     public function update($user_id)
@@ -294,16 +375,6 @@ class User extends CI_Controller
                 //
                 break;
             case 'mentor':
-                // $upload_file = $_FILES['userphoto']['tmp_name'];
-                // if ($upload_file) {
-                //     $data = file_get_contents($upload_file);
-                //     $type = pathinfo($_FILES["userphoto"]["name"], PATHINFO_EXTENSION);
-                //     $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
-                //     $userdata = array(
-                //         'userphoto' => $base64
-                //     );
-                //     $this->user_model->update_user($user_id, $userdata);
-                // }
                 $role_id = $this->input->post('role_id');
                 $roomnum = $this->input->post('roomnum');
                 $position = $this->input->post('position');
@@ -318,7 +389,6 @@ class User extends CI_Controller
                 $this->mentor_model->update_mentor($user_id, $mentordata);
                 break;
             case 'student':
-
                 $studentdata = array(
                     'matric' => $user_id,
                     'program_id' => $this->input->post('program_id'),

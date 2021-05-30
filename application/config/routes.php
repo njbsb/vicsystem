@@ -58,6 +58,9 @@ $route['mentor/register'] = 'mentor/register';
 $route['mentor/update'] = 'mentor/update';
 $route['mentor/(:any)'] = 'mentor/view/$1';
 
+$route['changepassword'] = 'user/changepassword';
+$route['resetpassword'] = 'user/resetpassword';
+
 $route['score'] = 'score/index';
 $route['score/download_badgeboard'] = 'score/download_badgeboard';
 $route['score/download_scoreboard'] = 'score/download_scoreboard';

@@ -9,15 +9,12 @@ class User_model extends CI_Model
 
     public function login($username, $password)
     {
-        $this->db->where(array(
+        $query = $this->db->get_where('user', array(
             'id' => $username,
             'password' => $password
         ));
-        $query = $this->db->get('user');
-        if ($query->num_rows() == 1) {
-            // and $query->row(0)->userstatus_id == 2
+        if ($query->num_rows() == 1 and $query->row(0)->userstatus == 'active') {
             return $query->row(0)->id;
-            # return essential user data: id, usertype, sig_id, mentor_id
         } else {
             return false;
         }
@@ -208,5 +205,19 @@ class User_model extends CI_Model
             }
         }
         return $rowaffectedcount;
+    }
+
+    public function change_password($username, $password)
+    {
+        return $this->db->set('password', $password)
+            ->where('id', $username)
+            ->update('user');
+    }
+
+    public function reset_password($username, $password)
+    {
+        return $this->db->set('password', $password)
+            ->where('id', $username)
+            ->update('user');
     }
 }
