@@ -73,7 +73,7 @@
     <div class="col-md-7">
         <div class="card-body">
             <!-- <h3>Sign Up Now!</h3> -->
-            <img src="<?= base_url('assets/images/illustration1.png') ?>" style="max-width:100%; max-height: 100%;" alt="">
+            <img src="<?= base_url('assets/images/login.png') ?>" style="max-width:100%; max-height: 100%;" alt="">
             <br><br>
             <p>Already have an account? <a href="<?= site_url('login') ?>">Sign In</a></p>
         </div>

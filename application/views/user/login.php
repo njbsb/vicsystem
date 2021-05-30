@@ -10,7 +10,7 @@
         <div class="card-body">
             <h3 class="text-pink">Magic Flick!</h3>
             <h5>An innovative solution to manage your SIG!</h5>
-            <img style="max-width: 100%; max-height: 100%; display: block;" src="<?= base_url('assets/images/illustration1.png') ?>" alt="">
+            <img style="max-width: 100%; max-height: 100%; display: block;" src="<?= base_url('assets/images/login.png') ?>" alt="">
         </div>
     </div>
     <div class="col-md-4 col-sm-8">

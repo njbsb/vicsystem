@@ -10,39 +10,45 @@
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn"
         crossorigin="anonymous"> -->
     <!-- <link rel="stylesheet" href="<?= base_url('assets/css/quartz.bootstrap.min.css') ?>"> -->
-    <!-- <link rel="stylesheet" href="<?= base_url('assets/css/jquery.dataTables.css') ?>"> -->
-    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css"> -->
-    <!-- <link rel="stylesheet" href="<?= base_url('assets/css/dataTables.bootstrap.css') ?>"> -->
-    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css"> -->
+
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="<?= base_url('assets/css/sticky-footer.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/sigcustom.css') ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-okaidia.min.css"
+        integrity="sha512-mIs9kKbaw6JZFfSuo+MovjU+Ntggfoj8RwAmJbVXQ5mkAX5LlgETQEweFPI18humSPHymTb5iikEOKWF7I8ncQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-    <!-- <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.min.css"> -->
     <script src="https://kit.fontawesome.com/dff01397e8.js" crossorigin="anonymous"></script>
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+    <!-- CK Editor -->
     <script src="http://cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
-    <!-- <script src="<?= base_url('assets/js/jquery.min.js') ?>"></script> -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="<?= base_url('assets/js/popper.min.js') ?>"></script>
-    <script src="<?= base_url('assets/js/bootstrap.min.js') ?>"></script>
-
-    <script src="<?= base_url('assets/js/custom.js') ?>"></script>
-    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
-    <!-- <script src="<?= base_url('assets/js/list.js') ?>"></script> -->
+    <!-- Chart JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
         crossorigin="anonymous"></script>
-    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <!-- Javascript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+    <script src="<?= base_url('assets/js/paging.js') ?>"></script>
+
+
+    <!-- Datatable JS -->
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+
+    <!-- <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.min.css"> -->
+    <!-- <link rel="stylesheet" href="<?= base_url('assets/css/jquery.dataTables.css') ?>"> -->
+    <!-- <link rel="stylesheet" href="<?= base_url('assets/css/dataTables.bootstrap.css') ?>"> -->
+    <!-- <link rel="stylesheet" href="<?= base_url('assets/css/sticky-footer.css') ?>"> -->
+    <!-- <script src="<?= base_url('assets/js/custom.js') ?>"></script> -->
+    <!-- <script src="<?= base_url('assets/js/jquery.min.js') ?>"></script> -->
     <style>
     body {
         font: 14px Montserrat, sans-serif;
         line-height: 1.8;
-        /* background-color: #ffb6c1; */
         background: rgb(238, 174, 202);
         background: linear-gradient(90deg, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
     }
@@ -63,7 +69,6 @@
     .img-wrap {
         position: relative;
         display: inline-block;
-        /* border: 1px red solid; */
         font-size: 0;
     }
 
@@ -87,10 +92,15 @@
     html {
         position: relative;
         min-height: 100%;
+        scroll-behavior: smooth;
     }
 
     body {
         margin-bottom: 60px;
+    }
+
+    label {
+        font-weight: 600;
     }
 
     .footer {
@@ -98,6 +108,8 @@
         bottom: 0;
         width: 100%;
         height: 60px;
+        line-height: 60px;
+        background-color: #f5f5f5;
     }
 
     .table {
@@ -152,10 +164,44 @@
     }
 
     .container-fluid {
-        /* padding-top: 25px;
-            padding-bottom: 25px; */
+        padding-top: 25px;
+        padding-bottom: 25px;
         margin-top: 25px;
         margin-bottom: 25px;
+    }
+
+    /* Pagination  */
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    #paging {
+        padding: 0 20px 20px 20px;
+        font-size: 13px;
+        margin-top: 10px;
+    }
+
+    #paging a {
+        color: #000;
+        background: #e0e0e0;
+        padding: 8px 12px;
+        margin-right: 5px;
+        text-decoration: none;
+    }
+
+    #paging a.aktif {
+        background: #000 !important;
+        color: #fff;
+    }
+
+    #paging a:hover {
+        border: 1px solid #000;
+    }
+
+    .hidden {
+        display: none;
     }
     </style>
 </head>
@@ -258,7 +304,7 @@
 
     </nav>
 
-    <div id="main" class="container demo">
+    <div id="main" class="container">
         <br>
         <!-- <?php if ($this->session->flashdata('login_failed')) : ?>
         <div class="alert alert-dismissible alert-danger">
