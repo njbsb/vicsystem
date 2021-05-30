@@ -84,6 +84,26 @@
         border-radius: 50%;
     }
 
+    html {
+        position: relative;
+        min-height: 100%;
+    }
+
+    body {
+        margin-bottom: 60px;
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 60px;
+    }
+
+    .table {
+        overflow-x: auto;
+    }
+
     .img-wrap:hover .close {
         opacity: 1;
     }
@@ -238,7 +258,7 @@
 
     </nav>
 
-    <div class="container">
+    <div id="main" class="container demo">
         <br>
         <!-- <?php if ($this->session->flashdata('login_failed')) : ?>
         <div class="alert alert-dismissible alert-danger">
