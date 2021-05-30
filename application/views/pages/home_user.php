@@ -5,8 +5,7 @@
 <div class="card" style="padding-bottom: 0px; padding-top: 1rem;">
     <div class="card-body">
         <h5 class="text-right text-muted"><b>Today is <?= date("jS F Y (l)") ?></b></h5>
-        <h1 class="display-3">Welcome, <?= $user_name ?>!</h1>
-        <p class="lead">This is a website to manage VIC Information and Activities</p>
+        <h1 class="display-4">Welcome, <?= $user_name ?>!</h1>
         <!-- <?php if (!$profileComplete) : ?>
     <p>We have detected that you have not completed your profile. Update your profile information <a href="<?= base_url("/profile/update") ?>">here</a></p>
     <?php endif ?> -->
