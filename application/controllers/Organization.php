@@ -44,6 +44,26 @@ class Organization extends CI_Controller
                 'email' => '-'
             );
         }
+        # to filter $roles_org with already existing data;
+        $roles_org = $this->committee_model->get_roles_org();
+        $committees = $this->committee_model->get_org_committees($acadyear_id);
+        foreach ($roles_org as $i => $role) {
+            foreach ($committees as $com) {
+                if ($role['id'] == $com['role_id']) {
+                    unset($roles_org[$i]);
+                }
+            }
+        }
+        $sigmembers = $this->student_model->get_sigstudents($sig_id);
+        foreach ($sigmembers as $i => $member) {
+            foreach ($committees as $com) {
+                if ($member['id'] == $com['student_id']) {
+                    unset($sigmembers[$i]);
+                }
+            }
+        }
+        $sigmembers = array_values($sigmembers);
+        $roles_org = array_values($roles_org);
         $data = array(
             'title' => 'Organization Hierarchy',
             'sig' => $sig,
@@ -53,10 +73,9 @@ class Organization extends CI_Controller
             'secondrows' => $secondrows, # deputy, secretary, treasurer
             'orgajks' => $this->committee_model->get_org_ajks($acadyear_id), # member with committee members (AJK) role
             'sigcommittees' => $this->committee_model->get_org_committees($acadyear_id), # all committees registered in the table
-            'roles_org' => $this->committee_model->get_roles_org(), # to register new com
-            'sig_member' => $this->student_model->get_sigstudents($sig_id) # to register new com
+            'roles_org' => $roles_org, # to register new com
+            'sig_member' => $sigmembers # to register new com
         );
-        // print_r($data['sigcommittees']);
         $this->load->view('templates/header');
         $this->load->view('organization/index', $data);
         $this->load->view('templates/footer');
