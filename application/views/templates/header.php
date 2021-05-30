@@ -25,6 +25,8 @@
     <!-- Chart JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
         crossorigin="anonymous"></script>
+    <!-- HighChart JS -->
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
 
     <!-- Javascript -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -240,7 +242,7 @@
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Academic</a>
                         <div class="dropdown-menu">
-                            <?php if ($usertype == 'mentor') : ?>
+                            <?php if ($usertype != 'student') : ?>
                             <a class="dropdown-item" href="<?= site_url('academic') ?>">Academic Control</a>
                             <a class="dropdown-item" href="<?= site_url('academicplan/mentor') ?>">Academic Plan</a>
                             <a class="dropdown-item" href="<?= site_url('enroll') ?>">Enroll Students</a>
@@ -249,16 +251,17 @@
                             <?php endif ?>
                         </div>
                     </li>
-                    <?php if ($usertype == 'mentor' or $usertype == 'admin') : ?>
-
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">Score</a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="<?= site_url('scoreboard') ?>">Score Board</a>
+                            <?php if ($usertype != 'student') : ?>
                             <a class="dropdown-item" href="<?= site_url('scoreplan') ?>">Score Plan</a>
                             <a class="dropdown-item" href="<?= site_url('score') ?>">Submit Score</a>
+                            <?php endif ?>
                         </div>
                     </li>
+                    <?php if ($usertype != 'student') : ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">Admin</a>
                         <div class="dropdown-menu">
@@ -271,7 +274,7 @@
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="<?= site_url('citra') ?>">Citra</a>
                             <a class="dropdown-item" href="<?= site_url('collaborator') ?>">Collaborator</a>
-                            <a class="dropdown-item" href="<?= site_url('template') ?>">Upload Templates</a>
+                            <a class="dropdown-item" href="<?= site_url('template') ?>">File Links</a>
                         </div>
                     </li>
                     <?php endif ?>

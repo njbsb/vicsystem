@@ -101,6 +101,8 @@
 
 <script>
 $(document).ready(function() {
-    $('#acp_table').DataTable();
+    $('#acp_table').DataTable({
+        "order": []
+    });
 });
 </script>

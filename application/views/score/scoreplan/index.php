@@ -26,9 +26,7 @@
                         <?php foreach ($academicsessions as $acs) : ?>
                         <tr>
                             <td><?= $acs['academicsession'] ?></td>
-                            <!-- <td><?= $acs['academicyear'] ?></td> -->
                             <?php foreach ($acs['activitycategories'] as $cat) : ?>
-                            <!-- <td><?= $cat['categorycount'] ?></td> -->
                             <td><?= sprintf('%s%% (%s)', $cat['categorytotalpercent'], $cat['categorycount']) ?></td>
                             <?php endforeach ?>
                             <?php $textclass = ($acs['total'] == 40) ? 'text-success' : 'text-danger' ?>
@@ -38,18 +36,6 @@
                         </tr>
                         <?php endforeach ?>
                     </tbody>
-                    <!-- <tfoot class="table-dark">
-            <tr>
-                <td>Session</td>
-                <td>Year</td>
-                <?php foreach ($activitycategory as $actcat) : ?>
-                    <td data-toggle="tooltip" data-placement="top" title="" data-original-title="<?= $actcat['category'] ?> Count"><?= $actcat['category'] ?></td>
-                    <td>Total % (<?= $actcat['code'] ?>)</td>
-                <?php endforeach ?>
-                <td>Total %</td>
-                <td></td>
-            </tr>
-        </tfoot> -->
                 </table>
             </div>
 
@@ -105,27 +91,9 @@
 
 <script>
 $(document).ready(function() {
-    $('#scoreplanindex').DataTable();
-    // $('#scoreplanindex').DataTable({
-    //     initComplete: function() {
-    //         this.api().columns().every(function() {
-    //             var column = this;
-    //             var select = $('<select><option value=""></option></select>')
-    //                 .appendTo($(column.footer()).empty())
-    //                 .on('change', function() {
-    //                     var val = $.fn.dataTable.util.escapeRegex(
-    //                         $(this).val()
-    //                     );
-    //                     column
-    //                         .search(val ? '^' + val + '$' : '', true, false)
-    //                         .draw();
-    //                 });
-    //             column.data().unique().sort().each(function(d, j) {
-    //                 select.append('<option value="' + d + '">' + d + '</option>')
-    //             });
-    //         });
-    //     }
-    // });
+    $('#scoreplanindex').DataTable({
+        "order": []
+    });
     $('[data-toggle="tooltip"]').tooltip();
 });
 </script>
