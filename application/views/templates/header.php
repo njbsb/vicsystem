@@ -146,7 +146,7 @@
     <?php $usertype =  $this->session->userdata('user_type') ?>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <img class="" style="object-fit:cover;" height="40px" width="40px" src="<?= base_url('assets/images/logo.png') ?>" alt="">
+            <a href="<?= site_url() ?>"><img class="" style="object-fit:cover;" height="40px" width="40px" src="<?= base_url('assets/images/logo.png') ?>" alt=""></a>
             <?php if ($this->session->userdata('logged_in')) : ?>
             <a class="navbar-brand" href="<?= site_url() ?>">VIC System</a>
             <?php endif ?>
@@ -232,7 +232,7 @@
             </li>
             <?php else : ?>
             <li class="nav-item">
-                <a class="nav-link" href="<?= site_url('login') ?>">Login<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="<?= site_url('login') ?>">Sign In<span class="sr-only">(current)</span></a>
             </li>
             <?php endif ?>
 

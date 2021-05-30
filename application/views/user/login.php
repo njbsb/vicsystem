@@ -5,21 +5,35 @@
     <p class="mb-0"><?= validation_errors() ?></p>
 </div>
 <?php endif ?>
-<div class="row justify-content-md-center">
-    <div class="col-md-4 col-md-offset-4 text-center">
+<div class="row">
+    <div class="col-md-8 card justify-content-md-center">
+        <div class="card-body">
+            <h3 class="text-pink">Magic Flick!</h3>
+            <h5>A more innovative solution to manage your SIG!</h5>
+            <img style="max-width: 100%; max-height: 100%; display: block;" src="<?= base_url('assets/images/illustration1.png') ?>" alt="">
+        </div>
+    </div>
+    <div class="col-md-4 col-md-offset-4">
         <?= form_open('user/login') ?>
-        <h3 class="text-center"><?= $title ?></h3>
-        <div class="form-group">
-            <input type="text" name="username" class="form-control" placeholder="Enter ID" required autofocus>
+        <div class="card">
+            <div class="card-body">
+                <h3 class="text-center text-pink">Sign In</h3>
+                <div class="form-group">
+                    <label for="">Username</label>
+                    <input type="text" name="username" class="form-control" placeholder="Enter ID" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="">Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="Enter Password" required autofocus>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+                <?= form_close() ?>
+                <div class="text-center" style="margin-top:10px;">
+                    <a href="#chooseUser" data-toggle="modal" class="text-center">Register here</a>
+                </div>
+
+            </div>
         </div>
-        <div class="form-group">
-            <input type="password" name="password" class="form-control" placeholder="Enter Password" required autofocus>
-        </div>
-        <button type="submit" class="btn btn-primary btn-block">Login</button>
-        <?= form_close() ?>
-        <a href="#chooseUser" data-toggle="modal" class="">
-            Register here
-        </a>
     </div>
 </div>
 

@@ -6,68 +6,76 @@
 </div>
 <?php endif ?>
 
-
-<div class="row justify-content-md-center">
-    <div class="col-md-4 col-md-offset-4">
-        <h3 class="text-center"><?= $title ?></h3>
-        <?php $hidden = array('usertype' => $usertype) ?>
-        <?= form_open('register', '', $hidden) ?>
-        <!-- Usertype -->
-        <div class="form-group">
-            <!-- <label>Usertype</label> -->
-            <!-- <input type="text" class="form-control" id='usertype_id' name="usertype_name" value="<?= $usertype_name ?>" readonly="" required> -->
-            <!-- <input type="hidden" class="form-control" id='usertype_id' name="usertype_id" value="<?= $usertype_id ?>" readonly="" required> -->
-        </div>
-
-        <!-- ID -->
-        <div class="form-group">
-            <label>ID/Matric</label>
-            <input value="<?= $id ?>" type="text" class="form-control" id='id' name="id" placeholder="Matric/ID No" required>
-        </div>
-
-        <!-- NAME -->
-        <div class="form-group">
-            <label>Name</label>
-            <input value="<?= $name ?>" type="text" class="form-control" name="name" placeholder="Name">
-        </div>
-
-        <!-- DOB -->
-        <div class="form-group">
-            <label for="dob">Date of Birth</label>
-            <input name="dob" class="form-control" type="date" value="<?= $dob ?>" id="dob" required>
-        </div>
-
-        <!-- GENDER -->
-        <div class="form-group">
-            <label for="gender">Gender</label>
-            <div class="custom-control custom-radio">
-                <input value="m" type="radio" id="customRadio1" name="gender" class="custom-control-input" checked="">
-                <label class="custom-control-label" for="customRadio1">Male</label>
+<div class="row">
+    <div class="col-md-5 card">
+        <div class="card-body justify-content-md-center">
+            <h3 class="text-pink"><?= $title ?></h3>
+            <?php $hidden = array('usertype' => $usertype) ?>
+            <?= form_open('register', '', $hidden) ?>
+            <!-- NAME -->
+            <div class="form-group">
+                <label>Name</label>
+                <input value="<?= $name ?>" type="text" class="form-control" name="name" placeholder="Name">
             </div>
-            <div class="custom-control custom-radio">
-                <input value="f" type="radio" id="customRadio2" name="gender" class="custom-control-input">
-                <label class="custom-control-label" for="customRadio2">Female</label>
+            <!-- ID -->
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-6">
+                        <label>ID/Matric</label>
+                        <input value="<?= $id ?>" type="text" class="form-control" id='id' name="id" maxlength="8" size="8" placeholder="ID/Matric No" required>
+                    </div>
+                    <div class="col-6">
+                        <label for="dob">Date of Birth</label>
+                        <input name="dob" class="form-control" type="date" value="<?= $dob ?>" id="dob" required>
+                    </div>
+                </div>
+
             </div>
-        </div>
+            <!-- GENDER -->
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <div class="custom-control custom-radio">
+                    <input value="m" type="radio" id="customRadio1" name="gender" class="custom-control-input" checked="">
+                    <label class="custom-control-label" for="customRadio1">Male</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input value="f" type="radio" id="customRadio2" name="gender" class="custom-control-input">
+                    <label class="custom-control-label" for="customRadio2">Female</label>
+                </div>
+            </div>
+            <hr>
+            <!-- EMAIL -->
+            <div class="form-group">
+                <label>Email</label>
+                <input value="<?= $email ?>" type="email" class="form-control" name="email" placeholder="Email">
+            </div>
+            <!-- PASSWORD -->
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input value="password" type="password" class="form-control" name="password" placeholder="Password">
+                    </div>
 
-        <!-- EMAIL -->
-        <div class="form-group">
-            <label>Email</label>
-            <input value="<?= $email ?>" type="email" class="form-control" name="email" placeholder="Email">
-        </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Confirm password</label>
+                        <input value="password" type="password" class="form-control" name="confirmpassword" placeholder="Confirm password">
+                    </div>
+                </div>
+            </div>
 
-        <!-- PASSWORD -->
-        <div class="form-group">
-            <label>Password</label>
-            <input value="password" type="password" class="form-control" name="password" placeholder="Password">
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+            <?= form_close() ?>
         </div>
-        <div class="form-group">
-            <label>Confirm password</label>
-            <input value="password" type="password" class="form-control" name="confirmpassword" placeholder="Confirm password">
+    </div>
+    <div class="col-md-7">
+        <div class="card-body">
+            <!-- <h3>Sign Up Now!</h3> -->
+            <img src="<?= base_url('assets/images/illustration1.png') ?>" style="max-width:100%; max-height: 100%;" alt="">
+            <br><br>
+            <p>Already have an account? <a href="<?= site_url('login') ?>">Sign In</a></p>
         </div>
-
-        <button type="submit" class="btn btn-primary btn-block">Register</button>
-
-        <?= form_close() ?>
     </div>
 </div>
