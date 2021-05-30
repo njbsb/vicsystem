@@ -15,30 +15,31 @@
     <div class="card">
         <div class="card-body">
             <div class="form-group">
-                <h4><?= $activitycategory['category'] ?></h4>
+                <h4><?= $activitycategory['category'] . ' @ ' . $activesession['academicsession'] ?></h4>
             </div>
             <div class="form-group">
                 <label><?= $activitycategory['category'] ?> Title</label>
                 <input name="activityname" type="text" class="form-control" placeholder="<?= $activitycategory['category'] ?> Title" required>
             </div>
-            <div class="form-group">
-                <label>Select academic session</label>
+            <!-- <div class="form-group">
+                <label>Academic session</label>
                 <input value="<?= $activesession['academicsession'] ?>" readonly type="text" class="form-control">
-            </div>
+            </div> -->
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="datetime_start">Start date</label>
                         <input type="datetime-local" name="datetime_start" class="form-control" id="">
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 col-lg-4">
                     <div class="form-group">
                         <label for="datetime_end">End date</label>
                         <input type="datetime-local" name="datetime_end" class="form-control" id="">
                     </div>
                 </div>
             </div>
+            <small>You can only add activity in the currently active academic session.</small>
         </div>
     </div>
     <hr>
@@ -48,7 +49,7 @@
                 <h4>Committee</h4>
             </div>
             <div class="form-group">
-                <label>Select activity advisor</label>
+                <label><?= $activitycategory['category'] ?> Advisor</label>
                 <select name="advisor_id" class="form-control" required>
                     <option value="" selected disabled hidden>Choose Advisor</option>
                     <?php foreach ($mentors as $mentor) : ?>
@@ -76,13 +77,11 @@
                 <?php endforeach ?>
             </div>
             <small>If you don't see any specific student, you might have not enrolled them into the current academic session.</small>
-
+            <hr>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
         </div>
-    </div>
-    <!-- <hr> -->
-    <br>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </fieldset>
 <?= form_close() ?>

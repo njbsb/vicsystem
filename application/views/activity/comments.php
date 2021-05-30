@@ -6,8 +6,8 @@
     </div>
 </div>
 
-<button data-toggle="modal" data-target="#showComment" class="btn btn-info">Show Comments</button>
-<br><br>
+<!-- <button data-toggle="modal" data-target="#showComment" class="btn btn-info">Show Comments</button> -->
+<!-- <br><br> -->
 <div id="comments">
     <div class="card">
         <div class="card-body">
@@ -46,8 +46,9 @@
                             <br><small><?= $com['created_at'] ?></small><br>
                         </div>
                         <div class="col-sm-2">
-                            <?php if ($this->session->userdata('username') == $com['user_id']) : ?>
-                            <a href="#" class="btn btn-sm" style="float: right;"><i class="fa fa-trash"></i></a>
+                            <?php if ($this->session->userdata('username') == $com['user_id'] or $this->session->userdata('user_type') != 'student') : ?>
+                            <a data-toggle="modal" data-target="#delete_comment" data-userid="<?= $com['user_id'] ?>" data-commentid="<?= $com['id'] ?>" data-comment="<?= $com['comment'] ?>"
+                                class="btn btn-sm" style="float: right;"><i class="fa fa-trash"></i></a>
                             <?php endif ?>
                         </div>
                     </div>
@@ -57,6 +58,36 @@
         <?php endforeach ?>
     </ul>
     <?php endif ?>
+</div>
+
+<div id="delete_comment" class="modal fade card">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <?php $hidden = array('activity_id' => $activity['id'], 'slug' => $activity['slug']) ?>
+            <?= form_open('comment/delete', '', $hidden) ?>
+            <div class="modal-header">
+                <h5 class="modal-title">Delete this comment?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="deletecomment" id="deleteuserid"></label> said:
+                    <p id="deletecomment"></p>
+                    <input type="text" class="form-control" name="deletecommentid" readonly hidden>
+                </div>
+                <?php if ($this->session->userdata('user_type') != 'student') : ?>
+                <small>Only mentor is able to delete students' comments</small>
+                <?php endif ?>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
+            </div>
+            <?= form_close() ?>
+        </div>
+    </div>
 </div>
 
 
@@ -70,7 +101,21 @@ $(function() {
 $(document).ready(function() {
     $('#tablecomment').DataTable();
 });
-
+var deleteuserid = document.getElementById('deleteuserid');
+var deletecomment = document.getElementById('deletecomment');
+$('#delete_comment').on('show.bs.modal', function(e) {
+    var commentid = $(e.relatedTarget).data('commentid');
+    var comment = $(e.relatedTarget).data('comment');
+    var userid = $(e.relatedTarget).data('userid');
+    $(e.currentTarget).find('input[name="deletecommentid"]').val(commentid);
+    deletecomment.innerHTML = comment;
+    deleteuserid.innerHTML = userid;
+    // $(e.currentTarget).find('input[name="deleterole"]').val(role);
+    // $(e.currentTarget).find('input[name="deleteroleid"]').val(role_id);
+});
+$('#delete_comment').on('hide.bs.modal', function(e) {
+    deleteuserid.innerHTML = '';
+});
 var commentarray = <?= json_encode($comments) ?>;
 buildComments(commentarray);
 var limit = 3;

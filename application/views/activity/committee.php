@@ -27,10 +27,11 @@
                 <tbody class="list table-active">
                     <?php if ($committees) : ?>
                     <?php foreach ($committees as $com) : ?>
+                    <?php $fullrole = ($com['role'] == 'Committee Member') ? sprintf('%s AJK', $com['description'])  : $com['role'] ?>
                     <tr>
                         <td scope="row"><?= $com['student_id'] ?></td>
                         <td scope="row"><?= $com['name'] ?></td>
-                        <td scope="row"><?= $com['role'] ?></td>
+                        <td scope="row"><?= $fullrole ?></td>
                         <?php if ($isHighcom or ($this->session->userdata('username') == $activity['advisor_id'])) : ?>
                         <!-- only advisor and highcom can see the delete button -->
                         <?php $disabled = ($isHighcom and in_array($com['role_id'], $highcoms_id)) ? 'disabled' : '' ?>
