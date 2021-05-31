@@ -35,16 +35,20 @@
 </div>
 <div class="card">
     <div class="card-body">
+        <?php if ($academicplans) : ?>
         <div class="form-group">
-            <a class="btn btn-success" href="<?= site_url('score/download_record') ?>" target="_blank"><i class='fas fa-file-excel'></i> Download</a>
+            <?php $hidden = array('acadyear_id' => $acadyear_id, 'semester' => $semester) ?>
+            <?= form_open('academicplan/download_record', '', $hidden) ?>
+            <button type="submit" class="btn btn-success" target="_blank"><i class='fas fa-file-excel'></i> Download</button>
+            <?= form_close() ?>
         </div>
+        <?php endif ?>
         <div class="table-responsive">
             <table id="acp_table" class="table">
                 <thead class="table-dark">
                     <tr>
                         <th>Matric</th>
                         <th>Name</th>
-                        <!-- <td>Academic Session</td> -->
                         <th>GPA Target</th>
                         <th>GPA Achieved</th>
                         <th>Status</th>
@@ -66,7 +70,7 @@
                     <?php endforeach ?>
                     <?php else : ?>
                     <tr>
-                        <td>No data</td>
+                        <!-- <td>No data</td> -->
                     </tr>
                     <?php endif ?>
 
@@ -77,11 +81,6 @@
     </div>
 </div>
 <br>
-<div class="card">
-    <div class="card-body">
-
-    </div>
-</div>
 <script>
 $(document).ready(function() {
     $('#acp_table').DataTable({

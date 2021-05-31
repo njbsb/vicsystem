@@ -44,14 +44,18 @@
 <div class="card">
     <div class="container">
         <?= form_open_multipart('academic/import_result') ?>
-        <div class="form-group">
-            <!-- <p>It's end of academic session. Upload the students' result here</p> -->
-            <label for="formFile" class="form-label mt-4">It's end of academic session. Upload the students' result here</label>
-            <input class="form-control" type="file" name="upload_file" id="upload_file" required accept=".csv,.xls,.xlsx">
+        <div class="row">
+            <div class="col-lg-6 col-md-8">
+                <div class="form-group">
+                    <label for="formFile" class="form-label mt-4">It's end of academic session. Upload the students' result here</label>
+                    <input class="form-control" type="file" name="upload_file" id="upload_file" required accept=".csv,.xls,.xlsx">
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <button class="btn btn-info" type="submit"><i class='fas fa-upload'></i> Upload</button>
         </div>
+        <small>Get result upload template <a href="<?= site_url('filelink') ?>">here</a></small>
         <?= form_close() ?>
     </div>
 </div>

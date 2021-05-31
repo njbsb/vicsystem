@@ -105,6 +105,7 @@ class Academic extends CI_Controller
 
     public function academicplanrecords()
     {
+        # mentor's view
         $acadyear_id = $this->input->post('acadyear_id');
         $semester = $this->input->post('semester');
         $academicsession = $this->academic_model->get_academicsession_byyearsem($acadyear_id, $semester);
@@ -130,22 +131,24 @@ class Academic extends CI_Controller
                 $academicplans[$i]['textclass'] = $textclass;
             }
             # create chart from academicplans
-            $barData = [];
-            $barData['label'] = ['1 - 1.5', '1.5 - 2', '2 - 2.5', '2.5 - 3', '3 - 3.5', '3.5 - 4'];
-            $barData['threshold'] = [1, 1.5, 2, 2.5, 3, 3.5, 4];
-            foreach ($barData['label'] as $i => $group) {
-                foreach ($academicplans as $plan) {
-                    $gpa = $plan['gpa_achieved'];
-                    if ($gpa > $group['threshold']) {
-                    }
-                }
-            }
+            // $barData = [];
+            // $barData['label'] = ['1 - 1.5', '1.5 - 2', '2 - 2.5', '2.5 - 3', '3 - 3.5', '3.5 - 4'];
+            // $barData['threshold'] = [1, 1.5, 2, 2.5, 3, 3.5, 4];
+            // foreach ($barData['label'] as $i => $group) {
+            //     foreach ($academicplans as $plan) {
+            //         $gpa = $plan['gpa_achieved'];
+            //         if ($gpa > $group['threshold']) {
+            //         }
+            //     }
+            // }
             $data = array(
                 'title' => 'Academic Plan Records',
                 'academicyears' => $this->academic_model->get_academicyear(),
                 'semesters' => $this->semester_model->get_semesters(),
                 'academicsession' => $academicsession,
-                'academicplans' => $academicplans
+                'academicplans' => $academicplans,
+                'acadyear_id' => $acadyear_id,
+                'semester' => $semester
             );
 
             $this->load->view('templates/header');
@@ -156,6 +159,7 @@ class Academic extends CI_Controller
 
     public function records()
     {
+        # student's view
         $student_id = $this->input->post('student_id');
         $acadyear_id = $this->input->post('acadyear_id');
         $semester_id = $this->input->post('semester_id');
@@ -218,6 +222,53 @@ class Academic extends CI_Controller
         }
     }
 
+    public function download_record()
+    {
+        $postdata = $this->input->post();
+        $acadyear_id = $postdata['acadyear_id'];
+        $semester = $postdata['semester'];
+        $academicsession = $this->academic_model->get_academicsession_byyearsem($acadyear_id, $semester);
+        $academicplans = $this->academic_model->get_academicplan(FALSE, $academicsession['id']);
+        foreach ($academicplans as $i => $acp) {
+            # acp = students
+            $diff = $acp['gpa_achieved'] - $acp['gpa_target'];
+            $academicplans[$i]['difference'] = $diff;
+            if ($diff > 0) {
+                $status = 'Passed';
+            } elseif ($diff < 0) {
+                $status = 'Not Pass';
+            } else {
+                $status = 'Constant';
+            }
+            $academicplans[$i]['status'] = $status;
+        }
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $academicsession['academicsession'] . ' Academic Records.xlsx"');
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'Academic Year');
+        $sheet->setCellValue('B1', 'Semester');
+        $sheet->setCellValue('C1', 'Matric');
+        $sheet->setCellValue('D1', 'Name');
+        $sheet->setCellValue('E1', 'GPA Target');
+        $sheet->setCellValue('F1', 'GPA Achieved');
+        $sheet->setCellValue('G1', 'Increment');
+        $sheet->setCellValue('H1', 'Target Status');
+        foreach ($academicplans as $i => $student) {
+            $i += 1;
+            $sheet->setCellValue('A' . $i + 1, $academicsession['academicyear']);
+            $sheet->setCellValue('B' . $i + 1, $semester);
+            $sheet->setCellValue('C' . $i + 1, $student['student_id']);
+            $sheet->setCellValue('D' . $i + 1, $student['name']);
+            $sheet->setCellValue('E' . $i + 1, $student['gpa_target']);
+            $sheet->setCellValue('F' . $i + 1, $student['gpa_achieved']);
+            $sheet->setCellValue('G' . $i + 1, $student['difference']);
+            $sheet->setCellValue('H' . $i + 1, $student['status']);
+        }
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+    }
+
     # controller functions
     public function enroll()
     {
@@ -253,7 +304,6 @@ class Academic extends CI_Controller
         }
     }
 
-    # unenroll
     public function unenroll()
     {
         $acadsession_id = $this->input->post('acadsession_id');
