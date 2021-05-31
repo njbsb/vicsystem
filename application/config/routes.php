@@ -6,6 +6,7 @@ $route['academic'] = 'academic/index';
 $route['academicplan/student'] = 'academic/academicplanstudent';
 $route['academicplan/mentor'] = 'academic/academicplanmentor';
 $route['academicplan/records'] = 'academic/academicplanrecords';
+$route['academicplan/download_record'] = 'academic/download_record';
 $route['academic/records'] = 'academic/records';
 $route['academic/set_gpa'] = 'academic/set_gpa';
 $route['enroll'] = 'academic/enroll';
@@ -47,6 +48,7 @@ $route['profile'] = 'user/profile';
 $route['profile/update'] = 'user/edit';
 
 $route['student'] = 'student/index';
+$route['student/download'] = 'student/download';
 $route['student/update'] = 'student/update';
 $route['student/register'] = 'student/register';
 $route['student/(:any)'] = 'student/view/$1';
@@ -80,7 +82,7 @@ $route['score/edit_scorelevel'] = 'score/edit_scorelevel';
 $route['score/(:any)'] = 'score/viewacs/$1';
 $route['score/(:any)/(:any)'] = 'score/view/$1/$2';
 
-$route['template'] = 'pages/template';
+$route['filelink'] = 'pages/template';
 $route['updatelink'] = 'pages/updatelink';
 $route['createlink'] = 'pages/createlink';
 $route['deletelink'] = 'pages/deletelink';

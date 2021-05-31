@@ -48,6 +48,19 @@ class Student_model extends CI_Model
         }
     }
 
+    public function get_studentdata()
+    {
+        $this->db->select('user.*, student.*, mentor.name as mentorname')
+            ->from('user')
+            ->where(array(
+                'user.usertype' => 'student'
+            ))
+            ->join('student', 'student.matric = user.id', 'left')
+            ->join('user as mentor', 'user.superior_id = mentor.id', 'left');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     public function get_student_profile($id)
     {
         $query = $this->db->get_where('student', array(
