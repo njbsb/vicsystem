@@ -21,10 +21,12 @@
                 <span class="badge rounded-pill bg-warning"><?= $ext['level'] ?></span><small class="post-date">Endorsed by: <?= $ext['mentorname'] ?></small>
                 <p><?= sprintf('%s: %s', '<b>' . date_format(date_create($ext['date']), 'M d, Y') . '</b>', $ext['description']) ?></p>
                 <?php if ($usertype != 'student') : ?>
-                <a data-toggle="modal" data-toggle="tooltip" title="Edit Activity" data-target="#editexternal" data-id="<?= $ext['id'] ?>" data-title="<?= $ext['title'] ?>"
-                    data-description="<?= $ext['description'] ?>" data-date="<?= $ext['date'] ?>" class="btn btn-primary btn-sm" href=""><i class='fas fa-pen'></i></a>
-                <a data-toggle="modal" data-toggle="tooltip" title="Add Participant" data-target="#addparticipant" data-externalid="<?= $ext['id'] ?>" data-title="<?= $ext['title'] ?>"
-                    class="btn btn-primary btn-sm" href=""><i class='fas fa-user-plus'></i></a>
+                <a data-toggle="modal" data-target="#editexternal" data-id="<?= $ext['id'] ?>" data-title="<?= $ext['title'] ?>" data-description="<?= $ext['description'] ?>"
+                    data-date="<?= $ext['date'] ?>" class="btn btn-primary btn-sm" href=""><i data-toggle="tooltip" title="Edit Activity" class='fas fa-pen'></i></a>
+                <a data-toggle="modal" data-target="#addparticipant" data-externalid="<?= $ext['id'] ?>" data-title="<?= $ext['title'] ?>" class="btn btn-primary btn-sm" href=""><i
+                        data-toggle="tooltip" title="Add Participant" class='fas fa-user-plus'></i></a>
+                <a data-toggle="modal" data-target="#deleteexternal" data-externalid="<?= $ext['id'] ?>" data-title="<?= $ext['title'] ?>" class="btn btn-primary btn-sm" href=""><i
+                        data-toggle="tooltip" title="Delete Participant" class='fa fa-trash'></i></a>
                 <?php endif ?>
             </div>
         </div>
@@ -40,7 +42,7 @@
                     <a data-toggle="modal" data-target="#deleteparticipant" data-title="<?= $ext['title'] ?>" data-name="<?= $participant['name'] ?>" data-userid="<?= $participant['id'] ?>"
                         data-externalid="<?= $ext['id'] ?>" class="close">&times;</a>
                     <?php endif ?>
-                    <a data-name="<?= $participant['name'] ?>" data-toggle="tooltip" title="<?= $participant['name'] ?>" href="<?= site_url('student/' . $participant['id']) ?>"><img
+                    <a data-name="<?= $participant['name'] ?>" href="<?= site_url('student/' . $participant['id']) ?>"><img data-toggle="tooltip" title="<?= $participant['name'] ?>"
                             class="rounded-circle" style="object-fit:cover;" src="<?= $participant['userphoto'] ?>" alt="<?= $participant['name'] ?>" width="60px" height="60px"></a>
                 </div>
                 <?php endforeach ?>
@@ -249,11 +251,21 @@ $('#deleteparticipant').on('show.bs.modal', function(e) {
 $('#deleteparticipant').on('hide.bs.modal', function(e) {
     texttitle.innerHTML = '';
 });
-$('a[data-toggle="tooltip"]').tooltip({
+$('[data-toggle="tooltip"]').tooltip({
     animated: 'fade',
     placement: 'bottom',
     html: true
 });
+// $('a[data-toggle="tooltip"]').tooltip({
+//     animated: 'fade',
+//     placement: 'bottom',
+//     html: true
+// });
+// $('i[data-toggle="tooltip"]').tooltip({
+//     animated: 'fade',
+//     placement: 'bottom',
+//     html: true
+// });
 $(document).ready(function() {
     $("#selectstudent").on("keyup", function() {
         var value = $(this).val().toLowerCase();

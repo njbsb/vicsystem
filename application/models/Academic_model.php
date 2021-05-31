@@ -128,9 +128,9 @@ class Academic_model extends CI_Model
                 concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
                         ->from('academicplan as acp')
                         ->where(array('acp.student_id' => $student_id))
-                        ->join('academicsession as acs', 'acs.id = acp.acadsession_id')
-                        ->join('academicyear as acy', 'acy.id = acs.acadyear_id')
-                        ->join('user as std', 'std.id = acp.student_id');
+                        ->join('academicsession as acs', 'acs.id = acp.acadsession_id', 'left')
+                        ->join('academicyear as acy', 'acy.id = acs.acadyear_id', 'left')
+                        ->join('user as std', 'std.id = acp.student_id', 'left');
                     $query = $this->db->get();
                     return $query->result_array();
                 }

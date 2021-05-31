@@ -244,7 +244,7 @@
                         <div class="dropdown-menu">
                             <?php if ($usertype != 'student') : ?>
                             <a class="dropdown-item" href="<?= site_url('academic') ?>">Academic Control</a>
-                            <a class="dropdown-item" href="<?= site_url('academicplan/mentor') ?>">Academic Plan</a>
+                            <a class="dropdown-item" href="<?= site_url('academicplan/mentor') ?>">Academic Records</a>
                             <a class="dropdown-item" href="<?= site_url('enroll') ?>">Enroll Students</a>
                             <?php else : ?>
                             <a class="dropdown-item" href="<?= site_url('academicplan/student') ?>">Academic Plan</a>

@@ -36,7 +36,7 @@
                         <th>Increment</th>
                     </tr>
                 </thead>
-                <tbody class="table-active">
+                <tbody class="table-light">
                     <?php if ($academicplans) : ?>
                     <?php foreach ($academicplans as $acp) : ?>
                     <?php $sign = ($acp['difference'] > 0) ? '+' : '' ?>

@@ -15,7 +15,7 @@
                     <tr>
                         <td>Academic Session</td>
                         <?php foreach ($scoreplans as $scoreplan) : ?>
-                        <td class="text-warning" data-toggle="tooltip" data-placement="top" title="<?= $scoreplan['percentweightage'] ?>%">Level <?= ucfirst($scoreplan['label']) ?></td>
+                        <td class="text-warning" data-toggle="tooltip" data-placement="top" title="<?= $scoreplan['percentweightage'] ?>%"><?= ucfirst($scoreplan['label']) ?></td>
                         <?php endforeach ?>
                         <td class="text-info" data-toggle="tooltip" data-placement="top" title="15%">Components</td>
                         <td data-toggle="tooltip" data-placement="top" title="55%">Total</td>
@@ -41,8 +41,8 @@
 <div class="row">
     <?php foreach ($scoreplans as $scoreplan) : ?>
     <div class="col-lg-6">
-        <div class="card" style="border-radius: 12px; padding-top: 20px; padding-bottom: 20px; margin-bottom:20px;">
-            <div class="container">
+        <div class="card" style="margin-bottom:20px;">
+            <div class="card-body">
                 <h5 class="text-primary text-center"><b>Level <?= $scoreplan['label'] ?></b></h5>
                 <hr>
                 <div class="form-group">
@@ -59,7 +59,7 @@
                     <?php foreach ($scoreplan['scores'] as $key => $score) :  ?>
                     <div class="col-sm-3 text-center">
                         <div class="form-group card" style="padding: 4px; border-radius: 10px">
-                            <p><?= ucfirst($key) ?></p>
+                            <p class="text-info"><?= ucfirst($key) ?></p>
                             <h3><?= $score ?></h3>
                             <?php foreach ($guide[$key] as $scoreguide) : ?>
                             <?php if ($scoreguide['score'] == $score) : ?>
@@ -194,16 +194,8 @@
                     <?php foreach ($scorecomps['scores'] as $key => $value) : ?>
                     <div class="col-sm-4 text-center">
                         <div class="form-group card" style="padding: 4px; border-radius: 10px">
-                            <p><?= ucfirst($key) ?></p>
+                            <p class="text-info"><?= ucfirst($key) ?></p>
                             <h3><?= $value ?></h3>
-                            <!-- <?php if ($key != 'volunteer') : ?>
-                            <?php foreach ($guide[$key] as $scoreguide) : ?>
-                            <?php if ($scoreguide['id'] = $value) : ?>
-                            <small><?= $scoreguide['description'] ?></small>
-                            <?php endif ?>
-                            <?php endforeach ?>
-                            <?php endif ?> -->
-
                         </div>
                     </div>
                     <?php endforeach ?>

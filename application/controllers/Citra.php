@@ -23,6 +23,6 @@ class Citra extends CI_Controller
         );
         $this->load->view('templates/header');
         $this->load->view('citra/view', $data);
-        // $this->load->view('templates/footer');
+        $this->load->view('templates/footer');
     }
 }

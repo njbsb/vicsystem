@@ -29,6 +29,7 @@ class Score extends CI_Controller
         );
         $this->load->view('templates/header');
         $this->load->view('score/index', $data);
+        $this->load->view('templates/footer');
     }
 
     public function viewacs($acadsession_slug)
@@ -71,6 +72,7 @@ class Score extends CI_Controller
         );
         $this->load->view('templates/header');
         $this->load->view('score/viewacs', $data);
+        $this->load->view('templates/footer');
     }
 
     public function view($acadsession_slug, $student_id)
@@ -152,6 +154,7 @@ class Score extends CI_Controller
             );
             $this->load->view('templates/header');
             $this->load->view('score/scoreplan/index', $data);
+            $this->load->view('templates/footer');
         } else {
             # scoreplan view
             $academicsession = $this->academic_model->get_academicsession(FALSE, $slug);
@@ -169,6 +172,7 @@ class Score extends CI_Controller
             );
             $this->load->view('templates/header');
             $this->load->view('score/scoreplan/view', $data);
+            $this->load->view('templates/footer');
         }
     }
 
@@ -200,6 +204,7 @@ class Score extends CI_Controller
         );
         $this->load->view('templates/header');
         $this->load->view('score/scoreboard', $data);
+        $this->load->view('templates/footer');
     }
 
     ###

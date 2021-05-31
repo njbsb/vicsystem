@@ -12,76 +12,97 @@
 ); ?>
 <?= form_open('activity/create', '', $hidden) ?>
 <fieldset class="">
-    <div class="card">
-        <div class="card-body">
-            <div class="form-group">
-                <h4><?= $activitycategory['category'] . ' @ ' . $activesession['academicsession'] ?></h4>
-            </div>
-            <div class="form-group">
-                <label><?= $activitycategory['category'] ?> Title</label>
-                <input name="activityname" type="text" class="form-control" placeholder="<?= $activitycategory['category'] ?> Title" required>
-            </div>
-            <!-- <div class="form-group">
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">
+                        <img style="max-width: 100%; object-fit: cover; object-position: center; box-sizing: border-box; border-radius: 12px; background-position: center center;
+  background-repeat: no-repeat;" width="50%" height="100%" src="<?= base_url('assets/images/activity.png') ?>" alt="">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <h4><?= $activitycategory['category'] . ' @ ' . $activesession['academicsession'] ?></h4>
+                    </div>
+                    <div class="form-group">
+                        <label><?= $activitycategory['category'] ?> Title</label>
+                        <input name="activityname" type="text" class="form-control" placeholder="<?= $activitycategory['category'] ?> Title" required>
+                    </div>
+                    <!-- <div class="form-group">
                 <label>Academic session</label>
                 <input value="<?= $activesession['academicsession'] ?>" readonly type="text" class="form-control">
             </div> -->
-            <div class="row">
-                <div class="col-md-6 col-lg-4">
-                    <div class="form-group">
-                        <label for="datetime_start">Start date</label>
-                        <input type="datetime-local" name="datetime_start" class="form-control" id="">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="datetime_start">Start date</label>
+                                <input type="datetime-local" name="datetime_start" class="form-control" id="">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="datetime_end">End date</label>
+                                <input type="datetime-local" name="datetime_end" class="form-control" id="">
+                            </div>
+                        </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="form-group">
+                                <label><?= $activitycategory['category'] ?> Advisor</label>
+                                <select name="advisor_id" class="form-control" required>
+                                    <option value="" selected disabled hidden>Choose Advisor</option>
+                                    <?php foreach ($mentors as $mentor) : ?>
+                                    <option value="<?= $mentor['id'] ?>">
+                                        <?= $mentor['name'] . ' (' . $mentor['id'] . ')' ?>
+                                    </option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <small>You can only add activity in the currently active academic session.</small>
                 </div>
-                <div class="col-md-6 col-lg-4">
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-body">
                     <div class="form-group">
-                        <label for="datetime_end">End date</label>
-                        <input type="datetime-local" name="datetime_end" class="form-control" id="">
+                        <h4>Committee</h4>
+                    </div>
+
+                    <div class="row">
+                        <?php foreach ($highcoms as $highcom) : ?>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label><?= $highcom['role'] ?></label>
+                                <select name="highcoms[<?= $highcom['id'] ?>]" id="" class="form-control" required>
+                                    <option value="" disabled selected hidden>Select <?= strtolower($highcom['role']) ?></option>
+                                    <?php foreach ($sigstudents as $std) : ?>
+                                    <option value="<?= $std['id'] ?>">
+                                        <?= $std['id'] . ' ' . $std['name'] ?>
+                                    </option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+                        <?php endforeach ?>
+                    </div>
+                    <div style="line-height: 100%;">
+                        <small>If you don't see any specific student, you might have not enrolled them into the current academic session.</small>
+                    </div>
+                    <br>
+                    <hr>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </div>
             </div>
-            <small>You can only add activity in the currently active academic session.</small>
         </div>
     </div>
+
     <hr>
-    <div class="card">
-        <div class="card-body">
-            <div class="form-group">
-                <h4>Committee</h4>
-            </div>
-            <div class="form-group">
-                <label><?= $activitycategory['category'] ?> Advisor</label>
-                <select name="advisor_id" class="form-control" required>
-                    <option value="" selected disabled hidden>Choose Advisor</option>
-                    <?php foreach ($mentors as $mentor) : ?>
-                    <option value="<?= $mentor['id'] ?>">
-                        <?= $mentor['name'] . ' (' . $mentor['id'] . ')' ?>
-                    </option>
-                    <?php endforeach ?>
-                </select>
-            </div>
-            <div class="row">
-                <?php foreach ($highcoms as $highcom) : ?>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label><?= $highcom['role'] ?></label>
-                        <select name="highcoms[<?= $highcom['id'] ?>]" id="" class="form-control" required>
-                            <option value="" disabled selected hidden>Select <?= strtolower($highcom['role']) ?></option>
-                            <?php foreach ($sigstudents as $std) : ?>
-                            <option value="<?= $std['id'] ?>">
-                                <?= $std['id'] . ' ' . $std['name'] ?>
-                            </option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
-                </div>
-                <?php endforeach ?>
-            </div>
-            <small>If you don't see any specific student, you might have not enrolled them into the current academic session.</small>
-            <hr>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-        </div>
-    </div>
+
 </fieldset>
 <?= form_close() ?>

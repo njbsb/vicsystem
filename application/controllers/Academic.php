@@ -57,7 +57,7 @@ class Academic extends CI_Controller
             'semesters' => $this->semester_model->get_semesters(),
             'title' => 'Academic Plan: ' . $student['name'],
             'academicplans' => $this->scoretable->get_arraytable_academicplan(
-                $this->academic_model->get_academicplan($student_id)
+                $this->academic_model->get_academicplan($student_id, '')
             ),
             'activeacadsession' => $activeacadsession
         );
@@ -112,6 +112,7 @@ class Academic extends CI_Controller
         if (!isset($academicsession)) {
             $this->load->view('templates/header');
             $this->load->view('academic/plan/norecord');
+            $this->load->view('templates/footer');
         } else {
             $academicplans = $this->academic_model->get_academicplan(FALSE, $academicsession['id']);
             foreach ($academicplans as $i => $acp) {

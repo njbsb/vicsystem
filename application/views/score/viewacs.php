@@ -15,7 +15,7 @@
         <small>To edit current score plan, go <a href="<?= site_url('scoreplan/' . $academicsession['slug']) ?>">here</a></small>
         <?php endif ?>
         <div class="table-responsive">
-            <table class="table table-hover" id="scoreacs">
+            <table class="table table-hover text-center" id="scoreacs">
                 <thead class="table-dark">
                     <tr>
                         <th>Matric</th>

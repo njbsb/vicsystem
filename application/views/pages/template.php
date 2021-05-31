@@ -85,6 +85,7 @@
                     <label for="newpath">Path</label>
                     <input id="newpath" name="newpath" type="text" class="form-control" required>
                 </div>
+                <small>Please include "https://" before any link</small>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Create</button>

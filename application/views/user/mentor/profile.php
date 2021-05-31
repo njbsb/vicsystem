@@ -4,37 +4,45 @@
 </ol>
 <div class="container-fluid text-center">
     <div class="row">
-        <div class="col-lg-4">
-            <div class="card border-dark mb-3" style="max-width: 20rem;">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="card border-dark mb-3 text-center" style="max-width: 20rem;">
                 <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= $mentor['userphoto'] ?>">
                 <div class="card-footer text-muted">
                     <?= $mentor['id'] ?>
                 </div>
             </div>
         </div>
-        <div class="col-lg-8 text-left">
+        <div class="col-lg-8 col-md-6 text-left">
             <div class="row">
-                <div class="col-6">
+                <div class="col-lg-6 col-md-6">
                     <h3><b><?= $mentor['name'] ?></b></h3>
 
                 </div>
-                <div class="col-6">
-                    <a href="<?= site_url('profile/update') ?>" class="btn btn-outline-primary" style="float:right;"><i class='fas fa-edit'></i> Edit</a>
+                <div class="col-lg-6 col-md-6">
+                    <a href="<?= site_url('profile/update') ?>" class="btn btn-outline-primary" style="float:right;"><i class='fas fa-pen'></i> Edit</a>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-lg-3 col-md-6 col-sm-6">
                     <h6><b>Email</b></h6>
-                    <h6><b>Position:</b></h6>
-                    <h6><b>Role:</b></h6>
-                    <h6><b>Room Num:</b></h6>
-                    <h6><b>Phone Num:</b></h6>
+                    <h6><b>Position</b></h6>
+                    <h6><b>Role</b></h6>
+                    <h6><b>Room Num</b></h6>
                 </div>
-                <div class="col-sm-9">
+                <div class="col-lg-9 col-md-6 col-sm-6">
                     <h6><a href="mailto:<?= $mentor['email'] ?>"><?= $mentor['email'] ?></a></h6>
                     <h6><?= $mentor['position'] ?></h6>
                     <h6><?= $mentor['role'] ?></h6>
                     <h6><?= $mentor['roomnum'] ?></h6>
+                </div>
+            </div>
+            <hr>
+            <h5>Personal Information</h5>
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <h6><b>Phone Num:</b></h6>
+                </div>
+                <div class="col-lg-9 col-md-6 col-sm-6">
                     <h6><?= $mentor['phonenum'] ?></h6>
                 </div>
             </div>

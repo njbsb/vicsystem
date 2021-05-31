@@ -60,20 +60,21 @@
         </div>
     </div>
     <div class="col-lg-8 col-md-6 col-sm-6">
-        <div class="container">
-            <h6>Committees: <?= $act['committeenum'] ?></h6>
-            <div class="row">
-                <?php if ($act['committees']) : ?>
-                <?php foreach ($act['committees'] as $committee) : ?>
-                <div class="col-auto text-center">
-                    <div class="img-wrap">
-                        <a data-name="<?= $committee['name'] ?>" data-toggle="tooltip" data-placement="bottom" title="<?= $committee['role'] ?>"
-                            href="<?= site_url('student/' . $committee['id']) ?>"><img class="rounded-circle" style="object-fit:cover;" src="<?= $committee['userphoto'] ?>"
-                                alt="<?= $committee['name'] ?>" width="60px" height="60px"></a>
+        <div class="row">
+            <div class="col">
+                <div class="container">
+                    <h6>Committees: <?= $act['committeenum'] ?></h6>
+                    <?php if ($act['committees']) : ?>
+                    <?php foreach ($act['committees'] as $committee) : ?>
+                    <div class="img-wrap" style="margin:2px;">
+                        <a data-name="<?= $committee['name'] ?>" href="<?= site_url('student/' . $committee['id']) ?>"><img data-toggle="tooltip" data-placement="bottom"
+                                title="<?= $committee['role'] ?>" class="rounded-circle" style="object-fit:cover;" src="<?= $committee['userphoto'] ?>" alt="<?= $committee['name'] ?>" width="60px"
+                                height="60px"></a>
                     </div>
+                    <?php endforeach ?>
+                    <?php endif ?>
                 </div>
-                <?php endforeach ?>
-                <?php endif ?>
+
             </div>
         </div>
     </div>

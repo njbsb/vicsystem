@@ -51,6 +51,7 @@ class User extends CI_Controller
             );
             $this->load->view('templates/header');
             $this->load->view('user/login', $data);
+            $this->load->view('templates/footer');
         } else {
             # user clicked on Login
             $username = $this->input->post('username');
@@ -131,6 +132,7 @@ class User extends CI_Controller
 
             $this->load->view('templates/header');
             $this->load->view('user/register', $data);
+            $this->load->view('templates/footer');
         } else {
             # INSERT DATA TO DB
             $enc_password = md5($this->input->post('password'));
@@ -151,6 +153,7 @@ class User extends CI_Controller
             );
             $this->load->view('templates/header');
             $this->load->view('user/register_success', $data);
+            $this->load->view('templates/footer');
         }
     }
 
@@ -175,6 +178,7 @@ class User extends CI_Controller
             # ADMIN VALIDATES THE NEW USER
             $this->load->view('templates/header');
             $this->load->view('user/validate', $data);
+            $this->load->view('templates/footer');
         } else {
             # ADMIN SUBMITS FORM
             $superior_id = $this->input->post('superior_id');
@@ -244,6 +248,7 @@ class User extends CI_Controller
                 $this->load->view('user/student/profile', $data);
                 break;
         }
+        $this->load->view('templates/footer');
     }
 
     public function edit()
@@ -290,6 +295,7 @@ class User extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
             $this->load->view('user/passwordchange');
+            $this->load->view('templates/footer');
         } else {
             $password1 = $this->input->post('password1');
             $password2 = $this->input->post('password2');
@@ -344,6 +350,7 @@ class User extends CI_Controller
                 'validated' => $validated
             );
             $this->load->view('user/passwordreset', $data);
+            $this->load->view('templates/footer');
         } else {
             if ($passwordnew == $passwordconfirm) {
                 $encrypted = md5($passwordnew);

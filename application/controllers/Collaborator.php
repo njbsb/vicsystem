@@ -9,7 +9,7 @@ class Collaborator extends CI_Controller
         );
         $this->load->view('templates/header');
         $this->load->view('collaborator/index', $data);
-        // $this->load->view('templates/footer');
+        $this->load->view('templates/footer');
     }
 
     public function create()
@@ -22,7 +22,7 @@ class Collaborator extends CI_Controller
             $data['title'] = 'Create new collaborator';
             $this->load->view('templates/header');
             $this->load->view('collaborator/create', $data);
-            // $this->load->view('templates/footer');
+            $this->load->view('templates/footer');
         } else {
             $config = array(
                 'upload_path' => './assets/images/collaborator',

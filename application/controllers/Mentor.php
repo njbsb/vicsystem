@@ -15,7 +15,7 @@ class Mentor extends CI_Controller
         }
         $this->load->view('templates/header');
         $this->load->view('mentor/index', $data);
-        // $this->load->view('templates/footer');
+        $this->load->view('templates/footer');
     }
 
     public function view($mentor_id)
@@ -27,7 +27,7 @@ class Mentor extends CI_Controller
         );
         $this->load->view('templates/header');
         $this->load->view('mentor/view', $data);
-        // $this->load->view('templates/footer');
+        $this->load->view('templates/footer');
     }
 
     public function edit($mentor_id)
@@ -44,7 +44,7 @@ class Mentor extends CI_Controller
         );
         $this->load->view('templates/header');
         $this->load->view('mentor/edit', $data);
-        // $this->load->view('templates/footer');
+        $this->load->view('templates/footer');
     }
 
     public function update($id)

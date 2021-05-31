@@ -14,49 +14,69 @@
             </div>
             <br>
             <h2 class="text-primary"><b><?= $activity['title'] ?></b></h2>
-            <p class="text-justify"><?= $activity['description'] ?></p>
-            <!-- <div class="container h-100"> -->
-            <div class="row">
-                <div class="col-md-4">
-                    <span class="iconify" data-icon="ic:outline-place" data-inline="false" style="width:24px; height:24px;"></span>
-                    &nbsp;&nbsp;
-                    <?php $venue = is_null($activity['venue']) ? 'No data' : $activity['venue']; ?>
-                    <b><?= $venue ?></b>
-                </div>
-                <div class="col-md-4">
-                    <?php if (is_null($activity['datetime_start']) and is_null($activity['datetime_end'])) : ?>
-                    <span class="iconify" data-icon="akar-icons:calendar" data-inline="false" style="width:24px; height:24px;"></span>
-                    &nbsp;&nbsp;<b>No date</b>
-                    <?php else : ?>
-                    <?php $dateStart = (is_null($activity['datetime_start']) or $activity['datetime_start'] == '0000-00-00 00:00:00') ? '?' : date('jS M Y', strtotime($activity['datetime_start'])) ?>
-                    <?php $dateEnd = (is_null($activity['datetime_end']) or $activity['datetime_end'] == '0000-00-00 00:00:00') ? '?' : date('jS M Y', strtotime($activity['datetime_end'])) ?>
-                    <span class="iconify" data-icon="akar-icons:calendar" data-inline="false" style="width:24px; height:24px;"></span>
-                    &nbsp;&nbsp;<?= $dateStart ?> to <?= $dateEnd ?>
-                    <?php endif ?>
-                </div>
-                <div class="col-md-4">
-                    <span class="iconify" data-icon="ic:outline-supervised-user-circle" data-inline="true" style="width:24px; height:24px;"></span>
-                    &nbsp;&nbsp;<a href="<?= base_url('mentor/' . $activity['advisor_id']) ?>"><?= $activity['advisorname'] ?></a>
+            <hr>
+            <?php if ($activity['description']) : ?>
+            <div class="card">
+                <div class="container">
+                    <p class="text-justify"><?= $activity['description'] ?></p>
                 </div>
             </div>
-            <!-- </div> -->
             <br>
-            <p><b>Theme: </b><?= $activity['theme'] ?></p>
+            <?php endif ?>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div style='font-size:20px'>
+                        <i class='fas fa-map-marker-alt'></i> Location
+                    </div>
+                    <?php $venue = is_null($activity['venue']) ? 'No data' : $activity['venue']; ?>
+                    <div style="margin-top:0%">
+                        <p class="fs-3"><?= $venue ?></p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div style='font-size:20px'>
+                        <i class='fas fa-calendar-check'></i> Date
+                    </div>
+                    <?php $dateStart = (is_null($activity['datetime_start']) or $activity['datetime_start'] == '0000-00-00 00:00:00') ? '' : date('jS M Y', strtotime($activity['datetime_start'])) ?>
+                    <?php $dateEnd = (is_null($activity['datetime_end']) or $activity['datetime_end'] == '0000-00-00 00:00:00') ? '' : ' to ' . date('jS M Y', strtotime($activity['datetime_end'])) ?>
+                    <div style="margin-top:0%">
+                        <p class="fs-3"><?= sprintf('%s %s', $dateStart, $dateEnd) ?></p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div style='font-size:20px'>
+                        <i class='fas fa-user-cog'></i> Advisor
+                    </div>
+                    <div style="margin-top:0%">
+                        <p class="fs-3"><?= $activity['advisorname'] ?></p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div style='font-size:20px'>
+                        <i class='fas fa-layer-group'></i> Theme
+                    </div>
+                    <div>
+                        <?php $theme = ($activity['theme']) ? $activity['theme'] : 'No data' ?>
+                        <p class="fs-3"><?= $theme ?></p>
+                    </div>
+                </div>
+            </div>
+
             <?php if ($activity['sp_link']) : ?>
             <div class="form-group">
-                <a class="btn btn-success btn-sm" target="_blank" href="<?= $activity['sp_link'] ?>"><i class='fas fa-box-open'></i> SharePoint</a>
+                <a data-toggle="tooltip" title="SharePoint folder" target="_blank" href="<?= $activity['sp_link'] ?>"><i class='fas fa-box-open'></i> SharePoint folder</a>
             </div>
-            <hr>
             <?php endif ?>
         </div>
         <div class="card-footer">
             <div class="row">
-                <?php if ($this->session->userdata('user_type') == 'mentor' or $isHighcom) : ?>
+
+                <?php if ($this->session->userdata('user_type') != 'student' or $isHighcom) : ?>
                 <?= form_open('activity/edit/' . $activity['slug']) ?>
-                <button type="submit" class="btn btn-primary"><i class='fas fa-edit'></i> Update</button>
+                <button type="submit" class="btn btn-primary"><i class='fas fa-pen'></i> Update</button>
                 <?= form_close() ?>
                 &nbsp;
-                <?php $disabled = ($this->session->userdata('user_type') == 'mentor') ? '' : 'disabled' ?>
+                <?php $disabled = ($this->session->userdata('user_type') != 'student') ? '' : 'disabled' ?>
                 <button data-toggle="modal" data-target="#confirmdelete" class="btn btn-outline-danger" <?= $disabled ?>>
                     <i class="fa fa-trash"></i> Delete
                 </button>

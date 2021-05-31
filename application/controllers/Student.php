@@ -38,6 +38,7 @@ class Student extends CI_Controller
         );
         $this->load->view('templates/header');
         $this->load->view('student/index', $data);
+        $this->load->view('templates/footer');
     }
 
     public function view($student_id)
@@ -85,7 +86,7 @@ class Student extends CI_Controller
         );
         $this->load->view('templates/header');
         $this->load->view('student/edit', $data);
-        // $this->load->view('templates/footer');
+        $this->load->view('templates/footer');
     }
 
     public function update()
