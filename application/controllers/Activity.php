@@ -155,18 +155,18 @@ class Activity extends CI_Controller
             redirect(site_url());
         }
         $externals = $this->activity_model->get_externalactivity();
+        $academicsession = $this->academic_model->get_activeacademicsession();
+        $students = $this->student_model->get_enrolling_students($academicsession['id']);
         foreach ($externals as $i => $external) {
             $externals[$i]['participants'] = $this->activity_model->get_externalactivity_participants($external['id']);
         }
-        $academicsession = $this->academic_model->get_activeacademicsession();
         $data = array(
             'externals' => $externals,
             'academicsession' => $academicsession,
             'mentors' => $this->mentor_model->get_mentor(),
             'activitylevels' => $this->activity_model->get_activitylevels(),
-            'students' => $this->student_model->get_enrolling_students($academicsession['id'])
+            'students' => $students
         );
-        // print_r($externals);
         $this->load->view('templates/header');
         $this->load->view('activity/external', $data);
         $this->load->view('templates/footer');

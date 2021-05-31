@@ -274,7 +274,7 @@
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="<?= site_url('citra') ?>">Citra</a>
                             <a class="dropdown-item" href="<?= site_url('collaborator') ?>">Collaborator</a>
-                            <a class="dropdown-item" href="<?= site_url('template') ?>">File Links</a>
+                            <a class="dropdown-item" href="<?= site_url('filelink') ?>">File Links</a>
                         </div>
                     </li>
                     <?php endif ?>

@@ -50,6 +50,7 @@
                 </tfoot>
             </table>
         </div>
+        <br>
         <a class="btn btn-success" href="<?= site_url('user/download') ?>" target="_blank"><i class='fas fa-file-excel'></i> Download</a>
     </div>
 </div>
@@ -57,17 +58,19 @@
 <div class="card">
     <div class="container">
         <?= form_open_multipart('user/upload') ?>
-        <div class="form-group">
-            <!-- <p>It's end of academic session. Upload the students' result here</p> -->
-            <label for="formFile" class="form-label mt-4">Upload new users/students by batch</label>
-            <input class="form-control" type="file" name="upload_file" id="upload_file" required>
+        <div class="row">
+            <div class="col-md-8 col-lg-6">
+                <div class="form-group">
+                    <label for="formFile" class="form-label mt-4">Upload new users/students by batch</label>
+                    <input class="form-control" type="file" name="upload_file" id="upload_file" required>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <button class="btn btn-info" type="submit"><i class='fas fa-upload'></i> Upload</button>
         </div>
+        <small>Get user upload template <a href="<?= site_url('filelink') ?>">here</a></small>
         <?= form_close() ?>
-
-
     </div>
 </div>
 
@@ -88,7 +91,6 @@
                     <button type="submit" class="btn btn-danger">Delete</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </form>
-
             </div>
         </div>
     </div>
