@@ -48,9 +48,11 @@ class Organization extends CI_Controller
         $roles_org = $this->committee_model->get_roles_org();
         $committees = $this->committee_model->get_org_committees($acadyear_id);
         foreach ($roles_org as $i => $role) {
-            foreach ($committees as $com) {
-                if ($role['id'] == $com['role_id']) {
-                    unset($roles_org[$i]);
+            if ($role['role'] != 'Committee Member' or $role['id'] != '9') {
+                foreach ($committees as $com) {
+                    if ($role['id'] == $com['role_id']) {
+                        unset($roles_org[$i]);
+                    }
                 }
             }
         }
@@ -83,16 +85,18 @@ class Organization extends CI_Controller
 
     public function register_committee()
     {
-        $description = $this->input->post('description');
-        if ($this->input->post('description') == '') {
-            $description = NULL;
-        }
+        // if ($this->input->post('description') == '') {
+        //     $description = NULL;
+        // }
         $comdata = array(
             'acadyear_id' => $this->input->post('acadyear_id'),
             'student_id' => $this->input->post('student_id'),
-            'role_id' => $this->input->post('role_id'),
-            'description' => $description
+            'role_id' => $this->input->post('role_id')
         );
+        $description = $this->input->post('description');
+        if ($description != '') {
+            $comdata['description'] = $description;
+        }
         $this->committee_model->register_org_committee($comdata);
         redirect('organization');
     }

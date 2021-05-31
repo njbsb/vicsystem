@@ -64,7 +64,7 @@
 <div class="row text-center justify-content-center">
     <?php if ($orgajks) : ?>
     <?php foreach ($orgajks as $ajk) : ?>
-    <div class="col-md-3">
+    <div class="col-lg-3 col-md-3 col-sm-6">
         <div class="card mb-3">
             <div class="card-header bg-dark text-white">
                 <h6><?= $ajk['description'] ?> AJK</h6>
@@ -188,7 +188,7 @@
                 </div>
                 <div class="form-group">
                     <label for="role">Role</label>
-                    <select name="role_id" class="form-control" required>
+                    <select name="role_id" id="role_id" class="form-control" onchange="enableDescription()" required>
                         <?php foreach ($roles_org as $rorg) : ?>
                         <option value="<?= $rorg['id'] ?>"><?= $rorg['role'] ?></option>
                         <?php endforeach ?>
@@ -196,7 +196,7 @@
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <input name="description" type="text" class="form-control">
+                    <input name="description" id="description" type="text" class="form-control" readonly>
                     <small>Only necessary when registering AJK</small>
                 </div>
                 <div class="form-group">
@@ -210,7 +210,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button id="submitcommittee" type="submit" class="btn btn-primary">Register</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
             </div>
             <?= form_close() ?>
@@ -224,6 +224,39 @@ $(document).ready(function() {
         "order": []
     });
 });
+var descinput = document.getElementById("description");
+var submitbtn = document.getElementById("submitcommittee");
+
+function checkDescription() {
+    var desc = $('#description').val();
+    if (desc == '' && descinput.readOnly == false) {
+        descinput.className = 'form-control is-invalid'
+        submitbtn.disabled = true;
+    } else {
+        descinput.className = 'form-control is-valid'
+        submitbtn.disabled = false;
+    }
+}
+
+function enableDescription() {
+    var select = document.getElementById("role_id");
+    var x = select.value;
+    var text = select.options[select.selectedIndex].text;
+    if (x != 9 || text != 'Committee Member') {
+        // 9 equals committee member id
+        descinput.readOnly = true;
+        descinput.className = 'form-control'
+        submitbtn.disabled = false;
+    } else {
+        descinput.readOnly = false;
+        checkDescription();
+    }
+}
+$(document).ready(function() {
+    $("#description").keyup(checkDescription);
+});
+
+
 var confirmtext = document.getElementById('confirmtext');
 $('#delete_orgcom').on('show.bs.modal', function(e) {
     var matric = $(e.relatedTarget).data('stdmatric');

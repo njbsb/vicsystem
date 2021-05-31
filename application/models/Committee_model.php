@@ -41,7 +41,7 @@ class Committee_model extends CI_Model
     public function get_org_ajks($acadyear_id)
     {
         # to get members with committee member (AJK) role
-        $currentyear = date('Y');
+        $currentyear = date('Y') + 1;
         $this->db->select('orgcom.*, std.name, std.email, std.userphoto, role.role, (' . $currentyear . ' - std.yearjoined) as year')
             ->from('committee_organization as orgcom')
             ->join('user as std', 'std.id = orgcom.student_id')
@@ -105,9 +105,8 @@ class Committee_model extends CI_Model
 
     public function delete_orgcommittee($deleteuserdata)
     {
-        $this->db->where($deleteuserdata);
-        $this->db->delete('committee_organization');
-        return true;
+        return $this->db->where($deleteuserdata)
+            ->delete('committee_organization');
     }
 
     public function delete_actcommittee($userdata)
@@ -120,7 +119,7 @@ class Committee_model extends CI_Model
         $this->db->select('*')
             ->from('role_organization')
             ->where(array(
-                // 'description' => 'highcom',
+                'committee' => true,
                 'level' => 'student'
 
             ));
@@ -130,16 +129,14 @@ class Committee_model extends CI_Model
 
     public function register_org_committee($comdata)
     {
-        $this->db->set($comdata)
+        return $this->db->set($comdata)
             ->insert('committee_organization');
-        return true;
     }
 
     public function register_act_committee($comdata)
     {
-        $this->db->set($comdata);
-        $this->db->insert('committee_activity');
-        return true;
+        return $this->db->set($comdata)
+            ->insert('committee_activity');
     }
 
     public function get_acthighcoms_id()
