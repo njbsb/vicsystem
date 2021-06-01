@@ -55,8 +55,5 @@ $(document).ready(function() {
     $('#scoreacs').DataTable({
         "order": []
     });
-    $(function() {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
 });
 </script>

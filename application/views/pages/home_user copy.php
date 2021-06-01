@@ -28,7 +28,7 @@
             <canvas responsive="true" id="pieChart"></canvas>
         </div>
         <div class="col-sm-6">
-            <label><b>VIC Intake by Year</b></label>
+            <label>VIC Intake by Year</label>
             <canvas id="barChart" responsive="true"></canvas>
         </div>
         <!-- <div class="col-sm-6">

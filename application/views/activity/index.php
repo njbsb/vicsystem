@@ -105,9 +105,6 @@
 </div>
 
 <script>
-$(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-});
 $(document).ready(function() {
     $('#activitytable').DataTable({
         "order": []

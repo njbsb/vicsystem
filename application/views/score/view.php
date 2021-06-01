@@ -307,9 +307,3 @@
         </div>
     </div>
 </div>
-
-<script>
-$(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-});
-</script>

@@ -287,16 +287,6 @@ $('[data-toggle="tooltip"]').tooltip({
     placement: 'bottom',
     html: true
 });
-// $('a[data-toggle="tooltip"]').tooltip({
-//     animated: 'fade',
-//     placement: 'bottom',
-//     html: true
-// });
-// $('i[data-toggle="tooltip"]').tooltip({
-//     animated: 'fade',
-//     placement: 'bottom',
-//     html: true
-// });
 $(document).ready(function() {
     $("#selectstudent").on("keyup", function() {
         var value = $(this).val().toLowerCase();

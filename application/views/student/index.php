@@ -31,9 +31,3 @@
     No data of students
     <?php endif ?>
 </div>
-
-<script>
-$(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-});
-</script>

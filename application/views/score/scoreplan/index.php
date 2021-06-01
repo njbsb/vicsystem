@@ -94,6 +94,5 @@ $(document).ready(function() {
     $('#scoreplanindex').DataTable({
         "order": []
     });
-    $('[data-toggle="tooltip"]').tooltip();
 });
 </script>

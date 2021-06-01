@@ -121,9 +121,6 @@ buildComments(commentarray);
 var limit = 3;
 
 function buildComments(array) {}
-$(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-});
 
 
 $(document).ready(function() {
