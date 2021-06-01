@@ -1,17 +1,17 @@
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
-    <li class="breadcrumb-item active">Academic Plan</li>
+    <li class="breadcrumb-item active">Academic</li>
 </ol>
 
 <h2><?= $title ?></h2>
-<h4>Academic Session: <?= $activesession['academicsession'] ?></h4>
+<h4><?= sprintf('Academic Session: %s', $activesession['academicsession']) ?></h4>
 <hr>
 <div class="form-group">
-    <?= form_open('academicplan/records') ?>
+    <?= form_open('academic/record') ?>
     <label for="">Search records</label>
     <div class="row">
         <div class="col-md-3">
-            <select name="acadyear_id" id="" class="form-control" required>
+            <select name="acadyear_id" id="acadyear_id" class="form-control" required>
                 <option value="" disabled selected>Select academic year</option>
                 <?php foreach ($academicyears as $acadyear) : ?>
                 <option value="<?= $acadyear['id'] ?>"><?= $acadyear['acadyear'] ?></option>
@@ -19,7 +19,7 @@
             </select>
         </div>
         <div class="col-md-3">
-            <select name="semester" id="" class="form-control" required>
+            <select name="semester" id="semester" class="form-control" required>
                 <option value="" disabled selected>Select semester</option>
                 <?php foreach ($semesters as $sem) : ?>
                 <option value="<?= $sem ?>"><?= $sem ?></option>
@@ -39,7 +39,7 @@
 <?php endif ?>
 
 
-<?php if ($activesession['endofsession'] == true) : ?>
+
 <hr>
 <div class="card">
     <div class="container">
@@ -47,27 +47,30 @@
         <div class="row">
             <div class="col-lg-6 col-md-8">
                 <div class="form-group">
-                    <label for="formFile" class="form-label mt-4">It's end of academic session. Upload the students' result here</label>
-                    <input class="form-control" type="file" name="upload_file" id="upload_file" required accept=".csv,.xls,.xlsx">
+                    <?php $label = ($today >= strtotime($examdate)) ? "It's end of academic session. Upload the students' result here" : '' ?>
+                    <?php $disabled = ($today >= strtotime($examdate)) ? "" : 'disabled' ?>
+                    <label for="upload_file" class="form-label mt-4"><?= $label ?></label>
+                    <input class="form-control" type="file" name="upload_file" id="upload_file" required accept=".csv,.xls,.xlsx" <?= $disabled ?>>
                 </div>
             </div>
         </div>
         <div class="form-group">
-            <button class="btn btn-info" type="submit"><i class='fas fa-upload'></i> Upload</button>
+            <button <?= $disabled ?> class="btn btn-info" type="submit"><i class='fas fa-upload'></i> Upload</button>
         </div>
-        <small>Get result upload template <a href="<?= site_url('filelink') ?>">here</a></small>
+        <?php if ($today >= strtotime($examdate)) : ?>
+        <small>Get result upload template <a href="<?= site_url('filelink') ?>">here</a>. ID of current session: <?= $activesession['id'] ?></small>
+        <?php else : ?>
+        <small>You are able to upload your students' result after week 14</small>
+        <?php endif ?>
         <?= form_close() ?>
     </div>
 </div>
 <hr>
-<?php else : ?>
-<p>You can only upload students' result once it is end of academic session. Set it <a href="<?= site_url('academic') ?>">here</a></p>
-<?php endif ?>
 
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
-            <table id="acp_table" class="table display">
+            <table id="acp_table" class="table display table-hover">
                 <thead class="table-dark">
                     <tr>
                         <th>Matric</th>

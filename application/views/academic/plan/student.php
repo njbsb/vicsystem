@@ -1,12 +1,12 @@
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
-    <li class="breadcrumb-item active">Academic Plan</li>
+    <li class="breadcrumb-item active">Academic</li>
 </ol>
 
 <h2><?= $title ?></h2>
 <hr>
 <?php if (!$thisacademicplan) : ?>
-<p>You are not enrolled in the current academic session (<?= $activeacadsession['academicsession'] ?>). Please contact your mentor.</p>
+<p>You are not enrolled in the current academic session (<?= $activesession['academicsession'] ?>). Please contact your mentor.</p>
 <?php else : ?>
 
 <?php if (empty($thisacademicplan['gpa_target'])) : ?>
@@ -16,10 +16,10 @@
 <button class="btn btn-primary" data-toggle="modal" data-target="#setGPA">Set GPA</button>
 <?php else : ?>
 <h6>You have registered this session's GPA target!</h6>
-<?php if ($activeacadsession['endofsession'] == true) : ?>
+<?php if ($today >= strtotime($examdate)) : ?>
 <small>It's end of academic session. Your result will soon be updated by your mentor</small><br>
 <?php else : ?>
-<small>Long way to go, sir</small>
+<small>Study week on going.</small>
 <?php endif ?>
 <?php endif ?>
 <?php endif ?>
@@ -28,12 +28,13 @@
     <div class="card-body">
         <div class="table-responsive">
             <table id="tableacademicplan" class="table display table-hover">
-                <thead class="table-dark">
+                <thead class="table-primary">
                     <tr>
                         <th>Academic Session</th>
                         <th>GPA Target</th>
                         <th>GPA Achieved</th>
                         <th>Increment</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody class="table-light">
@@ -46,6 +47,10 @@
                         <td><?= $acp['gpa_target'] ?></td>
                         <td><?= $acp['gpa_achieved'] ?></td>
                         <td class="<?= $textclass ?>"><?= $sign ?><?= $acp['difference'] ?></td>
+                        <?php $hidden = array('student_id' => $student['id'], 'acadsession_id' => $acp['acadsession_id']) ?>
+                        <?= form_open('academic/record', '', $hidden) ?>
+                        <td><button type="submit" class="btn btn-sm btn-primary"><i class='fas fa-search'></i> Score</button></td>
+                        <?= form_close() ?>
                     </tr>
                     <?php endforeach ?>
                     <?php else : ?>
@@ -56,44 +61,9 @@
                 </tbody>
             </table>
         </div>
+        <small>Click <i class='fas fa-search'></i> Score to view your score</small>
     </div>
 </div>
-<hr>
-
-<h3>Score Records</h3>
-<?php $hidden = array(
-    'student_id' => $student['id']
-); ?>
-<?= form_open('academic/records', '', $hidden) ?>
-<div class="row">
-    <div class="col-md-4">
-        <div class="form-group">
-            <select name="acadyear_id" class="form-control" required>
-                <option value="" selected disabled>Select academic year</option>
-                <?php foreach ($academicyears as $acadyear) :  ?>
-                <option value="<?= $acadyear['id'] ?>"><?= $acadyear['acadyear'] ?></option>
-                <?php endforeach ?>
-            </select>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <select name="semester_id" class="form-control" required>
-                <option value="" selected disabled>Select semester</option>
-                <?php foreach ($semesters as $sem) : ?>
-                <option value="<?= $sem ?>"><?= $sem ?></option>
-                <?php endforeach ?>
-            </select>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <button type="submit" class="btn btn-outline-primary"><i class='fas fa-search'></i> Record</button>
-        </div>
-    </div>
-</div>
-<hr>
-<?= form_close() ?>
 
 <div id="setGPA" class="modal fade card">
     <div class="modal-dialog" role="document">
@@ -106,13 +76,13 @@
             </div>
             <?php $hidden = array(
                 'student_id' => $student_id,
-                'acadsession_id' => $activeacadsession['id']
+                'acadsession_id' => $activesession['id']
             ); ?>
             <?= form_open('academic/set_gpatarget', '', $hidden) ?>
             <div class="modal-body">
                 <div class="form-group">
                     <label for="acadsession_id">Academic Session</label>
-                    <input name="activeacademicsession" value="<?= $activeacadsession['academicsession'] ?>" type="text" class="form-control" readonly>
+                    <input name="activeacademicsession" value="<?= $activesession['academicsession'] ?>" type="text" class="form-control" readonly>
                 </div>
                 <div class="form-group">
                     <label for="gpa_target">GPA Target</label>
@@ -134,9 +104,6 @@
 $(document).ready(function() {
     $('#tableacademicplan').DataTable({
         "order": []
-    });
-    $(function() {
-        $('[data-toggle="tooltip"]').tooltip();
     });
 });
 </script>

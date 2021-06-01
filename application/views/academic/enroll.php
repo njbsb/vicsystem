@@ -1,10 +1,10 @@
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
-    <li class="breadcrumb-item active">Academic Enrollment</li>
+    <li class="breadcrumb-item active">Enrollment</li>
 </ol>
 
-<h2><?= $title ?></h2>
-
+<h2><?= $title . ': ' . $activesession['academicsession']  ?></h2>
+<small>You can only enroll students in the currently active academic session</small>
 <?php if (validation_errors()) : ?>
 <div class="alert alert-dismissible alert-warning">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -12,11 +12,7 @@
     <p class="mb-0"><?= validation_errors() ?></p>
 </div>
 <?php endif ?>
-<hr>
-<div class="form-group">
-    <legend>Active Session: <?= $activesession['academicsession'] ?></legend>
-    <small>You can only enroll students in an active academic session!</small>
-</div>
+
 <hr>
 <div class="card">
     <div class="card-body">

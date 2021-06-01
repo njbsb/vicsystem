@@ -35,6 +35,21 @@ class Academic_model extends CI_Model
         }
     }
 
+    public function get_academicsession_activeyear()
+    {
+        $now = date('Y-m-d');
+        $this->db->select("acs.*, acy.acadyear as academicyear, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
+            ->from('academicsession as acs')
+            ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
+            ->where(array(
+                'acy.startdate <=' => $now,
+                'acy.enddate >=' => $now
+            ))
+            ->order_by('acs.id', 'DESC');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     public function get_academicsession_byyearsem($acadyear_id, $semester)
     {
         $this->db->select("acs.*, acy.acadyear as academicyear, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
@@ -50,16 +65,24 @@ class Academic_model extends CI_Model
 
     public function get_activeacadyear()
     {
-        $query = $this->db->get_where('academicyear', array('status' => 'active'));
+        $now = date('Y-m-d');
+        $query = $this->db->get_where('academicyear', array(
+            'startdate <=' => $now,
+            'enddate >=' => $now
+        ));
         return $query->row_array();
     }
 
     public function get_activeacademicsession()
     {
+        $now = date('Y-m-d');
         $this->db->select("acs.*, acy.acadyear as academicyear, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
             ->from('academicsession as acs')
-            ->where('acs.status', 'active')
-            ->join('academicyear as acy', 'acs.acadyear_id = acy.id');
+            ->where(array(
+                'acs.startdate <=' => $now,
+                'acs.enddate >=' => $now
+            ))
+            ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left');
         $query = $this->db->get();
         return $query->row_array();
     }
@@ -92,9 +115,10 @@ class Academic_model extends CI_Model
                 ->order_by('id', 'desc');
             $query = $this->db->get();
             return $query->result_array();
+        } else {
+            $query = $this->db->get_where('academicyear', array('id' => $academicyear_id));
+            return $query->row_array();
         }
-        $query = $this->db->get_where('academicyear', array('id' => $academicyear_id));
-        return $query->row_array();
     }
 
     public function get_academicplan($student_id = NULL, $acadsession_id = NULL)
@@ -192,6 +216,18 @@ class Academic_model extends CI_Model
         return $this->db->insert('academicyear', $acydata);
     }
 
+    public function update_academicsession($id, $data)
+    {
+        return $this->db->where('id', $id)
+            ->update('academicsession', $data);
+    }
+
+    public function update_academicyear($id, $data)
+    {
+        return $this->db->where('id', $id)
+            ->update('academicyear', $data);
+    }
+
     public function create_academicplan($acadsession_id, $student_id)
     {
         $academicplan = array(
@@ -208,27 +244,6 @@ class Academic_model extends CI_Model
             'student_id' => $student_id
         ));
         return $this->db->delete('academicplan');
-    }
-
-    public function setactive_acadsession($acadsession_id)
-    {
-        $active = array('status' => 'active');
-        $inactive = array('status' => 'inactive');
-        $this->db->where('id', $acadsession_id)
-            ->update('academicsession', $active);
-        $this->db->where('id !=', $acadsession_id)
-            ->update('academicsession', $inactive);
-    }
-
-    public function setactive_acadyear($acadyear_id)
-    {
-        $active = array('status' => 'active');
-        $inactive = array('status' => 'inactive');
-        $this->db->where('id', $acadyear_id)
-            ->update('academicyear', $active);
-        $this->db->where('id !=', $acadyear_id)
-            ->update('academicyear', $inactive);
-        return true;
     }
 
     public function set_gpa($where, $gpa)
@@ -251,15 +266,6 @@ class Academic_model extends CI_Model
             }
         }
         return $rowaffectedcount;
-    }
-
-    public function set_endsession($acadsession_id)
-    {
-        $status = $this->db->get_where('academicsession', array('id' => $acadsession_id))->row()->endofsession;
-        return $this->db->where('id', $acadsession_id)
-            ->update('academicsession', array(
-                'endofsession' => !$status
-            ));
     }
 
     public function check_academicsession_exist($where)

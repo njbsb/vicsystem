@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
-    <li class="breadcrumb-item"><a href="<?= site_url('academicplan/student') ?>">Academic Plan</a></li>
+    <li class="breadcrumb-item"><a href="<?= site_url('academic') ?>">Academic</a></li>
     <li class="breadcrumb-item active">Records <?= $academicsession['academicsession'] ?></li>
 </ol>
 
@@ -38,63 +38,48 @@
 <small class="text-warning">Attention!</small>
 <small>You have not registered your target GPA for this semester yet! Set your current target GPA in Academic Plan page.</small>
 <?php endif ?>
-<!-- <hr>
-<div class="card" style=" padding-top: 20px; padding-bottom: 20px;">
-    <div class="container">
-    </div>
-    <h4>Citra Registered</h4>
-    <?php if (isset($citras)) : ?>
-    <?php foreach ($citras as $citra) : ?>
-    <span data-toggle="tooltip" data-placement="top" title="<?= $citra['citraname'] ?>" class="badge badge-pill badge-primary"><?= $citra['citra_code'] ?></span>
-    <?php endforeach ?>
-    <?php else : ?>
-    <p>No data of Citra course registered</p>
-    <?php endif ?>
-    <small>This feature has not been made available yet.</small>
-</div> -->
 
 <hr>
-<h3>Activity Records</h3>
+<h3>Activity Scores</h3>
 <br>
-<div class="card">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-hover text-center ">
-                <thead class="table-primary">
-                    <tr>
-                        <th>Academic Session</th>
-                        <?php if ($scoreplans) : ?>
-                        <?php foreach ($scoreplans as $scoreplan) : ?>
-                        <th data-toggle="tooltip" data-placement="top" title="<?= $scoreplan['percentweightage'] ?>%">
-                            <?= $scoreplan['label'] ?>
-                        </th>
-                        <?php endforeach ?>
-                        <?php endif ?>
-                        <th data-toggle="tooltip" title="15%">Components</th>
-                        <th>Total (55%)</th>
-                    </tr>
-                </thead>
-                <tbody class="table-active">
-                    <tr>
-                        <td><?= $academicsession['academicsession'] ?></td>
-                        <?php if ($scoreplans) : ?>
-                        <?php foreach ($scoreplans as $scoreplan) : ?>
-                        <td><?= $scoreplan['totalpercent'] ?> %</td>
-                        <?php endforeach ?>
-                        <?php endif ?>
-                        <?php if ($totalcomp) : ?>
-                        <td><?= $totalcomp ?> %</td>
-                        <?php else : ?>
-                        <td>?</td>
-                        <?php endif ?>
-                        <td><?= $total_all ?> %</td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </div>
-    </div>
+<!-- <div class="card">
+    <div class="card-body"> -->
+<div class="table-responsive">
+    <table class="table table-hover text-center ">
+        <thead class="table-primary">
+            <tr>
+                <th>Academic Session</th>
+                <?php if ($scoreplans) : ?>
+                <?php foreach ($scoreplans as $scoreplan) : ?>
+                <th data-toggle="tooltip" data-placement="top" title="<?= $scoreplan['percentweightage'] ?>%">
+                    <?= $scoreplan['label'] ?>
+                </th>
+                <?php endforeach ?>
+                <?php endif ?>
+                <th data-toggle="tooltip" title="15%">Components</th>
+                <th>Total (55%)</th>
+            </tr>
+        </thead>
+        <tbody class="table-active">
+            <tr>
+                <td><?= $academicsession['academicsession'] ?></td>
+                <?php if ($scoreplans) : ?>
+                <?php foreach ($scoreplans as $scoreplan) : ?>
+                <td><?= $scoreplan['totalpercent'] ?> %</td>
+                <?php endforeach ?>
+                <?php endif ?>
+                <?php if ($totalcomp) : ?>
+                <td><?= $totalcomp ?> %</td>
+                <?php else : ?>
+                <td>?</td>
+                <?php endif ?>
+                <td><?= $total_all ?> %</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
+<!-- </div>
+</div> -->
 <hr>
 <div class="row">
     <?php foreach ($scoreplans as $scoreplan) : ?>
@@ -168,12 +153,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
-
-<script>
-$(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-});
-</script>

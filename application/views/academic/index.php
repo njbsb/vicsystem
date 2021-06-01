@@ -8,10 +8,15 @@
 <!-- ACADEMIC SESSION -->
 <div class="row justify-content-between">
     <div class="col-8">
-        <h3>Academic Session</h3>
+        <?php if ($activeyear) : ?>
+        <h3><?= sprintf('Academic Session: %s', $activeyear['acadyear']) ?></h3>
+        <?php else : ?>
+        <h3><?= 'Academic Session: -' ?></h3>
+        <?php endif ?>
+
     </div>
     <div class="col-4">
-        <button class="btn btn-info margin" data-toggle="modal" data-target="#addacademicsession" style="float: right;">
+        <button id="btn_acs" class="btn btn-info margin" data-toggle="modal" data-target="#addacademicsession" style="float: right;">
             <i class='far fa-calendar-plus'></i> New Session
         </button>
     </div>
@@ -20,38 +25,43 @@
     <table id="acs_table" class="table table-hover">
         <thead>
             <tr class="table-dark">
-                <th>ID</th>
                 <th>Academic Year</th>
                 <th>Semester</th>
+                <th>Start Date</th>
+                <th>End Date</th>
                 <th>Status</th>
                 <th>Progress</th>
-                <th>Active</th>
-                <th>End</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($academicsession as $acs) : ?>
             <?php $textclass = ($acs['status'] == 'active') ? 'text-success' : 'text-muted' ?>
-            <?php $activedisabled = ($acs['status'] == 'active') ? 'disabled' : '' ?>
             <?php $btnclass = ($acs['status'] == 'active') ? 'btn btn-outline-success btn-sm' : 'btn btn-outline-info btn-sm' ?>
-            <?php $enddisabled = ($acs['endofsession'] == 1) ? 'disabled' : '' ?>
             <tr class="table-light">
-                <td><?= $acs['id'] ?></td>
                 <td><?= $acs['academicyear'] ?></td>
                 <td><?= $acs['semester'] ?></td>
+                <td><?= date("d-m-Y", strtotime($acs['startdate'])) ?></td>
+                <td><?= date("d-m-Y", strtotime($acs['enddate'])) ?></td>
                 <td class="<?= $textclass ?>"><?= ucfirst($acs['status']) ?></td>
-                <?php $progress = ($acs['endofsession']) ? 'Ending' : 'On Going' ?>
-                <td><?= $progress ?></td>
-                <td><button <?= $activedisabled ?> data-toggle="modal" data-toggle="tooltip" data-placement="top" title="Hooray!" data-target="#setactive_acs"
-                        data-string="<?= $acs['academicsession'] ?>" data-acsid="<?= $acs['id'] ?>" class="<?= $btnclass ?>">Activate <i class='fas fa-power-off'></i></button>&nbsp;</td>
-                <td><button <?= $enddisabled ?> data-toggle="modal" data-target="#setendsession" data-string="<?= $acs['academicsession'] ?>" data-acsid="<?= $acs['id'] ?>"
-                        class="btn btn-outline-primary btn-sm">End <i class='fas fa-stop'></i></button></td>
+                <td><?= $acs['progress'] ?></td>
+                <td><button data-toggle="modal" data-toggle="tooltip" title="Edit" data-placement="top" data-target="#edit_acs" data-string="<?= $acs['academicsession'] ?>"
+                        data-acsid="<?= $acs['id'] ?>" data-acsstartdate="<?= $acs['startdate'] ?>" data-acsenddate="<?= $acs['enddate'] ?>" class="btn btn-sm btn-outline-primary">
+                        <i class='fas fa-pen'></i>
+                    </button>
+                </td>
             </tr>
             <?php endforeach ?>
         </tbody>
     </table>
 </div>
-<small>End session enables you to upload student's academic result in academic page</small>
+<?php if ($activeyear) : ?>
+<small>This table will only show sessions under an active academic year</small>
+<?php else : ?>
+<small class="text-black-50">Attention! </small>
+<small>Seems that you do not have an active academic year. Kindly proceed to create a new one</small>
+<?php endif ?>
+
 <hr>
 <!-- ACADEMIC YEAR -->
 <div class="row justify-content-between">
@@ -59,7 +69,7 @@
         <h3>Academic Year</h3>
     </div>
     <div class="col-4">
-        <button class="btn btn-info margin" data-toggle="modal" data-target="#addacadyear" style="float: right;">
+        <button id="btn_acy" class="btn btn-info margin" data-toggle="modal" data-target="#addacadyear" style="float: right;">
             <i class='far fa-calendar-plus'></i> New Year
         </button>
     </div>
@@ -71,26 +81,30 @@
         <thead class="table-dark">
             <tr>
                 <th>Academic Year</th>
+                <th>Start Date</th>
+                <th>End Date</th>
                 <th>Status</th>
-                <th>Active</th>
+                <th>Edit</th>
             </tr>
         </thead>
         <tbody class="table-light">
             <?php foreach ($academicyear as $acy) : ?>
             <?php $textclass = ($acy['status'] == 'active') ? 'text-success' : 'text-muted' ?>
-            <?php $disabled = ($acy['status'] == 'active') ? 'disabled' : '' ?>
             <tr>
-                <!-- <td><?= $acy['id'] ?></td> -->
                 <td><?= $acy['acadyear'] ?></td>
+                <td><?= date("d-m-Y", strtotime($acy['startdate'])) ?></td>
+                <td><?= date("d-m-Y", strtotime($acy['enddate'])) ?></td>
                 <td class="<?= $textclass ?>"><?= ucfirst($acy['status']) ?></td>
-                <td><button <?= $disabled ?> data-toggle="modal" data-target="#setactive_acy" data-string="<?= $acy['acadyear'] ?>" data-acyid="<?= $acy['id'] ?>"
-                        class="btn btn-outline-primary btn-sm">Activate <i class='fas fa-power-off'></i></button></td>
+                <td><button data-toggle="modal" data-target="#edit_acy" data-string="<?= $acy['acadyear'] ?>" data-acystartdate="<?= $acy['startdate'] ?>" data-acyenddate="<?= $acy['enddate'] ?>"
+                        data-acyid="<?= $acy['id'] ?>" class="btn btn-outline-primary btn-sm">
+                        <i class='fas fa-pen'></i>
+                    </button>
+                </td>
             </tr>
             <?php endforeach ?>
         </tbody>
     </table>
 </div>
-<small>You should only add and activate a year when it's the new academic year.</small>
 
 <div id="addacademicsession" class="modal fade card">
     <div class="modal-dialog" role="document">
@@ -101,29 +115,62 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+
             <?= form_open('academic/create_academicsession') ?>
             <div class="modal-body">
-                <div class="form-group">
-                    <label for="acadyear">Select academic year</label>
-                    <select name="acadyear_id" id="acadyear_id" class="form-control" required>
-                        <option value="" selected disabled hidden>Select academic year</option>
-                        <?php foreach (array_slice($academicyear, 0, 5) as $acadyear) : ?>
-                        <option value="<?= $acadyear['id'] ?>"><?= $acadyear['acadyear'] ?></option>
-                        <?php endforeach ?>
-                    </select>
+                <div id="acsform">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="acadyear">Academic Year</label>
+                                <select name="acadyear_id" id="acyselect" class="form-control" required>
+                                    <?php if ($activeyear) : ?>
+                                    <option value="<?= $activeyear['id'] ?>"><?= $activeyear['acadyear'] ?></option>
+                                    <?php endif ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="semester">Semester</label>
+                                <select name="semester" id="semester" class="form-control" onchange="enableSubmit()" required>
+                                    <option value="" selected disabled hidden>Select semester</option>
+                                    <?php foreach ($semesters as $sem) : ?>
+                                    <option value="<?= $sem ?>"><?= $sem ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="">Start Date</label>
+                                <input type="date" name="acs_startdate" class="form-control" id="acs_startdate" required>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="">End Date</label>
+                                <input type="date" name="acs_enddate" class="form-control" id="acs_enddate" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="line-height: 100%;">
+                        <small>Please make sure end date is a day before the upcoming academic session. Date of academic session will affect score pages.</small>
+                        <br>
+                        <small></small>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="semester">Select semester</label>
-                    <select name="semester" id="semester" class="form-control" required>
-                        <option value="" selected disabled hidden>Select semester</option>
-                        <?php foreach ($semesters as $sem) : ?>
-                        <option value="<?= $sem ?>"><?= $sem ?></option>
-                        <?php endforeach ?>
-                    </select>
+                <div id="acsmessage">
+                    <?php if (empty($semesters)) : ?>
+                    <p>There is no more session to add for this academic year</p>
+                    <?php endif ?>
                 </div>
+
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button id="submitacs" type="submit" class="btn btn-primary" disabled>Add</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
@@ -142,13 +189,29 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label for="acadyear">Academic Year:</label>
-                    <input name="acadyear" type="text" placeholder="20XX/20XX" readonly value="<?= $new_year ?>" id="acadyear" class="form-control">
+                <div id="acyform">
+                    <div class="form-group">
+                        <label for="acadyear">Academic Year:</label>
+                        <input name="acadyear" type="text" placeholder="20XX/20XX" readonly value="<?= $new_year ?>" id="acadyear" class="form-control">
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="acy_startdate">Start Date</label>
+                            <input type="date" name="acy_startdate" id="acy_startdate" class="form-control" required>
+                        </div>
+                        <div class="col-6">
+                            <label for="acy_enddate">Start Date</label>
+                            <input type="date" name="acy_enddate" id="acy_enddate" class="form-control" required>
+                        </div>
+                    </div>
+                    <small>You can only create a new academic year after the previous one has ended.</small>
+                </div>
+                <div id="acymessage">
+                    <p>You can only create new academic year when the last academic year has ended.</p>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button id="submitacy" type="submit" class="btn btn-primary">Add</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
@@ -156,59 +219,40 @@
     </div>
 </div>
 
-<div id="setactive_acs" class="modal fade card">
+<div id="edit_acs" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <?= form_open('academic/set_activesession') ?>
+            <?= form_open('academic/update_academicsession') ?>
             <div class="modal-header">
-                <h5 class="modal-title">Confirm action</h5>
+                <h5 class="modal-title">Edit Academic Session</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p id="confirmtext">This will set this academic session to active: </p>
-                <div class="form-group">
-                    <label>ID</label>
-                    <input name="session_id" readonly type="text" class="form-control">
-                </div>
+                <p id="confirmtext">You can only edit the date of this academic session</p>
                 <div class="form-group">
                     <label>Session</label>
-                    <input name="session_string" readonly type="text" class="form-control">
+                    <input name="session_string" readonly type="text" class="form-control" required>
+                    <input name="acadsession_id" readonly type="text" class="form-control" required hidden>
                 </div>
-
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="">Start Date</label>
+                            <input type="date" name="acs_editstartdate" id="acs_editstartdate" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="">End Date</label>
+                            <input type="date" name="acs_editenddate" id="acs_editenddate" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Set active</button>
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
-            </div>
-            <?= form_close() ?>
-        </div>
-    </div>
-</div>
-<div id="setendsession" class="modal fade card">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <?= form_open('academic/set_endsession') ?>
-            <div class="modal-header">
-                <h5 class="modal-title">Confirm action</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="confirmtext">This will set this academic session to end. Mentor will be able to update students' academic plans with their actual result.</p>
-                <div class="form-group">
-                    <label hidden>ID</label>
-                    <input name="session_id" readonly type="text" class="form-control" hidden>
-                </div>
-                <div class="form-group">
-                    <h5 id="academicsession" class="text-center text-lg-center"></h5>
-                </div>
-                <small>You will be able to change this only once. Please be careful</small>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">End Session</button>
+                <button type="submit" class="btn btn-primary">Update</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
@@ -216,77 +260,119 @@
     </div>
 </div>
 
-<div id="setactive_acy" class="modal fade card">
+<div id="edit_acy" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <?= form_open('academic/set_activeyear') ?>
+            <?= form_open('academic/update_academicyear') ?>
             <div class="modal-header">
-                <h5 class="modal-title">Confirm action</h5>
+                <h5 class="modal-title">Edit Academic Year</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p id="confirmtext">This will set this academic year to active.</p>
-                <div class="form-group">
-                    <Label>ID</Label>
-                    <input name="acadyear_id" readonly type="text" class="form-control">
-                </div>
                 <div class="form-group">
                     <label>Year</label>
                     <input name="year_string" readonly type="text" class="form-control">
+                    <input type="text" name="acadyear_id" id="acadyear_id" class="form-control" hidden>
                 </div>
-
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="">Start Date</label>
+                            <input type="date" name="acy_editstartdate" id="acy_editstartdate" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="">End Date</label>
+                            <input type="date" name="acy_editenddate" id="acy_editenddate" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <small>Please make sure the dates do not overlap with other academic years</small>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Set active</button>
+                <button type="submit" class="btn btn-primary">Update</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
         </div>
     </div>
 </div>
-
+<br>
 <script>
-var tables = ['#acs_table', '#acy_table', '#acp_table'];
+var tables = ['#acs_table', '#acy_table'];
+tables.forEach(setupTable);
+var acssubmitbtn = document.getElementById("submitacs");
+var acsform = document.getElementById("acsform");
+var acsmessage = document.getElementById("acsmessage");
+var acysubmitbtn = document.getElementById("submitacy");
+var acyform = document.getElementById("acyform");
+var acymessage = document.getElementById("acymessage");
+var semesters = Object.values(JSON.parse(`<?php echo json_encode($semesters) ?>`));
+
+restrictAcadsession();
+restrictAcadyear();
+
+
+function restrictAcadsession() {
+    if (semesters.length > 0) {
+        acsmessage.remove();
+    } else {
+        acsform.remove();
+        acssubmitbtn.remove();
+    }
+}
+
+function restrictAcadyear() {
+    if (`<?= $btn_acy ?>`) {
+        acymessage.remove();
+    } else {
+        acyform.remove();
+        acysubmitbtn.remove();
+    }
+}
+
+
+function setupTable(item, index) {
+    $(item).DataTable({
+        "order": []
+    });
+}
+
+function enableSubmit() {
+    var acyselect = document.getElementById("acyselect");
+    var semselect = document.getElementById("semester");
+    var acy_id = acyselect.value;
+    var sem_id = semselect.value;
+    if (sem_id && acy_id) {
+        acssubmitbtn.disabled = false;
+    } else {
+        acssubmitbtn.disabled = true;
+    }
+}
 $(document).ready(function() {
-    $('#acs_table').DataTable({
-        "order": []
-    });
-    $('#acy_table').DataTable({
-        "order": []
-    });
-    var confirmtext = document.getElementById('confirmtext');
-    var academicsession = document.getElementById('academicsession');
-    $('#setactive_acs').on('show.bs.modal', function(e) {
+    $('#edit_acs').on('show.bs.modal', function(e) {
         var userid = $(e.relatedTarget).data('acsid');
         var acads = $(e.relatedTarget).data('string');
-        confirmtext.innerHTML += ' <b>(' + acads + ')</b>';
-        $(e.currentTarget).find('input[name="session_id"]').val(userid);
+        var acs_startdate = $(e.relatedTarget).data('acsstartdate');
+        console.log(acs_startdate);
+        var acs_enddate = $(e.relatedTarget).data('acsenddate');
+        $(e.currentTarget).find('input[name="acadsession_id"]').val(userid);
         $(e.currentTarget).find('input[name="session_string"]').val(acads);
+        document.getElementById("acs_editstartdate").value = acs_startdate;
+        document.getElementById("acs_editenddate").value = acs_enddate;
     });
-    $('#setactive_acs').on('hide.bs.modal', function(e) {
-        confirmtext.innerHTML = 'This will set this academic session to active.';
-    }); // required to set the value back
-    $('#setactive_acy').on('show.bs.modal', function(e) {
+    $('#edit_acy').on('show.bs.modal', function(e) {
         var id = $(e.relatedTarget).data('acyid');
         var years = $(e.relatedTarget).data('string');
-        confirmtext.innerHTML += ' <b>(' + years + ')</b>';
+        var acy_startdate = $(e.relatedTarget).data('acystartdate');
+        var acy_enddate = $(e.relatedTarget).data('acyenddate');
         $(e.currentTarget).find('input[name="acadyear_id"]').val(id);
         $(e.currentTarget).find('input[name="year_string"]').val(years);
-    });
-    $('#setactive_acy').on('hide.bs.modal', function(e) {
-        confirmtext.innerHTML = 'This will set this academic year to active.';
-    }); // required to set the value back
-    $('#setendsession').on('show.bs.modal', function(e) {
-        var acsid = $(e.relatedTarget).data('acsid');
-        var acads = $(e.relatedTarget).data('string');
-        confirmtext.innerHTML += ' <b>(' + acads + ')</b>';
-        academicsession.innerHTML = ' <b>(' + acads + ')</b>';
-        $(e.currentTarget).find('input[name="session_id"]').val(acsid);
-    });
-    $('#setendsession').on('hide.bs.modal', function(e) {
-        confirmtext.innerHTML = '';
+        document.getElementById("acy_editstartdate").value = acy_startdate;
+        document.getElementById("acy_editenddate").value = acy_enddate;
     });
 });
 </script>
