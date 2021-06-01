@@ -15,10 +15,9 @@ class Score extends CI_Controller
         if (!$this->session->userdata('user_type') == 'mentor') {
             redirect(site_url());
         }
-        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         $academicsessions = $this->academic_model->get_academicsession();
         foreach ($academicsessions as $i => $academicsession) {
-            $enrollingstudents = $this->student_model->get_enrolling_students($academicsession['id'], $sig_id);
+            $enrollingstudents = $this->student_model->get_enrolling_students($academicsession['id']);
             $academicsessions[$i]['enrolling'] = count($enrollingstudents);
         }
         $data = array(
@@ -37,9 +36,8 @@ class Score extends CI_Controller
         if (!$this->session->userdata('user_type') == 'mentor') {
             redirect(site_url());
         }
-        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         $academicsession = $this->academic_model->get_academicsession(FALSE, $acadsession_slug);
-        $enrolling = $this->student_model->get_enrolling_students($academicsession['id'], $sig_id);
+        $enrolling = $this->student_model->get_enrolling_students($academicsession['id']);
         $scoreplans = $this->score_model->get_scoreplan($academicsession['id']);
         $fullscore = 15; # fixed value of components
         foreach ($scoreplans as $scoreplan) {
@@ -80,7 +78,6 @@ class Score extends CI_Controller
         if ($this->session->userdata('user_type') != 'mentor') {
             redirect(site_url());
         }
-        // $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         $student = $this->student_model->get_student($student_id);
         $thisacadsession = $this->academic_model->get_academicsession(FALSE, $acadsession_slug);
         $scoreplans = $this->score_model->get_scoreplan($thisacadsession['id'], FALSE);
@@ -130,17 +127,15 @@ class Score extends CI_Controller
         if ($this->session->userdata('user_type') == 'student') {
             redirect(site_url());
         }
-        $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
         if ($slug == FALSE) {
             # scoreplan index
             $activitycategories = $this->activity_model->get_activitycategory();
             $academicsessions = $this->academic_model->get_academicsession();
-            // print_r($activitycategories);
             foreach ($academicsessions as $index => $acs) {
                 $totalcategory = 0;
                 foreach ($activitycategories as $id => $cat) {
-                    $activitycategories[$id]['categorycount'] = $this->activity_model->get_categoryactivitycount($acs['id'], $cat['code'], $sig_id);
-                    $activitycategories[$id]['categorytotalpercent'] = $this->score_model->get_categorytotalpercent($acs['id'], $cat['code'], $sig_id);
+                    $activitycategories[$id]['categorycount'] = $this->activity_model->get_categoryactivitycount($acs['id'], $cat['code']);
+                    $activitycategories[$id]['categorytotalpercent'] = $this->score_model->get_categorytotalpercent($acs['id'], $cat['code']);
                     $totalcategory += $activitycategories[$id]['categorytotalpercent'];
                 }
                 $academicsessions[$index]['activitycategories'] = $activitycategories;
@@ -163,7 +158,6 @@ class Score extends CI_Controller
                 // $activitycategories[$i]['scoreplan'] = $this->score_model->get_scoreplan($sig_id, $academicsession['id'], $actcat['code']);
                 $activitycategories[$i]['unregistered'] = $this->activity_model->get_category_unregisteredactivity($academicsession['id'], $actcat['code']);
             }
-            // print_r($activitycategories);
             $data = array(
                 'acslug' => $slug,
                 'activitycategories' => $activitycategories,
@@ -179,7 +173,25 @@ class Score extends CI_Controller
     public function scoreboard()
     {
         $academicsession = $this->academic_model->get_activeacademicsession();
+        if ($academicsession) {
+            $enrollingstudents = $this->student_model->get_enrolling_students($academicsession['id']);
+            # for score per session
+            foreach ($enrollingstudents as $i => $student) {
+                $activityscore = $this->scoretable->calculate_activityscore($student['matric'], $academicsession['id']);
+                $workshopscore = $this->scoretable->calculate_workshopscore($student['matric'], $academicsession['id']);
+                $componentscore = $this->scoretable->calculate_componentscore($student['matric'], $academicsession['id']);
+
+                $enrollingstudents[$i]['activityscore'] = $activityscore;
+                $enrollingstudents[$i]['workshopscore'] = $workshopscore;
+                $enrollingstudents[$i]['componentscore'] = $componentscore;
+                $enrollingstudents[$i]['totalscore'] = $activityscore + $workshopscore + $componentscore;
+            }
+        } else {
+            $enrollingstudents = null;
+        }
+
         $students = $this->student_model->get_student();
+        # for cumulative badge
         foreach ($students as $i => $student) {
             $academicbadge = $this->scoretable->calculate_academicbadge($student['id']);
             $activitybadge = $this->scoretable->calculate_activitybadge($student['id']);
@@ -188,19 +200,11 @@ class Score extends CI_Controller
             $students[$i]['activitybadge'] = $activitybadge;
             $students[$i]['externalbadge'] = $externalbadge;
             $students[$i]['totalbadge'] = $academicbadge + $activitybadge + $externalbadge;
-
-            $activityscore = $this->scoretable->calculate_activityscore($student['id'], $academicsession['id']);
-            $workshopscore = $this->scoretable->calculate_workshopscore($student['id'], $academicsession['id']);
-            $componentscore = $this->scoretable->calculate_componentscore($student['id'], $academicsession['id']);
-
-            $students[$i]['activityscore'] = $activityscore;
-            $students[$i]['workshopscore'] = $workshopscore;
-            $students[$i]['componentscore'] = $componentscore;
-            $students[$i]['totalscore'] = $activityscore + $workshopscore + $componentscore;
         }
         $data = array(
             'thisacademicsession' => $academicsession,
-            'students' => $students
+            'students' => $students,
+            'enrollingstudents' => $enrollingstudents
         );
         $this->load->view('templates/header');
         $this->load->view('score/scoreboard', $data);
@@ -319,7 +323,7 @@ class Score extends CI_Controller
         }
 
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="Scoreboard.xlsx"');
+        header('Content-Disposition: attachment;filename="Cumulative Badgeboard.xlsx"');
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -344,41 +348,44 @@ class Score extends CI_Controller
         $writer->save('php://output');
     }
 
-    public function download_scoreboard()
+    public function download_scoreboard($acadsession_id = NULL)
     {
-        $academicsession = $this->academic_model->get_activeacademicsession();
-        $students = $this->student_model->get_student();
-        foreach ($students as $i => $student) {
-            $activityscore = $this->scoretable->calculate_activityscore($student['id'], $academicsession['id']);
-            $workshopscore = $this->scoretable->calculate_workshopscore($student['id'], $academicsession['id']);
-            $componentscore = $this->scoretable->calculate_componentscore($student['id'], $academicsession['id']);
+        if ($acadsession_id == FALSE) {
+            $academicsession = $this->academic_model->get_activeacademicsession();
+            $students = $this->student_model->get_student();
+            foreach ($students as $i => $student) {
+                $activityscore = $this->scoretable->calculate_activityscore($student['id'], $academicsession['id']);
+                $workshopscore = $this->scoretable->calculate_workshopscore($student['id'], $academicsession['id']);
+                $componentscore = $this->scoretable->calculate_componentscore($student['id'], $academicsession['id']);
+                $students[$i]['activityscore'] = $activityscore;
+                $students[$i]['workshopscore'] = $workshopscore;
+                $students[$i]['componentscore'] = $componentscore;
+                $students[$i]['totalscore'] = $activityscore + $workshopscore + $componentscore;
+            }
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="Scoreboard ' . $academicsession['academicsession'] . '.xlsx"');
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
 
-            $students[$i]['activityscore'] = $activityscore;
-            $students[$i]['workshopscore'] = $workshopscore;
-            $students[$i]['componentscore'] = $componentscore;
-            $students[$i]['totalscore'] = $activityscore + $workshopscore + $componentscore;
-        }
-
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="Scoreboard.xlsx"');
-
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-
-        $sheet->setCellValue('A1', 'Matric');
-        $sheet->setCellValue('B1', 'Name');
-        $sheet->setCellValue('C1', 'Academic Score');
-        $sheet->setCellValue('D1', 'Activity Score');
-        $sheet->setCellValue('E1', 'External Score');
-        $sheet->setCellValue('F1', 'Total Score (55%)');
-        foreach ($students as $i => $student) {
-            $i += 1;
-            $sheet->setCellValue('A' . $i + 1, $student['id']);
-            $sheet->setCellValue('B' . $i + 1, $student['name']);
-            $sheet->setCellValue('C' . $i + 1, $student['activityscore']);
-            $sheet->setCellValue('D' . $i + 1, $student['workshopscore']);
-            $sheet->setCellValue('E' . $i + 1, $student['componentscore']);
-            $sheet->setCellValue('F' . $i + 1, $student['totalscore']);
+            $sheet->setCellValue('A1', 'Academic Year');
+            $sheet->setCellValue('B1', 'Semester');
+            $sheet->setCellValue('C1', 'Matric');
+            $sheet->setCellValue('D1', 'Name');
+            $sheet->setCellValue('E1', 'Academic Score');
+            $sheet->setCellValue('F1', 'Activity Score');
+            $sheet->setCellValue('G1', 'External Score');
+            $sheet->setCellValue('H1', 'Total Score (55%)');
+            foreach ($students as $i => $student) {
+                $i += 1;
+                $sheet->setCellValue('A' . $i + 1, $academicsession['academicyear']);
+                $sheet->setCellValue('B' . $i + 1, $academicsession['semester']);
+                $sheet->setCellValue('C' . $i + 1, $student['id']);
+                $sheet->setCellValue('D' . $i + 1, $student['name']);
+                $sheet->setCellValue('E' . $i + 1, $student['activityscore']);
+                $sheet->setCellValue('F' . $i + 1, $student['workshopscore']);
+                $sheet->setCellValue('G' . $i + 1, $student['componentscore']);
+                $sheet->setCellValue('H' . $i + 1, $student['totalscore']);
+            }
         }
 
         $writer = new Xlsx($spreadsheet);

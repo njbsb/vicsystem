@@ -11,6 +11,7 @@ class Scoretable
 
     public function get_arraytable_academicplan($academicplans)
     {
+        # to include acadyear_id and semester
         $acadplans = array();
         for ($i = 0; $i < count($academicplans); $i++) {
             $acp = $academicplans[$i];

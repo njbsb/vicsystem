@@ -272,11 +272,10 @@ class Activity_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_categoryactivitycount($acadsession_id, $category_id, $sig_id)
+    public function get_categoryactivitycount($acadsession_id, $category_id)
     {
         $this->db->where(array(
             'acadsession_id' => $acadsession_id,
-            // 'sig_id' => $sig_id,
             'activitycategory_id' => $category_id
         ))->from('score_plan');
         return $this->db->count_all_results();

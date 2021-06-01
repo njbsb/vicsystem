@@ -26,7 +26,7 @@
                 <a data-toggle="modal" data-target="#addparticipant" data-externalid="<?= $ext['id'] ?>" data-title="<?= $ext['title'] ?>" class="btn btn-primary btn-sm" href=""><i
                         data-toggle="tooltip" title="Add Participant" class='fas fa-user-plus'></i></a>
                 <a data-toggle="modal" data-target="#deleteexternal" data-externalid="<?= $ext['id'] ?>" data-title="<?= $ext['title'] ?>" class="btn btn-primary btn-sm" href=""><i
-                        data-toggle="tooltip" title="Delete Participant" class='fa fa-trash'></i></a>
+                        data-toggle="tooltip" title="Delete Activity" class='fa fa-trash'></i></a>
                 <?php endif ?>
             </div>
         </div>
@@ -187,6 +187,37 @@
             <?= form_open('activity/delete_externalparticipant') ?>
             <div class="modal-header">
                 <h5 class="modal-title">Delete Participant</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <h5 id="texttitle" class="text-center text-pink"></h5>
+                    <!-- <input type="text" class="form-control" name="deletetitle" readonly> -->
+                    <input type="text" class="form-control" name="deleteexternalid" readonly hidden>
+                </div>
+                <div class="form-group">
+                    <img src="" alt="">
+                    <label for="">Student</label>
+                    <input type="text" class="form-control" name="deletename" readonly>
+                    <input type="text" class="form-control" name="deleteuserid" readonly hidden>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
+            </div>
+            <?= form_close() ?>
+        </div>
+    </div>
+</div>
+<div id="deleteexternal" class="modal fade card">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <?= form_open('activity/delete_externalactivity') ?>
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Activity</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
