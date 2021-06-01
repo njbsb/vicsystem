@@ -72,13 +72,13 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Please fill in the required fields</p>
+                <p>No worries we got you. Please fill in the required fields</p>
                 <div class="form-group">
-                    <label for="user_id"><b>Matric/ID</b></label>
+                    <label for="user_id">Matric/ID</label>
                     <input placeholder="Matric/ID" type="text" name="user_id" id="user_id" class="form-control" maxlength="8" size="8" required>
                 </div>
                 <div class="form-group">
-                    <label for="securitycode"><b>Security code</b></label>
+                    <label for="securitycode">Security code</label>
                     <input placeholder="XXXX" type="password" class="form-control" name="securitycode" id="securitycode" maxlength="4" size="4" required>
                     <small>Last 4 digit of your registered phone number</small>
                 </div>

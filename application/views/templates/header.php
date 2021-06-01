@@ -5,14 +5,13 @@
     <meta charset="utf-8">
     <title>VIC System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/flatly/bootstrap.min.css" integrity="sha384-qF/QmIAj5ZaYFAeQcrQ6bfVMAh4zZlrGwTPY7T/M+iTTLJqJBJjwwnsE5Y0mV7QK"
-        crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn"
         crossorigin="anonymous"> -->
     <!-- <link rel="stylesheet" href="<?= base_url('assets/css/quartz.bootstrap.min.css') ?>"> -->
+    <link rel="stylesheet" href="<?= base_url('assets/css/flatly.bootstrap.min.css') ?>">
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="<?= base_url('assets/css/sigcustom.css') ?>">
+    <!-- <link rel="stylesheet" href="<?= base_url('assets/css/sigcustom.css') ?>"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-okaidia.min.css"
         integrity="sha512-mIs9kKbaw6JZFfSuo+MovjU+Ntggfoj8RwAmJbVXQ5mkAX5LlgETQEweFPI18humSPHymTb5iikEOKWF7I8ncQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -47,165 +46,6 @@
     <!-- <link rel="stylesheet" href="<?= base_url('assets/css/sticky-footer.css') ?>"> -->
     <!-- <script src="<?= base_url('assets/js/custom.js') ?>"></script> -->
     <!-- <script src="<?= base_url('assets/js/jquery.min.js') ?>"></script> -->
-    <style>
-    body {
-        font: 14px Montserrat, sans-serif;
-        line-height: 1.8;
-        background: rgb(238, 174, 202);
-        background: linear-gradient(90deg, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
-    }
-
-    a {
-        color: #e83283;
-    }
-
-    a:hover {
-        color: #b32665;
-        text-decoration: underline;
-    }
-
-    .text-pink {
-        color: #c7286f !important;
-    }
-
-    .img-wrap {
-        position: relative;
-        display: inline-block;
-        font-size: 0;
-    }
-
-    .img-wrap .close {
-        position: absolute;
-        top: 2px;
-        right: 2px;
-        z-index: 100;
-        background-color: #FFF;
-        padding: 5px 2px 2px;
-        color: #000;
-        font-weight: bold;
-        cursor: pointer;
-        opacity: .2;
-        text-align: center;
-        font-size: 22px;
-        line-height: 10px;
-        border-radius: 50%;
-    }
-
-    html {
-        position: relative;
-        min-height: 100%;
-        scroll-behavior: smooth;
-    }
-
-    body {
-        margin-bottom: 60px;
-    }
-
-    label {
-        font-weight: 600;
-    }
-
-    .footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 60px;
-        line-height: 60px;
-        background-color: #f5f5f5;
-    }
-
-    .table {
-        overflow-x: auto;
-    }
-
-    .img-wrap:hover .close {
-        opacity: 1;
-    }
-
-    .card {
-        border-radius: 12px;
-        padding: 0.5rem;
-        background-color: transparent;
-        background-image: linear-gradient(125deg,
-                rgba(255, 255, 255, 0.3),
-                rgba(255, 255, 255, 0.2) 70%);
-        -webkit-backdrop-filter: blur(5px);
-        backdrop-filter: blur(5px);
-    }
-
-    .breadcrumb {
-        background-color: transparent;
-        background-image: linear-gradient(125deg,
-                rgba(255, 255, 255, 0.3),
-                rgba(255, 255, 255, 0.2) 70%);
-        -webkit-backdrop-filter: blur(5px);
-        backdrop-filter: blur(5px);
-    }
-
-    .bg-primary {
-        background-color: #e83283 !important;
-    }
-
-    input {
-        font: 14px Montserrat, sans-serif;
-    }
-
-    p.activitydesc {
-        text-align: justify;
-    }
-
-    .post-date {
-        background: #f4f4f4;
-        padding: 4px;
-        margin: 3px 0;
-        display: block;
-    }
-
-    .margin {
-        margin-bottom: 35px;
-    }
-
-    .container-fluid {
-        padding-top: 25px;
-        padding-bottom: 25px;
-        margin-top: 25px;
-        margin-bottom: 25px;
-    }
-
-    /* Pagination  */
-
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    #paging {
-        padding: 0 20px 20px 20px;
-        font-size: 13px;
-        margin-top: 10px;
-    }
-
-    #paging a {
-        color: #000;
-        background: #e0e0e0;
-        padding: 8px 12px;
-        margin-right: 5px;
-        text-decoration: none;
-    }
-
-    #paging a.aktif {
-        background: #000 !important;
-        color: #fff;
-    }
-
-    #paging a:hover {
-        border: 1px solid #000;
-    }
-
-    .hidden {
-        display: none;
-    }
-    </style>
 </head>
 
 <body>
@@ -243,12 +83,10 @@
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Academic</a>
                         <div class="dropdown-menu">
                             <?php if ($usertype != 'student') : ?>
-                            <a class="dropdown-item" href="<?= site_url('academic') ?>">Academic Control</a>
-                            <a class="dropdown-item" href="<?= site_url('academicplan/mentor') ?>">Academic Records</a>
                             <a class="dropdown-item" href="<?= site_url('enroll') ?>">Enroll Students</a>
-                            <?php else : ?>
-                            <a class="dropdown-item" href="<?= site_url('academicplan/student') ?>">Academic Plan</a>
                             <?php endif ?>
+                            <?php $academictitle = ($usertype !=  'student') ? 'Academic Records' : 'Academic Plan' ?>
+                            <a class="dropdown-item" href="<?= site_url('academic') ?>"><?= $academictitle ?></a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -265,8 +103,8 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">Admin</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="<?= site_url('user') ?>">Manage Users</a>
-
+                            <a class="dropdown-item" href="<?= site_url('user') ?>">Users</a>
+                            <a class="dropdown-item" href="<?= site_url('academic/control') ?>">Academic</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
