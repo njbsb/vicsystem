@@ -338,12 +338,11 @@ class Score_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_categorytotalpercent($acadsession_id, $category_id, $sig_id)
+    public function get_categorytotalpercent($acadsession_id, $category_id)
     {
         $this->db->select_sum('scp.percentweightage')
             ->from('score_plan as scp')
             ->where(array(
-                // 'scp.sig_id' => $sig_id,
                 'scp.acadsession_id' => $acadsession_id,
                 'scp.activitycategory_id' => $category_id
             ));

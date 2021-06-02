@@ -122,13 +122,12 @@ class Student_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_available_sigstudents($sig_id, $enrolledstudents)
+    public function get_available_sigstudents($enrolledstudents)
     {
         $this->db->select('std.matric, user.name, std.yearjoined')
             ->from('student as std')
             ->join('user', 'user.id = std.matric')
             ->where(array(
-                'user.sig_id' => $sig_id,
                 'user.userstatus' => 'active'
             ));
         if (isset($enrolledstudents)) {
@@ -140,7 +139,7 @@ class Student_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_enrolling_students($acadsession_id, $sig_id = NULL)
+    public function get_enrolling_students($acadsession_id)
     {
         # those that has data in the academicplan
         $this->db->select('acp.student_id as matric, user.name, acp.gpa_target, acp.gpa_achieved')
@@ -149,7 +148,6 @@ class Student_model extends CI_Model
             // ->join('user', array('user.id' => 'acp.student_id', 'user.sig_id' => $sig_id))
             ->where(array(
                 'acp.acadsession_id' => $acadsession_id
-                // 'user.sig_id' => $sig_id
             ));
         $query = $this->db->get();
         return $query->result_array();

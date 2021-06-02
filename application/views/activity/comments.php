@@ -5,9 +5,6 @@
         <label class="custom-control-label" for="checkbox_comments">Show comments</label>
     </div>
 </div>
-
-<!-- <button data-toggle="modal" data-target="#showComment" class="btn btn-info">Show Comments</button> -->
-<!-- <br><br> -->
 <div id="comments">
     <div class="card">
         <div class="card-body">
@@ -110,8 +107,6 @@ $('#delete_comment').on('show.bs.modal', function(e) {
     $(e.currentTarget).find('input[name="deletecommentid"]').val(commentid);
     deletecomment.innerHTML = comment;
     deleteuserid.innerHTML = userid;
-    // $(e.currentTarget).find('input[name="deleterole"]').val(role);
-    // $(e.currentTarget).find('input[name="deleteroleid"]').val(role_id);
 });
 $('#delete_comment').on('hide.bs.modal', function(e) {
     deleteuserid.innerHTML = '';

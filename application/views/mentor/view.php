@@ -58,7 +58,7 @@
             <div class="table-responsive">
                 <table id="acttable" class="table">
                     <thead>
-                        <tr class="table-primary">
+                        <tr class="table-dark">
                             <th>Session</th>
                             <th>Activity</th>
                             <th>Role</th>

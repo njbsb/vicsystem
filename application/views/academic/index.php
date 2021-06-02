@@ -315,7 +315,6 @@ var semesters = Object.values(JSON.parse(`<?php echo json_encode($semesters) ?>`
 restrictAcadsession();
 restrictAcadyear();
 
-
 function restrictAcadsession() {
     if (semesters.length > 0) {
         acsmessage.remove();
@@ -333,7 +332,6 @@ function restrictAcadyear() {
         acysubmitbtn.remove();
     }
 }
-
 
 function setupTable(item, index) {
     $(item).DataTable({

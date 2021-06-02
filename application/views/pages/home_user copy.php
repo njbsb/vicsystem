@@ -70,7 +70,7 @@
                 </p> -->
                 <div class="table-responsive">
                     <table class="table table-hover">
-                        <thead class="table-primary">
+                        <thead class="table-dark">
                             <tr>
                                 <th>No</th>
                                 <th>Activity</th>

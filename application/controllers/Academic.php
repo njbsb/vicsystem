@@ -163,23 +163,30 @@ class Academic extends CI_Controller
             redirect('home');
         }
         $activesession = $this->academic_model->get_activeacademicsession();
-        $academicplans = $this->academic_model->get_academicplan(FALSE, $activesession['id']);
-        foreach ($academicplans as $i => $acp) {
-            $diff = $acp['gpa_achieved'] - $acp['gpa_target'];
-            $academicplans[$i]['difference'] = $diff;
-            if ($diff > 0) {
-                $status = 'Passed';
-                $textclass = 'text-success';
-            } elseif ($diff < 0) {
-                $status = 'Not Pass';
-                $textclass = 'text-warning';
-            } else {
-                $status = 'Constant';
-                $textclass = '';
+        if ($activesession) {
+            $academicplans = $this->academic_model->get_academicplan(FALSE, $activesession['id']);
+            foreach ($academicplans as $i => $acp) {
+                $diff = $acp['gpa_achieved'] - $acp['gpa_target'];
+                $academicplans[$i]['difference'] = $diff;
+                if ($diff > 0) {
+                    $status = 'Passed';
+                    $textclass = 'text-success';
+                } elseif ($diff < 0) {
+                    $status = 'Not Pass';
+                    $textclass = 'text-warning';
+                } else {
+                    $status = 'Constant';
+                    $textclass = '';
+                }
+                $academicplans[$i]['status'] = $status;
+                $academicplans[$i]['textclass'] = $textclass;
             }
-            $academicplans[$i]['status'] = $status;
-            $academicplans[$i]['textclass'] = $textclass;
+            $examdate = date('Y-m-d', strtotime("+4 months", strtotime($activesession['startdate'])));
+        } else {
+            $academicplans = array();
+            $examdate = null;
         }
+
         $data = array(
             'title' => "Student's Academic Records",
             'academicplans' => $academicplans,
@@ -187,7 +194,7 @@ class Academic extends CI_Controller
             'semesters' => $this->semester_model->get_semesters(),
             'activesession' => $activesession,
             'today' => time(),
-            'examdate' => date('Y-m-d', strtotime("+4 months", strtotime($activesession['startdate'])))
+            'examdate' => $examdate
         );
         $this->load->view('templates/header');
         $this->load->view('academic/plan/mentor', $data);
@@ -354,14 +361,20 @@ class Academic extends CI_Controller
         // $this->form_validation->set_rules('students', 'student', 'required');
 
         if ($this->form_validation->run() == FALSE) {
-            $sig_id = $this->sig_model->get_sig_id($this->session->userdata('username'));
             $activesession = $this->academic_model->get_activeacademicsession();
-            $enrolledstudents = $this->student_model->get_enrolling_students($activesession['id']);
+            if ($activesession) {
+                $enrolledstudents = $this->student_model->get_enrolling_students($activesession['id']);
+                $text = 'You can only enroll students in the currently active academic session';
+            } else {
+                $enrolledstudents = null;
+                $text = 'You are currently not within any active academic year or session. Please configure the academic year and session date properly';
+            }
             $data = array(
-                'title' => 'Student Enrollment',
-                'availablestudents' => $this->student_model->get_available_sigstudents($sig_id, $enrolledstudents),
+                'title' => 'Enrollment Session',
+                'availablestudents' => $this->student_model->get_available_sigstudents($enrolledstudents),
                 'enrolledstudents' => $enrolledstudents,
-                'activesession' => $activesession
+                'activesession' => $activesession,
+                'text' => $text
             );
             $this->load->view('templates/header');
             $this->load->view('academic/enroll', $data);

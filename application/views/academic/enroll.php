@@ -2,9 +2,9 @@
     <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
     <li class="breadcrumb-item active">Enrollment</li>
 </ol>
-
-<h2><?= $title . ': ' . $activesession['academicsession']  ?></h2>
-<small>You can only enroll students in the currently active academic session</small>
+<?php $academicsession = ($activesession) ? $activesession['academicsession'] : '?' ?>
+<h2><?= $title . ': ' . $academicsession  ?></h2>
+<small><?= $text ?></small>
 <?php if (validation_errors()) : ?>
 <div class="alert alert-dismissible alert-warning">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -17,7 +17,7 @@
 <div class="card">
     <div class="card-body">
 
-        <?php $hidden = array('acadsession_id' => $activesession['id']); ?>
+        <?php $hidden = ($activesession) ? array('acadsession_id' => $activesession['id']) : array() ?>
         <?php $attribute = array('id' => 'enrollform') ?>
         <?= form_open('enroll', $attribute, $hidden) ?>
         <h3 class="margin">Non Enrolled Students</h3>
@@ -29,7 +29,7 @@
                         <th>Intake</th>
                         <th>Matric</th>
                         <th>Name</th>
-                        <th>Status</th>
+                        <!-- <th>Status</th> -->
                     </tr>
                 </thead>
                 <tbody class="table-active">
@@ -40,7 +40,7 @@
                         <td><?= $std['yearjoined'] ?></td>
                         <td><?= $std['matric'] ?></td>
                         <td><?= $std['name'] ?></td>
-                        <td></td>
+                        <!-- <td></td> -->
                     </tr>
                     <?php endforeach ?>
                 </tbody>
@@ -50,13 +50,15 @@
                         <td>Joined Year</td>
                         <td>Matric</td>
                         <td>Name</td>
-                        <td>Status</td>
+                        <!-- <td>Status</td> -->
                     </tr>
                 </tfoot>
             </table>
         </div>
         <br>
+        <?php if ($activesession) : ?>
         <a data-toggle="modal" id="enrollbtn" data-target="#enrollconfirm" class="btn btn-outline-primary"><i class='fas fa-upload'></i> Enroll</a>
+        <?php endif ?>
         <?= form_close() ?>
     </div>
 </div>
@@ -64,7 +66,7 @@
 <div class="card">
     <div class="card-body">
         <h3 class="margin">Enrolled Students</h3>
-        <?php $hidden = array('acadsession_id' => $activesession['id']) ?>
+        <?php $hidden = ($activesession) ? array('acadsession_id' => $activesession['id']) : array() ?>
         <?php $attribute = array('id' => 'unenrollform') ?>
         <?= form_open('unenroll', $attribute, $hidden) ?>
         <div class="table-responsive">
@@ -89,18 +91,14 @@
                         <td><?= $std['gpa_achieved'] ?></td>
                     </tr>
                     <?php endforeach ?>
-                    <?php else : ?>
-                    <tr>
-                        <td>No data</td>
-                    </tr>
                     <?php endif ?>
                 </tbody>
             </table>
         </div>
         <br>
-        <div class="form-group">
-            <a data-toggle="modal" id="unenrollbtn" data-target="#unenrollconfirm" class="btn btn-outline-danger"><i class='fas fa-download'></i> Un-Enroll</a>
-        </div>
+        <?php if ($activesession) : ?>
+        <a data-toggle="modal" id="unenrollbtn" data-target="#unenrollconfirm" class="btn btn-outline-danger"><i class='fas fa-download'></i> Un-Enroll</a>
+        <?php endif ?>
         <?= form_close() ?>
     </div>
 </div>
@@ -191,6 +189,7 @@ $(document).ready(function() {
         "order": []
     });
 });
+
 var enrollconfirmtext = document.getElementById('enrollconfirmtext');
 var unenrollconfirmtext = document.getElementById('unenrollconfirmtext');
 $('#enrollbtn').click(function() {

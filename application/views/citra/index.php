@@ -21,9 +21,9 @@
                         <?= $citra['name_en'] ?>
                     </a>
                 </h5>
-                <h6 class="card-subtitle text-muted"><?= $citra['name_bm'] ?></h6>
+                <h6 class="card-subtitle text-white"><?= $citra['name_bm'] ?></h6>
             </div>
-            <div class="card-footer text-muted">
+            <div class="card-footer text-white">
                 <?= $citra['level'] ?>
             </div>
         </div>

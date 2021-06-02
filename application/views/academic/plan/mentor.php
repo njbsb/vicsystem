@@ -4,7 +4,11 @@
 </ol>
 
 <h2><?= $title ?></h2>
-<h4><?= sprintf('Academic Session: %s', $activesession['academicsession']) ?></h4>
+<?php $session = ($activesession) ? $activesession['academicsession'] : '?' ?>
+<h4><?= sprintf('Academic Session: %s', $session) ?></h4>
+<?php if (!$activesession) : ?>
+<small>You are not within any active academic session. Please configure the academic session's date properly <a href="<?= site_url('academic/control') ?>">here</a></small>
+<?php endif ?>
 <hr>
 <div class="form-group">
     <?= form_open('academic/record') ?>
@@ -47,8 +51,8 @@
         <div class="row">
             <div class="col-lg-6 col-md-8">
                 <div class="form-group">
-                    <?php $label = ($today >= strtotime($examdate)) ? "It's end of academic session. Upload the students' result here" : '' ?>
-                    <?php $disabled = ($today >= strtotime($examdate)) ? "" : 'disabled' ?>
+                    <?php $label = ($today >= strtotime($examdate) and $examdate) ? "It's end of academic session. Upload the students' result here" : '' ?>
+                    <?php $disabled = ($today >= strtotime($examdate) and $examdate) ? "" : 'disabled' ?>
                     <label for="upload_file" class="form-label mt-4"><?= $label ?></label>
                     <input class="form-control" type="file" name="upload_file" id="upload_file" required accept=".csv,.xls,.xlsx" <?= $disabled ?>>
                 </div>
@@ -57,8 +61,9 @@
         <div class="form-group">
             <button <?= $disabled ?> class="btn btn-info" type="submit"><i class='fas fa-upload'></i> Upload</button>
         </div>
-        <?php if ($today >= strtotime($examdate)) : ?>
-        <small>Get result upload template <a href="<?= site_url('filelink') ?>">here</a>. ID of current session: <?= $activesession['id'] ?></small>
+        <?php if ($today >= strtotime($examdate) and $examdate) : ?>
+        <?php $id = ($activesession) ? $activesession['id'] : '?' ?>
+        <small>Get result upload template <a href="<?= site_url('filelink') ?>">here</a>. ID of current session: <?= $id ?></small>
         <?php else : ?>
         <small>You are able to upload your students' result after week 14</small>
         <?php endif ?>
@@ -94,10 +99,6 @@
                         <td class="<?= $acp['textclass'] ?>"><?= $acp['difference'] ?></td>
                     </tr>
                     <?php endforeach ?>
-                    <?php else : ?>
-                    <tr>
-                        <td>No data</td>
-                    </tr>
                     <?php endif ?>
 
                 </tbody>

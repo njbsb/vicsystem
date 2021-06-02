@@ -68,8 +68,8 @@
             <br>
             <div class="table-responsive">
                 <table id="acttable" class="table">
-                    <thead>
-                        <tr class="table-primary">
+                    <thead class="table-dark">
+                        <tr>
                             <th>Year</th>
                             <th>Activity</th>
                             <th>Role</th>
@@ -102,8 +102,8 @@
             <br>
             <div class="table-responsive">
                 <table id="orgtable" class="table">
-                    <thead>
-                        <tr class="table-primary">
+                    <thead class="table-dark">
+                        <tr>
                             <th>Academic Year</th>
                             <th>Role</th>
                             <th>Description</th>

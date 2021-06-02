@@ -25,7 +25,7 @@
                     data-date="<?= $ext['date'] ?>" class="btn btn-primary btn-sm" href=""><i data-toggle="tooltip" title="Edit Activity" class='fas fa-pen'></i></a>
                 <a data-toggle="modal" data-target="#addparticipant" data-externalid="<?= $ext['id'] ?>" data-title="<?= $ext['title'] ?>" class="btn btn-primary btn-sm" href=""><i
                         data-toggle="tooltip" title="Add Participant" class='fas fa-user-plus'></i></a>
-                <a data-toggle="modal" data-target="#deleteexternal" data-externalid="<?= $ext['id'] ?>" data-title="<?= $ext['title'] ?>" class="btn btn-primary btn-sm" href=""><i
+                <a data-toggle="modal" data-target="#deleteexternal" data-externalid="<?= $ext['id'] ?>" data-externaltitle="<?= $ext['title'] ?>" class="btn btn-primary btn-sm" href=""><i
                         data-toggle="tooltip" title="Delete Activity" class='fa fa-trash'></i></a>
                 <?php endif ?>
             </div>
@@ -68,43 +68,49 @@
                 </button>
             </div>
             <div class="modal-body">
-                <h5 class="text-center"><?= $academicsession['academicsession'] ?></h5>
-                <?php $hidden = array('acadsession_id' => $academicsession['id']) ?>
+                <?php $sessiontext = ($academicsession) ? $academicsession['academicsession'] : '?' ?>
+                <h5 class="text-center"><?= $sessiontext ?></h5>
+                <?php $hidden = ($academicsession) ? array('acadsession_id' => $academicsession['id']) : array() ?>
                 <?= form_open('activity/create_external', '', $hidden) ?>
-                <div class="form-group">
-                    <label for="">Title</label>
-                    <input name="title" type="text" class="form-control" required>
+                <div id="externalformdiv">
+                    <div class="form-group">
+                        <label for="">Title</label>
+                        <input name="title" type="text" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Description</label>
+                        <textarea name="description" class="form-control" id="" cols="20" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Date</label>
+                        <input class="form-control" type="date" id="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Level</label>
+                        <select name="activitylevel" id="" class="form-control" required>
+                            <option value="" disabled selected>Select activity level</option>
+                            <?php foreach ($activitylevels as $level) : ?>
+                            <option value="<?= $level['id'] ?>"><?= $level['level'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Endorser Mentor</label>
+                        <select class="form-control" name="mentor_id" id="" required>
+                            <option value="" selected disabled>Select endorser mentor</option>
+                            <?php foreach ($mentors as $mentor) : ?>
+                            <option value="<?= $mentor['id'] ?>"><?= $mentor['name'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="">Description</label>
-                    <textarea name="description" class="form-control" id="" cols="20" rows="3" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="">Date</label>
-                    <input class="form-control" type="date" id="date" name="date" required>
-                </div>
-                <div class="form-group">
-                    <label for="">Level</label>
-                    <select name="activitylevel" id="" class="form-control" required>
-                        <option value="" disabled selected>Select activity level</option>
-                        <?php foreach ($activitylevels as $level) : ?>
-                        <option value="<?= $level['id'] ?>"><?= $level['level'] ?></option>
-                        <?php endforeach ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="">Endorser Mentor</label>
-                    <select class="form-control" name="mentor_id" id="" required>
-                        <option value="" selected disabled>Select endorser mentor</option>
-                        <?php foreach ($mentors as $mentor) : ?>
-                        <option value="<?= $mentor['id'] ?>"><?= $mentor['name'] ?></option>
-                        <?php endforeach ?>
-                    </select>
-                </div>
-                <small>You can only add external activity in the current academic session</small>
+                <small>You can only add external activity within the currently active academic session</small>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" type="submit">Submit</button>
+                <div id="externalbtndiv">
+                    <button id="btnaddexternal" class="btn btn-primary" type="submit">Submit</button>
+                </div>
+
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
@@ -138,7 +144,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button id="btneditexternal" type="submit" class="btn btn-primary">Update</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
@@ -162,7 +168,7 @@
                     <!-- <input type="text" class="form-control" name="title" readonly> -->
                 </div>
                 <div class="form-group">
-                    <select name="student_id" id="student_id" class="form-control" data-live-search="true">
+                    <select name="student_id" id="student_id" class="form-control" data-live-search="true" onchange="enablebtnadd()" required>
                         <option value="" selected disabled>Select student</option>
                         <?php if ($students) : ?>
                         <?php foreach ($students as $student) : ?>
@@ -174,7 +180,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button id="btnaddparticipant" type="submit" class="btn btn-primary" disabled>Add</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
@@ -194,18 +200,17 @@
             <div class="modal-body">
                 <div class="form-group">
                     <h5 id="texttitle" class="text-center text-pink"></h5>
-                    <!-- <input type="text" class="form-control" name="deletetitle" readonly> -->
-                    <input type="text" class="form-control" name="deleteexternalid" readonly hidden>
+                    <input type="text" class="form-control" name="deleteexternalid" readonly hidden required>
                 </div>
                 <div class="form-group">
                     <img src="" alt="">
                     <label for="">Student</label>
                     <input type="text" class="form-control" name="deletename" readonly>
-                    <input type="text" class="form-control" name="deleteuserid" readonly hidden>
+                    <input type="text" class="form-control" name="deleteuserid" readonly hidden required>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-danger">Delete</button>
+                <button id="btndeleteparticipant" type="submit" class="btn btn-danger">Delete</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
@@ -224,19 +229,12 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <h5 id="texttitle" class="text-center text-pink"></h5>
-                    <!-- <input type="text" class="form-control" name="deletetitle" readonly> -->
-                    <input type="text" class="form-control" name="deleteexternalid" readonly hidden>
-                </div>
-                <div class="form-group">
-                    <img src="" alt="">
-                    <label for="">Student</label>
-                    <input type="text" class="form-control" name="deletename" readonly>
-                    <input type="text" class="form-control" name="deleteuserid" readonly hidden>
+                    <h5 id="deletetitle" class="text-center text-pink"></h5>
+                    <input type="text" class="form-control" name="deleteexternalid" readonly required hidden>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-danger">Delete</button>
+                <button id="btndeleteexternal" type="submit" class="btn btn-danger">Delete</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
@@ -248,6 +246,23 @@
 
 
 <script>
+var externalformdiv = document.getElementById("externalformdiv");
+var externalbtndiv = document.getElementById("externalbtndiv");
+var btnaddparticipant = document.getElementById("btnaddparticipant");
+var btnaddexternal = document.getElementById("btnaddexternal");
+var selectstudent = document.getElementById("student_id");
+var student_id = selectstudent.value;
+var activesession = <?= json_encode($academicsession) ?>;
+if (!activesession) {
+    externalbtndiv.remove();
+    externalformdiv.remove();
+}
+if (student_id) {
+    btnaddparticipant.disabled = false;
+} else {
+    btnaddparticipant.disabled = true;
+}
+
 $('#editexternal').on('show.bs.modal', function(e) {
     var id = $(e.relatedTarget).data('id');
     var title = $(e.relatedTarget).data('title');
@@ -269,6 +284,7 @@ $('#addparticipant').on('show.bs.modal', function(e) {
 $('#addparticipant').on('hide.bs.modal', function(e) {
     texttitle.innerHTML = '';
 });
+//
 $('#deleteparticipant').on('show.bs.modal', function(e) {
     var title = $(e.relatedTarget).data('title');
     var external_id = $(e.relatedTarget).data('externalid');
@@ -282,17 +298,20 @@ $('#deleteparticipant').on('show.bs.modal', function(e) {
 $('#deleteparticipant').on('hide.bs.modal', function(e) {
     texttitle.innerHTML = '';
 });
+//
+var deletetext = document.getElementById("deletetitle");
+$('#deleteexternal').on('show.bs.modal', function(e) {
+    var externalid = $(e.relatedTarget).data('externalid');
+    var externaltitle = $(e.relatedTarget).data('externaltitle');
+    $(e.currentTarget).find('input[name="deleteexternalid"]').val(externalid);
+    deletetext.innerHTML += externaltitle;
+});
+$('#deleteexternal').on('hide.bs.modal', function(e) {
+    deletetext.innerHTML = '';
+});
 $('[data-toggle="tooltip"]').tooltip({
     animated: 'fade',
     placement: 'bottom',
     html: true
-});
-$(document).ready(function() {
-    $("#selectstudent").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $(".form-control option").filter(function() {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-    });
 });
 </script>

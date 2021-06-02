@@ -20,13 +20,17 @@ class Pages extends CI_Controller
             $profileComplete = (isset($userspecific)) ? true : false;
 
             $activesession = $this->academic_model->get_activeacademicsession();
-            $activities = $this->activity_model->get_upcomingactivities($user['sig_id'], $activesession['id']);
-            foreach ($activities as $key => $act) {
-                $date_event = date_create($act['datetime_start']);
-                $date_now = date_create(date('y-m-d'));
-                $diff = date_diff($date_now, $date_event);
-                $d = ($date_event < $date_now) ? 'Event passed' : $diff->format("%r%a days");
-                $activities[$key]['diff'] = $d;
+            if ($activesession) {
+                $activities = $this->activity_model->get_upcomingactivities($user['sig_id'], $activesession['id']);
+                foreach ($activities as $key => $act) {
+                    $date_event = date_create($act['datetime_start']);
+                    $date_now = date_create(date('y-m-d'));
+                    $diff = date_diff($date_now, $date_event);
+                    $d = ($date_event < $date_now) ? 'Event passed' : $diff->format("%r%a days");
+                    $activities[$key]['diff'] = $d;
+                }
+            } else {
+                $activities = array();
             }
             $coursecount = $this->student_model->get_studentbycourse($user['sig_id']);
             $intakedata = $this->student_model->get_studentbyintake($user['sig_id']);

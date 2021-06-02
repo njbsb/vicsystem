@@ -16,7 +16,7 @@
             </h6>
             <div class="card-body" style="padding-top:0.5rem; padding-bottom:0.5rem;">
                 <?php if ($president['userphoto']) : ?>
-                <a data-toggle="tooltip" title="<?= $president['name'] ?>" href="<?= site_url('student/' . $president['student_id']) ?>"><img class="rounded-circle" style="object-fit:cover;"
+                <a data-toggle="tooltip" title="<?= $president['name'] ?>" href="<?= site_url('student/' . $president['student_id']) ?>"><img class="rounded-circle img-circle"
                         src="<?= $president['userphoto'] ?>" alt="" width="150" height="150"></a>
                 <?php endif ?>
                 <h5 class="card-title" style="margin-bottom: 0.3rem; margin-top:0.4rem;">
@@ -26,7 +26,7 @@
                     <a href="<?= site_url('/student/' . $president['student_id']) ?>"><?= $president['name'] ?></a>
                     <?php endif ?>
                 </h5>
-                <p class="card-subtitle text-muted">Year <?= $president['year'] ?></p>
+                <p class="card-subtitle text-white">Year <?= $president['year'] ?></p>
             </div>
         </div>
     </div>
@@ -42,8 +42,8 @@
             </h6>
             <div class="card-body" style="padding-top:0.5rem; padding-bottom:0.5rem;">
                 <?php if ($rows['userphoto']) : ?>
-                <a data-toggle="tooltip" title="<?= $rows['name'] ?>" href="<?= site_url('student/' . $rows['student_id']) ?>"><img class="rounded-circle" style="object-fit:cover;"
-                        src="<?= $rows['userphoto'] ?>" alt="" width="150" height="150"></a>
+                <a data-toggle="tooltip" title="<?= $rows['name'] ?>" href="<?= site_url('student/' . $rows['student_id']) ?>"><img class="rounded-circle img-circle" src="<?= $rows['userphoto'] ?>"
+                        alt="" width="150" height="150"></a>
                 <?php endif ?>
                 <h5 class="card-title" style="margin-bottom: 0.3rem; margin-top:0.4rem;">
                     <?php if ($rows['name'] != '-') : ?>
@@ -53,7 +53,7 @@
                     <?php endif ?>
                 </h5>
                 <?php if ($rows['year'] != '') : ?>
-                <p class="card-subtitle text-muted">Year <?= $rows['year']; ?></p>
+                <p class="card-subtitle text-white">Year <?= $rows['year']; ?></p>
                 <?php endif ?>
             </div>
         </div>
@@ -71,8 +71,8 @@
             </div>
             <div class="card-body" style="padding-top:0.5rem; padding-bottom:0.5rem;">
                 <?php if ($ajk['userphoto']) : ?>
-                <a data-toggle="tooltip" title="<?= $ajk['name'] ?>" href="<?= site_url('student/' . $ajk['student_id']) ?>"><img class="rounded-circle" style="object-fit:cover;"
-                        src="<?= $ajk['userphoto'] ?>" alt="" width="100" height="100"></a>
+                <a data-toggle="tooltip" title="<?= $ajk['name'] ?>" href="<?= site_url('student/' . $ajk['student_id']) ?>"><img class="rounded-circle img-circle" src="<?= $ajk['userphoto'] ?>"
+                        alt="" width="100" height="100"></a>
                 <?php endif ?>
                 <h5 class="card-title" style="margin-bottom: 0.3rem; margin-top:0.4rem;">
                     <a href="<?= site_url('/student/' . $ajk['student_id']) ?>">
@@ -80,7 +80,7 @@
                     </a>
                 </h5>
                 <?php if ($ajk['year'] != '') : ?>
-                <p class="card-subtitle text-muted">Year <?= $ajk['year']; ?></p>
+                <p class="card-subtitle text-white">Year <?= $ajk['year']; ?></p>
                 <?php endif ?>
             </div>
         </div>

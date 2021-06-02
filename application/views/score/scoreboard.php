@@ -21,13 +21,15 @@
         </div>
 
         <hr class="my-2">
+        <?php if ($usertype != 'student') : ?>
         <p class="lead">
             <a class="btn btn-success" href="<?= site_url('score/download_badgeboard') ?>" target="_blank"><i class='fas fa-file-excel'></i> Download</a>
         </p>
+        <?php endif ?>
         <div class="table-responsive">
             <table id="badgeboard" class="table table-hover">
                 <thead>
-                    <tr class="table-primary">
+                    <tr class="table-dark">
                         <th>No</th>
                         <th>Matric</th>
                         <th>Name</th>
@@ -76,14 +78,16 @@
         <hr class="my-2">
         <!-- <p>More info</p> -->
         <?php if ($thisacademicsession) : ?>
+        <?php if ($usertype != 'student') : ?>
         <p class="lead">
             <a class="btn btn-success" href="<?= site_url('score/download_scoreboard')  ?>" target="_blank"><i class='fas fa-file-excel'></i> Download</a>
         </p>
         <?php endif ?>
+        <?php endif ?>
         <div class="table-responsive">
             <table id="scoreboard" class="table table-hover">
-                <thead>
-                    <tr class="table-primary">
+                <thead class="table-dark">
+                    <tr>
                         <th>No</th>
                         <th>Matric</th>
                         <th>Name</th>

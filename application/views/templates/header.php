@@ -46,6 +46,20 @@
     <!-- <link rel="stylesheet" href="<?= base_url('assets/css/sticky-footer.css') ?>"> -->
     <!-- <script src="<?= base_url('assets/js/custom.js') ?>"></script> -->
     <!-- <script src="<?= base_url('assets/js/jquery.min.js') ?>"></script> -->
+    <style>
+    p.home-text {
+        font-size: 20px;
+        line-height: 100%;
+    }
+
+    .home-title {
+        /* font: 48px Montserrat, sans-serif; */
+        font-weight: bolder;
+        font-family: Montserrat, sans-serif;
+        color: #c7286f !important;
+    }
+    </style>
+
 </head>
 
 <body>

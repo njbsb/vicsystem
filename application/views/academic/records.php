@@ -46,7 +46,7 @@
     <div class="card-body"> -->
 <div class="table-responsive">
     <table class="table table-hover text-center ">
-        <thead class="table-primary">
+        <thead class="table-dark">
             <tr>
                 <th>Academic Session</th>
                 <?php if ($scoreplans) : ?>

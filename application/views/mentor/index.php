@@ -3,16 +3,20 @@
     <li class="breadcrumb-item active">Mentor</li>
 </ol>
 <div class="container-fluid text-center">
-    <div class="row">
+    <div class="row justify-content-center">
+        <?php if ($mentors) : ?>
         <?php foreach ($mentors as $mentor) : ?>
-        <div class="col-md-3">
+        <div class="col-sm-6 col-md-4 col-lg-3">
             <div class="card mb-3">
-                <?php $bg = ($mentor['id'] == $mentor_matric) ? 'text-pink' : 'text-dark'; ?>
-                <h4 class="card-header text-white <?= $bg ?>">
-                    <?= ($mentor['id'] == $mentor_matric) ? 'My ' . $mentor['sigcode'] . ' Mentor' : $mentor['sigcode'] ?>
+                <?php $bg = ($mentor['id'] == $mentor_matric) ? 'text-white' : 'text-dark'; ?>
+                <h4 class="card-header <?= $bg ?>">
+                    <?= ($mentor['id'] == $mentor_matric) ? 'My Mentor' : 'Mentor' ?>
                 </h4>
-                <img style="display: block; object-fit:cover; padding:10px; border-radius:50%;" src="<?= $mentor['userphoto'] ?>">
-                <div class="card-body">
+                <div class="card-body text-center" style="text-align: center;">
+                    <div class="container d-flex flex-column align-items-center">
+                        <img class="rounded-circle img-circle" src="<?= $mentor['userphoto'] ?>" width="150" height="150">
+                    </div>
+                    <br>
                     <h5 class="card-title">
                         <a href="<?= site_url('/mentor/' . $mentor['id']) ?>">
                             <?= $mentor['name'] ?>
@@ -20,12 +24,11 @@
                     </h5>
                     <h6 class="card-subtitle text-muted"><?= $mentor['role'] ?></h6>
                 </div>
-
-                <!-- <div class="card-footer">
-                    <?= $mentor['email'] ?>
-                </div> -->
             </div>
         </div>
         <?php endforeach ?>
+        <?php else : ?>
+        <p>No data of mentors</p>
+        <?php endif ?>
     </div>
 </div>

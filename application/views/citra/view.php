@@ -5,4 +5,4 @@
 </ol>
 
 <h2><?= $citra['name_en'] ?></h2>
-<h4 class="text-muted"><?= $citra['name_bm'] ?></h4>
+<h4 class="text-white"><?= $citra['name_bm'] ?></h4>

@@ -11,7 +11,7 @@
         <br>
         <br>
         <table class="table table-hover">
-            <thead class="table-primary">
+            <thead class="table-dark">
                 <tr>
                     <td>No</td>
                     <td>File Name</td>

@@ -4,7 +4,7 @@
 
 <div class="card" style="padding-bottom: 0px; padding-top: 1rem;">
     <div class="card-body">
-        <h5 class="text-right text-muted"><b>Today is <?= date("jS F Y (l)") ?></b></h5>
+        <h5 class="text-right text-white"><b>Today is <?= date("jS F Y (l)") ?></b></h5>
         <h1 class="display-4">Welcome, <?= $user_name ?>!</h1>
         <!-- <?php if (!$profileComplete) : ?>
     <p>We have detected that you have not completed your profile. Update your profile information <a href="<?= base_url("/profile/update") ?>">here</a></p>
@@ -16,14 +16,12 @@
 </div>
 <br>
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-3 col-sm-12">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex flex-column align-items-center text-center">
-                    <img class="rounded-circle" style="object-fit:cover;" src="<?= $user['userphoto'] ?>" alt="" width="150" height="150">
+                    <img class="rounded-circle img-circle" src="<?= $user['userphoto'] ?>" alt="" width="150" height="150">
                     <div class="mt-3">
-                        <!-- <h5 class="card-title">Hello</h5>
-                        <p class="card-subtitle">World</p> -->
                         <h4><?= $this->session->userdata('username') ?></h4>
                         <p class="text-primary mb-1"><?= $user_name ?></p>
                         <p class="text-primary font-size-sm">Video Innovation Club</p>
@@ -48,7 +46,7 @@
         </div>
         <hr>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-9 col-sm-12">
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -88,12 +86,13 @@
             <div class="col-md-12 col-lg-8">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="text-left text-primary"><b>Current Academic Session: <?= $activesession['academicsession'] ?></b></h5>
+                        <?php $academicsession = ($activesession) ? $activesession['academicsession'] : '?' ?>
+                        <h5 class="text-left text-primary"><b>Current Academic Session: <?= $academicsession ?></b></h5>
                         <hr class="my-2">
                         <p>Upcoming activities this semester:</p>
                         <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-primary">
+                            <table id="upcomingactivity" class="table table-hover">
+                                <thead class="table-dark">
                                     <tr>
                                         <th>No</th>
                                         <th>Activity</th>

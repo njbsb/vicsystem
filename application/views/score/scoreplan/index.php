@@ -9,7 +9,7 @@
             <br>
             <div class="table-responsive">
                 <table id="scoreplanindex" class="table table-hover">
-                    <thead class="table-primary">
+                    <thead class="table-dark">
                         <tr>
                             <th>Session</th>
                             <!-- <th>Year</th> -->

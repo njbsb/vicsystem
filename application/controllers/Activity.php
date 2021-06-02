@@ -156,7 +156,12 @@ class Activity extends CI_Controller
         }
         $externals = $this->activity_model->get_externalactivity();
         $academicsession = $this->academic_model->get_activeacademicsession();
-        $students = $this->student_model->get_enrolling_students($academicsession['id']);
+        if ($academicsession) {
+            $students = $this->student_model->get_enrolling_students($academicsession['id']);
+        } else {
+            $students = array();
+        }
+
         foreach ($externals as $i => $external) {
             $externals[$i]['participants'] = $this->activity_model->get_externalactivity_participants($external['id']);
         }

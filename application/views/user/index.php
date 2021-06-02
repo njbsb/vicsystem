@@ -7,7 +7,7 @@
     <div class="card-body">
         <div class="table-responsive">
             <table id="usertable" class="table table-hover">
-                <thead class="table-primary">
+                <thead class="table-dark">
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
@@ -16,7 +16,8 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody class="table-active">
+                <tbody class="table-light">
+                    <?php if ($users) : ?>
                     <?php foreach ($users as $user) : ?>
                     <tr>
                         <td><?= $user['id'] ?></td>
@@ -38,6 +39,7 @@
                         </td>
                     </tr>
                     <?php endforeach ?>
+                    <?php endif ?>
                 </tbody>
                 <tfoot>
                     <tr>

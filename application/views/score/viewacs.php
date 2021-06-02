@@ -10,9 +10,16 @@
 <div class="card">
     <div class="card-body">
         <?php if ($fullscore < 55) : ?>
-        <small class="text-warning">Warning!</small>
-        <small>Seems that your score plan is not configured properly (<?= $fullscore ?>/55).</small>
-        <small>To edit current score plan, go <a href="<?= site_url('scoreplan/' . $academicsession['slug']) ?>">here</a></small>
+        <div class="form-group">
+            <small class="text-danger">Attention!</small>
+            <small>Seems that your score plan is not configured properly (<?= $fullscore ?>/55).</small>
+            <small>To edit current score plan, go <a href="<?= site_url('scoreplan/' . $academicsession['slug']) ?>">here</a></small>
+        </div>
+        <?php endif ?>
+        <?php if ($this->session->userdata('user_type') != 'student' and $enrolling) : ?>
+        <div class="form-group">
+            <a class="btn btn-success" href="<?= site_url('score/download_scoreboard/' . $academicsession['id'])  ?>" target="_blank"><i class='fas fa-file-excel'></i> Download</a>
+        </div>
         <?php endif ?>
         <div class="table-responsive">
             <table class="table table-hover text-center" id="scoreacs">
@@ -39,10 +46,6 @@
                         <td><a class="btn btn-outline-primary btn-sm" href="<?= site_url('score/' . $academicsession['slug'] . '/' . $std['matric']) ?>"><i class='fas fa-pen'></i> Edit</a></td>
                     </tr>
                     <?php endforeach ?>
-                    <?php else : ?>
-                    <tr>
-                        <td>No data</td>
-                    </tr>
                     <?php endif ?>
                 </tbody>
             </table>

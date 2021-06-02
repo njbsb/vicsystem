@@ -202,6 +202,7 @@ class Score extends CI_Controller
             $students[$i]['totalbadge'] = $academicbadge + $activitybadge + $externalbadge;
         }
         $data = array(
+            'usertype' => $this->session->userdata('user_type'),
             'thisacademicsession' => $academicsession,
             'students' => $students,
             'enrollingstudents' => $enrollingstudents
@@ -353,39 +354,46 @@ class Score extends CI_Controller
         if ($acadsession_id == FALSE) {
             $academicsession = $this->academic_model->get_activeacademicsession();
             $students = $this->student_model->get_student();
+        } {
+            $academicsession = $this->academic_model->get_academicsession($acadsession_id, NULL);
+            $students = $this->student_model->get_enrolling_students($acadsession_id);
             foreach ($students as $i => $student) {
-                $activityscore = $this->scoretable->calculate_activityscore($student['id'], $academicsession['id']);
-                $workshopscore = $this->scoretable->calculate_workshopscore($student['id'], $academicsession['id']);
-                $componentscore = $this->scoretable->calculate_componentscore($student['id'], $academicsession['id']);
-                $students[$i]['activityscore'] = $activityscore;
-                $students[$i]['workshopscore'] = $workshopscore;
-                $students[$i]['componentscore'] = $componentscore;
-                $students[$i]['totalscore'] = $activityscore + $workshopscore + $componentscore;
+                $students[$i]['id'] = $student['matric'];
             }
-            header('Content-Type: application/vnd.ms-excel');
-            header('Content-Disposition: attachment;filename="Scoreboard ' . $academicsession['academicsession'] . '.xlsx"');
-            $spreadsheet = new Spreadsheet();
-            $sheet = $spreadsheet->getActiveSheet();
+        }
+        foreach ($students as $i => $student) {
+            $activityscore = $this->scoretable->calculate_activityscore($student['id'], $academicsession['id']);
+            $workshopscore = $this->scoretable->calculate_workshopscore($student['id'], $academicsession['id']);
+            $componentscore = $this->scoretable->calculate_componentscore($student['id'], $academicsession['id']);
+            $students[$i]['activityscore'] = $activityscore;
+            $students[$i]['workshopscore'] = $workshopscore;
+            $students[$i]['componentscore'] = $componentscore;
+            $students[$i]['totalscore'] = $activityscore + $workshopscore + $componentscore;
+        }
 
-            $sheet->setCellValue('A1', 'Academic Year');
-            $sheet->setCellValue('B1', 'Semester');
-            $sheet->setCellValue('C1', 'Matric');
-            $sheet->setCellValue('D1', 'Name');
-            $sheet->setCellValue('E1', 'Academic Score');
-            $sheet->setCellValue('F1', 'Activity Score');
-            $sheet->setCellValue('G1', 'External Score');
-            $sheet->setCellValue('H1', 'Total Score (55%)');
-            foreach ($students as $i => $student) {
-                $i += 1;
-                $sheet->setCellValue('A' . $i + 1, $academicsession['academicyear']);
-                $sheet->setCellValue('B' . $i + 1, $academicsession['semester']);
-                $sheet->setCellValue('C' . $i + 1, $student['id']);
-                $sheet->setCellValue('D' . $i + 1, $student['name']);
-                $sheet->setCellValue('E' . $i + 1, $student['activityscore']);
-                $sheet->setCellValue('F' . $i + 1, $student['workshopscore']);
-                $sheet->setCellValue('G' . $i + 1, $student['componentscore']);
-                $sheet->setCellValue('H' . $i + 1, $student['totalscore']);
-            }
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Scoreboard ' . $academicsession['academicsession'] . '.xlsx"');
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'Academic Year');
+        $sheet->setCellValue('B1', 'Semester');
+        $sheet->setCellValue('C1', 'Matric');
+        $sheet->setCellValue('D1', 'Name');
+        $sheet->setCellValue('E1', 'Academic Score');
+        $sheet->setCellValue('F1', 'Activity Score');
+        $sheet->setCellValue('G1', 'External Score');
+        $sheet->setCellValue('H1', 'Total Score (55%)');
+        foreach ($students as $i => $student) {
+            $i += 1;
+            $sheet->setCellValue('A' . $i + 1, $academicsession['academicyear']);
+            $sheet->setCellValue('B' . $i + 1, $academicsession['semester']);
+            $sheet->setCellValue('C' . $i + 1, $student['id']);
+            $sheet->setCellValue('D' . $i + 1, $student['name']);
+            $sheet->setCellValue('E' . $i + 1, $student['activityscore']);
+            $sheet->setCellValue('F' . $i + 1, $student['workshopscore']);
+            $sheet->setCellValue('G' . $i + 1, $student['componentscore']);
+            $sheet->setCellValue('H' . $i + 1, $student['totalscore']);
         }
 
         $writer = new Xlsx($spreadsheet);

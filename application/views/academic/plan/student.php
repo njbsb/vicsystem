@@ -28,7 +28,7 @@
     <div class="card-body">
         <div class="table-responsive">
             <table id="tableacademicplan" class="table display table-hover">
-                <thead class="table-primary">
+                <thead class="table-dark">
                     <tr>
                         <th>Academic Session</th>
                         <th>GPA Target</th>

@@ -3,13 +3,13 @@
     <li class="breadcrumb-item active">Score</li>
 </ol>
 
-<h2 class="margin text-primary"><?= $title ?></h2>
+<h2 class="margin text-white"><?= $title ?></h2>
 <div class="card">
     <div class="card-body">
 
         <div class="table-responsive">
             <table class="table table-hover" id="scoretable">
-                <thead class="table-primary">
+                <thead class="table-dark">
                     <tr>
                         <th>Academic Year</th>
                         <th>Academic Session</th>
