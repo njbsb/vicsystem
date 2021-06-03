@@ -27,16 +27,17 @@
                         <p class="text-primary font-size-sm">Video Innovation Club</p>
                         <a class="btn btn-primary" href="<?= site_url('profile') ?>">Profile</a>
                         <a class="btn btn-outline-primary" href="<?= site_url('profile/update') ?>">Edit</a>
+                        <?php if (!$profileComplete) : ?>
+                        <!-- <br> -->
+                        <div style="line-height: 100%; margin-top:8px;">
+                            <small>Please update your profile first</small>
+                        </div>
+                        <?php endif ?>
                     </div>
 
                 </div>
             </div>
         </div>
-        <?php if (!$profileComplete) : ?>
-        <br>
-        <p class="text-center text-warning"><b>Attention</b></p>
-        <p>We have detected that you have not completed your <?= $this->session->userdata('user_type') ?> profile. Go to Profile -> Edit to update.</p>
-        <?php endif ?>
         <br>
         <div class="card" style="border-radius: 12px">
             <div class="card-body text-center">
@@ -123,31 +124,7 @@
     </div>
 </div>
 
-<div id="defaultpassword" class="modal fade card">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Welcome!</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- <h5 class="text-warning">But Warning</h5> -->
-                <p>You just logged in using the default password. Kindly proceed to change your password first.</p>
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-primary" href="<?= site_url('changepassword') ?>" class="btn btn-primary">Change my password</a>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
-var defaultpassword = <?= json_encode($defaultpassword) ?>;
-if (defaultpassword) {
-    $("#defaultpassword").modal()
-}
 var pieC = document.getElementById('pieChart').getContext('2d');
 var bData = JSON.parse(`<?php echo $barchart_data; ?>`);
 var btx = document.getElementById('barChart').getContext('2d');
