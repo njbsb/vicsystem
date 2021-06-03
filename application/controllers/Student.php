@@ -24,7 +24,7 @@ class Student extends CI_Controller
                 redirect(site_url());
                 break;
             case 'mentor':
-                $students = $this->student_model->get_student('', $sig_id);
+                $students = $this->student_model->get_activestudents();
                 $title = $sig['code'] . ' Students';
                 break;
             case 'admin':
@@ -48,12 +48,9 @@ class Student extends CI_Controller
             show_404();
         }
         $yearjoined = $student['yearjoined'];
-        if (date('Y') - $yearjoined + 1 > 4) {
-            $duration = ' (' . $yearjoined . ' - ' . ($yearjoined + 4) . ')';
-            $student['year'] = 'Alumni' . $duration;
-        } else {
-            $student['year'] = date('Y') - $yearjoined + 1;
-        }
+        $year = date('Y') - $yearjoined + 1;
+        $duration = sprintf('(%s - %s)', $yearjoined, $yearjoined + 4);
+        $student['year'] = ($year > 4) ? 'Alumni ' . $duration : $year;
         $data = array(
             'student' => $student,
             'activity_roles' => $this->committee_model->get_activityroles($student_id),

@@ -133,13 +133,17 @@ class Academic extends CI_Controller
         $student_id = $this->session->userdata('username');
         $student = $this->student_model->get_student($student_id);
         $activesession = $this->academic_model->get_activeacademicsession();
+        if ($activesession) {
+            $currentacademicplan = $this->academic_model->get_this_academicplan($student_id, $activesession['id']);
+            $examdate = date('Y-m-d', strtotime("+4 months", strtotime($activesession['startdate'])));
+        } else {
+            $currentacademicplan = array();
+            $examdate = null;
+        }
         $data = array(
             'student_id' => $student_id,
             'student' => $student,
-            'thisacademicplan' => $this->academic_model->get_this_academicplan(
-                $student_id,
-                $activesession['id']
-            ),
+            'thisacademicplan' => $currentacademicplan,
             'academicsessions' => $this->academic_model->get_academicsession(),
             'academicyears' => $this->academic_model->get_academicyear(),
             'semesters' => $this->semester_model->get_semesters(),
@@ -149,7 +153,7 @@ class Academic extends CI_Controller
             ),
             'activesession' => $activesession,
             'today' => time(),
-            'examdate' => date('Y-m-d', strtotime("+4 months", strtotime($activesession['startdate'])))
+            'examdate' => $examdate
         );
         $this->load->view('templates/header');
         $this->load->view('academic/plan/student', $data);
@@ -369,9 +373,19 @@ class Academic extends CI_Controller
                 $enrolledstudents = null;
                 $text = 'You are currently not within any active academic year or session. Please configure the academic year and session date properly';
             }
+            $availablestudents = $this->student_model->get_activestudents();
+            foreach ($availablestudents as $i => $avail) {
+                if ($enrolledstudents) {
+                    foreach ($enrolledstudents as $enrol) {
+                        if ($enrol['matric'] == $avail['id']) {
+                            unset($avail[$i]);
+                        }
+                    }
+                }
+            }
             $data = array(
                 'title' => 'Enrollment Session',
-                'availablestudents' => $this->student_model->get_available_sigstudents($enrolledstudents),
+                'availablestudents' => $availablestudents,
                 'enrolledstudents' => $enrolledstudents,
                 'activesession' => $activesession,
                 'text' => $text

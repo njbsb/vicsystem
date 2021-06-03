@@ -21,7 +21,7 @@ class Pages extends CI_Controller
 
             $activesession = $this->academic_model->get_activeacademicsession();
             if ($activesession) {
-                $activities = $this->activity_model->get_upcomingactivities($user['sig_id'], $activesession['id']);
+                $activities = $this->activity_model->get_upcomingactivities($activesession['id']);
                 foreach ($activities as $key => $act) {
                     $date_event = date_create($act['datetime_start']);
                     $date_now = date_create(date('y-m-d'));
@@ -32,8 +32,8 @@ class Pages extends CI_Controller
             } else {
                 $activities = array();
             }
-            $coursecount = $this->student_model->get_studentbycourse($user['sig_id']);
-            $intakedata = $this->student_model->get_studentbyintake($user['sig_id']);
+            $coursecount = $this->student_model->get_studentbycourse();
+            $intakedata = $this->student_model->get_studentbyintake();
             $pieData = [];
             $barData = [];
             $totalmembercount = 0;
@@ -46,18 +46,16 @@ class Pages extends CI_Controller
                 $barData['label'][] = $intake->yearjoined;
                 $barData['data'][] = $intake->intake_count;
             }
-            $defaultpassword = (md5($username) == $user['password']) ? true : false;
             $data = array(
                 'user_name' => $user['name'],
                 'user' => $user,
                 'profileComplete' => $profileComplete,
                 'activesession' => $this->academic_model->get_activeacademicsession(),
-                'birthdaymembers' => $this->user_model->get_birthdaymembers($user['sig_id']),
+                'birthdaymembers' => $this->user_model->get_birthdaymembers(),
                 'upcomingactivities' => $activities,
                 'chart_data' => json_encode($pieData),
                 'total_count' => $totalmembercount,
-                'barchart_data' => json_encode($barData),
-                'defaultpassword' => $defaultpassword
+                'barchart_data' => json_encode($barData)
             );
             $this->load->view('templates/header');
             $this->load->view('pages/home_user', $data);

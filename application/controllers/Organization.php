@@ -56,7 +56,7 @@ class Organization extends CI_Controller
                 }
             }
         }
-        $sigmembers = $this->student_model->get_sigstudents($sig_id);
+        $sigmembers = $this->student_model->get_activestudents();
         foreach ($sigmembers as $i => $member) {
             foreach ($committees as $com) {
                 if ($member['id'] == $com['student_id']) {

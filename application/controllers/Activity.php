@@ -44,7 +44,7 @@ class Activity extends CI_Controller
             'committees' => $this->activity_model->get_committees($activity['id']),
             'categories' => $this->category_model->get_category(),
             'activity_roles' => $this->role_model->get_roles_activity(),
-            'sig_members' => $this->student_model->get_sigstudents($activity['sig_id']),
+            'sig_members' => $this->student_model->get_activestudents(),
             'highcoms_id' => $this->committee_model->get_acthighcoms_id()
         );
         if ($this->session->userdata('user_type') == 'mentor') {
@@ -83,7 +83,7 @@ class Activity extends CI_Controller
                 'sigs' => $this->sig_model->get_sig(),
                 'mentors' =>  $this->mentor_model->get_sigmentors($sig_id),
                 'semesters' => $this->semester_model->get_semesters(),
-                'sigstudents' => $this->student_model->get_sigstudents($sig_id),
+                'sigstudents' => $this->student_model->get_activestudents(),
                 'highcoms' => $this->activity_model->get_act_highcoms_position(),
                 'activesession' => $this->academic_model->get_activeacademicsession()
             );
@@ -141,7 +141,7 @@ class Activity extends CI_Controller
             'mentors' => $this->mentor_model->get_mentor(),
             'semesters' => $this->semester_model->get_semesters(),
             'highcoms' => $this->activity_model->get_highcoms($activity['id']),
-            'sigstudents' => $this->student_model->get_sigstudents($activity['sig_id']),
+            'sigstudents' => $this->student_model->get_activestudents(),
             'activity' => $activity,
         );
         $this->load->view('templates/header');
@@ -156,15 +156,27 @@ class Activity extends CI_Controller
         }
         $externals = $this->activity_model->get_externalactivity();
         $academicsession = $this->academic_model->get_activeacademicsession();
-        if ($academicsession) {
-            $students = $this->student_model->get_enrolling_students($academicsession['id']);
-        } else {
-            $students = array();
+        // if ($academicsession) {
+        //     // $students = $this->student_model->get_enrolling_students($academicsession['id']);
+        //     $students = $this->student_model->get_activestudents();
+        // } else {
+        //     $students = array();
+        // }
+        $students = $this->student_model->get_activestudents();
+        foreach ($externals as $i => $external) {
+            $participants = $this->activity_model->get_externalactivity_participants($external['id']);
+            $availablestudents = $this->student_model->get_activestudents();
+            foreach ($availablestudents as $avail) {
+                foreach ($participants as $participant) {
+                    if ($participant['id'] == $avail['id']) {
+                        unset($availablestudents[$i]);
+                    }
+                }
+            }
+            $externals[$i]['participants'] = $participants;
+            $externals[$i]['availablestudents'] = $availablestudents;
         }
 
-        foreach ($externals as $i => $external) {
-            $externals[$i]['participants'] = $this->activity_model->get_externalactivity_participants($external['id']);
-        }
         $data = array(
             'externals' => $externals,
             'academicsession' => $academicsession,
