@@ -378,7 +378,7 @@ class Academic extends CI_Controller
                 if ($enrolledstudents) {
                     foreach ($enrolledstudents as $enrol) {
                         if ($enrol['matric'] == $avail['id']) {
-                            unset($avail[$i]);
+                            unset($availablestudents[$i]);
                         }
                     }
                 }
