@@ -296,7 +296,6 @@ class Score_model extends CI_Model
             # returns all scoreplans of specific sig
             $this->db->select("scp.*, act.title, acs.slug, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
                 ->from('score_plan as scp')
-                // ->where('scp.sig_id', $sig_id)
                 ->join('academicsession as acs', 'scp.acadsession_id = acs.id', 'left')
                 ->join('academicyear as acy', 'acy.id = acs.acadyear_id', 'left')
                 ->join('activity as act', 'scp.activity_id = act.id', 'left');
@@ -306,7 +305,6 @@ class Score_model extends CI_Model
                 $this->db->select('scp.*, act.title, actcat.category')
                     ->from('score_plan as scp')
                     ->where(array(
-                        // 'scp.sig_id' => $sig_id,
                         'scp.acadsession_id' => $acadsession_id
                     ))
                     ->join('activitycategory as actcat', 'actcat.code = scp.activitycategory_id', 'left')
@@ -317,7 +315,6 @@ class Score_model extends CI_Model
                 $this->db->select('scp.*, act.title')
                     ->from('score_plan as scp')
                     ->where(array(
-                        // 'scp.sig_id' => $sig_id,
                         'scp.activitycategory_id' => $category_id
                     ))
                     ->join('activity as act', 'scp.activity_id = act.id');

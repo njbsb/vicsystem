@@ -6,22 +6,20 @@ class Student_model extends CI_Model
         $this->load->database();
     }
 
-    public function get_student($student_id = FALSE, $sig_id = FALSE)
+    public function get_student($student_id = FALSE)
     {
-        if ($student_id === FALSE and $sig_id === FALSE) {
-            $this->db->select('user.*')
+        if ($student_id === FALSE) {
+            $this->db->select('user.*, year(startdate) as yearjoined')
                 ->from('user')
                 ->where(array(
-                    'userstatus' => 'active',
-                    'usertype' => 'student'
+                    'usertype' => 'student',
                 ))
                 ->order_by('user.id');
             $query = $this->db->get();
             return $query->result_array();
-        }
-        if ($student_id) {
+        } else {
             # returns specific user
-            $this->db->select("user.*, std.*, mtr.name as mentor_name, prg.program as program_name, 
+            $this->db->select("user.*, std.*, year(user.startdate) as yearjoined, mtr.name as mentor_name, prg.program as program_name, 
         sig.code as sigcode, sig.name as signame, concat(sig.name, ' (', sig.code, ')') as signamecode")
                 ->from('user as user')
                 ->where(array('user.id' => $student_id))
@@ -32,25 +30,28 @@ class Student_model extends CI_Model
             $query = $this->db->get();
             return $query->row_array();
         }
-        if ($sig_id) {
-            # returns active students under specific sig
-            $this->db->select('user.*')
-                ->from('user')
-                ->join('student as std', 'user.id = std.matric', 'left')
-                ->where(array(
-                    'user.userstatus' => 'active',
-                    'user.sig_id' => $sig_id,
-                    'user.usertype' => 'student'
-                ))
-                ->order_by('user.id');
-            $query = $this->db->get();
-            return $query->result_array();
-        }
     }
 
+    public function get_activestudents()
+    {
+        $now = date('Y-m-d');
+        $this->db->select('user.*, year(user.startdate) as intake')
+            ->from('user')
+            ->join('student as std', 'user.id = std.matric', 'left')
+            ->where(array(
+                'startdate <=' => $now,
+                'enddate >=' => $now,
+                'user.usertype' => 'student'
+            ))
+            ->order_by('user.id');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    # for download
     public function get_studentdata()
     {
-        $this->db->select('user.*, student.*, mentor.name as mentorname')
+        $this->db->select('user.*, year(user.startdate) as yearjoined, student.*, mentor.name as mentorname')
             ->from('user')
             ->where(array(
                 'user.usertype' => 'student'
@@ -69,30 +70,28 @@ class Student_model extends CI_Model
         return $query->row_array();
     }
 
-    public function get_studentbycourse($sig_id)
+    public function get_studentbycourse()
     {
         $this->db->select('program_id, count(*) as program_count')
             ->from('student')
             ->join('user', 'user.id = student.matric')
-            ->where('user.sig_id', $sig_id)
             ->group_by('program_id');
         $query = $this->db->get();
         return $query->result();
     }
 
-    public function get_studentbyintake($sig_id)
+    public function get_studentbyintake()
     {
         $currentyear = intval(date('Y'));
         $limityear = $currentyear - 4;
-        $this->db->select('user.yearjoined, count(*) as intake_count')
+        $this->db->select('year(user.startdate) as yearjoined, count(*) as intake_count')
             ->from('user')
             ->join('student', 'user.id = student.matric', 'left')
             ->where(array(
                 'user.usertype' => 'student',
-                'user.sig_id' => $sig_id,
-                'user.yearjoined >' => $limityear
+                'year(user.startdate) >' => $limityear
             ))
-            ->group_by('yearjoined');
+            ->group_by('year(user.startdate)');
         $query = $this->db->get();
         return $query->result();
     }
@@ -103,49 +102,12 @@ class Student_model extends CI_Model
         return $query->row()->superior_id;
     }
 
-    public function get_sigstudents($sig_id)
-    {
-        $currentyear = intval(date('Y'));
-        $limityear = $currentyear - 4;
-        $this->db->select('user.id, user.name')
-            ->from('user as user')
-            ->where(array(
-                'sig_id' => $sig_id,
-                'usertype' => 'student',
-                'userstatus' => 'active'
-            ))
-            ->join('student', 'student.matric = user.id', 'left')
-            // ->join('academicplan as acp', 'user.id = acp.student_id', 'left')
-            ->where('user.yearjoined >=', $limityear)
-            ->order_by('user.yearjoined', 'desc');
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-
-    public function get_available_sigstudents($enrolledstudents)
-    {
-        $this->db->select('std.matric, user.name, std.yearjoined')
-            ->from('student as std')
-            ->join('user', 'user.id = std.matric')
-            ->where(array(
-                'user.userstatus' => 'active'
-            ));
-        if (isset($enrolledstudents)) {
-            foreach ($enrolledstudents as $std) {
-                $this->db->where_not_in('std.matric', $std['matric']);
-            }
-        }
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-
     public function get_enrolling_students($acadsession_id)
     {
         # those that has data in the academicplan
         $this->db->select('acp.student_id as matric, user.name, acp.gpa_target, acp.gpa_achieved')
             ->from('academicplan as acp')
             ->join('user', 'user.id = acp.student_id')
-            // ->join('user', array('user.id' => 'acp.student_id', 'user.sig_id' => $sig_id))
             ->where(array(
                 'acp.acadsession_id' => $acadsession_id
             ));
@@ -170,9 +132,6 @@ class Student_model extends CI_Model
                 ->set($studentdata)
                 ->insert('student');
         }
-
-        // $this->db->where('matric', $id);
-        // return $this->db->update('student', $studentdata);
     }
 
     public function update_activity_highcoms($activity_id, $highcoms)

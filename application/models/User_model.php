@@ -13,41 +13,44 @@ class User_model extends CI_Model
             'id' => $username,
             'password' => $password
         ));
-        if ($query->num_rows() == 1 and $query->row(0)->userstatus == 'active') {
+        if ($query->num_rows() == 1 and $query->row(0)->validated) {
             return $query->row(0)->id;
         } else {
             return false;
         }
     }
 
-    public function get_user($user_id = FALSE, $sig_id = FALSE)
+    public function get_user($user_id = FALSE)
     {
-        if ($user_id === FALSE and $sig_id === FALSE) {
+        if ($user_id === FALSE) {
             # return array of users
-            $this->db->select('id, name, userstatus, usertype, sig_id, userphoto')
-                ->from('user as user');
+            $this->db->select('user.*, year(user.startdate) as yearjoined')
+                ->from('user');
             $query = $this->db->get();
             return $query->result_array();
-        }
-        if ($user_id) {
+        } else {
             # return specific user
             $this->db->select('user.*, sig.code, sig.name as signame')
                 ->from('user')
                 ->where('user.id', $user_id)
-                // ->join('usertype as ust', 'user.usertype_id = ust.id', 'left')
-                // ->join('userstatus as uss', 'user.userstatus_id = uss.id', 'left')
                 ->join('sig as sig', 'user.sig_id = sig.code', 'left');
             $query = $this->db->get();
             return $query->row_array();
         }
-        if ($sig_id) {
-            # returns user with specific sig
-            $this->db->select('id, name, userstatus, usertype, userphoto')
-                ->from('user')
-                ->where('sig_id', $sig_id);
-            $query = $this->db->get();
-            return $query->result_array();
-        }
+    }
+
+    # for download
+    public function get_userdata()
+    {
+        # return array of users
+        $this->db->select('user.*, year(user.startdate) as yearjoined, student.program_id, student.parent_num1, student.parent_num2, student.address, 
+        superior.name as mentorname, mentor.position, mentor.roomnum')
+            ->from('user')
+            ->join('user as superior', 'superior.id = user.superior_id', 'left')
+            ->join('student', 'user.id = student.matric', 'left')
+            ->join('mentor', 'user.id = mentor.matric', 'left');
+        $query = $this->db->get();
+        return $query->result_array();
     }
 
     public function register_user($userdata)
@@ -57,24 +60,20 @@ class User_model extends CI_Model
 
     public function update_user($user_id, $userdata)
     {
-        $this->db->where('id', $user_id);
-        return $this->db->update('user', $userdata);
+        return $this->db->where('id', $user_id)
+            ->update('user', $userdata);
     }
 
     public function delete_user($user_id)
     {
-        $this->db->where('id', $user_id);
-        $this->db->delete('user');
-        return true;
+        return $this->db->where('id', $user_id)
+            ->delete('user');
     }
 
     public function get_user_superior($id)
     {
         $superior_id = $this->db->get_where('user', array('id' => $id))->row()->superior_id;
         $query = $this->db->get_where('user', array('id' => $superior_id));
-        // $query = $this->db->select('user.id, user.name')
-        //     ->from('user')
-        //     ->where('id', $superior_id)->get();
         return $query->row_array();
     }
 
@@ -90,9 +89,7 @@ class User_model extends CI_Model
     {
         $query = $this->db->get_where(
             'mentor',
-            array(
-                'matric' => $user_id
-            )
+            array('matric' => $user_id)
         );
         if ($query->num_rows() > 0) {
             return true;
@@ -105,9 +102,7 @@ class User_model extends CI_Model
     {
         $query = $this->db->get_where(
             'student',
-            array(
-                'matric' => $user_id
-            )
+            array('matric' => $user_id)
         );
         if ($query->num_rows() > 0) {
             return true;
@@ -139,31 +134,13 @@ class User_model extends CI_Model
         return $my_sig;
     }
 
-    public function get_usertypename($user_id)
-    {
-        $usertype_name = $this->db->select('usertype')->get_where('usertype', array('id' => $user_id))->row()->usertype;
-        return $usertype_name;
-    }
-
-    public function get_userstatus()
-    {
-        $query = $this->db->get('userstatus');
-        return $query->result_array();
-    }
-
-    public function approve_user($user_id)
-    {
-        $this->db->where('id', $user_id);
-        return $this->db->update('user', array('userstatus' => 'active'));
-    }
-
-    public function get_birthdaymembers($sig_id)
+    public function get_birthdaymembers()
     {
         // current month
         $this->db->select('name, dob')
-            ->from('user')->where(array(
-                'MONTH(dob)' => date('m'),
-                'sig_id' => $sig_id
+            ->from('user')
+            ->where(array(
+                'MONTH(dob)' => date('m')
             ));
         $query = $this->db->get();
         return $query->result_array();
@@ -171,8 +148,7 @@ class User_model extends CI_Model
 
     public function id_exist($user_id)
     {
-        $this->db->where('id', $user_id);
-        $query = $this->db->get('user');
+        $query = $this->db->get_where('user', array('id' => $user_id));
         if ($query->num_rows() > 0) {
             return true;
         } else {
@@ -183,7 +159,7 @@ class User_model extends CI_Model
     public function id_active($user_id)
     {
         $query = $this->db->get_where('user', array('id' => $user_id));
-        if ($query->num_rows() > 1 and  $query->row()->userstatus_id != 2) {
+        if ($query->num_rows() > 1 and $query->row()->startdate < date('Y-m-d')) {
             return false;
         } else {
             return true;
@@ -219,5 +195,16 @@ class User_model extends CI_Model
         return $this->db->set('password', $password)
             ->where('id', $username)
             ->update('user');
+    }
+
+    public function check_defaultpassword($username)
+    {
+        $query = $this->db->get_where('user', array('id' => $username));
+        $password = $query->row(0)->password;
+        if (md5($username) == $password) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

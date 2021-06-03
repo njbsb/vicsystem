@@ -9,12 +9,13 @@ class Mentor_model extends CI_Model
 
     public function get_mentor($matric = FALSE)
     {
+        $now = date('Y-m-d');
         if ($matric === FALSE) {
             $this->db->select('user.id, user.name, user.email, mtr.position, sig.code as sigcode, sig.name as signame, role.role')
-                ->from('user as user')
+                ->from('user')
                 ->where(array(
                     'usertype' => 'mentor',
-                    'userstatus' => 'active'
+                    'user.startdate <=' => $now
                 ))
                 ->join('mentor as mtr', 'mtr.matric = user.id', 'left')
                 ->join('sig as sig', 'sig.code = user.sig_id', 'left')
@@ -48,7 +49,7 @@ class Mentor_model extends CI_Model
             ->join('user', 'mtr.matric = user.id', 'left')
             ->where(array(
                 'user.sig_id' => $sig_id,
-                'user.userstatus' => 'active' #active
+                'user.startdate <=' => date('Y-m-d')
             ))
             ->join('role_organization as role', 'role.id = mtr.role_id')
             ->join('sig as sig', 'sig.code = user.sig_id', 'left');

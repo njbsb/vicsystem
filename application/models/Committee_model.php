@@ -9,8 +9,7 @@ class Committee_model extends CI_Model
     public function get_org_highcom($position, $acadyear_id)
     {
         # to get highcom using position string
-        $currentyear = date('Y');
-        $this->db->select("orgcom.*, user.name, user.email, user.userphoto, role.role, (" . $currentyear . " - user.yearjoined + 1 ) as year")
+        $this->db->select("orgcom.*, user.name, user.email, user.userphoto, role.role, (year(CURDATE()) - year(user.startdate) + 1 ) as year")
             ->from('committee_organization as orgcom')
             ->join('user', 'user.id = orgcom.student_id')
             ->join('role_organization as role', 'role.id = orgcom.role_id')
@@ -41,10 +40,9 @@ class Committee_model extends CI_Model
     public function get_org_ajks($acadyear_id)
     {
         # to get members with committee member (AJK) role
-        $currentyear = date('Y') + 1;
-        $this->db->select('orgcom.*, std.name, std.email, std.userphoto, role.role, (' . $currentyear . ' - std.yearjoined) as year')
+        $this->db->select('orgcom.*, user.name, user.email, user.userphoto, role.role, (year(CURDATE()) - year(user.startdate) + 1 ) as year')
             ->from('committee_organization as orgcom')
-            ->join('user as std', 'std.id = orgcom.student_id')
+            ->join('user', 'user.id = orgcom.student_id')
             ->join('role_organization as role', 'role.id = orgcom.role_id')
             ->join('academicyear as acy', 'acy.id = orgcom.acadyear_id')
             ->where(array(

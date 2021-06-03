@@ -84,11 +84,10 @@ class Activity_model extends CI_Model
             ->result_array();
     }
 
-    public function get_upcomingactivities($sig_id, $acadsession_id)
+    public function get_upcomingactivities($acadsession_id)
     {
         $this->db->select('*')
             ->from('activity')->where(array(
-                'sig_id' => $sig_id,
                 'acadsession_id' => $acadsession_id
             ));
         $query = $this->db->get();
