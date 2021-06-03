@@ -12,26 +12,27 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>User type</th>
-                        <th>Status</th>
+                        <th>Uni Status</th>
+                        <th>Validation</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody class="table-light">
                     <?php if ($users) : ?>
                     <?php foreach ($users as $user) : ?>
+                    <?php $statusclass = ($user['validated']) ? 'text-success' : 'text-warning' ?>
                     <tr>
                         <td><?= $user['id'] ?></td>
                         <td><?= $user['name'] ?></td>
                         <td><?= $user['usertype'] ?></td>
-                        <?php if ($user['userstatus'] == 'pending') : ?>
-                        <td class="text-warning"><?= $user['userstatus'] ?></td>
-                        <?php elseif ($user['userstatus'] == 'active') : ?>
-                        <td class="text-success"><?= $user['userstatus'] ?></td>
+                        <td><?= $user['unistatus'] ?></td>
+                        <?php if ($user['validated']) : ?>
                         <?php else : ?>
-                        <td class="text-secondary"><?= $user['userstatus'] ?></td>
                         <?php endif ?>
+
+                        <td class="<?= $statusclass ?>"><?= $user['validationstatus'] ?></td>
                         <td>
-                            <a class="btn btn-sm btn-outline-primary" href="<?= site_url('validate/') . $user['id'] ?>"><i class='fas fa-pen'></i></a>
+                            <a class="btn btn-sm btn-outline-dark" href="<?= site_url('validate/') . $user['id'] ?>"><i class='fas fa-pen'></i></a>
                             <?php if ($user['id'] != $this->session->userdata('username')) : ?>
                             <a class="btn btn-sm btn-outline-danger" data-toggle="modal" data-userid="<?= $user['id'] ?>"
                                 onclick="$('#confirmDelete #formDelete').attr('action', '<?= site_url('user/delete/' . $user['id']) ?>')" href="#confirmDelete"><i class='fas fa-trash-alt'></i></a>
@@ -53,7 +54,9 @@
             </table>
         </div>
         <br>
+        <?php if ($users) : ?>
         <a class="btn btn-success" href="<?= site_url('user/download') ?>" target="_blank"><i class='fas fa-file-excel'></i> Download</a>
+        <?php endif ?>
     </div>
 </div>
 <br>

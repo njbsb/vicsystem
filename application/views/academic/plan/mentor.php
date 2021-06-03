@@ -37,12 +37,9 @@
     <?= form_close() ?>
 </div>
 
-
 <?php if ($this->session->flashdata('message')) : ?>
 <?= $this->session->flashdata('message') ?>
 <?php endif ?>
-
-
 
 <hr>
 <div class="card">

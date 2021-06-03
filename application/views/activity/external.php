@@ -23,8 +23,8 @@
                 <?php if ($usertype != 'student') : ?>
                 <a data-toggle="modal" data-target="#editexternal" data-id="<?= $ext['id'] ?>" data-title="<?= $ext['title'] ?>" data-description="<?= $ext['description'] ?>"
                     data-date="<?= $ext['date'] ?>" class="btn btn-primary btn-sm" href=""><i data-toggle="tooltip" title="Edit Activity" class='fas fa-pen'></i></a>
-                <a data-toggle="modal" data-target="#addparticipant" data-externalid="<?= $ext['id'] ?>" data-title="<?= $ext['title'] ?>" class="btn btn-primary btn-sm" href=""><i
-                        data-toggle="tooltip" title="Add Participant" class='fas fa-user-plus'></i></a>
+                <a data-toggle="modal" data-target="#addparticipant" data-externalid="<?= $ext['id'] ?>" data-availableid="<?= $i ?>" data-title="<?= $ext['title'] ?>" class="btn btn-primary btn-sm"
+                    href=""><i data-toggle="tooltip" title="Add Participant" class='fas fa-user-plus'></i></a>
                 <a data-toggle="modal" data-target="#deleteexternal" data-externalid="<?= $ext['id'] ?>" data-externaltitle="<?= $ext['title'] ?>" class="btn btn-primary btn-sm" href=""><i
                         data-toggle="tooltip" title="Delete Activity" class='fa fa-trash'></i></a>
                 <?php endif ?>
@@ -168,11 +168,11 @@
                     <!-- <input type="text" class="form-control" name="title" readonly> -->
                 </div>
                 <div class="form-group">
-                    <select name="student_id" id="student_id" class="form-control" data-live-search="true" onchange="enablebtnadd()" required>
-                        <option value="" selected disabled>Select student</option>
+                    <select name="student_id" id="student_id" class="form-control" data-live-search="true" required>
+                        <option selected disabled>Select student</option>
                         <?php if ($students) : ?>
                         <?php foreach ($students as $student) : ?>
-                        <option data-tokens="<?= $student['name'] ?>" value="<?= $student['matric'] ?>"><?= $student['name'] ?></option>
+                        <option data-tokens="<?= $student['name'] ?>" value="<?= $student['id'] ?>"><?= $student['name'] ?></option>
                         <?php endforeach ?>
                         <?php endif ?>
                     </select>
@@ -274,9 +274,12 @@ $('#editexternal').on('show.bs.modal', function(e) {
     $(e.currentTarget).find('input[name="editdate"]').val(date);
 });
 var texttitle = document.getElementById('texttitle');
+
 $('#addparticipant').on('show.bs.modal', function(e) {
     var title = $(e.relatedTarget).data('title');
     var external_id = $(e.relatedTarget).data('externalid');
+    var availableid = $(e.relatedTarget).data("availableid");
+    console.log(availableid);
     $(e.currentTarget).find('input[name="external_id"]').val(external_id);
     $(e.currentTarget).find('input[name="title"]').val(title);
     texttitle.innerHTML += title;
@@ -284,7 +287,7 @@ $('#addparticipant').on('show.bs.modal', function(e) {
 $('#addparticipant').on('hide.bs.modal', function(e) {
     texttitle.innerHTML = '';
 });
-//
+
 $('#deleteparticipant').on('show.bs.modal', function(e) {
     var title = $(e.relatedTarget).data('title');
     var external_id = $(e.relatedTarget).data('externalid');

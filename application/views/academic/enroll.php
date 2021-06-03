@@ -29,18 +29,16 @@
                         <th>Intake</th>
                         <th>Matric</th>
                         <th>Name</th>
-                        <!-- <th>Status</th> -->
                     </tr>
                 </thead>
                 <tbody class="table-active">
                     <?php foreach ($availablestudents as $std) : ?>
                     <?php $checked = 'selected'; ?>
                     <tr>
-                        <td><input id="enrollstudents" name="unenrollstudents[]" value="<?= $std['matric'] ?>" type="checkbox" /></td>
-                        <td><?= $std['yearjoined'] ?></td>
-                        <td><?= $std['matric'] ?></td>
+                        <td><input id="enrollstudents" name="unenrollstudents[]" value="<?= $std['id'] ?>" type="checkbox" /></td>
+                        <td><?= $std['intake'] ?></td>
+                        <td><?= $std['id'] ?></td>
                         <td><?= $std['name'] ?></td>
-                        <!-- <td></td> -->
                     </tr>
                     <?php endforeach ?>
                 </tbody>
@@ -50,7 +48,6 @@
                         <td>Joined Year</td>
                         <td>Matric</td>
                         <td>Name</td>
-                        <!-- <td>Status</td> -->
                     </tr>
                 </tfoot>
             </table>

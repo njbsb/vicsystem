@@ -3,14 +3,12 @@
     <li class="breadcrumb-item active">Profile</li>
 </ol>
 
-<!-- <h2 class="text-center"><?= $title; ?></h2> -->
-
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-4 text-center">
             <div class="card border-dark mb-3" style="max-width: 20rem;">
                 <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= $student['userphoto'] ?>">
-                <div class="card-footer text-muted text-center">
+                <div class="card-footer text-white text-center">
                     <?= $student['id'] ?>
                 </div>
             </div>
@@ -21,13 +19,14 @@
                     <h3><b><?= $student['name'] ?></b></h3>
                 </div>
                 <div class="col-6">
-                    <a href="<?= site_url('profile/update') ?>" class="btn btn-outline-primary" style="float:right;"><i class='fas fa-edit'></i> Edit</a>
+                    <a href="<?= site_url('profile/update') ?>" class="btn btn-outline-primary" style="float:right;"><i class='fas fa-pen'></i> Edit</a>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     <h6><b>Club name</b></h6>
                     <h6><b>Program</b></h6>
+                    <h6><b>Year Joined</b></h6>
                     <h6><b>Year</b></h6>
                     <h6><b>Phone Num</b></h6>
                     <h6><b>Email</b></h6>
@@ -37,7 +36,8 @@
                     <h6><?= $student['signamecode'] ?></h6>
                     <h6><?= $student['program_name'] ?></h6>
                     <h6><?= $student['year'] ?></h6>
-                    <h6><a href="#"><?= $student['phonenum'] ?></a></h6>
+                    <h6><?= $student['yearjoined'] ?></h6>
+                    <h6><?= $student['phonenum'] ?></h6>
                     <h6><a href="mailto:<?= $student['email'] ?>"><?= $student['email'] ?></a></h6>
                     <h6><?= $student['mentor_name'] ?></h6>
                 </div>

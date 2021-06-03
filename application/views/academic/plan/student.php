@@ -6,7 +6,12 @@
 <h2><?= $title ?></h2>
 <hr>
 <?php if (!$thisacademicplan) : ?>
+<?php if ($activesession) : ?>
 <p>You are not enrolled in the current academic session (<?= $activesession['academicsession'] ?>). Please contact your mentor.</p>
+<?php else : ?>
+<p>There is not any active session at the moment. Your mentor will update the system accordingly</p>
+<?php endif ?>
+
 <?php else : ?>
 
 <?php if (empty($thisacademicplan['gpa_target'])) : ?>
@@ -16,7 +21,7 @@
 <button class="btn btn-primary" data-toggle="modal" data-target="#setGPA">Set GPA</button>
 <?php else : ?>
 <h6>You have registered this session's GPA target!</h6>
-<?php if ($today >= strtotime($examdate)) : ?>
+<?php if ($today >= strtotime($examdate) and $examdate) : ?>
 <small>It's end of academic session. Your result will soon be updated by your mentor</small><br>
 <?php else : ?>
 <small>Study week on going.</small>
@@ -53,10 +58,6 @@
                         <?= form_close() ?>
                     </tr>
                     <?php endforeach ?>
-                    <?php else : ?>
-                    <tr>
-                        <td>No data found</td>
-                    </tr>
                     <?php endif ?>
                 </tbody>
             </table>

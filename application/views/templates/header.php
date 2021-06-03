@@ -161,21 +161,21 @@
 
     <div id="main" class="container">
         <br>
-        <!-- <?php if ($this->session->flashdata('login_failed')) : ?>
-        <div class="alert alert-dismissible alert-danger">
+        <?php if ($this->session->flashdata('login_failed')) : ?>
+        <!-- <div class="alert alert-dismissible alert-danger">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <strong>Oh snap!</strong> <?= $this->session->flashdata('login_failed') ?>
-        </div>
+        </div> -->
         <?php endif ?>
         <?php if ($this->session->flashdata('user_loggedin')) : ?>
-        <div class="alert alert-dismissible alert-success">
+        <!-- <div class="alert alert-dismissible alert-success">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <strong>Welcome!</strong> <?= $this->session->flashdata('user_loggedin') ?>
-        </div>
+        </div> -->
         <?php endif ?>
         <?php if ($this->session->flashdata('logged_out')) : ?>
-        <div class="alert alert-dismissible alert-success">
+        <!-- <div class="alert alert-dismissible alert-success">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <strong></strong> <?= $this->session->flashdata('logged_out') ?>
-        </div>
-        <?php endif ?> -->
+        </div> -->
+        <?php endif ?>

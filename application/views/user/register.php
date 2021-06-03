@@ -29,9 +29,15 @@
                         <input name="dob" class="form-control" type="date" value="<?= $dob ?>" id="dob" required>
                     </div>
                 </div>
-
             </div>
-            <!-- GENDER -->
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="phonenum">Phone Number</label>
+                        <input value="<?= $phonenum ?>" type="tel" name="phonenum" id="phonenum" class="form-control" placeholder="0123456789" required>
+                    </div>
+                </div>
+            </div>
             <div class="form-group">
                 <label for="gender">Gender</label>
                 <div class="custom-control custom-radio">
@@ -44,38 +50,83 @@
                 </div>
             </div>
             <hr>
-            <!-- EMAIL -->
             <div class="form-group">
                 <label>Email</label>
                 <input value="<?= $email ?>" type="email" class="form-control" name="email" placeholder="Email">
             </div>
-            <!-- PASSWORD -->
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Password</label>
-                        <input value="password" type="password" class="form-control" name="password" placeholder="Password">
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                        <div id="pwtext" class="valid-feedback">Success! You've done it.</div>
                     </div>
 
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Confirm password</label>
-                        <input value="password" type="password" class="form-control" name="confirmpassword" placeholder="Confirm password">
+                        <input type="password" class="form-control" name="confirmpassword" id="confirmpassword" placeholder="Confirm password">
+                        <div id="confirmtext" class="valid-feedback">Success! You've done it.</div>
                     </div>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block">Register</button>
+            <button id="submitform" type="submit" class="btn btn-primary btn-block" disabled>Register</button>
             <?= form_close() ?>
         </div>
     </div>
     <div class="col-md-7">
         <div class="card-body">
-            <!-- <h3>Sign Up Now!</h3> -->
+            <!-- <h3 class="home-title">Sign Up Now!</h3> -->
             <img src="<?= base_url('assets/images/login.png') ?>" style="max-width:100%; max-height: 100%;" alt="">
             <br><br>
             <p>Already have an account? <a href="<?= site_url('login') ?>">Sign In</a></p>
         </div>
     </div>
 </div>
+
+<script>
+var input1 = document.getElementById("password");
+var input2 = document.getElementById("confirmpassword");
+var message1 = document.getElementById("pwtext");
+var message2 = document.getElementById("confirmtext");
+var submitbtn = document.getElementById("submitform");
+
+function checkPasswordMatch() {
+    var password = $("#password").val();
+    var confirmPassword = $("#confirmpassword").val();
+    if (password != confirmPassword) {
+        input2.className = "form-control is-invalid";
+        message2.className = "invalid-feedback";
+        message2.innerHTML = "Password mismatch!";
+        submitbtn.disabled = true;
+    } else {
+        if (password != '' || confirmPassword != '') {
+            input2.className = "form-control is-valid";
+            message2.className = "valid-feedback";
+            message2.innerHTML = "Password match!";
+            submitbtn.disabled = false;
+        }
+    }
+}
+
+function checkEmpty() {
+    var password = $("#password").val();
+    var confirmPassword = $("#confirmpassword").val();
+    if (password == '') {
+        input1.className = "form-control is-invalid";
+        message1.className = "invalid-feedback";
+        message1.innerHTML = "Password cannot be empty!";
+    } else {
+        input1.className = "form-control is-valid";
+        message1.className = "valid-feedback";
+        message1.innerHTML = "";
+    }
+}
+$(document).ready(function() {
+    $("#password").keyup(checkEmpty);
+    $("#password, #confirmpassword").keyup(checkPasswordMatch);
+    // $('#submitpassword').
+});
+</script>
