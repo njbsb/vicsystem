@@ -267,7 +267,10 @@ class Score extends CI_Controller
             $student['totalbadge'] = $academicbadge + $activitybadge + $externalbadge;
             $data = array(
                 'student' => $student,
-                'academicplans' => $academicplans
+                'academicplans' => $academicplans,
+                'academicbadge' => $this->file_model->get_academicbadge(),
+                'activitybadge' => $this->file_model->get_activitybadge(),
+                'externalbadge' => $this->file_model->get_externalbadge()
             );
             $this->load->view('templates/header');
             $this->load->view('score/scoreboardview', $data);

@@ -89,8 +89,10 @@ $route['filelink'] = 'pages/filelink';
 $route['updatelink'] = 'pages/updatelink';
 $route['createlink'] = 'pages/createlink';
 $route['deletelink'] = 'pages/deletelink';
+$route['createbadge'] = 'pages/createbadge';
+$route['updatebadge'] = 'pages/updatebadge';
 
-$route['image'] = 'pages/image';
+$route['badge'] = 'pages/badge';
 
 $route['default_controller'] = 'pages/view';
 $route['(:any)'] = 'pages/view/$1';

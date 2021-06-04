@@ -76,7 +76,7 @@ class Pages extends CI_Controller
                 'templates' => $this->file_model->get_template()
             );
             $this->load->view('templates/header');
-            $this->load->view('pages/template', $data);
+            $this->load->view('pages/filelink', $data);
             $this->load->view('templates/footer');
         } else {
             redirect('home');
@@ -114,16 +114,49 @@ class Pages extends CI_Controller
         redirect('filelink');
     }
 
-    public function image()
+    public function badge()
     {
         if (!$this->session->userdata('username') or $this->session->userdata('user_type') == 'student') {
             redirect('home');
         }
         $data =  array(
-            'images' => $this->file_model->get_image()
+            'images' => $this->file_model->get_badge()
         );
         $this->load->view('templates/header');
-        $this->load->view('pages/images', $data);
+        $this->load->view('pages/badge', $data);
         $this->load->view('templates/footer');
+    }
+
+    public function createimage()
+    {
+        $name = $this->input->post('newtitle');
+        $upload_file = $_FILES['newfile']['tmp_name'];
+        if ($upload_file) {
+            $data = file_get_contents($upload_file);
+            $type = pathinfo($_FILES["newfile"]["name"], PATHINFO_EXTENSION);
+            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+            $imagedata = array(
+                'title' => $name,
+                'photo' => $base64
+            );
+            $this->file_model->create_badge($imagedata);
+        }
+        redirect('badge');
+    }
+
+    public function updateimage()
+    {
+        $id = $this->input->post('editid');
+        $title = $this->input->post('edittitle');
+        $imagedata = array('title' => $title);
+        $upload_file = $_FILES['editfile']['tmp_name'];
+        if ($upload_file) {
+            $data = file_get_contents($upload_file);
+            $type = pathinfo($_FILES["editfile"]["name"], PATHINFO_EXTENSION);
+            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+            $imagedata['photo'] = $base64;
+        }
+        $this->file_model->update_badge($id, $imagedata);
+        redirect('badge');
     }
 }

@@ -440,7 +440,6 @@ class User extends CI_Controller
             $userdata['userphoto'] = $base64;
         }
         $this->user_model->update_user($user_id, $userdata);
-        $user = $this->user_model->get_user($user_id);
         $profileExist = false;
         # specific for each user
         switch ($usertype) {

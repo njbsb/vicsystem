@@ -127,7 +127,7 @@
                             <a class="dropdown-item" href="<?= site_url('citra') ?>">Citra</a>
                             <a class="dropdown-item" href="<?= site_url('collaborator') ?>">Collaborator</a>
                             <a class="dropdown-item" href="<?= site_url('filelink') ?>">File Links</a>
-                            <a class="dropdown-item" href="<?= site_url('image') ?>">Images</a>
+                            <a class="dropdown-item" href="<?= site_url('badge') ?>">Badges</a>
                         </div>
                     </li>
                     <?php endif ?>
