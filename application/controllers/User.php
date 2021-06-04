@@ -46,7 +46,18 @@ class User extends CI_Controller
                             $unistatus = 'Unregistered';
                         }
                     }
+                    switch ($user['usertype']) {
+                        case 'student':
+                            $profileExist = $this->student_model->student_exist($user['id']);
+                            break;
+                        case 'mentor':
+                            $profileExist = $this->mentor_model->mentor_exist($user['id']);
+                            break;
+                    }
+                    $users[$i]['profileicon'] = ($profileExist) ? "<i class='fas fa-check-circle'></i>" : "<i class='fas fa-question-circle'></i>";
+                    $users[$i]['profilestatus'] = ($profileExist) ? "Completed" : "Missing";
                     $users[$i]['unistatus'] = $unistatus;
+                    $users[$i]['profileexist'] = $profileExist;
                 }
                 break;
             case 'student':
@@ -339,6 +350,7 @@ class User extends CI_Controller
             redirect(site_url());
         }
         $username = $this->session->userdata('username');
+
         $this->form_validation->set_rules('password1', 'password 1', 'required');
         $this->form_validation->set_rules('password2', 'password 2', 'required');
         if ($this->form_validation->run() == FALSE) {
@@ -355,6 +367,10 @@ class User extends CI_Controller
                 # tukaq password
                 $password = md5($password1);
                 $this->user_model->change_password($username, $password);
+                $passwordDefault = $this->user_model->check_defaultpassword($username);
+                if ($this->session->userdata('defaultpassword') != $passwordDefault) {
+                    $this->session->set_userdata('defaultpassword', $passwordDefault);
+                }
                 $this->session->set_flashdata('password_changed', 'Password changed successfully');
                 redirect('home');
             }
@@ -414,21 +430,21 @@ class User extends CI_Controller
     {
         $usertype = $this->user_model->get_usertype($user_id);
         $usertype = $this->session->userdata('user_type');
+        $userdata = array('phonenum' => $this->input->post('phonenum'));
         # upload photo logics
         $upload_file = $_FILES['userphoto']['tmp_name'];
         if ($upload_file) {
             $data = file_get_contents($upload_file);
             $type = pathinfo($_FILES["userphoto"]["name"], PATHINFO_EXTENSION);
             $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
-            $userdata = array(
-                'userphoto' => $base64
-            );
-            $this->user_model->update_user($user_id, $userdata);
+            $userdata['userphoto'] = $base64;
         }
+        $this->user_model->update_user($user_id, $userdata);
+        $user = $this->user_model->get_user($user_id);
+        $profileExist = false;
         # specific for each user
         switch ($usertype) {
             case 'admin':
-                //
                 break;
             case 'mentor':
                 $role_id = $this->input->post('role_id');
@@ -437,24 +453,27 @@ class User extends CI_Controller
                 if ($role_id and $roomnum and $position) {
                 }
                 $mentordata = array(
-                    'matric' => $user_id,
                     'role_id' => $this->input->post('role_id'),
                     'roomnum' => $this->input->post('roomnum'),
-                    'position' => $this->input->post('position')
+                    'position' => $this->input->post('position'),
                 );
                 $this->mentor_model->update_mentor($user_id, $mentordata);
+                $profileExist = $this->mentor_model->mentor_exist($user_id);
                 break;
             case 'student':
                 $studentdata = array(
                     'matric' => $user_id,
                     'program_id' => $this->input->post('program_id'),
-                    'phonenum' => $this->input->post('phonenum'),
                     'parent_num1' => $this->input->post('parent1'),
                     'parent_num2' => $this->input->post('parent2'),
                     'address' => $this->input->post('address')
                 );
                 $this->student_model->update_student($user_id, $studentdata);
+                $profileExist = $this->student_model->student_exist($user_id);
                 break;
+        }
+        if ($this->session->userdata('profilecomplete') != $profileExist) {
+            $this->session->set_userdata('profilecomplete', $profileExist);
         }
         redirect('profile');
     }
@@ -624,5 +643,17 @@ class User extends CI_Controller
             }
             redirect(site_url('academicplan/mentor'));
         }
+    }
+
+    # to delete after completing UI improvement
+    public function register_success()
+    {
+        $data = array(
+            'title' => 'Registration Successful',
+            'content' => 'Your registration is currently pending your admin\'s approval. Your admin will inform you once your registration is approved'
+        );
+        $this->load->view('templates/header');
+        $this->load->view('user/register_success', $data);
+        $this->load->view('templates/footer');
     }
 }

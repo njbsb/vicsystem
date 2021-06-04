@@ -95,7 +95,6 @@ class Score extends CI_Controller
         # SCORE COMPONENTS
         $scorecomps['totalpercent'] = (!empty($scorecomps['scores'])) ? array_sum($scorecomps['scores']) : 0;
         $totalwhole += $scorecomps['totalpercent'];
-        // print_r($scoreplans);
         $data = array(
             'title' => 'Score: ' . $student['name'] . ' on ' . $thisacadsession['academicsession'],
             'student_id' => $student['id'],
@@ -170,46 +169,110 @@ class Score extends CI_Controller
         }
     }
 
-    public function scoreboard()
+    public function scoreboard($student_id = NULL)
     {
-        $academicsession = $this->academic_model->get_activeacademicsession();
-        if ($academicsession) {
-            $enrollingstudents = $this->student_model->get_enrolling_students($academicsession['id']);
-            # for score per session
-            foreach ($enrollingstudents as $i => $student) {
-                $activityscore = $this->scoretable->calculate_activityscore($student['matric'], $academicsession['id']);
-                $workshopscore = $this->scoretable->calculate_workshopscore($student['matric'], $academicsession['id']);
-                $componentscore = $this->scoretable->calculate_componentscore($student['matric'], $academicsession['id']);
+        if ($student_id == FALSE) {
+            $academicsession = $this->academic_model->get_activeacademicsession();
+            if ($academicsession) {
+                $enrollingstudents = $this->student_model->get_enrolling_students($academicsession['id']);
+                # for score per session
+                foreach ($enrollingstudents as $i => $student) {
+                    $activityscore = $this->scoretable->calculate_activityscore($student['matric'], $academicsession['id']);
+                    $workshopscore = $this->scoretable->calculate_workshopscore($student['matric'], $academicsession['id']);
+                    $componentscore = $this->scoretable->calculate_componentscore($student['matric'], $academicsession['id']);
 
-                $enrollingstudents[$i]['activityscore'] = $activityscore;
-                $enrollingstudents[$i]['workshopscore'] = $workshopscore;
-                $enrollingstudents[$i]['componentscore'] = $componentscore;
-                $enrollingstudents[$i]['totalscore'] = $activityscore + $workshopscore + $componentscore;
+                    $enrollingstudents[$i]['activityscore'] = $activityscore;
+                    $enrollingstudents[$i]['workshopscore'] = $workshopscore;
+                    $enrollingstudents[$i]['componentscore'] = $componentscore;
+                    $enrollingstudents[$i]['totalscore'] = $activityscore + $workshopscore + $componentscore;
+                }
+            } else {
+                $enrollingstudents = null;
             }
-        } else {
-            $enrollingstudents = null;
-        }
 
-        $students = $this->student_model->get_student();
-        # for cumulative badge
-        foreach ($students as $i => $student) {
+            $students = $this->student_model->get_student();
+            # for cumulative badge
+            foreach ($students as $i => $student) {
+                $academicbadge = $this->scoretable->calculate_academicbadge($student['id']);
+                $activitybadge = $this->scoretable->calculate_activitybadge($student['id']);
+                $externalbadge = $this->scoretable->calculate_externalbadge($student['id']);
+                $students[$i]['academicbadge'] = $academicbadge;
+                $students[$i]['activitybadge'] = $activitybadge;
+                $students[$i]['externalbadge'] = $externalbadge;
+                $students[$i]['totalbadge'] = $academicbadge + $activitybadge + $externalbadge;
+            }
+            $data = array(
+                'usertype' => $this->session->userdata('user_type'),
+                'thisacademicsession' => $academicsession,
+                'students' => $students,
+                'enrollingstudents' => $enrollingstudents
+            );
+            $this->load->view('templates/header');
+            $this->load->view('score/scoreboard', $data);
+            $this->load->view('templates/footer');
+        } else {
+            # specific to student
+            $student = $this->student_model->get_student($student_id);
+            $academicplans = $this->academic_model->get_academicplan($student_id);
+
             $academicbadge = $this->scoretable->calculate_academicbadge($student['id']);
             $activitybadge = $this->scoretable->calculate_activitybadge($student['id']);
             $externalbadge = $this->scoretable->calculate_externalbadge($student['id']);
-            $students[$i]['academicbadge'] = $academicbadge;
-            $students[$i]['activitybadge'] = $activitybadge;
-            $students[$i]['externalbadge'] = $externalbadge;
-            $students[$i]['totalbadge'] = $academicbadge + $activitybadge + $externalbadge;
+
+
+            foreach ($academicplans as $i => $plan) {
+                # academic
+                $badgecount = 0;
+                $academicdesc = array();
+                if ($plan['gpa_achieved'] > 3.67) {
+                    $string = sprintf("Achieved Dean's List (%s)", $plan['gpa_achieved']);
+                    array_push($academicdesc, $string);
+                    $badgecount += 1;
+                }
+                if (is_numeric($plan['gpa_achieved']) and is_numeric($plan['gpa_target']) and $plan['gpa_achieved'] >= $plan['gpa_target']) {
+                    $diff = $plan['gpa_achieved'] - $plan['gpa_target'];
+                    $string = sprintf("Achieved academic target with increment of +%s (%s)", $diff, $plan['gpa_target']);
+                    array_push($academicdesc, $string);
+                    $badgecount += 1;
+                }
+
+                # activity
+                $scorelevels = $this->score_model->get_scorelevels_bystudentacadsession_a($student['id'],  $plan['acadsession_id']);
+                $activitydesc = array();
+                foreach ($scorelevels as $level) {
+                    if ($level['totalscore'] >= 18) {
+                        $string = sprintf("Performed excellently in activity: %s", $level['title']);
+                        array_push($activitydesc, $string);
+                        $badgecount += 1;
+                    }
+                }
+
+                # external activity
+                $externaldesc = array();
+                $externalsjoined = $this->activity_model->get_externalactivity_bystudentsession($student['id'], $plan['acadsession_id']);
+                foreach ($externalsjoined as $ext) {
+                    $string = sprintf("Joined %s on %s level", $ext['title'], $ext['level']);
+                    array_push($externaldesc, $string);
+                    $badgecount += 1;
+                }
+                $academicplans[$i]['academicdesc'] = $academicdesc;
+                $academicplans[$i]['activitydesc'] = $activitydesc;
+                $academicplans[$i]['externaldesc'] = $externaldesc;
+                $academicplans[$i]['badgecount'] = $badgecount;
+            }
+
+            $student['academicbadge'] = $academicbadge;
+            $student['activitybadge'] = $activitybadge;
+            $student['externalbadge'] = $externalbadge;
+            $student['totalbadge'] = $academicbadge + $activitybadge + $externalbadge;
+            $data = array(
+                'student' => $student,
+                'academicplans' => $academicplans
+            );
+            $this->load->view('templates/header');
+            $this->load->view('score/scoreboardview', $data);
+            $this->load->view('templates/footer');
         }
-        $data = array(
-            'usertype' => $this->session->userdata('user_type'),
-            'thisacademicsession' => $academicsession,
-            'students' => $students,
-            'enrollingstudents' => $enrollingstudents
-        );
-        $this->load->view('templates/header');
-        $this->load->view('score/scoreboard', $data);
-        $this->load->view('templates/footer');
     }
 
     ###
@@ -255,7 +318,6 @@ class Score extends CI_Controller
         foreach ($levelrubrics as $rubricname => $value) {
             $scoreleveldata[$rubricname] = $value;
         }
-        // print_r($scoreleveldata);
         $this->score_model->add_scoreleveldata($scoreleveldata);
         redirect('score/' . $acslug  . '/' . $student_id);
     }

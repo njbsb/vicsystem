@@ -28,12 +28,42 @@ class Activity extends CI_Controller
 
     public function view($slug = NULL)
     {
-        if (!$this->session->userdata('username')) {
+        $username = $this->session->userdata('username');
+        if (!$username) {
             redirect(site_url());
         }
+
         $activity = $this->activity_model->get_activity($slug);
         if (empty($activity)) {
             show_404();
+        }
+        $usertype = $this->session->userdata('user_type');
+
+        $activitysession = $this->academic_model->get_academicsession($activity['acadsession_id'], '');
+        $currentsession = $this->academic_model->get_activeacademicsession();
+        $oldSession = ($activity['acadsession_id'] == $currentsession['id']) ? false : true;
+        // print($oldSession);
+        # check if activity is in any score plan
+        $scoreplan = $this->activity_model->check_activity_inscoreplan($activity['id']);
+        if (!$scoreplan) {
+            $scoreplan = array();
+        }
+        $disabledelete = false;
+        $disableupdate = false;
+
+        if ($oldSession) {
+            $disabledelete = true;
+            $disableupdate = true;
+        }
+        $isHighcom = ($usertype != 'mentor') ? $this->activity_model->check_activity_highCom($username, $activity['id']) : false;
+        $sigmembers = $this->student_model->get_activestudents();
+        $committees = $this->activity_model->get_committees($activity['id']);
+        foreach ($sigmembers as $i => $member) {
+            foreach ($committees as $com) {
+                if ($member['id'] == $com['id']) {
+                    unset($sigmembers[$i]);
+                }
+            }
         }
         // $activity['datetime_start'] = date('jS M Y', strtotime($activity['datetime_start']));
         // $activity['datetime_end'] = date('jS M Y', strtotime($activity['datetime_end']));
@@ -41,19 +71,20 @@ class Activity extends CI_Controller
             'title' => $activity['title'],
             'activity' => $activity,
             'comments' => $this->comment_model->get_comments($activity['id']),
-            'committees' => $this->activity_model->get_committees($activity['id']),
+            'committees' => $committees,
             'categories' => $this->category_model->get_category(),
             'activity_roles' => $this->role_model->get_roles_activity(),
-            'sig_members' => $this->student_model->get_activestudents(),
-            'highcoms_id' => $this->committee_model->get_acthighcoms_id()
+            'sig_members' => $sigmembers,
+            'highcoms_id' => $this->committee_model->get_acthighcoms_id(),
+            'activitysession' => $activitysession,
+            'oldsession' => $oldSession,
+            'usertype' => $this->session->userdata('user_type'),
+            'isHighcom' => $isHighcom,
+            'disabledelete' => $disabledelete,
+            'disableupdate' => $disableupdate,
+            'scoreplan' => $scoreplan
         );
-        if ($this->session->userdata('user_type') == 'mentor') {
-            $isHighcom = $this->activity_model->check_activity_highCom($this->session->userdata('username'), $activity['id']);
-            $data['isHighcom'] = $isHighcom;
-        } else {
-            # if mentor or admin
-            $data['isHighcom'] = false;
-        }
+
         $this->load->view('templates/header');
         $this->load->view('activity/view', $data);
         if ($data['committees']) {
@@ -84,7 +115,7 @@ class Activity extends CI_Controller
                 'mentors' =>  $this->mentor_model->get_sigmentors($sig_id),
                 'semesters' => $this->semester_model->get_semesters(),
                 'sigstudents' => $this->student_model->get_activestudents(),
-                'highcoms' => $this->activity_model->get_act_highcoms_position(),
+                'highcoms' => $this->activity_model->get_activity_highcomroles(),
                 'activesession' => $this->academic_model->get_activeacademicsession()
             );
             $this->load->view('templates/header');
@@ -134,15 +165,21 @@ class Activity extends CI_Controller
         if (empty($activity)) {
             show_404();
         }
+        $highcomroles = $this->activity_model->get_activity_highcomroles();
+        foreach ($highcomroles as $i => $role) {
+            $position = $this->activity_model->get_activityhighcom($role['id'], $activity['id']);
+            $highcomroles[$i]['student'] = $position;
+        }
         $data = array(
-            'title' => 'Edit: ' . $activity['title'],
             'academicsession' => $this->academic_model->get_academicsession($activity['acadsession_id']),
             'sig' => $this->sig_model->get_sig($sig_id),
             'mentors' => $this->mentor_model->get_mentor(),
             'semesters' => $this->semester_model->get_semesters(),
             'highcoms' => $this->activity_model->get_highcoms($activity['id']),
+            'highcomroles' => $highcomroles,
             'sigstudents' => $this->student_model->get_activestudents(),
             'activity' => $activity,
+            'activestudents' => $this->student_model->get_activestudents()
         );
         $this->load->view('templates/header');
         $this->load->view('activity/edit', $data);
@@ -156,12 +193,6 @@ class Activity extends CI_Controller
         }
         $externals = $this->activity_model->get_externalactivity();
         $academicsession = $this->academic_model->get_activeacademicsession();
-        // if ($academicsession) {
-        //     // $students = $this->student_model->get_enrolling_students($academicsession['id']);
-        //     $students = $this->student_model->get_activestudents();
-        // } else {
-        //     $students = array();
-        // }
         $students = $this->student_model->get_activestudents();
         foreach ($externals as $i => $external) {
             $participants = $this->activity_model->get_externalactivity_participants($external['id']);
@@ -175,6 +206,7 @@ class Activity extends CI_Controller
             }
             $externals[$i]['participants'] = $participants;
             $externals[$i]['availablestudents'] = $availablestudents;
+            $externals[$i]['academicsession'] = $this->academic_model->get_academicsession($external['acadsession_id']);
         }
 
         $data = array(
@@ -271,6 +303,18 @@ class Activity extends CI_Controller
             $activitydata['datetime_end'] = $dateend;
         }
 
+        $highcoms = $this->input->post('highcoms');
+        foreach ($highcoms as $roleid => $matric) {
+            $isHighcom = $this->activity_model->check_activity_highCom($matric, $id);
+            if (!$isHighcom) {
+                $highcomdata = array(
+                    'activity_id' => $id,
+                    'student_id' => $matric,
+                    'role_id' => $roleid
+                );
+                $this->committee_model->register_act_committee($highcomdata);
+            }
+        }
         $this->activity_model->update_activity($id, $activitydata);
         redirect('activity/' . $slug);
     }

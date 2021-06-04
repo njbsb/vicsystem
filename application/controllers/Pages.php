@@ -113,4 +113,17 @@ class Pages extends CI_Controller
         $this->file_model->delete_link($id);
         redirect('template');
     }
+
+    public function image()
+    {
+        if (!$this->session->userdata('username') or $this->session->userdata('user_type') == 'student') {
+            redirect('home');
+        }
+        $data =  array(
+            'images' => $this->file_model->get_image()
+        );
+        $this->load->view('templates/header');
+        $this->load->view('pages/images', $data);
+        $this->load->view('templates/footer');
+    }
 }
