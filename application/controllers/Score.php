@@ -265,6 +265,7 @@ class Score extends CI_Controller
             $student['activitybadge'] = $activitybadge;
             $student['externalbadge'] = $externalbadge;
             $student['totalbadge'] = $academicbadge + $activitybadge + $externalbadge;
+            krsort($academicplans);
             $data = array(
                 'student' => $student,
                 'academicplans' => $academicplans,

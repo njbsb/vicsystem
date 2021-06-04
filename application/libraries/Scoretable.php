@@ -17,12 +17,12 @@ class Scoretable
             $acp = $academicplans[$i];
 
             if (floatval($acp['gpa_achieved']) == 0 or floatval($acp['gpa_achieved']) == null) {
-                $difference = 'No data';
+                $difference = '';
             } else {
                 $difference = floatval($acp['gpa_achieved']) - floatval($acp['gpa_target']);
             }
             if ($acp['gpa_achieved'] == 0 or $acp['gpa_achieved'] == null) {
-                $gpa_achieved = 'No data';
+                $gpa_achieved = '';
             } else {
                 $gpa_achieved = $acp['gpa_achieved'];
             }
