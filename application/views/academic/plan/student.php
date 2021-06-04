@@ -15,10 +15,14 @@
 <?php else : ?>
 
     <?php if (empty($thisacademicplan['gpa_target'])) : ?>
-        <small class="text-white">Attention!</small>
-        <small>Seems that you have not set your GPA for the current semester. Please set it first.</small>
-        <br>
-        <button class="btn btn-dark" data-toggle="modal" data-target="#setGPA">Set GPA</button>
+        <?php if ($today < strtotime($examdate) and $examdate) : ?>
+            <button class="btn btn-dark" data-toggle="modal" data-target="#setGPA">Set GPA</button>
+            <br>
+            <small class="text-white">Attention! </small><small>Seems that you have not set your GPA for the current semester. Please set it first.</small>
+
+        <?php else : ?>
+            <small class="text-white">Attention! </small><small>You missed the dateline to set your gpa :(</small>
+        <?php endif ?>
         <br>
     <?php else : ?>
         <h6>You have registered this session's GPA target!</h6>
