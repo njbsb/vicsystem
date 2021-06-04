@@ -5,8 +5,8 @@
 
 <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
     <br>
-    <button class="btn btn-info" data-toggle="modal" data-target="#activity_type"><i class='far fa-calendar-plus'></i> New Activity</button>
-    <!-- <a class="btn btn-primary" href="<?= site_url('activity/external') ?>">External</a> -->
+    <button class="btn btn-dark" data-toggle="modal" data-target="#activity_type"><i class='far fa-calendar-plus'></i> New Activity</button>
+    <!-- <a class="btn btn-dark" href="<?= site_url('activity/external') ?>">External</a> -->
 <?php endif ?>
 
 <?php if ($this->session->userdata('user_type') != 'student') : ?>
@@ -95,7 +95,7 @@
                 <p>Choose category of activity</p>
                 <?= form_open('activity/create') ?>
                 <?php foreach ($activitycategory as $actcat) : ?>
-                    <button name="activity_cat" type="submit" class="btn btn-primary" value="<?= $actcat['code'] ?>"><?= $actcat['category'] . ' (' . $actcat['code'] . ')' ?></button>&nbsp;
+                    <button name="activity_cat" type="submit" class="btn btn-dark" value="<?= $actcat['code'] ?>"><?= $actcat['category'] . ' (' . $actcat['code'] . ')' ?></button>&nbsp;
                 <?php endforeach ?>
                 <?= form_close() ?>
             </div>
@@ -116,7 +116,7 @@
 
     for (var i = 0; i < radios.length; i++) {
         radios[i].onchange = function() {
-            radios[i].className = 'btn btn-primary';
+            radios[i].className = 'btn btn-dark';
         }
     }
 </script>

@@ -56,7 +56,7 @@
             </div>
         </div>
         <div class="form-group">
-            <button <?= $disabled ?> class="btn btn-info" type="submit"><i class='fas fa-upload'></i> Upload</button>
+            <button <?= $disabled ?> class="btn btn-dark" type="submit"><i class='fas fa-upload'></i> Upload</button>
         </div>
         <?php if ($today >= strtotime($examdate) and $examdate) : ?>
             <?php $id = ($activesession) ? $activesession['id'] : '?' ?>

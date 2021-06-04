@@ -1,9 +1,9 @@
 <?php if (validation_errors()) : ?>
-<div class="alert alert-dismissible alert-warning">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <h4 class="alert-heading">Warning!</h4>
-    <p class="mb-0"><?= validation_errors() ?></p>
-</div>
+    <div class="alert alert-dismissible alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4 class="alert-heading">Warning!</h4>
+        <p class="mb-0"><?= validation_errors() ?></p>
+    </div>
 <?php endif ?>
 
 
@@ -53,10 +53,10 @@
             <select name="sig_id" class="form-control" id="sig_id">
                 <option value="" selected disabled hidden>Choose SIG</option>
                 <?php foreach ($sigs as $sig) : ?>
-                <?php $selected = ($sig_id == $sig['code']) ? 'selected' : '' ?>
-                <option value="<?= $sig['code'] ?>" <?= $selected ?>>
-                    <?= $sig['namecode'] ?>
-                </option>
+                    <?php $selected = ($sig_id == $sig['code']) ? 'selected' : '' ?>
+                    <option value="<?= $sig['code'] ?>" <?= $selected ?>>
+                        <?= $sig['namecode'] ?>
+                    </option>
                 <?php endforeach ?>
             </select>
         </div>
@@ -66,8 +66,8 @@
             <select name="orgrole_id" class="form-control" required>
                 <option value="" selected disabled hidden>Choose role in SIG</option>
                 <?php foreach ($mentorroles as $mr) : ?>
-                <?php $selected = ($orgrole_id == $mr['id']) ? 'selected' : '' ?>
-                <option value="<?= $mr['id'] ?>" <?= $selected ?>><?= $mr['role'] ?></option>
+                    <?php $selected = ($orgrole_id == $mr['id']) ? 'selected' : '' ?>
+                    <option value="<?= $mr['id'] ?>" <?= $selected ?>><?= $mr['role'] ?></option>
                 <?php endforeach ?>
             </select>
         </div>
@@ -87,7 +87,7 @@
             <label>Confirm password</label>
             <input value="" type="password" class="form-control" name="confirmpassword" placeholder="Confirm password" required>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Register</button>
+        <button type="submit" class="btn btn-dark btn-block">Register</button>
         <?= form_close() ?>
     </div>
 </div>

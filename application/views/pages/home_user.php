@@ -25,7 +25,7 @@
                         <h4><?= $this->session->userdata('username') ?></h4>
                         <p class="text-primary mb-1"><?= $user_name ?></p>
                         <p class="text-primary font-size-sm">Video Innovation Club</p>
-                        <a class="btn btn-primary" href="<?= site_url('profile') ?>">Profile</a>
+                        <a class="btn btn-dark" href="<?= site_url('profile') ?>">Profile</a>
                         <a class="btn btn-outline-dark" href="<?= site_url('profile/update') ?>">Edit</a>
                         <?php if (!$profileComplete) : ?>
                             <!-- <br> -->
@@ -78,7 +78,7 @@
                             <?php endforeach ?>
                         </p>
                         <p class="lead">
-                            <!-- <a class="btn btn-primary btn-sm" href="#" role="button">Send a wish!</a> -->
+                            <!-- <a class="btn btn-dark btn-sm" href="#" role="button">Send a wish!</a> -->
                         </p>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
                         </div>
                         <br>
                         <p class="lead">
-                            <a class="btn btn-primary btn-md btn-hover" href="activity" role="button">Go to activities</a>
+                            <a class="btn btn-dark btn-md btn-hover" href="activity" role="button">Go to activities</a>
                         </p>
                     </div>
                 </div>

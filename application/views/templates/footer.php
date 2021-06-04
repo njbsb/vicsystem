@@ -11,7 +11,7 @@
                 <p>You just logged in using the default password. Kindly proceed to change your password first.</p>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-primary" href="<?= site_url('changepassword') ?>" class="btn btn-primary">Change my password</a>
+                <a class="btn btn-dark" href="<?= site_url('changepassword') ?>" class="btn btn-dark">Change my password</a>
             </div>
         </div>
     </div>
@@ -29,7 +29,7 @@
                 <p>We have detected that you have not completed your profile. Please proceed to complete your profile first before using the system.</p>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-primary" href="<?= site_url('profile/update') ?>" class="btn btn-primary">Complete my profile</a>
+                <a class="btn btn-dark" href="<?= site_url('profile/update') ?>" class="btn btn-dark">Complete my profile</a>
             </div>
         </div>
     </div>
@@ -43,20 +43,20 @@
     </div>
 </footer>
 <script type="text/javascript">
-var loggedin = <?= json_encode($this->session->userdata('logged_in')) ?>;
-var defaultpassword = <?= json_encode($this->session->userdata('defaultpassword')) ?>;
-var profileComplete = <?= json_encode($this->session->userdata('profilecomplete')) ?>;
-if (loggedin) {
-    if (defaultpassword) {
-        $("#defaultpassword").modal()
+    var loggedin = <?= json_encode($this->session->userdata('logged_in')) ?>;
+    var defaultpassword = <?= json_encode($this->session->userdata('defaultpassword')) ?>;
+    var profileComplete = <?= json_encode($this->session->userdata('profilecomplete')) ?>;
+    if (loggedin) {
+        if (defaultpassword) {
+            $("#defaultpassword").modal()
+        }
+        if (!profileComplete) {
+            $("#profileComplete").modal()
+        }
     }
-    if (!profileComplete) {
-        $("#profileComplete").modal()
-    }
-}
-$(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-});
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 </script>
 </body>
 

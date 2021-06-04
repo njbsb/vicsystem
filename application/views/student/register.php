@@ -69,7 +69,7 @@
     <small id="fileHelp" class="form-text text-muted">Choose a proper profile image.</small>
 </div>
 
-<button type="submit" class="btn btn-primary btn-block">Register</button>
+<button type="submit" class="btn btn-dark btn-block">Register</button>
 
 <?php echo form_close(); ?>
 

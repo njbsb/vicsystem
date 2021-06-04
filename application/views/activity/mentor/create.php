@@ -50,9 +50,9 @@ if ($activesession) {
                                 <select name="advisor_id" class="form-control" required>
                                     <option value="" selected disabled hidden>Choose Advisor</option>
                                     <?php foreach ($mentors as $mentor) : ?>
-                                    <option value="<?= $mentor['id'] ?>">
-                                        <?= $mentor['name'] . ' (' . $mentor['id'] . ')' ?>
-                                    </option>
+                                        <option value="<?= $mentor['id'] ?>">
+                                            <?= $mentor['name'] . ' (' . $mentor['id'] . ')' ?>
+                                        </option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
@@ -70,19 +70,19 @@ if ($activesession) {
                     </div>
                     <div class="row">
                         <?php foreach ($highcoms as $highcom) : ?>
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label><?= $highcom['role'] ?></label>
-                                <select name="highcoms[<?= $highcom['id'] ?>]" id="" class="form-control" required>
-                                    <option value="" disabled selected hidden>Select <?= strtolower($highcom['role']) ?></option>
-                                    <?php foreach ($sigstudents as $std) : ?>
-                                    <option value="<?= $std['id'] ?>">
-                                        <?= $std['id'] . ' ' . $std['name'] ?>
-                                    </option>
-                                    <?php endforeach ?>
-                                </select>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label><?= $highcom['role'] ?></label>
+                                    <select name="highcoms[<?= $highcom['id'] ?>]" id="" class="form-control" required>
+                                        <option value="" disabled selected hidden>Select <?= strtolower($highcom['role']) ?></option>
+                                        <?php foreach ($sigstudents as $std) : ?>
+                                            <option value="<?= $std['id'] ?>">
+                                                <?= $std['id'] . ' ' . $std['name'] ?>
+                                            </option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
                         <?php endforeach ?>
                     </div>
                     <div style="line-height: 100%;">
@@ -91,7 +91,7 @@ if ($activesession) {
                     <br>
                     <hr>
                     <div class="form-group">
-                        <button id="submitbtn" type="submit" class="btn btn-primary">Submit</button>
+                        <button id="submitbtn" type="submit" class="btn btn-dark">Submit</button>
 
                         <div id="errormessage" style="line-height: 100%;">
                             <br>
@@ -109,12 +109,12 @@ if ($activesession) {
 <?= form_close() ?>
 
 <script>
-var btnsubmit = document.getElementById("submitbtn");
-var errormessage = document.getElementById("errormessage");
-var activesession = <?= json_encode($activesession) ?>;
-if (!activesession) {
-    btnsubmit.disabled = true;
-} else {
-    errormessage.remove();
-}
+    var btnsubmit = document.getElementById("submitbtn");
+    var errormessage = document.getElementById("errormessage");
+    var activesession = <?= json_encode($activesession) ?>;
+    if (!activesession) {
+        btnsubmit.disabled = true;
+    } else {
+        errormessage.remove();
+    }
 </script>

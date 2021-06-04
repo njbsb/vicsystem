@@ -164,6 +164,6 @@
         </div>
     </div>
     <br>
-    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+    <button type="submit" class="btn btn-dark btn-block">Submit</button>
 </fieldset>
 <?= form_close() ?>

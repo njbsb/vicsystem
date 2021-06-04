@@ -20,25 +20,24 @@
                 </thead>
                 <tbody class="table-light">
                     <?php if ($users) : ?>
-                    <?php foreach ($users as $user) : ?>
-                    <?php $statusclass = ($user['validated']) ? 'text-success' : 'text-warning' ?>
-                    <?php $profileclass = ($user['profileexist']) ? 'text-success' : 'text-danger' ?>
-                    <tr>
-                        <td class="text-left"><?= $user['id'] ?></td>
-                        <td class="text-left"><?= $user['name'] ?></td>
-                        <td><?= $user['usertype'] ?></td>
-                        <td><?= $user['unistatus'] ?></td>
-                        <td class="<?= $statusclass ?>"><?= $user['validationstatus'] ?></td>
-                        <td data-toggle="tooltip" data-placement="left" title="<?= $user['profilestatus'] ?>" class="<?= $profileclass ?> text-center"><?= $user['profileicon'] ?></td>
-                        <td class="text-right">
-                            <a class="btn btn-sm btn-outline-dark" href="<?= site_url('validate/') . $user['id'] ?>"><i class='fas fa-pen'></i></a>
-                            <?php if ($user['id'] != $this->session->userdata('username')) : ?>
-                            <a class="btn btn-sm btn-outline-danger" data-toggle="modal" data-profileexist="<?= $user['profileexist'] ?>" data-userid="<?= $user['id'] ?>"
-                                onclick="$('#confirmDelete #formDelete').attr('action', '<?= site_url('user/delete/' . $user['id']) ?>')" href="#confirmDelete"><i class='fas fa-trash-alt'></i></a>
-                            <?php endif ?>
-                        </td>
-                    </tr>
-                    <?php endforeach ?>
+                        <?php foreach ($users as $user) : ?>
+                            <?php $statusclass = ($user['validated']) ? 'text-success' : 'text-warning' ?>
+                            <?php $profileclass = ($user['profileexist']) ? 'text-success' : 'text-danger' ?>
+                            <tr>
+                                <td class="text-left"><?= $user['id'] ?></td>
+                                <td class="text-left"><?= $user['name'] ?></td>
+                                <td><?= $user['usertype'] ?></td>
+                                <td><?= $user['unistatus'] ?></td>
+                                <td class="<?= $statusclass ?>"><?= $user['validationstatus'] ?></td>
+                                <td data-toggle="tooltip" data-placement="left" title="<?= $user['profilestatus'] ?>" class="<?= $profileclass ?> text-center"><?= $user['profileicon'] ?></td>
+                                <td class="text-right">
+                                    <a class="btn btn-sm btn-outline-dark" href="<?= site_url('validate/') . $user['id'] ?>"><i class='fas fa-pen'></i></a>
+                                    <?php if ($user['id'] != $this->session->userdata('username')) : ?>
+                                        <a class="btn btn-sm btn-outline-danger" data-toggle="modal" data-profileexist="<?= $user['profileexist'] ?>" data-userid="<?= $user['id'] ?>" onclick="$('#confirmDelete #formDelete').attr('action', '<?= site_url('user/delete/' . $user['id']) ?>')" href="#confirmDelete"><i class='fas fa-trash-alt'></i></a>
+                                    <?php endif ?>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
                     <?php endif ?>
                 </tbody>
                 <tfoot>
@@ -55,7 +54,7 @@
         </div>
         <br>
         <?php if ($users) : ?>
-        <a class="btn btn-success" href="<?= site_url('user/download') ?>" target="_blank"><i class='fas fa-file-excel'></i> Download</a>
+            <a class="btn btn-success" href="<?= site_url('user/download') ?>" target="_blank"><i class='fas fa-file-excel'></i> Download</a>
         <?php endif ?>
     </div>
 </div>
@@ -72,7 +71,7 @@
             </div>
         </div>
         <div class="form-group">
-            <button class="btn btn-info" type="submit"><i class='fas fa-upload'></i> Upload</button>
+            <button class="btn btn-dark" type="submit"><i class='fas fa-upload'></i> Upload</button>
         </div>
         <small>Get user upload template <a href="<?= site_url('filelink') ?>">here</a></small>
         <?= form_close() ?>
@@ -102,44 +101,44 @@
 </div>
 
 <script>
-$(document).ready(function() {
-    $('#usertable').DataTable({
-        initComplete: function() {
-            this.api().columns().every(function() {
-                var column = this;
-                var select = $('<select><option value=""></option></select>')
-                    .appendTo($(column.footer()).empty())
-                    .on('change', function() {
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
-                        column
-                            .search(val ? '^' + val + '$' : '', true, false)
-                            .draw();
+    $(document).ready(function() {
+        $('#usertable').DataTable({
+            initComplete: function() {
+                this.api().columns().every(function() {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function() {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+                            column
+                                .search(val ? '^' + val + '$' : '', true, false)
+                                .draw();
+                        });
+                    column.data().unique().sort().each(function(d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>')
                     });
-                column.data().unique().sort().each(function(d, j) {
-                    select.append('<option value="' + d + '">' + d + '</option>')
                 });
-            });
-        }
+            }
+        });
     });
-});
-var confirmtext = document.getElementById('confirmtext');
-var confirmdeletebtn = document.getElementById('confirmdeletebtn');
-$('#confirmDelete').on('show.bs.modal', function(e) {
-    var profileExist = $(e.relatedTarget).data('profileexist');
-    var userid = $(e.relatedTarget).data('userid');
-    if (!profileExist) {
-        confirmtext.innerHTML = 'Are you sure to delete this user?' + ' <b>(' + userid + ')</b>';
-        confirmdeletebtn.disabled = false;
-    } else {
-        confirmtext.innerHTML = 'This user has completed his/her profile. You can no longer delete this user.';
-        confirmdeletebtn.disabled = true;
-    }
-    // data('userid) is passed from a button
-    // confirmtext.innerHTML += ' <b>(' + userid + ')</b>';
-});
-$('#confirmDelete').on('hide.bs.modal', function(e) {
-    confirmtext.innerHTML = '';
-});
+    var confirmtext = document.getElementById('confirmtext');
+    var confirmdeletebtn = document.getElementById('confirmdeletebtn');
+    $('#confirmDelete').on('show.bs.modal', function(e) {
+        var profileExist = $(e.relatedTarget).data('profileexist');
+        var userid = $(e.relatedTarget).data('userid');
+        if (!profileExist) {
+            confirmtext.innerHTML = 'Are you sure to delete this user?' + ' <b>(' + userid + ')</b>';
+            confirmdeletebtn.disabled = false;
+        } else {
+            confirmtext.innerHTML = 'This user has completed his/her profile. You can no longer delete this user.';
+            confirmdeletebtn.disabled = true;
+        }
+        // data('userid) is passed from a button
+        // confirmtext.innerHTML += ' <b>(' + userid + ')</b>';
+    });
+    $('#confirmDelete').on('hide.bs.modal', function(e) {
+        confirmtext.innerHTML = '';
+    });
 </script>

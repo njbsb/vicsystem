@@ -1,9 +1,9 @@
 <?php if (validation_errors()) : ?>
-<div class="alert alert-dismissible alert-warning">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <h4 class="alert-heading">Warning!</h4>
-    <p class="mb-0"><?= validation_errors() ?></p>
-</div>
+    <div class="alert alert-dismissible alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4 class="alert-heading">Warning!</h4>
+        <p class="mb-0"><?= validation_errors() ?></p>
+    </div>
 <?php endif ?>
 
 <div class="row">
@@ -72,7 +72,7 @@
                 </div>
             </div>
 
-            <button id="submitform" type="submit" class="btn btn-primary btn-block" disabled>Register</button>
+            <button id="submitform" type="submit" class="btn btn-dark btn-block" disabled>Register</button>
             <?= form_close() ?>
         </div>
     </div>
@@ -87,46 +87,46 @@
 </div>
 
 <script>
-var input1 = document.getElementById("password");
-var input2 = document.getElementById("confirmpassword");
-var message1 = document.getElementById("pwtext");
-var message2 = document.getElementById("confirmtext");
-var submitbtn = document.getElementById("submitform");
+    var input1 = document.getElementById("password");
+    var input2 = document.getElementById("confirmpassword");
+    var message1 = document.getElementById("pwtext");
+    var message2 = document.getElementById("confirmtext");
+    var submitbtn = document.getElementById("submitform");
 
-function checkPasswordMatch() {
-    var password = $("#password").val();
-    var confirmPassword = $("#confirmpassword").val();
-    if (password != confirmPassword) {
-        input2.className = "form-control is-invalid";
-        message2.className = "invalid-feedback";
-        message2.innerHTML = "Password mismatch!";
-        submitbtn.disabled = true;
-    } else {
-        if (password != '' || confirmPassword != '') {
-            input2.className = "form-control is-valid";
-            message2.className = "valid-feedback";
-            message2.innerHTML = "Password match!";
-            submitbtn.disabled = false;
+    function checkPasswordMatch() {
+        var password = $("#password").val();
+        var confirmPassword = $("#confirmpassword").val();
+        if (password != confirmPassword) {
+            input2.className = "form-control is-invalid";
+            message2.className = "invalid-feedback";
+            message2.innerHTML = "Password mismatch!";
+            submitbtn.disabled = true;
+        } else {
+            if (password != '' || confirmPassword != '') {
+                input2.className = "form-control is-valid";
+                message2.className = "valid-feedback";
+                message2.innerHTML = "Password match!";
+                submitbtn.disabled = false;
+            }
         }
     }
-}
 
-function checkEmpty() {
-    var password = $("#password").val();
-    var confirmPassword = $("#confirmpassword").val();
-    if (password == '') {
-        input1.className = "form-control is-invalid";
-        message1.className = "invalid-feedback";
-        message1.innerHTML = "Password cannot be empty!";
-    } else {
-        input1.className = "form-control is-valid";
-        message1.className = "valid-feedback";
-        message1.innerHTML = "";
+    function checkEmpty() {
+        var password = $("#password").val();
+        var confirmPassword = $("#confirmpassword").val();
+        if (password == '') {
+            input1.className = "form-control is-invalid";
+            message1.className = "invalid-feedback";
+            message1.innerHTML = "Password cannot be empty!";
+        } else {
+            input1.className = "form-control is-valid";
+            message1.className = "valid-feedback";
+            message1.innerHTML = "";
+        }
     }
-}
-$(document).ready(function() {
-    $("#password").keyup(checkEmpty);
-    $("#password, #confirmpassword").keyup(checkPasswordMatch);
-    // $('#submitpassword').
-});
+    $(document).ready(function() {
+        $("#password").keyup(checkEmpty);
+        $("#password, #confirmpassword").keyup(checkPasswordMatch);
+        // $('#submitpassword').
+    });
 </script>

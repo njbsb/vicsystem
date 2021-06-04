@@ -114,7 +114,7 @@
                 <small>Enrolling students would create default academic plan for this semester.</small>
             </div>
             <div class="modal-footer">
-                <button type="button" id="enrollconfirmbtn" class="btn btn-primary">Submit</button>
+                <button type="button" id="enrollconfirmbtn" class="btn btn-dark">Submit</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -134,7 +134,7 @@
                 <small>Un-enroll students would delete their academic plan and GPA target if exist.</small>
             </div>
             <div class="modal-footer">
-                <button type="button" id="unenrollconfirmbtn" class="btn btn-primary">Submit</button>
+                <button type="button" id="unenrollconfirmbtn" class="btn btn-dark">Submit</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
         </div>

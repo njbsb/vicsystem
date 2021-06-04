@@ -16,7 +16,7 @@
 </div> -->
 <div class="card">
     <div class="card-body">
-        <button data-toggle="modal" data-target="#addimage" class="btn btn-info"><i class='fab fa-edge'></i> New</button>
+        <button data-toggle="modal" data-target="#addimage" class="btn btn-dark"><i class='fab fa-edge'></i> New</button>
         <br>
         <br>
         <table class="table table-hover">
@@ -67,7 +67,7 @@
                 <small>Please use file less than 200kb</small>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Create</button>
+                <button type="submit" class="btn btn-dark">Create</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
@@ -97,7 +97,7 @@
                 <small>Please use file less than 200kb</small>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-dark">Update</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>

@@ -16,7 +16,7 @@
 
     </div>
     <div class="col-4">
-        <button id="btn_acs" class="btn btn-info margin" data-toggle="modal" data-target="#addacademicsession" style="float: right;">
+        <button id="btn_acs" class="btn btn-dark margin" data-toggle="modal" data-target="#addacademicsession" style="float: right;">
             <i class='far fa-calendar-plus'></i> New Session
         </button>
     </div>
@@ -68,7 +68,7 @@
         <h3>Academic Year</h3>
     </div>
     <div class="col-4">
-        <button id="btn_acy" class="btn btn-info margin" data-toggle="modal" data-target="#addacadyear" style="float: right;">
+        <button id="btn_acy" class="btn btn-dark margin" data-toggle="modal" data-target="#addacadyear" style="float: right;">
             <i class='far fa-calendar-plus'></i> New Year
         </button>
     </div>
@@ -168,7 +168,7 @@
 
             </div>
             <div class="modal-footer">
-                <button id="submitacs" type="submit" class="btn btn-primary" disabled>Add</button>
+                <button id="submitacs" type="submit" class="btn btn-dark" disabled>Add</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
@@ -209,7 +209,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="submitacy" type="submit" class="btn btn-primary">Add</button>
+                <button id="submitacy" type="submit" class="btn btn-dark">Add</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
@@ -250,7 +250,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-dark">Update</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
@@ -291,7 +291,7 @@
                 <small>Please make sure the dates do not overlap with other academic years</small>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-dark">Update</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>

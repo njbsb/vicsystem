@@ -6,11 +6,11 @@
 </ol>
 <br>
 <?php if (validation_errors()) : ?>
-<div class="alert alert-dismissible alert-warning">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <h4 class="alert-heading">Warning!</h4>
-    <p class="mb-0"><?= validation_errors() ?></p>
-</div>
+    <div class="alert alert-dismissible alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4 class="alert-heading">Warning!</h4>
+        <p class="mb-0"><?= validation_errors() ?></p>
+    </div>
 <?php endif ?>
 
 <?php $hidden = array('id' => $activity['id']) ?>
@@ -71,26 +71,26 @@
                 </div>
                 <div class="row">
                     <?php foreach ($highcomroles as $role) : ?>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for=""><?= $role['role'] ?></label>
-                            <select name="highcoms[<?= $role['id'] ?>]" id="" class="form-control" required>
-                                <?php if ($role['student']) : ?>
-                                <option value="<?= $role['student']['student_id'] ?>" selected><?= $role['student']['name'] ?></option>
-                                <?php else : ?>
-                                <option value="" disabled hidden selected>Please select a student</option>
-                                <?php if ($activestudents) : ?>
-                                <?php foreach ($activestudents as $student) : ?>
-                                <?php $selected = ($student['id'] == $role['student']['student_id'] and $role['student']) ? 'selected' : '' ?>
-                                <option value="<?= $student['id'] ?>" <?= $selected ?>>
-                                    <?= $student['name'] ?>
-                                </option>
-                                <?php endforeach ?>
-                                <?php endif ?>
-                                <?php endif ?>
-                            </select>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for=""><?= $role['role'] ?></label>
+                                <select name="highcoms[<?= $role['id'] ?>]" id="" class="form-control" required>
+                                    <?php if ($role['student']) : ?>
+                                        <option value="<?= $role['student']['student_id'] ?>" selected><?= $role['student']['name'] ?></option>
+                                    <?php else : ?>
+                                        <option value="" disabled hidden selected>Please select a student</option>
+                                        <?php if ($activestudents) : ?>
+                                            <?php foreach ($activestudents as $student) : ?>
+                                                <?php $selected = ($student['id'] == $role['student']['student_id'] and $role['student']) ? 'selected' : '' ?>
+                                                <option value="<?= $student['id'] ?>" <?= $selected ?>>
+                                                    <?= $student['name'] ?>
+                                                </option>
+                                            <?php endforeach ?>
+                                        <?php endif ?>
+                                    <?php endif ?>
+                                </select>
+                            </div>
                         </div>
-                    </div>
                     <?php endforeach ?>
                 </div>
 
@@ -105,6 +105,6 @@
 
 <hr>
 
-<button type="submit" class="btn btn-primary"><i class='fas fa-save'></i> Update</button>
+<button type="submit" class="btn btn-dark"><i class='fas fa-save'></i> Update</button>
 <?= form_close() ?>
 <br>

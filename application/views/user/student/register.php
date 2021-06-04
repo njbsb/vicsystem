@@ -1,9 +1,9 @@
 <?php if (validation_errors()) : ?>
-<div class="alert alert-dismissible alert-warning">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <h4 class="alert-heading">Warning!</h4>
-    <p class="mb-0"><?= validation_errors() ?></p>
-</div>
+    <div class="alert alert-dismissible alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4 class="alert-heading">Warning!</h4>
+        <p class="mb-0"><?= validation_errors() ?></p>
+    </div>
 <?php endif ?>
 
 
@@ -47,10 +47,10 @@
             <select name="programcode" class="form-control" required>
                 <option value="" selected disabled hidden>Choose academic program</option>
                 <?php foreach ($programs as $prog) : ?>
-                <?php $selected = ($prog['code'] = $program_code) ? 'selected' : '' ?>
-                <option value="<?= $prog['code'] ?>" <?= $selected ?>>
-                    <?= $prog['program'] ?>
-                </option>
+                    <?php $selected = ($prog['code'] = $program_code) ? 'selected' : '' ?>
+                    <option value="<?= $prog['code'] ?>" <?= $selected ?>>
+                        <?= $prog['program'] ?>
+                    </option>
                 <?php endforeach ?>
             </select>
         </div>
@@ -61,10 +61,10 @@
             <select name="sig_id" class="form-control" id="sig_id" required>
                 <option value="" selected disabled hidden>Choose SIG</option>
                 <?php foreach ($sigs as $sig) : ?>
-                <?php $selected = ($sig_id == $sig['id']) ? 'selected' : '' ?>
-                <option value="<?= $sig['code'] ?>" <?= $selected ?>>
-                    <?= $sig['namecode'] ?>
-                </option>
+                    <?php $selected = ($sig_id == $sig['id']) ? 'selected' : '' ?>
+                    <option value="<?= $sig['code'] ?>" <?= $selected ?>>
+                        <?= $sig['namecode'] ?>
+                    </option>
                 <?php endforeach ?>
             </select>
         </div>
@@ -86,7 +86,7 @@
         </div>
 
         <!-- SUBMIT BUTTON -->
-        <button type="submit" class="btn btn-primary btn-block">Register</button>
+        <button type="submit" class="btn btn-dark btn-block">Register</button>
         <?= form_close() ?>
     </div>
 </div>

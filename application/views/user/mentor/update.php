@@ -50,8 +50,8 @@
                         <select name="role_id" class="form-control" required>
                             <option value="" disabled selected>Select a role in SIG</option>
                             <?php foreach ($roles as $role) : ?>
-                            <?php $selected = ($role['id'] == $mentor['role_id']) ? 'selected' : '' ?>
-                            <option value="<?= $role['id'] ?>" <?= $selected ?>><?= $role['role'] ?></option>
+                                <?php $selected = ($role['id'] == $mentor['role_id']) ? 'selected' : '' ?>
+                                <option value="<?= $role['id'] ?>" <?= $selected ?>><?= $role['role'] ?></option>
                             <?php endforeach ?>
                         </select>
                     </div>
@@ -68,7 +68,7 @@
             </div>
 
             <br>
-            <button type="submit" class="btn btn-primary"><i class='fas fa-save'></i> Save</button>
+            <button type="submit" class="btn btn-dark"><i class='fas fa-save'></i> Save</button>
         </div>
     </div>
     <br>
@@ -76,12 +76,12 @@
 </div>
 
 <script>
-var uploadField = document.getElementById("userphoto");
+    var uploadField = document.getElementById("userphoto");
 
-uploadField.onchange = function() {
-    if (this.files[0].size > 209715) {
-        alert("File exceeds 200kb!");
-        this.value = "";
+    uploadField.onchange = function() {
+        if (this.files[0].size > 209715) {
+            alert("File exceeds 200kb!");
+            this.value = "";
+        };
     };
-};
 </script>

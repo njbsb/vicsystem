@@ -24,5 +24,5 @@
     <small id="fileHelp" class="form-text text-muted">Insert collaborator logo if available</small>
 </div>
 
-<input type="submit" value="Create" class="btn btn-primary">
+<input type="submit" value="Create" class="btn btn-dark">
 <?= form_close() ?>

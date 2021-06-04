@@ -19,18 +19,18 @@
                 </thead>
                 <tbody class="table-active">
                     <?php if ($academicsessions) : ?>
-                    <?php foreach ($academicsessions as $acs) : ?>
-                    <tr>
-                        <td><?= $acs['academicyear'] ?></td>
-                        <td><?= $acs['academicsession'] ?></td>
-                        <td><?= $acs['enrolling'] ?></td>
-                        <td><a class="btn btn-sm btn-primary" href="<?= site_url('score/' . $acs['slug']) ?>"><i class='fas fa-search'></i></a></td>
-                    </tr>
-                    <?php endforeach ?>
+                        <?php foreach ($academicsessions as $acs) : ?>
+                            <tr>
+                                <td><?= $acs['academicyear'] ?></td>
+                                <td><?= $acs['academicsession'] ?></td>
+                                <td><?= $acs['enrolling'] ?></td>
+                                <td><a class="btn btn-sm btn-dark" href="<?= site_url('score/' . $acs['slug']) ?>"><i class='fas fa-search'></i></a></td>
+                            </tr>
+                        <?php endforeach ?>
                     <?php else : ?>
-                    <tr>
-                        <td>No data</td>
-                    </tr>
+                        <tr>
+                            <td>No data</td>
+                        </tr>
                     <?php endif ?>
                 </tbody>
             </table>
@@ -39,9 +39,9 @@
     </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function() {
-    $('#scoretable').DataTable({
-        "order": []
+    $(document).ready(function() {
+        $('#scoretable').DataTable({
+            "order": []
+        });
     });
-});
 </script>

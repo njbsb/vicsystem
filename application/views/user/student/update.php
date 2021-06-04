@@ -48,8 +48,8 @@
                         <select name="program_id" class="form-control" id="" required>
                             <option value="" selected disabled>Select program</option>
                             <?php foreach ($programs as $program) : ?>
-                            <?php $selected = ($program['code'] == $student['program_id']) ? 'selected readonly' : ''; ?>
-                            <option value="<?= $program['code'] ?>" <?= $selected ?>><?= $program['program'] ?></option>
+                                <?php $selected = ($program['code'] == $student['program_id']) ? 'selected readonly' : ''; ?>
+                                <option value="<?= $program['code'] ?>" <?= $selected ?>><?= $program['program'] ?></option>
                             <?php endforeach ?>
                         </select>
                     </div>
@@ -83,19 +83,19 @@
                 </div>
             </div>
             <br>
-            <button type="submit" class="btn btn-primary"><i class='fas fa-save'></i> Save</button>
+            <button type="submit" class="btn btn-dark"><i class='fas fa-save'></i> Save</button>
         </div>
     </div>
     <?= form_close() ?>
 </div>
 
 <script>
-var uploadField = document.getElementById("userphoto");
+    var uploadField = document.getElementById("userphoto");
 
-uploadField.onchange = function() {
-    if (this.files[0].size > 209715) {
-        alert("File exceeds 200kb!");
-        this.value = "";
+    uploadField.onchange = function() {
+        if (this.files[0].size > 209715) {
+            alert("File exceeds 200kb!");
+            this.value = "";
+        };
     };
-};
 </script>

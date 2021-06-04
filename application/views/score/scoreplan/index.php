@@ -81,7 +81,7 @@
                 <p><small>Please confirm the numbers before adding the scoreplan!</small></p>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button type="submit" class="btn btn-dark">Add</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>

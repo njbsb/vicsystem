@@ -5,5 +5,5 @@
     <label for="category">Category Name</label>
     <input class="form-control" type="text" name="category" id="category" placeholder="Enter category name">
 </div>
-<button type="submit" class="btn btn-primary btn-default">Submit</button>
+<button type="submit" class="btn btn-dark btn-default">Submit</button>
 </form>

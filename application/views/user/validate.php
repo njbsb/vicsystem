@@ -4,11 +4,11 @@
     <li class="breadcrumb-item active"><?= $user['id'] ?></li>
 </ol>
 <?php if (validation_errors()) : ?>
-<div class="alert alert-dismissible alert-warning">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <h4 class="alert-heading">Warning!</h4>
-    <p class="mb-0"><?= validation_errors() ?></p>
-</div>
+    <div class="alert alert-dismissible alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4 class="alert-heading">Warning!</h4>
+        <p class="mb-0"><?= validation_errors() ?></p>
+    </div>
 <?php endif ?>
 <h2 class="text-center"><?= $user['id'] ?></h2>
 <?php // $hidden = array('superior_id' => $superior['id']) 
@@ -81,16 +81,16 @@
                 </div>
                 <hr>
                 <?php if ($user['usertype'] == 'student') : ?>
-                <div class="form-group">
-                    <label class="text-danger" for="superior_id">*Mentor/Superior</label>
-                    <select name="superior_id" id="" class="form-control" required>
-                        <option value="" disabled selected>Select a mentor</option>
-                        <?php foreach ($mentors as $mentor) : ?>
-                        <?php $mentorselected = ($user['superior_id'] == $mentor['id']) ? 'selected' : '' ?>
-                        <option value="<?= $mentor['id'] ?>" <?= $mentorselected ?>><?= $mentor['name'] ?></option>
-                        <?php endforeach ?>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label class="text-danger" for="superior_id">*Mentor/Superior</label>
+                        <select name="superior_id" id="" class="form-control" required>
+                            <option value="" disabled selected>Select a mentor</option>
+                            <?php foreach ($mentors as $mentor) : ?>
+                                <?php $mentorselected = ($user['superior_id'] == $mentor['id']) ? 'selected' : '' ?>
+                                <option value="<?= $mentor['id'] ?>" <?= $mentorselected ?>><?= $mentor['name'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
                 <?php endif ?>
                 <div class="row">
                     <div class="col-md-4">
@@ -105,7 +105,7 @@
                             <label for="startdate">Leave Date</label>
                             <input value="<?= $user['enddate'] ?>" type="date" name="enddate" id="enddate" class="form-control" <?= $enddaterequired ?>>
                             <?php if ($user['usertype'] == 'mentor') : ?>
-                            <small>Optional for mentor</small>
+                                <small>Optional for mentor</small>
                             <?php endif ?>
                         </div>
                     </div>
@@ -115,17 +115,17 @@
                     <?php $checkedtext = ($user['validated']) ? 'Validated' : 'Pending' ?>
                     <?php $textclass = ($user['validated']) ? 'text-dark' : 'text-danger' ?>
                     <?php if ($user['id'] != $this->session->userdata('username')) : ?>
-                    <div class="custom-control custom-switch">
-                        <input <?= $checked ?> type="checkbox" class="custom-control-input" name="validated" id="validated" onclick="checkValue()">
-                        <label id="displaytext" class="custom-control-label <?= $textclass ?>" for="validated"><?= $checkedtext ?></label>
-                    </div>
-                    <div style="line-height:100%;">
-                        <small>To validate the user as active user, please toggle the validate toggle input. Only validated user is able to sign in and use the system.</small>
-                    </div>
+                        <div class="custom-control custom-switch">
+                            <input <?= $checked ?> type="checkbox" class="custom-control-input" name="validated" id="validated" onclick="checkValue()">
+                            <label id="displaytext" class="custom-control-label <?= $textclass ?>" for="validated"><?= $checkedtext ?></label>
+                        </div>
+                        <div style="line-height:100%;">
+                            <small>To validate the user as active user, please toggle the validate toggle input. Only validated user is able to sign in and use the system.</small>
+                        </div>
                     <?php endif ?>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-primary"><i class='fas fa-save'></i> Save</button>
+                <button type="submit" class="btn btn-dark"><i class='fas fa-save'></i> Save</button>
             </div>
         </div>
     </div>
@@ -133,22 +133,22 @@
 <?= form_close() ?>
 
 <script>
-function checkValue() {
-    var checkbox = document.getElementById("validated");
-    var textdisplay = document.getElementById("displaytext");
-    if (checkbox.checked == true) {
-        checkbox.value = true;
-        textdisplay.innerHTML = 'Validated';
-        textdisplay.classList.add('text-dark');
-        textdisplay.classList.remove('text-danger');
-    } else {
-        checkbox.value = false;
-        textdisplay.innerHTML = 'Pending';
-        textdisplay.classList.add('text-danger');
-        textdisplay.classList.remove('text-dark');
+    function checkValue() {
+        var checkbox = document.getElementById("validated");
+        var textdisplay = document.getElementById("displaytext");
+        if (checkbox.checked == true) {
+            checkbox.value = true;
+            textdisplay.innerHTML = 'Validated';
+            textdisplay.classList.add('text-dark');
+            textdisplay.classList.remove('text-danger');
+        } else {
+            checkbox.value = false;
+            textdisplay.innerHTML = 'Pending';
+            textdisplay.classList.add('text-danger');
+            textdisplay.classList.remove('text-dark');
+        }
     }
-}
-$(document).ready(function() {
+    $(document).ready(function() {
 
-});
+    });
 </script>
