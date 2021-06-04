@@ -106,7 +106,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">Score</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="<?= site_url('scoreboard') ?>">Score Board</a>
+                            <a class="dropdown-item" href="<?= site_url('scoreboard') ?>"><i class='fas fa-star'></i> Score Board</a>
                             <?php if ($usertype != 'student') : ?>
                             <a class="dropdown-item" href="<?= site_url('scoreplan') ?>">Score Plan</a>
                             <a class="dropdown-item" href="<?= site_url('score') ?>">Submit Score</a>
@@ -127,6 +127,7 @@
                             <a class="dropdown-item" href="<?= site_url('citra') ?>">Citra</a>
                             <a class="dropdown-item" href="<?= site_url('collaborator') ?>">Collaborator</a>
                             <a class="dropdown-item" href="<?= site_url('filelink') ?>">File Links</a>
+                            <a class="dropdown-item" href="<?= site_url('image') ?>">Images</a>
                         </div>
                     </li>
                     <?php endif ?>

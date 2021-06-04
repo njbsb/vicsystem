@@ -39,13 +39,23 @@ class File_model extends CI_Model
             ->delete('filelink');
     }
 
-    // public function get_collaborators($collab_id = NULL)
-    // {
-    //     if ($collab_id == FALSE) {
-    //         $query = $this->db->get('collaborator');
-    //         return $query->result_array();
-    //     }
-    //     $query = $this->db->get_where('collaborator', array('id' => $collab_id));
-    //     return $query->row_array();
-    // }
+    public function get_image($id = null)
+    {
+        if ($id) {
+            $query = $this->db->get_where('image', array('id' => $id));
+            return $query->row_array();
+        }
+        $query = $this->db->get('image');
+        return $query->result_array();
+    }
+
+    public function get_collaborators($collab_id = NULL)
+    {
+        if ($collab_id == FALSE) {
+            $query = $this->db->get('collaborator');
+            return $query->result_array();
+        }
+        $query = $this->db->get_where('collaborator', array('id' => $collab_id));
+        return $query->row_array();
+    }
 }

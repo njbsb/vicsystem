@@ -40,6 +40,7 @@ $route['user'] = 'user/index';
 $route['user/download'] = 'user/download';
 $route['user/upload'] = 'user/upload';
 $route['register'] = 'user/register';
+$route['register_sucess'] = 'user/register_success';
 $route['login'] = 'user/login';
 $route['logout'] = 'user/logout';
 $route['validate/(:any)'] = 'user/validate/$1';
@@ -69,6 +70,7 @@ $route['score/download_scoreboard'] = 'score/download_scoreboard';
 $route['score/download_scoreboard/(:any)'] = 'score/download_scoreboard/$1';
 $route['scoreplan'] = 'score/scoreplan';
 $route['scoreboard'] = 'score/scoreboard';
+$route['scoreboard/(:any)'] = 'score/scoreboard/$1';
 $route['scoreplan/(:any)'] = 'score/scoreplan/$1';
 $route['score/addscore'] = 'score/addscore';
 
@@ -87,6 +89,8 @@ $route['filelink'] = 'pages/template';
 $route['updatelink'] = 'pages/updatelink';
 $route['createlink'] = 'pages/createlink';
 $route['deletelink'] = 'pages/deletelink';
+
+$route['image'] = 'pages/image';
 
 $route['default_controller'] = 'pages/view';
 $route['(:any)'] = 'pages/view/$1';
