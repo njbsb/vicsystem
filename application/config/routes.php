@@ -85,7 +85,7 @@ $route['score/edit_scorelevel'] = 'score/edit_scorelevel';
 $route['score/(:any)'] = 'score/viewacs/$1';
 $route['score/(:any)/(:any)'] = 'score/view/$1/$2';
 
-$route['filelink'] = 'pages/template';
+$route['filelink'] = 'pages/filelink';
 $route['updatelink'] = 'pages/updatelink';
 $route['createlink'] = 'pages/createlink';
 $route['deletelink'] = 'pages/deletelink';

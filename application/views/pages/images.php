@@ -19,18 +19,15 @@
             </thead>
             <tbody class="table-active">
                 <?php foreach ($images as $i => $image) : ?>
-                <tr>
-                    <td><?= $i + 1 ?></td>
-                    <td><img src="<?= $image['photo'] ?>" alt="" width="40" height="40"></td>
-                    <td>
-                        <?= $image['title'] ?>
-                    </td>
-                    <td><a href="<?= $image['photo'] ?>" target="_blank" class="btn btn-sm btn-outline-primary"><i class='fas fa-search'></i></a> <button data-toggle="modal"
-                            data-id="<?= $image['id'] ?>" data-target="#editlink" data-name="<?= $image['title'] ?>" data-path="" class="btn btn-sm btn-outline-primary"><i
-                                class='fas fa-pen'></i></button> <a data-toggle="modal" data-target="#deletelink" data-name="<?= $image['title'] ?>" data-id="<?= $image['id'] ?>" href=""
-                            class="btn btn-sm btn-outline-primary"><i class="fa fa-trash"></i></a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td><?= $i + 1 ?></td>
+                        <td><img src="<?= $image['photo'] ?>" alt="" width="40" height="40"></td>
+                        <td>
+                            <?= $image['title'] ?>
+                        </td>
+                        <td><a href="<?= $image['photo'] ?>" target="_blank" class="btn btn-sm btn-outline-dark"><i class='fas fa-search'></i></a> <button data-toggle="modal" data-id="<?= $image['id'] ?>" data-target="#editlink" data-name="<?= $image['title'] ?>" data-path="" class="btn btn-sm btn-outline-dark"><i class='fas fa-pen'></i></button> <a data-toggle="modal" data-target="#deletelink" data-name="<?= $image['title'] ?>" data-id="<?= $image['id'] ?>" href="" class="btn btn-sm btn-outline-dark"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
                 <?php endforeach ?>
             </tbody>
         </table>

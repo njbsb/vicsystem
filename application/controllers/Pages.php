@@ -68,7 +68,7 @@ class Pages extends CI_Controller
         }
     }
 
-    public function template()
+    public function filelink()
     {
         if ($this->session->userdata('logged_in') and $this->session->userdata('user_type') != 'student') {
             $data = array(
@@ -92,7 +92,7 @@ class Pages extends CI_Controller
             $this->file_model->update_link($id, array('name' => $name, 'path' => $path));
         }
 
-        redirect('template');
+        redirect('filelink');
     }
 
     public function createlink()
@@ -104,14 +104,14 @@ class Pages extends CI_Controller
             'path' => $path
         );
         $this->file_model->create_link($data);
-        redirect('template');
+        redirect('filelink');
     }
 
     public function deletelink()
     {
         $id = $this->input->post('deleteid');
         $this->file_model->delete_link($id);
-        redirect('template');
+        redirect('filelink');
     }
 
     public function image()

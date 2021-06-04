@@ -170,18 +170,25 @@ class Academic extends CI_Controller
         if ($activesession) {
             $academicplans = $this->academic_model->get_academicplan(FALSE, $activesession['id']);
             foreach ($academicplans as $i => $acp) {
-                $diff = $acp['gpa_achieved'] - $acp['gpa_target'];
-                $academicplans[$i]['difference'] = $diff;
-                if ($diff > 0) {
-                    $status = 'Passed';
-                    $textclass = 'text-success';
-                } elseif ($diff < 0) {
-                    $status = 'Not Pass';
-                    $textclass = 'text-warning';
+                if (is_numeric($acp['gpa_achieved']) and is_numeric($acp['gpa_target'])) {
+                    $diff = $acp['gpa_achieved'] - $acp['gpa_target'];
+                    if ($diff > 0) {
+                        $status = 'Passed';
+                        $textclass = 'text-success';
+                    } elseif ($diff < 0) {
+                        $status = 'Not Pass';
+                        $textclass = 'text-warning';
+                    } else {
+                        $status = 'Constant';
+                        $textclass = '';
+                    }
                 } else {
-                    $status = 'Constant';
+                    $status = 'Incomplete';
                     $textclass = '';
+                    $diff = '';
                 }
+
+                $academicplans[$i]['difference'] = $diff;
                 $academicplans[$i]['status'] = $status;
                 $academicplans[$i]['textclass'] = $textclass;
             }

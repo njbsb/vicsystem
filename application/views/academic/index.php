@@ -9,9 +9,9 @@
 <div class="row justify-content-between">
     <div class="col-8">
         <?php if ($activeyear) : ?>
-        <h3><?= sprintf('Academic Session: %s', $activeyear['acadyear']) ?></h3>
+            <h3><?= sprintf('Academic Session: %s', $activeyear['acadyear']) ?></h3>
         <?php else : ?>
-        <h3><?= 'Academic Session: -' ?></h3>
+            <h3><?= 'Academic Session: -' ?></h3>
         <?php endif ?>
 
     </div>
@@ -36,30 +36,29 @@
         </thead>
         <tbody>
             <?php foreach ($academicsession as $acs) : ?>
-            <?php $textclass = ($acs['status'] == 'active') ? 'text-success' : 'text-muted' ?>
-            <?php $btnclass = ($acs['status'] == 'active') ? 'btn btn-outline-success btn-sm' : 'btn btn-outline-info btn-sm' ?>
-            <tr class="table-light">
-                <td><?= $acs['academicyear'] ?></td>
-                <td><?= $acs['semester'] ?></td>
-                <td><?= date("d-m-Y", strtotime($acs['startdate'])) ?></td>
-                <td><?= date("d-m-Y", strtotime($acs['enddate'])) ?></td>
-                <td class="<?= $textclass ?>"><?= ucfirst($acs['status']) ?></td>
-                <td><?= $acs['progress'] ?></td>
-                <td><button data-toggle="modal" data-toggle="tooltip" title="Edit" data-placement="top" data-target="#edit_acs" data-string="<?= $acs['academicsession'] ?>"
-                        data-acsid="<?= $acs['id'] ?>" data-acsstartdate="<?= $acs['startdate'] ?>" data-acsenddate="<?= $acs['enddate'] ?>" class="btn btn-sm btn-outline-primary">
-                        <i class='fas fa-pen'></i>
-                    </button>
-                </td>
-            </tr>
+                <?php $textclass = ($acs['status'] == 'active') ? 'text-success' : 'text-muted' ?>
+                <?php $btnclass = ($acs['status'] == 'active') ? 'btn btn-outline-success btn-sm' : 'btn btn-outline-info btn-sm' ?>
+                <tr class="table-light">
+                    <td><?= $acs['academicyear'] ?></td>
+                    <td><?= $acs['semester'] ?></td>
+                    <td><?= date("d-m-Y", strtotime($acs['startdate'])) ?></td>
+                    <td><?= date("d-m-Y", strtotime($acs['enddate'])) ?></td>
+                    <td class="<?= $textclass ?>"><?= ucfirst($acs['status']) ?></td>
+                    <td><?= $acs['progress'] ?></td>
+                    <td><button data-toggle="modal" data-toggle="tooltip" title="Edit" data-placement="top" data-target="#edit_acs" data-string="<?= $acs['academicsession'] ?>" data-acsid="<?= $acs['id'] ?>" data-acsstartdate="<?= $acs['startdate'] ?>" data-acsenddate="<?= $acs['enddate'] ?>" class="btn btn-sm btn-outline-dark">
+                            <i class='fas fa-pen'></i>
+                        </button>
+                    </td>
+                </tr>
             <?php endforeach ?>
         </tbody>
     </table>
 </div>
 <?php if ($activeyear) : ?>
-<small>This table will only show sessions under an active academic year</small>
+    <small>This table will only show sessions under an active academic year</small>
 <?php else : ?>
-<small class="text-black-50">Attention! </small>
-<small>Seems that you do not have an active academic year. Kindly proceed to create a new one</small>
+    <small class="text-black-50">Attention! </small>
+    <small>Seems that you do not have an active academic year. Kindly proceed to create a new one</small>
 <?php endif ?>
 
 <hr>
@@ -89,18 +88,17 @@
         </thead>
         <tbody class="table-light">
             <?php foreach ($academicyear as $acy) : ?>
-            <?php $textclass = ($acy['status'] == 'active') ? 'text-success' : 'text-muted' ?>
-            <tr>
-                <td><?= $acy['acadyear'] ?></td>
-                <td><?= date("d-m-Y", strtotime($acy['startdate'])) ?></td>
-                <td><?= date("d-m-Y", strtotime($acy['enddate'])) ?></td>
-                <td class="<?= $textclass ?>"><?= ucfirst($acy['status']) ?></td>
-                <td><button data-toggle="modal" data-target="#edit_acy" data-string="<?= $acy['acadyear'] ?>" data-acystartdate="<?= $acy['startdate'] ?>" data-acyenddate="<?= $acy['enddate'] ?>"
-                        data-acyid="<?= $acy['id'] ?>" class="btn btn-outline-primary btn-sm">
-                        <i class='fas fa-pen'></i>
-                    </button>
-                </td>
-            </tr>
+                <?php $textclass = ($acy['status'] == 'active') ? 'text-success' : 'text-muted' ?>
+                <tr>
+                    <td><?= $acy['acadyear'] ?></td>
+                    <td><?= date("d-m-Y", strtotime($acy['startdate'])) ?></td>
+                    <td><?= date("d-m-Y", strtotime($acy['enddate'])) ?></td>
+                    <td class="<?= $textclass ?>"><?= ucfirst($acy['status']) ?></td>
+                    <td><button data-toggle="modal" data-target="#edit_acy" data-string="<?= $acy['acadyear'] ?>" data-acystartdate="<?= $acy['startdate'] ?>" data-acyenddate="<?= $acy['enddate'] ?>" data-acyid="<?= $acy['id'] ?>" class="btn btn-outline-dark btn-sm">
+                            <i class='fas fa-pen'></i>
+                        </button>
+                    </td>
+                </tr>
             <?php endforeach ?>
         </tbody>
     </table>
@@ -125,7 +123,7 @@
                                 <label for="acadyear">Academic Year</label>
                                 <select name="acadyear_id" id="acyselect" class="form-control" required>
                                     <?php if ($activeyear) : ?>
-                                    <option value="<?= $activeyear['id'] ?>"><?= $activeyear['acadyear'] ?></option>
+                                        <option value="<?= $activeyear['id'] ?>"><?= $activeyear['acadyear'] ?></option>
                                     <?php endif ?>
                                 </select>
                             </div>
@@ -136,7 +134,7 @@
                                 <select name="semester" id="semester" class="form-control" onchange="enableSubmit()" required>
                                     <option value="" selected disabled hidden>Select semester</option>
                                     <?php foreach ($semesters as $sem) : ?>
-                                    <option value="<?= $sem ?>"><?= $sem ?></option>
+                                        <option value="<?= $sem ?>"><?= $sem ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
@@ -164,7 +162,7 @@
                 </div>
                 <div id="acsmessage">
                     <?php if (empty($semesters)) : ?>
-                    <p>There is no more session to add for this academic year</p>
+                        <p>There is no more session to add for this academic year</p>
                     <?php endif ?>
                 </div>
 
@@ -302,74 +300,74 @@
 </div>
 <br>
 <script>
-var tables = ['#acs_table', '#acy_table'];
-tables.forEach(setupTable);
-var acssubmitbtn = document.getElementById("submitacs");
-var acsform = document.getElementById("acsform");
-var acsmessage = document.getElementById("acsmessage");
-var acysubmitbtn = document.getElementById("submitacy");
-var acyform = document.getElementById("acyform");
-var acymessage = document.getElementById("acymessage");
-var semesters = Object.values(JSON.parse(`<?php echo json_encode($semesters) ?>`));
+    var tables = ['#acs_table', '#acy_table'];
+    tables.forEach(setupTable);
+    var acssubmitbtn = document.getElementById("submitacs");
+    var acsform = document.getElementById("acsform");
+    var acsmessage = document.getElementById("acsmessage");
+    var acysubmitbtn = document.getElementById("submitacy");
+    var acyform = document.getElementById("acyform");
+    var acymessage = document.getElementById("acymessage");
+    var semesters = Object.values(JSON.parse(`<?php echo json_encode($semesters) ?>`));
 
-restrictAcadsession();
-restrictAcadyear();
+    restrictAcadsession();
+    restrictAcadyear();
 
-function restrictAcadsession() {
-    if (semesters.length > 0) {
-        acsmessage.remove();
-    } else {
-        acsform.remove();
-        acssubmitbtn.remove();
+    function restrictAcadsession() {
+        if (semesters.length > 0) {
+            acsmessage.remove();
+        } else {
+            acsform.remove();
+            acssubmitbtn.remove();
+        }
     }
-}
 
-function restrictAcadyear() {
-    if (`<?= $btn_acy ?>`) {
-        acymessage.remove();
-    } else {
-        acyform.remove();
-        acysubmitbtn.remove();
+    function restrictAcadyear() {
+        if (`<?= $btn_acy ?>`) {
+            acymessage.remove();
+        } else {
+            acyform.remove();
+            acysubmitbtn.remove();
+        }
     }
-}
 
-function setupTable(item, index) {
-    $(item).DataTable({
-        "order": []
-    });
-}
-
-function enableSubmit() {
-    var acyselect = document.getElementById("acyselect");
-    var semselect = document.getElementById("semester");
-    var acy_id = acyselect.value;
-    var sem_id = semselect.value;
-    if (sem_id && acy_id) {
-        acssubmitbtn.disabled = false;
-    } else {
-        acssubmitbtn.disabled = true;
+    function setupTable(item, index) {
+        $(item).DataTable({
+            "order": []
+        });
     }
-}
-$(document).ready(function() {
-    $('#edit_acs').on('show.bs.modal', function(e) {
-        var userid = $(e.relatedTarget).data('acsid');
-        var acads = $(e.relatedTarget).data('string');
-        var acs_startdate = $(e.relatedTarget).data('acsstartdate');
-        var acs_enddate = $(e.relatedTarget).data('acsenddate');
-        $(e.currentTarget).find('input[name="acadsession_id"]').val(userid);
-        $(e.currentTarget).find('input[name="session_string"]').val(acads);
-        document.getElementById("acs_editstartdate").value = acs_startdate;
-        document.getElementById("acs_editenddate").value = acs_enddate;
+
+    function enableSubmit() {
+        var acyselect = document.getElementById("acyselect");
+        var semselect = document.getElementById("semester");
+        var acy_id = acyselect.value;
+        var sem_id = semselect.value;
+        if (sem_id && acy_id) {
+            acssubmitbtn.disabled = false;
+        } else {
+            acssubmitbtn.disabled = true;
+        }
+    }
+    $(document).ready(function() {
+        $('#edit_acs').on('show.bs.modal', function(e) {
+            var userid = $(e.relatedTarget).data('acsid');
+            var acads = $(e.relatedTarget).data('string');
+            var acs_startdate = $(e.relatedTarget).data('acsstartdate');
+            var acs_enddate = $(e.relatedTarget).data('acsenddate');
+            $(e.currentTarget).find('input[name="acadsession_id"]').val(userid);
+            $(e.currentTarget).find('input[name="session_string"]').val(acads);
+            document.getElementById("acs_editstartdate").value = acs_startdate;
+            document.getElementById("acs_editenddate").value = acs_enddate;
+        });
+        $('#edit_acy').on('show.bs.modal', function(e) {
+            var id = $(e.relatedTarget).data('acyid');
+            var years = $(e.relatedTarget).data('string');
+            var acy_startdate = $(e.relatedTarget).data('acystartdate');
+            var acy_enddate = $(e.relatedTarget).data('acyenddate');
+            $(e.currentTarget).find('input[name="acadyear_id"]').val(id);
+            $(e.currentTarget).find('input[name="year_string"]').val(years);
+            document.getElementById("acy_editstartdate").value = acy_startdate;
+            document.getElementById("acy_editenddate").value = acy_enddate;
+        });
     });
-    $('#edit_acy').on('show.bs.modal', function(e) {
-        var id = $(e.relatedTarget).data('acyid');
-        var years = $(e.relatedTarget).data('string');
-        var acy_startdate = $(e.relatedTarget).data('acystartdate');
-        var acy_enddate = $(e.relatedTarget).data('acyenddate');
-        $(e.currentTarget).find('input[name="acadyear_id"]').val(id);
-        $(e.currentTarget).find('input[name="year_string"]').val(years);
-        document.getElementById("acy_editstartdate").value = acy_startdate;
-        document.getElementById("acy_editenddate").value = acy_enddate;
-    });
-});
 </script>

@@ -41,7 +41,7 @@
                         <td><?= $plan['label'] ?></td>
                         <td><?= $plan['title'] ?></td>
                         <td><?= $plan['percentweightage'] ?> %</td>
-                        <td><a type="button" data-toggle="modal" data-target="#editscoreplan<?= $plan['id'] ?>" class="btn btn-outline-primary btn-sm"><i class='fas fa-pen'></i> Edit</a></td>
+                        <td><a type="button" data-toggle="modal" data-target="#editscoreplan<?= $plan['id'] ?>" class="btn btn-outline-dark btn-sm"><i class='fas fa-pen'></i> Edit</a></td>
                     </tr>
                     <?php endforeach ?>
                     <tr>

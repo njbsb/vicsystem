@@ -15,7 +15,7 @@
         <div class="col-md-8 text-left">
 
             <?php if (validation_errors()) : ?>
-            <?= validation_errors() ?>
+                <?= validation_errors() ?>
             <?php endif ?>
             <?php $hidden = array('student_id' => $student['id']) ?>
             <?= form_open('student/update', '', $hidden) ?>
@@ -30,9 +30,9 @@
                     <label>Select SIG</label>
                     <select name="sig_id" class="form-control form-control-sm" readonly>
                         <?php foreach ($sigs as $sig) : ?>
-                        <?php $selected = ($sig['code'] == $student['sig_id']) ? 'selected' : '' ?>
-                        <?php $disabled = ($sig['code'] == $student['sig_id']) ? '' : 'disabled' ?>
-                        <option value="<?= $sig['code'] ?>" <?= $selected, $disabled ?>><?= $sig['namecode'] ?></option>
+                            <?php $selected = ($sig['code'] == $student['sig_id']) ? 'selected' : '' ?>
+                            <?php $disabled = ($sig['code'] == $student['sig_id']) ? '' : 'disabled' ?>
+                            <option value="<?= $sig['code'] ?>" <?= $selected, $disabled ?>><?= $sig['namecode'] ?></option>
                         <?php endforeach ?>
                     </select>
                 </div>
@@ -41,10 +41,10 @@
                     <label>Select Program</label>
                     <select name="program_code" class="form-control form-control-sm">
                         <?php foreach ($programs as $program) : ?>
-                        <?php $selected = ($program['code'] == $student['program_code']) ? 'selected' : '' ?>
-                        <option value="<?= $program['code'] ?>" <?= $selected ?>>
-                            <?= $program['program'] ?>
-                        </option>
+                            <?php $selected = ($program['code'] == $student['program_code']) ? 'selected' : '' ?>
+                            <option value="<?= $program['code'] ?>" <?= $selected ?>>
+                                <?= $program['program'] ?>
+                            </option>
                         <?php endforeach ?>
                     </select>
                 </div>
@@ -63,15 +63,15 @@
                     <label>Select Mentor</label>
                     <select name="mentor_matric" class="form-control form-control-sm">
                         <?php foreach ($mentors as $mentor) : ?>
-                        <?php $selected = ($mentor['id'] == $student['mentor_matric']) ? 'selected' : '' ?>
-                        <option value="<?= $mentor['id'] ?>" <?= $selected ?>>
-                            <?= $mentor['name'] ?>
-                        </option>
+                            <?php $selected = ($mentor['id'] == $student['mentor_matric']) ? 'selected' : '' ?>
+                            <option value="<?= $mentor['id'] ?>" <?= $selected ?>>
+                                <?= $mentor['name'] ?>
+                            </option>
                         <?php endforeach ?>
                     </select>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-outline-primary">Update</button>
+                    <button type="submit" class="btn btn-outline-dark">Update</button>
                 </div>
 
             </fieldset>

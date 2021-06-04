@@ -20,17 +20,14 @@
             </thead>
             <tbody class="table-active">
                 <?php foreach ($templates as $i => $template) : ?>
-                <tr>
-                    <td><?= $i + 1 ?></td>
-                    <td>
-                        <?= $template['name'] ?>
-                    </td>
-                    <td><a href="<?= $template['path'] ?>" target="_blank" class="btn btn-sm btn-outline-primary"><i class='fas fa-search'></i></a> <button data-toggle="modal"
-                            data-id="<?= $template['id'] ?>" data-target="#editlink" data-name="<?= $template['name'] ?>" data-path="<?= $template['path'] ?>" class="btn btn-sm btn-outline-primary"><i
-                                class='fas fa-pen'></i></button> <a data-toggle="modal" data-target="#deletelink" data-name="<?= $template['name'] ?>" data-id="<?= $template['id'] ?>" href=""
-                            class="btn btn-sm btn-outline-primary"><i class="fa fa-trash"></i></a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td><?= $i + 1 ?></td>
+                        <td>
+                            <?= $template['name'] ?>
+                        </td>
+                        <td><a href="<?= $template['path'] ?>" target="_blank" class="btn btn-sm btn-outline-dark"><i class='fas fa-search'></i></a> <button data-toggle="modal" data-id="<?= $template['id'] ?>" data-target="#editlink" data-name="<?= $template['name'] ?>" data-path="<?= $template['path'] ?>" class="btn btn-sm btn-outline-dark"><i class='fas fa-pen'></i></button> <a data-toggle="modal" data-target="#deletelink" data-name="<?= $template['name'] ?>" data-id="<?= $template['id'] ?>" href="" class="btn btn-sm btn-outline-dark"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
                 <?php endforeach ?>
             </tbody>
         </table>
@@ -122,23 +119,23 @@
 </div>
 
 <script>
-var deletename = document.getElementById('deletename');
-$('#editlink').on('show.bs.modal', function(e) {
-    var id = $(e.relatedTarget).data('id');
-    var name = $(e.relatedTarget).data('name');
-    var path = $(e.relatedTarget).data('path');
-    $(e.currentTarget).find('input[name="editid"]').val(id);
-    $(e.currentTarget).find('input[name="editname"]').val(name);
-    $(e.currentTarget).find('input[name="editpath"]').val(path);
-});
-$('#editlink').on('hide.bs.modal', function(e) {});
-$('#deletelink').on('show.bs.modal', function(e) {
-    var id = $(e.relatedTarget).data('id');
-    var name = $(e.relatedTarget).data('name');
-    deletename.innerHTML = name;
-    $(e.currentTarget).find('input[name="deleteid"]').val(id);
-});
-$('#deletelink').on('hide.bs.modal', function(e) {
-    deletename.innerHTML = '';
-});
+    var deletename = document.getElementById('deletename');
+    $('#editlink').on('show.bs.modal', function(e) {
+        var id = $(e.relatedTarget).data('id');
+        var name = $(e.relatedTarget).data('name');
+        var path = $(e.relatedTarget).data('path');
+        $(e.currentTarget).find('input[name="editid"]').val(id);
+        $(e.currentTarget).find('input[name="editname"]').val(name);
+        $(e.currentTarget).find('input[name="editpath"]').val(path);
+    });
+    $('#editlink').on('hide.bs.modal', function(e) {});
+    $('#deletelink').on('show.bs.modal', function(e) {
+        var id = $(e.relatedTarget).data('id');
+        var name = $(e.relatedTarget).data('name');
+        deletename.innerHTML = name;
+        $(e.currentTarget).find('input[name="deleteid"]').val(id);
+    });
+    $('#deletelink').on('hide.bs.modal', function(e) {
+        deletename.innerHTML = '';
+    });
 </script>

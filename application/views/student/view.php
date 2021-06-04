@@ -53,7 +53,7 @@
     <?php if (!$this->session->userdata('user_type') == 'mentor') : ?>
     <div class="col-lg-4">
         <?= form_open('/student/edit/' . $student['id']); ?>
-        <input type="submit" value="Edit Student" class="btn btn-outline-primary">
+        <input type="submit" value="Edit Student" class="btn btn-outline-dark">
         <?= form_close() ?>
     </div>
     <?php endif ?>

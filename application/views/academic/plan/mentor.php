@@ -7,7 +7,7 @@
 <?php $session = ($activesession) ? $activesession['academicsession'] : '?' ?>
 <h4><?= sprintf('Academic Session: %s', $session) ?></h4>
 <?php if (!$activesession) : ?>
-<small>You are not within any active academic session. Please configure the academic session's date properly <a href="<?= site_url('academic/control') ?>">here</a></small>
+    <small>You are not within any active academic session. Please configure the academic session's date properly <a href="<?= site_url('academic/control') ?>">here</a></small>
 <?php endif ?>
 <hr>
 <div class="form-group">
@@ -18,7 +18,7 @@
             <select name="acadyear_id" id="acadyear_id" class="form-control" required>
                 <option value="" disabled selected>Select academic year</option>
                 <?php foreach ($academicyears as $acadyear) : ?>
-                <option value="<?= $acadyear['id'] ?>"><?= $acadyear['acadyear'] ?></option>
+                    <option value="<?= $acadyear['id'] ?>"><?= $acadyear['acadyear'] ?></option>
                 <?php endforeach ?>
             </select>
         </div>
@@ -26,19 +26,19 @@
             <select name="semester" id="semester" class="form-control" required>
                 <option value="" disabled selected>Select semester</option>
                 <?php foreach ($semesters as $sem) : ?>
-                <option value="<?= $sem ?>"><?= $sem ?></option>
+                    <option value="<?= $sem ?>"><?= $sem ?></option>
                 <?php endforeach ?>
             </select>
         </div>
         <div class="col-md-4">
-            <button type="submit" class="btn btn-outline-primary"><i class='fas fa-search'></i> Search</button>
+            <button type="submit" class="btn btn-outline-dark"><i class='fas fa-search'></i> Search</button>
         </div>
     </div>
     <?= form_close() ?>
 </div>
 
 <?php if ($this->session->flashdata('message')) : ?>
-<?= $this->session->flashdata('message') ?>
+    <?= $this->session->flashdata('message') ?>
 <?php endif ?>
 
 <hr>
@@ -59,10 +59,10 @@
             <button <?= $disabled ?> class="btn btn-info" type="submit"><i class='fas fa-upload'></i> Upload</button>
         </div>
         <?php if ($today >= strtotime($examdate) and $examdate) : ?>
-        <?php $id = ($activesession) ? $activesession['id'] : '?' ?>
-        <small>Get result upload template <a href="<?= site_url('filelink') ?>">here</a>. ID of current session: <?= $id ?></small>
+            <?php $id = ($activesession) ? $activesession['id'] : '?' ?>
+            <small>Get result upload template <a href="<?= site_url('filelink') ?>">here</a>. ID of current session: <?= $id ?></small>
         <?php else : ?>
-        <small>You are able to upload your students' result after week 14</small>
+            <small>You are able to upload your students' result after week 14</small>
         <?php endif ?>
         <?= form_close() ?>
     </div>
@@ -85,17 +85,17 @@
                 </thead>
                 <tbody class="table-light">
                     <?php if ($academicplans) : ?>
-                    <?php foreach ($academicplans as $acp) : ?>
-                    <?php $resultclass = ($acp['gpa_achieved'] < 2.3) ? 'text-danger' : '' ?>
-                    <tr>
-                        <td><?= $acp['student_id'] ?></td>
-                        <td><?= $acp['name'] ?></td>
-                        <td><?= $acp['gpa_target'] ?></td>
-                        <td class="<?= $resultclass ?>"><?= $acp['gpa_achieved'] ?></td>
-                        <td class="<?= $acp['textclass'] ?>"><?= $acp['status'] ?></td>
-                        <td class="<?= $acp['textclass'] ?>"><?= $acp['difference'] ?></td>
-                    </tr>
-                    <?php endforeach ?>
+                        <?php foreach ($academicplans as $acp) : ?>
+                            <?php $resultclass = ($acp['gpa_achieved'] < 2.3) ? 'text-danger' : '' ?>
+                            <tr>
+                                <td><?= $acp['student_id'] ?></td>
+                                <td><?= $acp['name'] ?></td>
+                                <td><?= $acp['gpa_target'] ?></td>
+                                <td class="<?= $resultclass ?>"><?= $acp['gpa_achieved'] ?></td>
+                                <td class="<?= $acp['textclass'] ?>"><?= $acp['status'] ?></td>
+                                <td class="<?= $acp['textclass'] ?>"><?= $acp['difference'] ?></td>
+                            </tr>
+                        <?php endforeach ?>
                     <?php endif ?>
 
                 </tbody>
@@ -105,9 +105,9 @@
 </div>
 
 <script>
-$(document).ready(function() {
-    $('#acp_table').DataTable({
-        "order": []
+    $(document).ready(function() {
+        $('#acp_table').DataTable({
+            "order": []
+        });
     });
-});
 </script>
