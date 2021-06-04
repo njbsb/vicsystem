@@ -5,10 +5,11 @@ class Activity extends CI_Controller
     {
         $user_id = $this->session->userdata('username');
         $sig_id = $this->sig_model->get_sig_id($user_id);
+        $activeyear = $this->academic_model->get_activeacadyear();
         if ($this->session->userdata('user_type') == 'admin') {
             $activities = $this->activity_model->get_activity();
         } else {
-            $activities = $this->activity_model->get_sig_activity($sig_id);
+            $activities = $this->activity_model->get_activity_activeyear($activeyear['id']);
         }
         foreach ($activities as $i => $activity) {
             $committee = $this->activity_model->get_committees($activity['id']);

@@ -11,13 +11,13 @@ class Activity_model extends CI_Model
     {
         if ($slug === FALSE && $activity_id === FALSE) {
             // this code will get all activities
-            $this->db->select("act.id, act.title, act.slug, act.datetime_start, act.activitycategory_id, act.created_at,
+            $this->db->select("act.*,
             concat(acy.acadyear, ' Sem ', acs.semester) as academicsession, sig.code, mtr.name as advisorname")
                 ->from('activity as act')
                 ->join('academicsession as acs', 'act.acadsession_id = acs.id', 'left')
                 ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
                 // ->join('user as mtr', 'act.advisor_matric = mtr.id', 'left')
-                ->join('sig as sig', 'act.sig_id = sig.code')
+                ->join('sig as sig', 'act.sig_id = sig.code', 'left')
                 ->order_by('act.id', 'DESC');
             $query = $this->db->get();
             return $query->result_array();
@@ -46,6 +46,24 @@ class Activity_model extends CI_Model
             }
             return $query->row_array();
         }
+    }
+
+    public function get_activity_activeyear($acadyear_id)
+    {
+        $this->db->select("act.*, actcat.category, mtr.name as advisorname,
+        act.datetime_start, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession, sig.code")
+            ->from('activity as act')
+            ->join('academicsession as acs', 'acs.id = act.acadsession_id', 'left')
+            ->join('academicyear as acy', 'acy.id = acs.acadyear_id', 'left')
+            ->join('user as mtr', 'act.advisor_id = mtr.id', 'left')
+            ->join('sig as sig', 'act.sig_id = sig.code', 'left')
+            ->join('activitycategory as actcat', 'act.activitycategory_id = actcat.code', 'left')
+            ->where(array(
+                'acy.id' => $acadyear_id
+            ))
+            ->order_by('act.id', 'DESC');
+        $query = $this->db->get();
+        return $query->result_array();
     }
 
     public function get_externalactivity($slug = FALSE)
@@ -111,22 +129,6 @@ class Activity_model extends CI_Model
             ->from('activity')->where(array(
                 'acadsession_id' => $acadsession_id
             ));
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-
-    public function get_sig_activity($sig_id)
-    {
-        $this->db->select("act.id, act.title, act.description, act.slug, act.activitycategory_id, act.created_at, actcat.category, mtr.name as advisorname,
-        act.datetime_start, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession, sig.code")
-            ->from('activity as act')
-            ->where('act.sig_id', $sig_id)
-            ->join('academicsession as acs', 'act.acadsession_id = acs.id', 'left')
-            ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
-            ->join('user as mtr', 'act.advisor_id = mtr.id', 'left')
-            ->join('sig as sig', 'act.sig_id = sig.code')
-            ->join('activitycategory as actcat', 'act.activitycategory_id = actcat.code', 'left')
-            ->order_by('act.id', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
     }
