@@ -100,15 +100,19 @@ class User extends CI_Controller
             }
             $user_id = $this->user_model->login($username, $password);
             // default password and incomplete profile variable 
-            switch ($usertype) {
-                case 'mentor':
-                    $userspecific = $this->mentor_model->get_mentor_profile($username);
-                    break;
-                case 'student':
-                    $userspecific = $this->student_model->get_student_profile($username);
-                    break;
+            if ($usertype == 'admin') {
+                $profileComplete = true;
+            } else {
+                switch ($usertype) {
+                    case 'mentor':
+                        $userspecific = $this->mentor_model->get_mentor_profile($username);
+                        break;
+                    case 'student':
+                        $userspecific = $this->student_model->get_student_profile($username);
+                        break;
+                }
+                $profileComplete = (isset($userspecific)) ? true : false;
             }
-            $profileComplete = (isset($userspecific)) ? true : false;
             $defaultPassword = $this->user_model->check_defaultpassword($username);
             $user = $this->user_model->get_user($username);
             if ($user_id) {
@@ -271,7 +275,7 @@ class User extends CI_Controller
                 $data = array(
                     'title' => 'User Profile',
                     'user' => $user,
-                    'admin' => $this->admin_model->get_admin($id)
+                    'admin' => $this->user_model->get_user($id)
                 );
                 $this->load->view('user/admin/profile', $data);
                 break;
@@ -328,8 +332,8 @@ class User extends CI_Controller
         $this->load->view('templates/header');
         switch ($usertype) {
             case 'admin':
-                $data['admin'] = $this->admin_model->get_admin($id);
-                $this->load->view('user/admin/update', $data);
+                // $data['admin'] = $this->user_model->get_user($id);
+                // $this->load->view('user/admin/update', $data);
                 break;
             case 'mentor':
                 $data['mentor'] = $this->mentor_model->get_mentor($id);
