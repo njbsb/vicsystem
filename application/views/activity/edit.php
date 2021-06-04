@@ -5,7 +5,6 @@
     <li class="breadcrumb-item active">Edit</li>
 </ol>
 <br>
-<!-- <h2><?= $title ?></h2> -->
 <?php if (validation_errors()) : ?>
 <div class="alert alert-dismissible alert-warning">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -14,9 +13,7 @@
 </div>
 <?php endif ?>
 
-<?php $hidden = array(
-    'id' => $activity['id']
-) ?>
+<?php $hidden = array('id' => $activity['id']) ?>
 <?= form_open_multipart('activity/update', '', $hidden); ?>
 <div class="row">
     <div class="col-md-12 col-sm-6">
@@ -25,7 +22,7 @@
                 <!-- NAME -->
                 <div class="form-group">
                     <label>Activity Name</label>
-                    <input name="title" type="text" class="form-control form-control-lg" placeholder="Enter activity name" value="<?= $activity['title'] ?>">
+                    <input name="title" type="text" class="form-control form-control-lg" placeholder="Enter activity name" value="<?= $activity['title'] ?>" required>
                     <small class="form-text text-muted">Please include unique activity name</small>
                 </div>
                 <!-- DESCRIPTION -->
@@ -54,11 +51,11 @@
                 <!-- Start and end date -->
                 <div class="form-group">
                     <label>Datetime start:</label><br>
-                    <input class="form-control" name="datetime_start" value="<?= str_replace(' ', 'T', $activity['datetime_start']) ?>" type="datetime-local" id="datetime_start">
+                    <input class="form-control" name="datetime_start" value="<?= str_replace(' ', 'T', $activity['datetime_start']) ?>" type="datetime-local" id="datetime_start" required>
                 </div>
                 <div class="form-group">
                     <label>Datetime end:</label><br>
-                    <input class="form-control" name="datetime_end" value="<?= str_replace(' ', 'T', $activity['datetime_end']) ?>" type="datetime-local" id="datatime_end">
+                    <input class="form-control" name="datetime_end" value="<?= str_replace(' ', 'T', $activity['datetime_end']) ?>" type="datetime-local" id="datatime_end" required>
                 </div>
             </div>
         </div>
@@ -66,20 +63,31 @@
     <div class="col-md-7 col-sm-6">
         <div class="card">
             <div class="card-body">
-                <!-- <h5>Committee</h5> -->
                 <div class="form-group">
                     <label>Activity Advisor</label>
-                    <select name="advisor_id" class="form-control">
+                    <select name="advisor_id" class="form-control" required>
                         <option value="<?= $activity['advisor_id'] ?>" selected readonly><?= $activity['advisorname'] . ' (' . $activity['advisor_id'] . ')' ?></option>
                     </select>
                 </div>
                 <div class="row">
-                    <?php foreach ($highcoms as $highcom) : ?>
+                    <?php foreach ($highcomroles as $role) : ?>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label><?= $highcom['role'] ?></label>
-                            <select name="highcoms[<?= $highcom['role_id'] ?>]" class="form-control" readonly>
-                                <option value="<?= $highcom['id'] ?>"><?= $highcom['name'] . ' (' . $highcom['id'] . ')' ?></option>
+                            <label for=""><?= $role['role'] ?></label>
+                            <select name="highcoms[<?= $role['id'] ?>]" id="" class="form-control" required>
+                                <?php if ($role['student']) : ?>
+                                <option value="<?= $role['student']['student_id'] ?>" selected><?= $role['student']['name'] ?></option>
+                                <?php else : ?>
+                                <option value="" disabled hidden selected>Please select a student</option>
+                                <?php if ($activestudents) : ?>
+                                <?php foreach ($activestudents as $student) : ?>
+                                <?php $selected = ($student['id'] == $role['student']['student_id'] and $role['student']) ? 'selected' : '' ?>
+                                <option value="<?= $student['id'] ?>" <?= $selected ?>>
+                                    <?= $student['name'] ?>
+                                </option>
+                                <?php endforeach ?>
+                                <?php endif ?>
+                                <?php endif ?>
                             </select>
                         </div>
                     </div>
@@ -97,6 +105,6 @@
 
 <hr>
 
-<button type="submit" class="btn btn-primary">Update</button>
+<button type="submit" class="btn btn-primary"><i class='fas fa-save'></i> Update</button>
 <?= form_close() ?>
 <br>

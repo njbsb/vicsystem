@@ -14,6 +14,7 @@
             </div>
             <br>
             <h2 class="text-primary"><b><?= $activity['title'] ?></b></h2>
+            <small>Session: <?= $activitysession['academicsession'] ?></small>
             <hr>
             <?php if ($activity['description']) : ?>
             <div class="card">
@@ -70,23 +71,30 @@
         </div>
         <div class="card-footer">
             <div class="row">
-
-                <?php if ($this->session->userdata('user_type') != 'student' or $isHighcom) : ?>
+                <?php if ($usertype != 'student' or $isHighcom) : ?>
+                <?php $disableupdatebtn = ($disableupdate) ? 'disabled' : '' ?>
                 <?= form_open('activity/edit/' . $activity['slug']) ?>
-                <button type="submit" class="btn btn-primary"><i class='fas fa-pen'></i> Update</button>
+                <button id="editbtn" type="submit" class="btn btn-primary" <?= $disableupdatebtn ?>><i class='fas fa-pen'></i> Edit</button>
                 <?= form_close() ?>
+                <?php endif ?>
                 &nbsp;
-                <?php $disabled = ($this->session->userdata('user_type') != 'student') ? '' : 'disabled' ?>
-                <button data-toggle="modal" data-target="#confirmdelete" class="btn btn-outline-danger" <?= $disabled ?>>
+                <?php if ($usertype != 'student') : ?>
+                <?php $disabledeletebtn = ($disabledelete) ? 'disabled' : '' ?>
+                <button id="deletebtn" data-toggle="modal" data-target="#confirmdelete" class="btn btn-outline-danger" <?= $disabledeletebtn ?>>
                     <i class="fa fa-trash"></i> Delete
                 </button>
                 <?php endif ?>
-
             </div>
+            <?php if ($oldsession) : ?>
+            <div class="row">
+                <small>You can no longer activity that was done in the previous academic session</small>
+            </div>
+            <?php endif ?>
+
         </div>
     </div>
+
 </div>
-<hr>
 
 <div id="confirmdelete" class="modal fade card">
     <div class="modal-dialog" role="document">
@@ -99,14 +107,34 @@
                 </button>
             </div>
             <div class="modal-body">
-                You are about to delete activity: <?= $activity['title'] ?>. You cannot undo this.
-                Proceed?
+                <div id="deletemessage">
+                    You are about to delete activity: <?= $activity['title'] ?>. You cannot undo this.
+                    Proceed?
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-danger">Delete anyway</button>
+                <?php if (!$scoreplan) : ?>
+                <button id="confirmdeletebtn" type="submit" class="btn btn-danger">Delete anyway</button>
+                <?php endif ?>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
         </div>
     </div>
 </div>
+
+<script>
+var editbtn = document.getElementById("editbtn");
+var deletebtn = document.getElementById("deletebtn");
+// var confirmdeletebtn = document.getElementById("confirmdeletebtn");
+var deletemessage = document.getElementById("deletemessage");
+var scoreplan = JSON.parse(`<?= json_encode($scoreplan) ?>`);
+$('#confirmdelete').on('show.bs.modal', function(e) {
+    if (Object.keys(scoreplan).length === 0) {
+        deletemessage.innerHTML = 'You are about to delete activity <?= $activity['title'] ?>. You cannot undo this. Proceed?';
+        // confirmdeletebtn.remove();
+    } else {
+        deletemessage.innerHTML = 'You cannot delete an activity that has a score plan registered with it';
+    }
+});
+</script>

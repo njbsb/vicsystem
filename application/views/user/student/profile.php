@@ -19,7 +19,7 @@
                     <h3><b><?= $student['name'] ?></b></h3>
                 </div>
                 <div class="col-6">
-                    <a href="<?= site_url('profile/update') ?>" class="btn btn-outline-primary" style="float:right;"><i class='fas fa-pen'></i> Edit</a>
+                    <a href="<?= site_url('profile/update') ?>" class="btn btn-outline-dark" style="float:right;"><i class='fas fa-pen'></i> Edit</a>
                 </div>
             </div>
             <div class="row">
@@ -64,10 +64,10 @@
     <?php if ($activity_roles) : ?>
     <div class="card">
         <div class="card-body">
-            <h4 class="text-secondary text-center"><b>Activity Level</b></h4>
+            <h4 class="text-white text-center"><b>Activity Level</b></h4>
             <br>
             <div class="table-responsive">
-                <table id="acttable" class="table">
+                <table id="acttable" class="table table-hover">
                     <thead class="table-dark">
                         <tr>
                             <th>Year</th>
@@ -75,10 +75,10 @@
                             <th>Role</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-active">
                         <?php foreach ($activity_roles as $actrole) : ?>
                         <?php $desc = (isset($actrole['description'])) ? sprintf(' (%s)', $actrole['description']) : '' ?>
-                        <tr class="table-light">
+                        <tr>
                             <td><?= $actrole['acadyear'] . ' Semester ' . $actrole['semester'] ?></td>
                             <td><?= $actrole['activity_name'] ?></td>
                             <td><?= $actrole['role'] . $desc ?></td>

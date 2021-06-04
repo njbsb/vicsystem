@@ -16,43 +16,40 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6">
                     <h3><b><?= $mentor['name'] ?></b></h3>
-
                 </div>
                 <div class="col-lg-6 col-md-6">
-                    <a href="<?= site_url('profile/update') ?>" class="btn btn-outline-primary" style="float:right;"><i class='fas fa-pen'></i> Edit</a>
+                    <a href="<?= site_url('profile/update') ?>" class="btn btn-outline-dark" style="float:right;"><i class='fas fa-pen'></i> Edit</a>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <h6><b>Email</b></h6>
-                    <h6><b>Position</b></h6>
-                    <h6><b>Role</b></h6>
-                    <h6><b>Room Num</b></h6>
+                    <h6><b>Phone Number</b></h6>
                 </div>
                 <div class="col-lg-9 col-md-6 col-sm-6">
                     <h6><a href="mailto:<?= $mentor['email'] ?>"><?= $mentor['email'] ?></a></h6>
-                    <h6><?= $mentor['position'] ?></h6>
-                    <h6><?= $mentor['role'] ?></h6>
-                    <h6><?= $mentor['roomnum'] ?></h6>
-                </div>
-            </div>
-            <hr>
-            <h5>Personal Information</h5>
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <h6><b>Phone Num:</b></h6>
-                </div>
-                <div class="col-lg-9 col-md-6 col-sm-6">
                     <h6><?= $mentor['phonenum'] ?></h6>
                 </div>
             </div>
-
+            <hr>
+            <h5>Mentor Information</h5>
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <h6><b>Role</b></h6>
+                    <h6><b>Position</b></h6>
+                    <h6><b>Room Num</b></h6>
+                </div>
+                <div class="col-lg-9 col-md-6 col-sm-6">
+                    <h6><?= $mentor['role'] ?></h6>
+                    <h6><?= $mentor['position'] ?></h6>
+                    <h6><?= $mentor['roomnum'] ?></h6>
+                </div>
+            </div>
         </div>
     </div>
     <hr>
     <h2>Previous Activity and Roles</h2> <br>
     <?php if ($activity_roles) : ?>
-
     <div class="card">
         <div class="card-body">
             <h4>Activities</h4>
@@ -71,7 +68,6 @@
             </div>
         </div>
     </div>
-
     <?php else : ?>
     <p>No data of activity roles found</p>
     <?php endif ?>

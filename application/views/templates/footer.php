@@ -46,7 +46,6 @@
 var loggedin = <?= json_encode($this->session->userdata('logged_in')) ?>;
 var defaultpassword = <?= json_encode($this->session->userdata('defaultpassword')) ?>;
 var profileComplete = <?= json_encode($this->session->userdata('profilecomplete')) ?>;
-console.log(profileComplete);
 if (loggedin) {
     if (defaultpassword) {
         $("#defaultpassword").modal()

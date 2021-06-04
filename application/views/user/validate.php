@@ -114,7 +114,7 @@
                     <?php $checked = ($user['validated']) ? 'checked' : '' ?>
                     <?php $checkedtext = ($user['validated']) ? 'Validated' : 'Pending' ?>
                     <?php $textclass = ($user['validated']) ? 'text-dark' : 'text-danger' ?>
-                    <?php if (!$user['id'] = $this->session->userdata('username')) : ?>
+                    <?php if ($user['id'] != $this->session->userdata('username')) : ?>
                     <div class="custom-control custom-switch">
                         <input <?= $checked ?> type="checkbox" class="custom-control-input" name="validated" id="validated" onclick="checkValue()">
                         <label id="displaytext" class="custom-control-label <?= $textclass ?>" for="validated"><?= $checkedtext ?></label>
@@ -141,7 +141,6 @@ function checkValue() {
         textdisplay.innerHTML = 'Validated';
         textdisplay.classList.add('text-dark');
         textdisplay.classList.remove('text-danger');
-        console.log(checkbox.value)
     } else {
         checkbox.value = false;
         textdisplay.innerHTML = 'Pending';

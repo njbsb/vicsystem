@@ -17,8 +17,11 @@
     <div class="col-md-5">
         <div class="card">
             <div class="card-body">
-                <h4><a href="<?= site_url('activity/external/' . $ext['slug']) ?>"><?= $ext['title'] ?></a></h4>
-                <span class="badge rounded-pill bg-warning"><?= $ext['level'] ?></span><small class="post-date">Endorsed by: <?= $ext['mentorname'] ?></small>
+                <h4><?= $ext['title'] ?></h4>
+                <span class="badge rounded-pill bg-dark text-white"><?= $ext['academicsession']['academicsession'] ?></span>&nbsp;<span
+                    class="badge rounded-pill bg-warning"><?= $ext['level'] ?></span><small class="post-date">Endorsed
+                    by:
+                    <?= $ext['mentorname'] ?></small>
                 <p><?= sprintf('%s: %s', '<b>' . date_format(date_create($ext['date']), 'M d, Y') . '</b>', $ext['description']) ?></p>
                 <?php if ($usertype != 'student') : ?>
                 <a data-toggle="modal" data-target="#editexternal" data-id="<?= $ext['id'] ?>" data-title="<?= $ext['title'] ?>" data-description="<?= $ext['description'] ?>"
@@ -279,7 +282,6 @@ $('#addparticipant').on('show.bs.modal', function(e) {
     var title = $(e.relatedTarget).data('title');
     var external_id = $(e.relatedTarget).data('externalid');
     var availableid = $(e.relatedTarget).data("availableid");
-    console.log(availableid);
     $(e.currentTarget).find('input[name="external_id"]').val(external_id);
     $(e.currentTarget).find('input[name="title"]').val(title);
     texttitle.innerHTML += title;

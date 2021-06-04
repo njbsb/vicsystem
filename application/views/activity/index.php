@@ -34,7 +34,7 @@
                 <tbody class="list table-active">
                     <?php foreach ($activities as $activity) : ?>
                     <tr>
-                        <td class="Activity" scope="row"><a href="<?= site_url('/activity/' . $activity['slug']) ?>"><?= $activity['title'] ?></a></t>
+                        <td class="Activity"><a class="text-dark" href="<?= site_url('/activity/' . $activity['slug']) ?>"><?= $activity['title'] ?></a></t>
                         <td class="Date"><?= date('d/m/Y', strtotime($activity['datetime_start'])) ?></td>
                         <td><?= $activity['academicsession'] ?></td>
                         <td><?= $activity['committeenum'] ?></td>
@@ -54,7 +54,9 @@
         <div class="card">
             <div class="card-body">
                 <h4><a href="<?= site_url('activity/' . $act['slug']) ?>"><?= $act['title'] ?></a></h4>
-                <span class="badge rounded-pill bg-warning"><?= $act['category'] ?></span><small class="post-date">Date: <?= date('d/m/Y', strtotime($act['datetime_start'])) ?></small>
+                <span class="badge rounded-pill bg-dark text-white"><?= $act['academicsession'] ?></span>&nbsp;<span class="badge rounded-pill bg-warning"><?= $act['category'] ?></span><small
+                    class="post-date">Date:
+                    <?= date('d/m/Y', strtotime($act['datetime_start'])) ?></small>
                 <p><?= word_limiter($act['description'], 10) ?></p>
             </div>
         </div>

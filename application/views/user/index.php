@@ -6,14 +6,15 @@
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
-            <table id="usertable" class="table table-hover">
+            <table id="usertable" class="table table-hover text-center">
                 <thead class="table-dark">
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
+                        <th class="text-left">ID</th>
+                        <th class="text-left">Name</th>
                         <th>User type</th>
                         <th>Uni Status</th>
                         <th>Validation</th>
+                        <th>Profile</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -21,20 +22,18 @@
                     <?php if ($users) : ?>
                     <?php foreach ($users as $user) : ?>
                     <?php $statusclass = ($user['validated']) ? 'text-success' : 'text-warning' ?>
+                    <?php $profileclass = ($user['profileexist']) ? 'text-success' : 'text-danger' ?>
                     <tr>
-                        <td><?= $user['id'] ?></td>
-                        <td><?= $user['name'] ?></td>
+                        <td class="text-left"><?= $user['id'] ?></td>
+                        <td class="text-left"><?= $user['name'] ?></td>
                         <td><?= $user['usertype'] ?></td>
                         <td><?= $user['unistatus'] ?></td>
-                        <?php if ($user['validated']) : ?>
-                        <?php else : ?>
-                        <?php endif ?>
-
                         <td class="<?= $statusclass ?>"><?= $user['validationstatus'] ?></td>
-                        <td>
+                        <td data-toggle="tooltip" data-placement="left" title="<?= $user['profilestatus'] ?>" class="<?= $profileclass ?> text-center"><?= $user['profileicon'] ?></td>
+                        <td class="text-right">
                             <a class="btn btn-sm btn-outline-dark" href="<?= site_url('validate/') . $user['id'] ?>"><i class='fas fa-pen'></i></a>
                             <?php if ($user['id'] != $this->session->userdata('username')) : ?>
-                            <a class="btn btn-sm btn-outline-danger" data-toggle="modal" data-userid="<?= $user['id'] ?>"
+                            <a class="btn btn-sm btn-outline-danger" data-toggle="modal" data-profileexist="<?= $user['profileexist'] ?>" data-userid="<?= $user['id'] ?>"
                                 onclick="$('#confirmDelete #formDelete').attr('action', '<?= site_url('user/delete/' . $user['id']) ?>')" href="#confirmDelete"><i class='fas fa-trash-alt'></i></a>
                             <?php endif ?>
                         </td>
@@ -48,6 +47,7 @@
                         <td>Name</td>
                         <td>User type</td>
                         <td>Status</td>
+                        <td></td>
                         <td></td>
                     </tr>
                 </tfoot>
@@ -93,7 +93,7 @@
             </div>
             <div class="modal-footer">
                 <form id="formDelete" action="" method="post">
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button id="confirmdeletebtn" type="submit" class="btn btn-danger">Delete</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </form>
             </div>
@@ -125,12 +125,21 @@ $(document).ready(function() {
     });
 });
 var confirmtext = document.getElementById('confirmtext');
+var confirmdeletebtn = document.getElementById('confirmdeletebtn');
 $('#confirmDelete').on('show.bs.modal', function(e) {
+    var profileExist = $(e.relatedTarget).data('profileexist');
     var userid = $(e.relatedTarget).data('userid');
+    if (!profileExist) {
+        confirmtext.innerHTML = 'Are you sure to delete this user?' + ' <b>(' + userid + ')</b>';
+        confirmdeletebtn.disabled = false;
+    } else {
+        confirmtext.innerHTML = 'This user has completed his/her profile. You can no longer delete this user.';
+        confirmdeletebtn.disabled = true;
+    }
     // data('userid) is passed from a button
-    confirmtext.innerHTML += ' <b>(' + userid + ')</b>';
+    // confirmtext.innerHTML += ' <b>(' + userid + ')</b>';
 });
 $('#confirmDelete').on('hide.bs.modal', function(e) {
-    confirmtext.innerHTML = 'Are you sure to delete this user?';
+    confirmtext.innerHTML = '';
 });
 </script>

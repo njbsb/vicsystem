@@ -15,10 +15,11 @@
 <?php else : ?>
 
 <?php if (empty($thisacademicplan['gpa_target'])) : ?>
-<small class="text-warning">Attention!</small>
+<small class="text-white">Attention!</small>
 <small>Seems that you have not set your GPA for the current semester. Please set it first.</small>
 <br>
 <button class="btn btn-primary" data-toggle="modal" data-target="#setGPA">Set GPA</button>
+<br>
 <?php else : ?>
 <h6>You have registered this session's GPA target!</h6>
 <?php if ($today >= strtotime($examdate) and $examdate) : ?>
@@ -45,8 +46,8 @@
                 <tbody class="table-light">
                     <?php if ($academicplans) : ?>
                     <?php foreach ($academicplans as $acp) : ?>
-                    <?php $sign = ($acp['difference'] > 0) ? '+' : '' ?>
-                    <?php $textclass = ($acp['difference'] >= 0) ? 'text-success' : 'text-danger' ?>
+                    <?php $sign = (is_numeric($acp['difference']) and $acp['difference'] > 0) ? '+' : '' ?>
+                    <?php $textclass = (is_numeric($acp['difference']) and $acp['difference'] >= 0) ? 'text-success' : 'text-danger' ?>
                     <tr>
                         <td><?= $acp['academicsession'] ?></td>
                         <td><?= $acp['gpa_target'] ?></td>
@@ -87,13 +88,13 @@
                 </div>
                 <div class="form-group">
                     <label for="gpa_target">GPA Target</label>
-                    <input name="gpa_target" min="2" max="4" type="number" placeholder="3.00" class="form-control" step="0.01" required>
+                    <input name="gpa_target" id="gpa_target" min="2" max="4" maxlength="4" size="4" type="number" placeholder="3.00" class="form-control" step="0.01" required>
                     <small>Note: GPA target must be bigger than 2.00</small><br>
                     <small>Carefully fill in your target GPA. You cannot change your target GPA in the future.</small>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button id="submitgpa" type="submit" class="btn btn-primary" disabled>Add</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
             </div>
             <?= form_close() ?>
@@ -106,5 +107,19 @@ $(document).ready(function() {
     $('#tableacademicplan').DataTable({
         "order": []
     });
+    var gpainput = document.getElementById("gpa_target");
+    var submitgpa = document.getElementById("submitgpa");
+
+    function checkGPA() {
+        var gpa = $('#gpa_target').val();
+        if (gpa > 2) {
+            submitgpa.disabled = false;
+        } else {
+            submitgpa.disabled = true;
+        }
+    }
+
+
+    $("#gpa_target").keyup(checkGPA);
 });
 </script>

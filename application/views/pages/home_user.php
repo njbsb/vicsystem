@@ -78,7 +78,7 @@
                             <?php endforeach ?>
                         </p>
                         <p class="lead">
-                            <a class="btn btn-primary btn-sm" href="#" role="button">Send a wish!</a>
+                            <!-- <a class="btn btn-primary btn-sm" href="#" role="button">Send a wish!</a> -->
                         </p>
                     </div>
                 </div>

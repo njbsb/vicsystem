@@ -28,7 +28,6 @@
         <h1 class="home-title">Activity Planner</h1>
         <br>
         <p class="home-text">Plan your activity and academic plan and track them from time to time</p>
-        <p>Hello</p>
     </div>
 </div>
 <hr>

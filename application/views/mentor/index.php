@@ -22,7 +22,7 @@
                             <?= $mentor['name'] ?>
                         </a>
                     </h5>
-                    <h6 class="card-subtitle text-muted"><?= $mentor['role'] ?></h6>
+                    <h6 class="card-subtitle text-white"><?= $mentor['role'] ?></h6>
                 </div>
             </div>
         </div>

@@ -355,7 +355,6 @@ $(document).ready(function() {
         var userid = $(e.relatedTarget).data('acsid');
         var acads = $(e.relatedTarget).data('string');
         var acs_startdate = $(e.relatedTarget).data('acsstartdate');
-        console.log(acs_startdate);
         var acs_enddate = $(e.relatedTarget).data('acsenddate');
         $(e.currentTarget).find('input[name="acadsession_id"]').val(userid);
         $(e.currentTarget).find('input[name="session_string"]').val(acads);
