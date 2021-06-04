@@ -2,12 +2,12 @@
     <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
     <li class="breadcrumb-item active">Profile</li>
 </ol>
-<div class="container-fluid text-center">
+<div class="container-fluid">
     <div class="row">
         <div class="col-lg-4 col-md-6 col-sm-12">
             <div class="card border-dark mb-3 text-center" style="max-width: 20rem;">
                 <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= $mentor['userphoto'] ?>">
-                <div class="card-footer text-muted">
+                <div class="card-footer text-white">
                     <?= $mentor['id'] ?>
                 </div>
             </div>
@@ -48,27 +48,41 @@
         </div>
     </div>
     <hr>
-    <h2>Previous Activity and Roles</h2> <br>
+    <h2 class="text-center">Previous Activity and Roles</h2> <br>
     <?php if ($activity_roles) : ?>
-    <div class="card">
-        <div class="card-body">
-            <h4>Activities</h4>
-            <div class="row justify-content-center">
-                <?php foreach ($activity_roles as $actrole) : ?>
-                <div class="col-md-4">
-                    <div class="card text-white bg-dark mb-3">
-                        <div class="card-header"><a class="text-white" href="<?= site_url('activity/' . $actrole['slug']) ?>"><?= $actrole['activity_name'] ?></a></div>
-                        <div class="card-body">
-                            <h4 class="card-title">Advisor</h4>
-                            <p class="card-text"><?= $actrole['academicsession'] ?></p>
-                        </div>
-                    </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="text-center text-white"><b>Activity Roles</b></h4>
+                <br>
+                <div class="table-responsive">
+                    <table id="tablerole" class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <td>Academic Session</td>
+                                <td>Activity</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($activity_roles as $role) : ?>
+                                <tr>
+                                    <td><?= $role['academicsession'] ?></td>
+                                    <td><?= $role['title'] ?></td>
+                                </tr>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
                 </div>
-                <?php endforeach ?>
             </div>
         </div>
-    </div>
     <?php else : ?>
-    <p>No data of activity roles found</p>
+        <p>No data of activity roles found</p>
     <?php endif ?>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#tablerole').DataTable({
+            "order": []
+        });
+    });
+</script>

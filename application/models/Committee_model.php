@@ -92,7 +92,7 @@ class Committee_model extends CI_Model
         $this->db->select("act.id, act.slug, act.title, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
             ->from('activity as act')
             // ->join('committee_activity as actcom')
-            // ->where('act.advisor_matric', $mentor_id)
+            ->where('act.advisor_id', $mentor_id)
             // ->join('commmittee_activity')
             // ->join('user', 'user.id = act.advisor_matric')
             ->join('academicsession as acs', 'acs.id = act.acadsession_id')

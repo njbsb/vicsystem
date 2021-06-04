@@ -11,12 +11,11 @@ class Activity_model extends CI_Model
     {
         if ($slug === FALSE && $activity_id === FALSE) {
             // this code will get all activities
-            $this->db->select("act.*,
-            concat(acy.acadyear, ' Sem ', acs.semester) as academicsession, sig.code, mtr.name as advisorname")
+            $this->db->select("act.*, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession, sig.code, mtr.name as advisorname")
                 ->from('activity as act')
                 ->join('academicsession as acs', 'act.acadsession_id = acs.id', 'left')
                 ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
-                // ->join('user as mtr', 'act.advisor_matric = mtr.id', 'left')
+                ->join('user as mtr', 'act.advisor_id = mtr.id', 'left')
                 ->join('sig as sig', 'act.sig_id = sig.code', 'left')
                 ->order_by('act.id', 'DESC');
             $query = $this->db->get();
@@ -61,6 +60,20 @@ class Activity_model extends CI_Model
             ->where(array(
                 'acy.id' => $acadyear_id
             ))
+            ->order_by('act.id', 'DESC');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function get_activity_bysession($acadsession_id)
+    {
+        $this->db->select("act.*, actcat.category, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession, mtr.name as advisorname")
+            ->from('activity as act')
+            ->where('act.acadsession_id', $acadsession_id)
+            ->join('academicsession as acs', 'act.acadsession_id = acs.id', 'left')
+            ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
+            ->join('activitycategory as actcat', 'act.activitycategory_id = actcat.code', 'left')
+            ->join('user as mtr', 'act.advisor_id = mtr.id', 'left')
             ->order_by('act.id', 'DESC');
         $query = $this->db->get();
         return $query->result_array();

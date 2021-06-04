@@ -288,7 +288,7 @@ class User extends CI_Controller
                     'title' => 'User Profile',
                     'user' => $user,
                     'mentor' => $mentor,
-                    'activity_roles' => $this->committee_model->get_activityroles($id)
+                    'activity_roles' => $this->committee_model->get_mentor_activityroles($id)
                 );
                 $this->load->view('user/mentor/profile', $data);
                 break;

@@ -6,32 +6,33 @@
 <h2><?= $title ?></h2>
 <hr>
 <?php if (!$thisacademicplan) : ?>
-    <?php if ($activesession) : ?>
-        <p>You are not enrolled in the current academic session (<?= $activesession['academicsession'] ?>). Please contact your mentor.</p>
-    <?php else : ?>
-        <p>There is not any active session at the moment. Your mentor will update the system accordingly</p>
-    <?php endif ?>
+<?php if ($activesession) : ?>
+<p>You are not enrolled in the current academic session (<?= $activesession['academicsession'] ?>). Please contact your mentor.</p>
+<?php else : ?>
+<p>There is not any active session at the moment. Your mentor will update the system accordingly</p>
+<?php endif ?>
 
 <?php else : ?>
 
-    <?php if (empty($thisacademicplan['gpa_target'])) : ?>
-        <?php if ($today < strtotime($examdate) and $examdate) : ?>
-            <button class="btn btn-dark" data-toggle="modal" data-target="#setGPA">Set GPA</button>
-            <br>
-            <small class="text-white">Attention! </small><small>Seems that you have not set your GPA for the current semester. Please set it first.</small>
-
-        <?php else : ?>
-            <small class="text-white">Attention! </small><small>You missed the dateline to set your gpa :(</small>
-        <?php endif ?>
-        <br>
+<?php if (empty($thisacademicplan['gpa_target'])) : ?>
+<?php if ($today < strtotime($examdate) and $examdate) : ?>
+<button class="btn btn-dark" data-toggle="modal" data-target="#setGPA">Set GPA</button>
+<br>
+<small class="text-white">Attention! </small><small>Seems that you have not set your GPA for the current semester. Please set it first.</small>
+<?php else : ?>
+<small class="text-white">Attention! </small><small>You missed the dateline to set your gpa :(</small>
+<?php endif ?>
+<br>
+<?php else : ?>
+<h6>You have registered this session's GPA target!</h6>
+<div style="line-height:100%">
+    <?php if ($today >= strtotime($examdate) and $examdate) : ?>
+    <small>It's end of academic session. Your result will soon be updated by your mentor</small><br>
     <?php else : ?>
-        <h6>You have registered this session's GPA target!</h6>
-        <?php if ($today >= strtotime($examdate) and $examdate) : ?>
-            <small>It's end of academic session. Your result will soon be updated by your mentor</small><br>
-        <?php else : ?>
-            <small>Study week on going.</small>
-        <?php endif ?>
+    <small>Study week on going.</small>
     <?php endif ?>
+</div>
+<?php endif ?>
 <?php endif ?>
 <br>
 <div class="card">
@@ -49,20 +50,20 @@
                 </thead>
                 <tbody class="table-light">
                     <?php if ($academicplans) : ?>
-                        <?php foreach ($academicplans as $acp) : ?>
-                            <?php $sign = (is_numeric($acp['difference']) and $acp['difference'] > 0) ? '+' : '' ?>
-                            <?php $textclass = (is_numeric($acp['difference']) and $acp['difference'] >= 0) ? 'text-success' : 'text-danger' ?>
-                            <tr>
-                                <td><?= $acp['academicsession'] ?></td>
-                                <td><?= $acp['gpa_target'] ?></td>
-                                <td><?= $acp['gpa_achieved'] ?></td>
-                                <td class="<?= $textclass ?>"><?= $sign ?><?= $acp['difference'] ?></td>
-                                <?php $hidden = array('student_id' => $student['id'], 'acadsession_id' => $acp['acadsession_id']) ?>
-                                <?= form_open('academic/record', '', $hidden) ?>
-                                <td><button type="submit" class="btn btn-sm btn-dark"><i class='fas fa-search'></i> Score</button></td>
-                                <?= form_close() ?>
-                            </tr>
-                        <?php endforeach ?>
+                    <?php foreach ($academicplans as $acp) : ?>
+                    <?php $sign = (is_numeric($acp['difference']) and $acp['difference'] > 0) ? '+' : '' ?>
+                    <?php $textclass = (is_numeric($acp['difference']) and $acp['difference'] >= 0) ? 'text-success' : 'text-danger' ?>
+                    <tr>
+                        <td><?= $acp['academicsession'] ?></td>
+                        <td><?= $acp['gpa_target'] ?></td>
+                        <td><?= $acp['gpa_achieved'] ?></td>
+                        <td class="<?= $textclass ?>"><?= $sign ?><?= $acp['difference'] ?></td>
+                        <?php $hidden = array('student_id' => $student['id'], 'acadsession_id' => $acp['acadsession_id']) ?>
+                        <?= form_open('academic/record', '', $hidden) ?>
+                        <td><button type="submit" class="btn btn-sm btn-dark"><i class='fas fa-search'></i> Score</button></td>
+                        <?= form_close() ?>
+                    </tr>
+                    <?php endforeach ?>
                     <?php endif ?>
                 </tbody>
             </table>
@@ -107,23 +108,23 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-        $('#tableacademicplan').DataTable({
-            "order": []
-        });
-        var gpainput = document.getElementById("gpa_target");
-        var submitgpa = document.getElementById("submitgpa");
-
-        function checkGPA() {
-            var gpa = $('#gpa_target').val();
-            if (gpa > 2) {
-                submitgpa.disabled = false;
-            } else {
-                submitgpa.disabled = true;
-            }
-        }
-
-
-        $("#gpa_target").keyup(checkGPA);
+$(document).ready(function() {
+    $('#tableacademicplan').DataTable({
+        "order": []
     });
+    var gpainput = document.getElementById("gpa_target");
+    var submitgpa = document.getElementById("submitgpa");
+
+    function checkGPA() {
+        var gpa = $('#gpa_target').val();
+        if (gpa > 3) {
+            submitgpa.disabled = false;
+        } else {
+            submitgpa.disabled = true;
+        }
+    }
+
+
+    $("#gpa_target").keyup(checkGPA);
+});
 </script>

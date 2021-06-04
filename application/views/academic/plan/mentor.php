@@ -103,7 +103,6 @@
         </div>
     </div>
 </div>
-
 <script>
     $(document).ready(function() {
         $('#acp_table').DataTable({

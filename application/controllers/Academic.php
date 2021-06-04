@@ -183,7 +183,7 @@ class Academic extends CI_Controller
                         $textclass = '';
                     }
                 } else {
-                    $status = 'Incomplete';
+                    $status = '';
                     $textclass = '';
                     $diff = '';
                 }

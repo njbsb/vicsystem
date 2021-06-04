@@ -13,6 +13,7 @@ $route['unenroll'] = 'academic/unenroll';
 $route['activity'] = 'activity/index';
 $route['activity/update'] = 'activity/update';
 $route['activity/create'] = 'activity/create';
+$route['activity/records'] = 'activity/records';
 $route['activity/update_academicyear'] = 'activity/update_academicyear';
 $route['activity/update_academicsession'] = 'activity/update_academicsession';
 $route['activity/delete_committee'] = 'activity/delete_committee';

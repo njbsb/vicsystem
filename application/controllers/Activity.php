@@ -20,7 +20,8 @@ class Activity extends CI_Controller
             'title' => 'Activities',
             'sig' => $this->sig_model->get_sig($sig_id),
             'activitycategory' => $this->activity_model->get_activitycategory(),
-            'activities' => $activities
+            'activities' => $activities,
+            'academicyears' => $this->academic_model->get_academicyear()
         );
         $this->load->view('templates/header');
         $this->load->view('activity/index', $data);
@@ -219,6 +220,26 @@ class Activity extends CI_Controller
         );
         $this->load->view('templates/header');
         $this->load->view('activity/external', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function records()
+    {
+        $acadyear_id = $this->input->post('acadyear_id');
+        $semester = $this->input->post('semester');
+        $academicsession = $this->academic_model->get_academicsession_byyearsem($acadyear_id, $semester);
+        $activities = $this->activity_model->get_activity_bysession($academicsession['id']);
+        foreach ($activities as $i => $activity) {
+            $committee = $this->activity_model->get_committees($activity['id']);
+            $activities[$i]['committeenum'] = count($committee);
+            $activities[$i]['committees'] = $committee;
+        }
+        $data = array(
+            'activities' => $activities,
+            'academicsession' => $academicsession
+        );
+        $this->load->view('templates/header');
+        $this->load->view('activity/records', $data);
         $this->load->view('templates/footer');
     }
 
