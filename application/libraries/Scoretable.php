@@ -58,7 +58,7 @@ class Scoretable
             $target = $plan['gpa_target'];
             $achieved = $plan['gpa_achieved'];
             $difference = $achieved - $target;
-            if ($difference > 0) {
+            if (is_numeric($target) and is_numeric($achieved) and $difference >= 0) {
                 $badgecount += 1;
             }
             if ($achieved >= 3.67) {
@@ -73,7 +73,6 @@ class Scoretable
         $badgecount = 0;
         $activityscores = $this->CI->score_model->get_scoreplan_scorelevel($student_id);
         foreach ($activityscores as $score) {
-            // if($score[''])
             $sum = array_sum($score);
             if ($sum >= 18) {
                 $badgecount += 1;

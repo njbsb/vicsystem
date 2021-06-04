@@ -172,13 +172,6 @@ class Academic_model extends CI_Model
         }
     }
 
-    public function get_academicplan_byyearsem($acadyear_id, $semester_id)
-    {
-        // $this->db->select("acp.*, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
-        // ->from('academicplan as acp')
-        // ->where(array('acadyear'))
-    }
-
     public function get_this_academicplan($student_id, $acadsession_id)
     {
         $this->db->select("acp.*, std.name, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")

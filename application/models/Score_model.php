@@ -23,7 +23,7 @@ class Score_model extends CI_Model
 
     public function get_student_scorelevel($matric, $acadsession_id)
     {
-        $this->db->select("scl.*, scp.label, scp.percentweightage, act.id as activity_id, act.title, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
+        $this->db->select("scl.*, scp.label, scp.activitycategory_id, scp.percentweightage, act.id as activity_id, act.title, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
             ->from('score_level as scl')
             ->where(array('scl.student_id' => $matric))
             ->join('score_plan as scp', 'scp.id = scl.scoreplan_id', 'left')
@@ -118,8 +118,8 @@ class Score_model extends CI_Model
 
     public function get_students_scorebylevels($student_id)
     {
-        $this->db->select("scl.*, acy.acadyear, acs.semester_id, 
-        concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, act.title")
+        $this->db->select("scl.*, acy.acadyear, acs.semester, 
+        concat(acy.acadyear, ' Sem ', acs.semester) as academicsession, act.title")
             ->from('score_level as scl')
             ->where(array(
                 'scl.student_id' => $student_id
@@ -137,7 +137,7 @@ class Score_model extends CI_Model
 
     public function get_students_scorebycomp($student_id)
     {
-        $this->db->select("sc.*, acy.acadyear, acs.semester_id, concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession")
+        $this->db->select("sc.*, acy.acadyear, acs.semester, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
             ->from('score_comp as sc')
             ->where(array(
                 'sc.student_id' => $student_id
@@ -249,6 +249,25 @@ class Score_model extends CI_Model
     {
         return $this->db->where($where)
             ->update('score_level', $scoredata);
+    }
+
+    public function get_scorelevels_bystudentacadsession_a($student_id, $acadsession_id)
+    {
+        $this->db->select('position.score as position, meeting.score as meeting, attendance.score as attendance, involvement.score as involvement, (position.score + meeting.score + attendance.score + involvement.score) as totalscore, act.title')
+            ->from('score_level as sc')
+            ->join('score_plan as scp', 'scp.id = sc.scoreplan_id', 'left')
+            ->join('activity as act', 'act.id = scp.activity_id', 'left')
+            ->where(array(
+                'student_id' => $student_id,
+                'scp.acadsession_id' => $acadsession_id,
+                'scp.activitycategory_id' => 'A'
+            ))
+            ->join('level_position as position', 'position.id = sc.position')
+            ->join('level_meeting as meeting', 'meeting.id = sc.meeting')
+            ->join('level_attendance as attendance', 'attendance.id = sc.attendance')
+            ->join('level_involvement as involvement', 'involvement.id = sc.involvement');
+        $query = $this->db->get();
+        return $query->result_array();
     }
 
     # SCORE COMP

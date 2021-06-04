@@ -12,7 +12,7 @@ class Activity_model extends CI_Model
         if ($slug === FALSE && $activity_id === FALSE) {
             // this code will get all activities
             $this->db->select("act.id, act.title, act.slug, act.datetime_start, act.activitycategory_id, act.created_at,
-            concat(acy.acadyear, ' Sem ', acs.semester_id) as academicsession, sig.code, mtr.name as advisorname")
+            concat(acy.acadyear, ' Sem ', acs.semester) as academicsession, sig.code, mtr.name as advisorname")
                 ->from('activity as act')
                 ->join('academicsession as acs', 'act.acadsession_id = acs.id', 'left')
                 ->join('academicyear as acy', 'acs.acadyear_id = acy.id', 'left')
@@ -61,11 +61,23 @@ class Activity_model extends CI_Model
             return $query->result_array();
         } else {
             $this->db->where(array('ext.slug' => $slug));
-            // ->join('academicsession as acs', 'acs.id = ext.acadsession_id', 'left')
-            // ->join('activitylevel as level', 'level.id = ext.activitylevel_id', 'left');
             $query = $this->db->get();
             return $query->row_array();
         }
+    }
+
+    public function get_externalactivity_bystudentsession($student_id, $acadsession_id)
+    {
+        $this->db->select('actext.*, actlevel.level')
+            ->from('score_external as sext')
+            ->join('activityexternal as actext', 'actext.id = sext.activityexternal_id', 'left')
+            ->join('activitylevel as actlevel', 'actlevel.id = actext.activitylevel_id', 'left')
+            ->where(array(
+                'sext.student_id' => $student_id,
+                'actext.acadsession_id' => $acadsession_id
+            ));
+        $query = $this->db->get();
+        return $query->result_array();
     }
 
     public function get_externalactivity_participants($activity_id)
@@ -82,6 +94,15 @@ class Activity_model extends CI_Model
     {
         return $this->db->get('activitylevel')
             ->result_array();
+    }
+
+    public function get_activity_highcomroles()
+    {
+        $query = $this->db->get_where('role_activity', array(
+            'level' => 'student',
+            'description' => 'highcom'
+        ));
+        return $query->result_array();
     }
 
     public function get_upcomingactivities($acadsession_id)
@@ -170,18 +191,17 @@ class Activity_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_act_highcoms_position()
+    public function get_activityhighcom($role_id, $activity_id)
     {
-        $this->db->select('id, role')
-            ->from('role_activity')
+        $this->db->select('cact.*, user.name')
+            ->from('committee_activity as cact')
             ->where(array(
-                'level' => 'student',
-                'description' => 'highcom'
-            ));
-        // ->like('keyword', 'activity')
-        // ->like('keyword', 'highcom');
+                'role_id' => $role_id,
+                'activity_id' => $activity_id
+            ))
+            ->join('user', 'user.id = cact.student_id');
         $query = $this->db->get();
-        return $query->result_array();
+        return $query->row_array();
     }
 
     public function get_committees($activity_id)
@@ -278,5 +298,13 @@ class Activity_model extends CI_Model
             'activitycategory_id' => $category_id
         ))->from('score_plan');
         return $this->db->count_all_results();
+    }
+
+    public function check_activity_inscoreplan($activity_id)
+    {
+        $query = $this->db->get_where('score_plan', array(
+            'activity_id' => $activity_id
+        ));
+        return $query->row_array();
     }
 }
