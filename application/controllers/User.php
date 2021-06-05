@@ -618,7 +618,7 @@ class User extends CI_Controller
                 $name = $sheetdata[$i][1]; #B
                 $usertype = $sheetdata[$i][2]; #C
                 $phonenum = $sheetdata[$i][3]; #D
-                $dob = $sheetdata[$i][4]; #E
+                $dob = date('Y-m-d', strtotime($sheetdata[$i][4])); #E
                 $gender = $sheetdata[$i][5]; #F
                 $email = $sheetdata[$i][6]; #G
                 $startdate =  date('Y-m-d', strtotime($sheetdata[$i][7])); #H
@@ -644,8 +644,40 @@ class User extends CI_Controller
             } else {
                 $this->session->set_flashdata('message', '<div class="alert alert-warning">' . $rowaffected . ' rows affected</div>');
             }
-            redirect(site_url('academicplan/mentor'));
+            redirect(site_url('user'));
         }
+    }
+
+    public function download_template()
+    {
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="UserUploadTemplate.xlsx"');
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'ID');
+        $sheet->setCellValue('B1', 'Name');
+        $sheet->setCellValue('C1', 'User Type');
+        $sheet->setCellValue('D1', 'Phone Number');
+        $sheet->setCellValue('E1', 'DOB');
+        $sheet->setCellValue('F1', 'Gender');
+        $sheet->setCellValue('G1', 'Email');
+        $sheet->setCellValue('H1', 'Start Date');
+        $sheet->setCellValue('I1', 'End Date');
+
+        $sheet->setCellValue('A2', 'A16000');
+        $sheet->setCellValue('B2', 'Ali');
+        $sheet->setCellValue('C2', 'student');
+        $sheet->setCellValue('D2', '0130000111');
+        $sheet->setCellValue('E2', '01/02/1997');
+        $sheet->setCellValue('F2', 'm');
+        $sheet->setCellValue('G2', 'a160000@siswa.ukm.edu.my');
+        $sheet->setCellValue('H2', '01/01/2020');
+        $sheet->setCellValue('I2', '31/12/2024');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
     }
 
     # to delete after completing UI improvement

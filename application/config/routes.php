@@ -40,6 +40,7 @@ $route['collaborator'] = 'collaborator/index';
 
 $route['user'] = 'user/index';
 $route['user/download'] = 'user/download';
+$route['user/download_template'] = 'user/download_template';
 $route['user/upload'] = 'user/upload';
 $route['register'] = 'user/register';
 $route['register_sucess'] = 'user/register_success';
