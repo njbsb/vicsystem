@@ -34,17 +34,7 @@
                     <h6><?= $mentor['phonenum'] ?></h6>
                 </div>
             </div>
-
-
         </div>
-        <!-- <?php if ($isMentor) : ?>
-        <div class="col-lg-4">
-            <?= form_open('/mentor/edit/' . $mentor['id']) ?>
-            <input type="submit" value="Edit Mentor" class="btn btn-outline-secondary">
-            <?= form_close() ?>
-        </div>
-        <?php endif ?> -->
-
     </div>
     <hr>
     <div class="text-center">
