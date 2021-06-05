@@ -17,7 +17,7 @@ class Academic extends CI_Controller
         }
         $usertype = $this->session->userdata('user_type');
         switch ($usertype) {
-            case  'admin':
+            case 'admin':
             case 'mentor':
                 $this->academicplanmentor();
                 break;
@@ -358,6 +358,46 @@ class Academic extends CI_Controller
         }
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
+    }
+
+    public function alterplan()
+    {
+        $acadsession_id = $this->input->post('acadsession_id');
+        if (!$acadsession_id) {
+            redirect('academic');
+        } else {
+            $academicsession = $this->academic_model->get_academicsession($acadsession_id);
+            $academicplans = $this->academic_model->get_academicplan(NULL, $acadsession_id);
+            $data = array(
+                'academicsession' => $academicsession,
+                'academicplans' => $academicplans
+            );
+            $this->load->view('templates/header');
+            $this->load->view('academic/alterplan', $data);
+            $this->load->view('templates/footer');
+        }
+    }
+
+    public function updateplan()
+    {
+        $acadsession_id = $this->input->post('acadsession_id');
+        if (!$acadsession_id) {
+            redirect('academic');
+        }
+        $activesession = $this->academic_model->get_academicsession($acadsession_id, '');
+        $student_id = $this->input->post('student_id');
+        $gpa_target = $this->input->post('gpa_target');
+        $gpa_achieved = $this->input->post('gpa_achieved');
+        $plandata = array(
+            'gpa_target' => $gpa_target,
+            'gpa_achieved' => $gpa_achieved
+        );
+        $where = array(
+            'student_id' => $student_id,
+            'acadsession_id' => $activesession['id']
+        );
+        $this->academic_model->update_academicplan($where, $plandata);
+        $this->alterplan();
     }
 
     # controller functions
