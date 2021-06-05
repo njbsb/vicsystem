@@ -198,7 +198,7 @@ class User extends CI_Controller
                 'dob' => $dob,
                 'gender' => $gender,
                 'phonenum' => $phonenum,
-                'validation' => false,
+                'validated' => false,
                 'email' => $email,
                 'password' => $enc_password
             );

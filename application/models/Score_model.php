@@ -290,14 +290,15 @@ class Score_model extends CI_Model
         } else {
             if ($category_id == FALSE) {
                 # returns scoreplan under specific category
-                $this->db->select('scp.*, act.title, actcat.category')
+                $this->db->select('scp.*, act.title, act.activitycategory_id, actcat.category')
                     ->from('score_plan as scp')
                     ->where(array(
                         'scp.acadsession_id' => $acadsession_id
                     ))
                     ->join('activity as act', 'scp.activity_id = act.id', 'left')
                     ->join('activitycategory as actcat', 'actcat.code = act.activitycategory_id', 'left')
-                    ->order_by('act.activitycategory_id', 'asc');
+                    // ->order_by('act.activitycategory_id', 'asc');
+                    ->order_by('scp.label', 'asc');
             } elseif ($acadsession_id == FALSE) {
                 # returns scoreplan under specific academic session
                 $this->db->select('scp.*, act.title')
@@ -309,7 +310,7 @@ class Score_model extends CI_Model
                 // ->join('activity as act', 'scp.activity_id = act.id');
             } else {
                 # returns scoreplan of specific sig under specific acadsession and category
-                $this->db->select('scp.*, act.title')
+                $this->db->select('scp.*, act.title, act.activitycategory_id')
                     ->from('score_plan as scp')
                     ->join('activity as act', 'act.id = scp.activity_id', 'left')
                     ->where(
