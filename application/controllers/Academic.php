@@ -362,6 +362,9 @@ class Academic extends CI_Controller
 
     public function alterplan()
     {
+        if ($this->session->userdata('user_type') == 'student') {
+            redirect('academic');
+        }
         $acadsession_id = $this->input->post('acadsession_id');
         if (!$acadsession_id) {
             redirect('academic');

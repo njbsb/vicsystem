@@ -16,7 +16,7 @@
 </div> -->
 <div class="card">
     <div class="card-body">
-        <button data-toggle="modal" data-target="#addimage" class="btn btn-dark"><i class='fab fa-edge'></i> New</button>
+        <button data-toggle="modal" data-target="#createbadge" class="btn btn-dark"><i class='fab fa-edge'></i> New</button>
         <br>
         <br>
         <table class="table table-hover">
@@ -30,25 +30,26 @@
             </thead>
             <tbody class="table-active">
                 <?php foreach ($images as $i => $image) : ?>
-                    <tr>
-                        <td><?= $i + 1 ?></td>
-                        <td><img src="<?= $image['photo'] ?>" alt="" width="40" height="40"></td>
-                        <td>
-                            <?= $image['title'] ?>
-                        </td>
-                        <td><button data-toggle="modal" data-id="<?= $image['id'] ?>" data-target="#editimage" data-name="<?= $image['title'] ?>" data-photo="<?= $image['photo'] ?>" class="btn btn-sm btn-outline-dark"><i class='fas fa-pen'></i></button>
-                        </td>
-                    </tr>
+                <tr>
+                    <td><?= $i + 1 ?></td>
+                    <td><img src="<?= $image['photo'] ?>" alt="" width="40" height="40"></td>
+                    <td>
+                        <?= $image['title'] ?>
+                    </td>
+                    <td><button data-toggle="modal" data-id="<?= $image['id'] ?>" data-target="#updatebadge" data-name="<?= $image['title'] ?>" data-photo="<?= $image['photo'] ?>"
+                            class="btn btn-sm btn-outline-dark"><i class='fas fa-pen'></i></button>
+                    </td>
+                </tr>
                 <?php endforeach ?>
             </tbody>
         </table>
     </div>
 </div>
 
-<div id="addimage" class="modal fade card">
+<div id="createbadge" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <?= form_open_multipart('createimage') ?>
+            <?= form_open_multipart('createbadge') ?>
             <div class="modal-header">
                 <h5 class="modal-title">Create Badge</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -74,10 +75,10 @@
         </div>
     </div>
 </div>
-<div id="editimage" class="modal fade card">
+<div id="updatebadge" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <?= form_open_multipart('updateimage') ?>
+            <?= form_open_multipart('updatebadge') ?>
             <div class="modal-header">
                 <h5 class="modal-title">Edit Badge</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -106,29 +107,29 @@
 </div>
 
 <script>
-    $('#editimage').on('show.bs.modal', function(e) {
-        var id = $(e.relatedTarget).data('id');
-        var name = $(e.relatedTarget).data('name');
-        var photo = $(e.relatedTarget).data('photo');
-        $(e.currentTarget).find('input[name="editid"]').val(id);
-        $(e.currentTarget).find('input[name="edittitle"]').val(name);
-        // $(e.currentTarget).find('input[name="editfile"]').val(photo);
-    });
-    $('#editimage').on('hide.bs.modal', function(e) {});
+$('#updatebadge').on('show.bs.modal', function(e) {
+    var id = $(e.relatedTarget).data('id');
+    var name = $(e.relatedTarget).data('name');
+    var photo = $(e.relatedTarget).data('photo');
+    $(e.currentTarget).find('input[name="editid"]').val(id);
+    $(e.currentTarget).find('input[name="edittitle"]').val(name);
+    // $(e.currentTarget).find('input[name="editfile"]').val(photo);
+});
+$('#updatebadge').on('hide.bs.modal', function(e) {});
 
-    var editfile = document.getElementById("editfile");
-    var newfile = document.getElementById("newfile");
+var editfile = document.getElementById("editfile");
+var newfile = document.getElementById("newfile");
 
-    newfile.onchange = function() {
-        if (this.files[0].size > 209715) {
-            alert("File exceeds 200kb!");
-            this.value = "";
-        };
+newfile.onchange = function() {
+    if (this.files[0].size > 209715) {
+        alert("File exceeds 200kb!");
+        this.value = "";
     };
-    editfile.onchange = function() {
-        if (this.files[0].size > 209715) {
-            alert("File exceeds 200kb!");
-            this.value = "";
-        };
+};
+editfile.onchange = function() {
+    if (this.files[0].size > 209715) {
+        alert("File exceeds 200kb!");
+        this.value = "";
     };
+};
 </script>

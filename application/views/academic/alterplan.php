@@ -65,7 +65,7 @@
                     <div class="col-6">
                         <div class="form-group">
                             <label for="gpa_achieved">GPA Achieved</label>
-                            <input id="gpa_achieved" name="gpa_achieved" type="text" class="form-control" required>
+                            <input id="gpa_achieved" name="gpa_achieved" type="text" class="form-control">
                         </div>
                     </div>
                 </div>

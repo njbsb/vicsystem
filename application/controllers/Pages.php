@@ -127,7 +127,7 @@ class Pages extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    public function createimage()
+    public function createbadge()
     {
         $name = $this->input->post('newtitle');
         $upload_file = $_FILES['newfile']['tmp_name'];
@@ -144,7 +144,7 @@ class Pages extends CI_Controller
         redirect('badge');
     }
 
-    public function updateimage()
+    public function updatebadge()
     {
         $id = $this->input->post('editid');
         $title = $this->input->post('edittitle');
