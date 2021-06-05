@@ -98,7 +98,7 @@
     <?php if ($org_roles) : ?>
     <div class="card">
         <div class="card-body">
-            <h4 class="text-secondary text-center"><b>Organization Level</b></h4>
+            <h4 class="text-white text-center"><b>Organization Level</b></h4>
             <br>
             <div class="table-responsive">
                 <table id="orgtable" class="table">
