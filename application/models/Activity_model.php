@@ -267,10 +267,10 @@ class Activity_model extends CI_Model
     public function get_categoryactivity($acadsession_id, $category_id)
     {
         $this->db->select("id, activity_name")
-            ->from('activity')
+            ->from('activity as act')
             ->where(array(
-                'activity.acadsession_id' => $acadsession_id,
-                'activity.activitycategory_id' => $category_id
+                'act.acadsession_id' => $acadsession_id,
+                'act.activitycategory_id' => $category_id
             ))
             ->join('score_plan', 'score_plan.activity_id = activity.id');
         $query = $this->db->get();
@@ -308,10 +308,17 @@ class Activity_model extends CI_Model
 
     public function get_categoryactivitycount($acadsession_id, $category_id)
     {
-        $this->db->where(array(
-            'acadsession_id' => $acadsession_id,
-            'activitycategory_id' => $category_id
-        ))->from('score_plan');
+        $this->db->select('*')
+            ->from('score_plan as scp')
+            ->join('activity as act', 'act.id = scp.activity_id')
+            ->where(array(
+                'scp.acadsession_id' => $acadsession_id,
+                'act.activitycategory_id' => $category_id
+            ));
+        // $this->db->where(array(
+        //     'acadsession_id' => $acadsession_id,
+        //     'activitycategory_id' => $category_id
+        // ))->from('score_plan');
         return $this->db->count_all_results();
     }
 

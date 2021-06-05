@@ -209,6 +209,12 @@ class Academic_model extends CI_Model
         return $this->db->insert('academicyear', $acydata);
     }
 
+    public function update_academicplan($where, $data)
+    {
+        return $this->db->where($where)
+            ->update('academicplan', $data);
+    }
+
     public function update_academicsession($id, $data)
     {
         return $this->db->where('id', $id)

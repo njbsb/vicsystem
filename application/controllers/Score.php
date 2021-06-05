@@ -152,16 +152,18 @@ class Score extends CI_Controller
         } else {
             # scoreplan view
             $academicsession = $this->academic_model->get_academicsession(FALSE, $slug);
+            $activesession = $this->academic_model->get_activeacademicsession();
+            $sessionactive = ($academicsession['id'] == $activesession['id']) ? true : false;
             $activitycategories = $this->activity_model->get_activitycategory();
             foreach ($activitycategories as $i => $actcat) {
-                // $activitycategories[$i]['scoreplan'] = $this->score_model->get_scoreplan($sig_id, $academicsession['id'], $actcat['code']);
                 $activitycategories[$i]['unregistered'] = $this->activity_model->get_category_unregisteredactivity($academicsession['id'], $actcat['code']);
             }
             $data = array(
                 'acslug' => $slug,
                 'activitycategories' => $activitycategories,
                 'acadsession' => $academicsession,
-                'scoreplans' => $this->score_model->get_scoreplan($academicsession['id'])
+                'scoreplans' => $this->score_model->get_scoreplan($academicsession['id']),
+                'sessionactive' => $sessionactive
             );
             $this->load->view('templates/header');
             $this->load->view('score/scoreplan/view', $data);
@@ -288,7 +290,6 @@ class Score extends CI_Controller
         $acslug = $this->input->post('acslug');
         $scoreplan = array(
             'acadsession_id' => $this->input->post('acadsession_id'),
-            'activitycategory_id' => $this->input->post('activitycategory_id'),
             'activity_id' => $this->input->post('activity_id'),
             'percentweightage' => $this->input->post('percentweightage'),
             'label' => $this->input->post('label')

@@ -6,11 +6,6 @@ class Score_model extends CI_Model
         $this->load->database();
     }
 
-    public function get_activityworkshopscore($student_id, $acadsession_id, $activitycategory_id)
-    {
-        $this->db->select();
-    }
-
     public function get_levelscore($id = NULL)
     {
         if ($id == FALSE) {
@@ -23,7 +18,7 @@ class Score_model extends CI_Model
 
     public function get_student_scorelevel($matric, $acadsession_id)
     {
-        $this->db->select("scl.*, scp.label, scp.activitycategory_id, scp.percentweightage, act.id as activity_id, act.title, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
+        $this->db->select("scl.*, scp.label, act.activitycategory_id, scp.percentweightage, act.id as activity_id, act.title, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
             ->from('score_level as scl')
             ->where(array('scl.student_id' => $matric))
             ->join('score_plan as scp', 'scp.id = scl.scoreplan_id', 'left')
@@ -42,9 +37,10 @@ class Score_model extends CI_Model
             $this->db->select('position.score as position, meeting.score as meeting, attendance.score as attendance, involvement.score as involvement')
                 ->from('score_level as sc')
                 ->join('score_plan as scp', 'scp.id = sc.scoreplan_id')
+                ->join('activity as act', 'scp.activity_id = act.id')
                 ->where(array(
                     'sc.student_id' => $student_id,
-                    'scp.activitycategory_id' => 'A'
+                    'act.activitycategory_id' => 'A'
                 ))
                 ->join('level_position as position', 'position.id = sc.position')
                 ->join('level_meeting as meeting', 'meeting.id = sc.meeting')
@@ -67,27 +63,8 @@ class Score_model extends CI_Model
             if ($query->num_rows() > 0) {
                 return $query->row_array();
             } else {
-                // return array(
-                //     'position' => 0,
-                //     'meeting' => 0,
-                //     'attendance' => 0,
-                //     'involvement' => 0
-                // );
             }
         }
-    }
-
-    public function get_scoreplan_level($student_id, $scoreplan_id)
-    {
-        # UNUSED
-        $this->db->select('position, meeting, attendance, involvement')
-            ->from('score_level')
-            ->where(array(
-                'student_id' => $student_id,
-                'scoreplan_id' => $scoreplan_id
-            ));
-        $query = $this->db->get();
-        return $query->row_array();
     }
 
     public function get_scoreplan_scorecomp($student_id, $acadsession_id)
@@ -121,9 +98,7 @@ class Score_model extends CI_Model
         $this->db->select("scl.*, acy.acadyear, acs.semester, 
         concat(acy.acadyear, ' Sem ', acs.semester) as academicsession, act.title")
             ->from('score_level as scl')
-            ->where(array(
-                'scl.student_id' => $student_id
-            ))
+            ->where(array('scl.student_id' => $student_id))
             ->join('score_plan as scp', 'scp.id = scl.scoreplan_id')
             ->join('academicsession as acs', 'acs.id = scp.acadsession_id')
             ->join('academicyear as acy', 'acy.id = acs.acadyear_id')
@@ -139,22 +114,16 @@ class Score_model extends CI_Model
     {
         $this->db->select("sc.*, acy.acadyear, acs.semester, concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
             ->from('score_comp as sc')
-            ->where(array(
-                'sc.student_id' => $student_id
-            ))
-            ->join('academicsession as acs', 'acs.id = sc.acadsession_id')
-            ->join('academicyear as acy', 'acy.id = acs.acadyear_id');
-        // ->join('levelscore as ls', 'ls.id = sc.levelscore_id');
+            ->where(array('sc.student_id' => $student_id))
+            ->join('academicsession as acs', 'acs.id = sc.acadsession_id', 'left')
+            ->join('academicyear as acy', 'acy.id = acs.acadyear_id', 'left');
         $query = $this->db->get();
         return $query->result_array();
     }
 
     public function get_student_scoreexternal($student_id)
     {
-        $this->db->select('sc.*')
-            ->from('score_external as sc')
-            ->where('sc.student_id', $student_id);
-        $query =  $this->db->get();
+        $query = $this->db->get_where('score_external', array('student_id' => $student_id));
         return $query->result_array();
     }
 
@@ -260,7 +229,7 @@ class Score_model extends CI_Model
             ->where(array(
                 'student_id' => $student_id,
                 'scp.acadsession_id' => $acadsession_id,
-                'scp.activitycategory_id' => 'A'
+                'act.activitycategory_id' => 'A'
             ))
             ->join('level_position as position', 'position.id = sc.position')
             ->join('level_meeting as meeting', 'meeting.id = sc.meeting')
@@ -326,28 +295,30 @@ class Score_model extends CI_Model
                     ->where(array(
                         'scp.acadsession_id' => $acadsession_id
                     ))
-                    ->join('activitycategory as actcat', 'actcat.code = scp.activitycategory_id', 'left')
                     ->join('activity as act', 'scp.activity_id = act.id', 'left')
-                    ->order_by('scp.activitycategory_id', 'asc');
+                    ->join('activitycategory as actcat', 'actcat.code = act.activitycategory_id', 'left')
+                    ->order_by('act.activitycategory_id', 'asc');
             } elseif ($acadsession_id == FALSE) {
                 # returns scoreplan under specific academic session
                 $this->db->select('scp.*, act.title')
                     ->from('score_plan as scp')
+                    ->join('activity as act', 'act.id = scp.activity_id', 'left')
                     ->where(array(
-                        'scp.activitycategory_id' => $category_id
-                    ))
-                    ->join('activity as act', 'scp.activity_id = act.id');
+                        'act.activitycategory_id' => $category_id
+                    ));
+                // ->join('activity as act', 'scp.activity_id = act.id');
             } else {
                 # returns scoreplan of specific sig under specific acadsession and category
                 $this->db->select('scp.*, act.title')
                     ->from('score_plan as scp')
+                    ->join('activity as act', 'act.id = scp.activity_id', 'left')
                     ->where(
                         array(
                             'scp.acadsession_id' => $acadsession_id,
-                            'scp.activitycategory_id' => $category_id
+                            'act.activitycategory_id' => $category_id
                         )
-                    )
-                    ->join('activity as act', 'scp.activity_id = act.id');
+                    );
+                // ->join('activity as act', 'scp.activity_id = act.id');
             }
         }
         $query = $this->db->get();
@@ -358,9 +329,10 @@ class Score_model extends CI_Model
     {
         $this->db->select_sum('scp.percentweightage')
             ->from('score_plan as scp')
+            ->join('activity as act', 'act.id = scp.activity_id', 'left')
             ->where(array(
                 'scp.acadsession_id' => $acadsession_id,
-                'scp.activitycategory_id' => $category_id
+                'act.activitycategory_id' => $category_id
             ));
         $totalpercent = $this->db->get()->row()->percentweightage;
         if (isset($totalpercent)) {
