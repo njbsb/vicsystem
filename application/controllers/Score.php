@@ -192,7 +192,7 @@ class Score extends CI_Controller
                 $enrollingstudents = null;
             }
 
-            $students = $this->student_model->get_student();
+            $students = $this->student_model->get_activestudents();
             # for cumulative badge
             foreach ($students as $i => $student) {
                 $academicbadge = $this->scoretable->calculate_academicbadge($student['id']);

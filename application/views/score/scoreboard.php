@@ -59,6 +59,7 @@
                 </tbody>
             </table>
         </div>
+        <small>This badge board will only show records from active students</small>
     </div>
 </div>
 <br>
