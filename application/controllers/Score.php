@@ -191,22 +191,9 @@ class Score extends CI_Controller
             } else {
                 $enrollingstudents = null;
             }
-
-            $students = $this->student_model->get_activestudents();
-            # for cumulative badge
-            foreach ($students as $i => $student) {
-                $academicbadge = $this->scoretable->calculate_academicbadge($student['id']);
-                $activitybadge = $this->scoretable->calculate_activitybadge($student['id']);
-                $externalbadge = $this->scoretable->calculate_externalbadge($student['id']);
-                $students[$i]['academicbadge'] = $academicbadge;
-                $students[$i]['activitybadge'] = $activitybadge;
-                $students[$i]['externalbadge'] = $externalbadge;
-                $students[$i]['totalbadge'] = $academicbadge + $activitybadge + $externalbadge;
-            }
             $data = array(
                 'usertype' => $this->session->userdata('user_type'),
                 'thisacademicsession' => $academicsession,
-                'students' => $students,
                 'enrollingstudents' => $enrollingstudents
             );
             $this->load->view('templates/header');
@@ -281,6 +268,33 @@ class Score extends CI_Controller
         }
     }
 
+    public function badgeboard($student_id = NULL)
+    {
+        if ($student_id == FALSE) {
+            $academicsession = $this->academic_model->get_activeacademicsession();
+            $students = $this->student_model->get_activestudents();
+            # for cumulative badge
+            foreach ($students as $i => $student) {
+                $academicbadge = $this->scoretable->calculate_academicbadge($student['id']);
+                $activitybadge = $this->scoretable->calculate_activitybadge($student['id']);
+                $externalbadge = $this->scoretable->calculate_externalbadge($student['id']);
+                $students[$i]['academicbadge'] = $academicbadge;
+                $students[$i]['activitybadge'] = $activitybadge;
+                $students[$i]['externalbadge'] = $externalbadge;
+                $students[$i]['totalbadge'] = $academicbadge + $activitybadge + $externalbadge;
+            }
+            $data = array(
+                'usertype' => $this->session->userdata('user_type'),
+                'thisacademicsession' => $academicsession,
+                'students' => $students
+            );
+            $this->load->view('templates/header');
+            $this->load->view('score/badgeboard', $data);
+            $this->load->view('templates/footer');
+        } else {
+        }
+    }
+
     ###
     # Controller Functions
     ###
@@ -303,11 +317,19 @@ class Score extends CI_Controller
         $scoreplan_id = $this->input->post('scoreplan_id');
         $scoreplandata = array(
             'label' => $this->input->post('label'),
-            'activity_id' => $this->input->post('activity_id'),
+            // 'activity_id' => $this->input->post('activity_id'),
             'percentweightage' => $this->input->post('percentweightage')
         );
         $this->score_model->update_scoreplan($scoreplan_id, $scoreplandata);
         redirect('scoreplan/' . $this->input->post('acslug'));
+    }
+
+    public function deletescoreplan()
+    {
+        $scoreplan_id = $this->input->post('scoreplan_id');
+        $acslug = $this->input->post('acslug');
+        $this->score_model->delete_scoreplan($scoreplan_id);
+        redirect('scoreplan/' . $acslug);
     }
 
     public function add_scorelevel()

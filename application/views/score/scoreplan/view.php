@@ -47,7 +47,10 @@
                         <td><?= $plan['percentweightage'] ?> %</td>
                         <td>
                             <?php if ($sessionactive) : ?>
-                            <a type="button" data-toggle="modal" data-target="#editscoreplan<?= $plan['id'] ?>" class="btn btn-outline-dark btn-sm"><i class='fas fa-pen'></i> Edit</a>
+                            <a type="button" data-label="<?= $plan['label'] ?>" data-activityid="<?= $plan['activity_id'] ?>" data-id="<?= $plan['id'] ?>" data-title="<?= $plan['title'] ?>"
+                                data-weightage="<?= $plan['percentweightage'] ?>" data-toggle="modal" data-target="#editscoreplan" class="btn btn-dark btn-sm"><i class='fas fa-pen'></i> </a>
+                            <a type="button" data-id="<?= $plan['id'] ?>" data-title="<?= $plan['title'] ?>" data-label="<?= $plan['label'] ?>" data-toggle="modal" data-target="#deletescoreplan"
+                                class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> </a>
                             <?php else : ?>
                             <?php endif ?>
                         </td>
@@ -73,9 +76,7 @@
     </div>
 </div>
 
-<?php $index = 0;
-foreach ($scoreplans as $plan) : $index++; ?>
-<div id="editscoreplan<?= $plan['id'] ?>" class="modal fade card">
+<div id="editscoreplan" class="modal fade card">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -85,24 +86,23 @@ foreach ($scoreplans as $plan) : $index++; ?>
                 </button>
             </div>
             <?php $hidden = array(
-                    'scoreplan_id' => $plan['id'],
-                    'acslug' => $acslug
-                ) ?>
+                'scoreplan_id' => '',
+                'activity_id' => '',
+                'acslug' => $acslug
+            ) ?>
             <?= form_open('score/updatescoreplan', '', $hidden) ?>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="label">Scoreplan Label</label>
-                    <input name="label" type="text" class="form-control" value="<?= $plan['label'] ?>">
+                    <label for="label">Label</label>
+                    <input name="label" type="text" class="form-control" value="">
                 </div>
                 <div class="form-group">
-                    <label for="activity_id">Activity</label>
-                    <select name="activity_id" class="form-control">
-                        <option value="<?= $plan['activity_id'] ?>"><?= $plan['title'] ?></option>
-                    </select>
+                    <label for="activitytitle">Activity</label>
+                    <input name="activitytitle" type="text" class="form-control" readonly>
                 </div>
                 <div class="form-group">
                     <label for="percentweightage">Percentage Weightage</label>
-                    <input name="percentweightage" type="text" class="form-control" value="<?= $plan['percentweightage'] ?>">
+                    <input name="percentweightage" type="text" class="form-control" value="">
                 </div>
             </div>
             <div class="modal-footer">
@@ -113,7 +113,6 @@ foreach ($scoreplans as $plan) : $index++; ?>
         </div>
     </div>
 </div>
-<?php endforeach ?>
 
 <?php foreach ($activitycategories as $category) : ?>
 <div id="addscoreplan<?= $category['code'] ?>" class="modal fade card">
@@ -168,3 +167,74 @@ foreach ($scoreplans as $plan) : $index++; ?>
     </div>
 </div>
 <?php endforeach ?>
+
+<div id="deletescoreplan" class="modal fade card">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Score Plan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?php $hidden = array(
+                'scoreplan_id' => $plan['id'],
+                'acslug' => $acslug
+            ) ?>
+            <?= form_open('score/deletescoreplan', '', $hidden) ?>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label id="labeltitle" for="label">Score Plan: </label><br>
+                    <label id="activitytitle">Activity: </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Dismiss</button>
+            </div>
+            <?= form_close() ?>
+        </div>
+    </div>
+</div>
+
+<script>
+$('#editscoreplan').on('show.bs.modal', function(e) {
+    var scoreplanid = $(e.relatedTarget).data('id');
+    var activityid = $(e.relatedTarget).data('activityid');
+    var activitytitle = $(e.relatedTarget).data('title');
+    var label = $(e.relatedTarget).data('label');
+    var weightage = $(e.relatedTarget).data('weightage');
+    $(e.currentTarget).find('input[name="scoreplan_id"]').val(scoreplanid);
+    $(e.currentTarget).find('input[name="activityid"]').val(activityid);
+    $(e.currentTarget).find('input[name="activitytitle"]').val(activitytitle);
+    $(e.currentTarget).find('input[name="label"]').val(label);
+    $(e.currentTarget).find('input[name="percentweightage"]').val(weightage);
+});
+$('#editscoreplan').on('hide.bs.modal', function(e) {
+    var scoreplanid = $(e.relatedTarget).data('id');
+    var activitytitle = $(e.relatedTarget).data('title');
+    var label = $(e.relatedTarget).data('label');
+    var weightage = $(e.relatedTarget).data('weightage');
+    $(e.currentTarget).find('input[name="scoreplan_id"]').val('');
+    $(e.currentTarget).find('input[name="activitytitle"]').val('');
+    $(e.currentTarget).find('input[name="label"]').val('');
+    $(e.currentTarget).find('input[name="percentweightage"]').val('');
+});
+
+$('#deletescoreplan').on('show.bs.modal', function(e) {
+    var scoreplanid = $(e.relatedTarget).data('id');
+    var activitytitle = $(e.relatedTarget).data('title');
+    var label = $(e.relatedTarget).data('label');
+    var labeltitle = document.getElementById("labeltitle");
+    var labelactivitytitle = document.getElementById("activitytitle");
+    $(e.currentTarget).find('input[name="scoreplan_id"]').val(scoreplanid);
+    labeltitle.innerHTML += label;
+    labelactivitytitle.innerHTML += activitytitle;
+});
+$('#deletescoreplan').on('hide.bs.modal', function(e) {
+    var labeltitle = document.getElementById("labeltitle");
+    var labelactivitytitle = document.getElementById("activitytitle");
+    labeltitle.innerHTML = 'Score Plan: ';
+    labelactivitytitle.innerHTML = 'Activity: ';
+});
+</script>

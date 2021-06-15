@@ -278,6 +278,12 @@ class Score_model extends CI_Model
         return $this->db->update('score_plan', $scoreplandata);
     }
 
+    public function delete_scoreplan($scoreplan_id)
+    {
+        return $this->db->where('id', $scoreplan_id)
+            ->delete('score_plan');
+    }
+
     public function get_scoreplan($acadsession_id = NULL, $category_id = NULL)
     {
         if ($acadsession_id == FALSE && $category_id == FALSE) {
