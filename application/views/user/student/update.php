@@ -39,7 +39,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="superior_id">Superior/Mentor</label>
-                                <input class="form-control" type="text" name="superior_id" id="superior_id" value="<?= $superior['name'] ?>" disabled>
+                                <?php $superiorname = ($superior) ? $superior['name'] : ''  ?>
+                                <input class="form-control" type="text" name="superior_id" id="superior_id" value="<?= $superiorname ?>" disabled>
                             </div>
                         </div>
                     </div>
@@ -48,8 +49,8 @@
                         <select name="program_id" class="form-control" id="" required>
                             <option value="" selected disabled>Select program</option>
                             <?php foreach ($programs as $program) : ?>
-                                <?php $selected = ($program['code'] == $student['program_id']) ? 'selected readonly' : ''; ?>
-                                <option value="<?= $program['code'] ?>" <?= $selected ?>><?= $program['program'] ?></option>
+                            <?php $selected = ($program['code'] == $student['program_id']) ? 'selected readonly' : ''; ?>
+                            <option value="<?= $program['code'] ?>" <?= $selected ?>><?= $program['program'] ?></option>
                             <?php endforeach ?>
                         </select>
                     </div>
@@ -90,12 +91,12 @@
 </div>
 
 <script>
-    var uploadField = document.getElementById("userphoto");
+var uploadField = document.getElementById("userphoto");
 
-    uploadField.onchange = function() {
-        if (this.files[0].size > 209715) {
-            alert("File exceeds 200kb!");
-            this.value = "";
-        };
+uploadField.onchange = function() {
+    if (this.files[0].size > 209715) {
+        alert("File exceeds 200kb!");
+        this.value = "";
     };
+};
 </script>

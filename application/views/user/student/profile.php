@@ -39,7 +39,8 @@
                     <h6><?= $student['yearjoined'] ?></h6>
                     <h6><?= $student['phonenum'] ?></h6>
                     <h6><a href="mailto:<?= $student['email'] ?>"><?= $student['email'] ?></a></h6>
-                    <h6><?= $student['mentor_name'] ?></h6>
+                    <?php $mentorname = ($student['mentor_name']) ? $student['mentor_name'] : '-' ?>
+                    <h6><?= $mentorname ?></h6>
                 </div>
             </div>
             <hr>
