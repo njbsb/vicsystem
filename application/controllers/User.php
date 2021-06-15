@@ -345,7 +345,9 @@ class User extends CI_Controller
                 $this->load->view('user/student/update', $data);
                 break;
         }
-        // $this->load->view('templates/footer');
+        if ($this->session->userdata['profilecomplete']) {
+            $this->load->view('templates/footer');
+        }
     }
 
     public function changepassword()
@@ -360,7 +362,9 @@ class User extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
             $this->load->view('user/passwordchange');
-            // $this->load->view('templates/footer');
+            if (!$this->session->userdata('defaultpassword')) {
+                $this->load->view('templates/footer');
+            }
         } else {
             $password1 = $this->input->post('password1');
             $password2 = $this->input->post('password2');
@@ -442,8 +446,10 @@ class User extends CI_Controller
             $type = pathinfo($_FILES["userphoto"]["name"], PATHINFO_EXTENSION);
             $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             $userdata['userphoto'] = $base64;
+            $this->session->set_userdata('userphoto', $base64);
         }
         $this->user_model->update_user($user_id, $userdata);
+
         $profileExist = false;
         # specific for each user
         switch ($usertype) {
@@ -617,17 +623,19 @@ class User extends CI_Controller
                 $id = $sheetdata[$i][0]; #A
                 $name = $sheetdata[$i][1]; #B
                 $usertype = $sheetdata[$i][2]; #C
-                $phonenum = $sheetdata[$i][3]; #D
-                $dob = date('Y-m-d', strtotime($sheetdata[$i][4])); #E
-                $gender = $sheetdata[$i][5]; #F
-                $email = $sheetdata[$i][6]; #G
-                $startdate =  date('Y-m-d', strtotime($sheetdata[$i][7])); #H
-                $enddate = date('Y-m-d', strtotime($sheetdata[$i][8])); #I
+                $superior_id = $sheetdata[$i][2]; #D
+                $phonenum = $sheetdata[$i][3]; #E
+                $dob = date('Y-m-d', strtotime($sheetdata[$i][4])); #F
+                $gender = $sheetdata[$i][5]; #G
+                $email = $sheetdata[$i][6]; #H
+                $startdate =  date('Y-m-d', strtotime($sheetdata[$i][7])); #I
+                $enddate = date('Y-m-d', strtotime($sheetdata[$i][8])); #J
                 $password = md5($id);
                 $data[] = array(
                     'id' => $id,
                     'name' => $name,
                     'usertype' => $usertype,
+                    'superior_id' => $superior_id,
                     'phonenum' => $phonenum,
                     'dob' => $dob,
                     'gender' => $gender,
@@ -659,22 +667,24 @@ class User extends CI_Controller
         $sheet->setCellValue('A1', 'ID');
         $sheet->setCellValue('B1', 'Name');
         $sheet->setCellValue('C1', 'User Type');
-        $sheet->setCellValue('D1', 'Phone Number');
-        $sheet->setCellValue('E1', 'DOB');
-        $sheet->setCellValue('F1', 'Gender');
-        $sheet->setCellValue('G1', 'Email');
-        $sheet->setCellValue('H1', 'Start Date');
-        $sheet->setCellValue('I1', 'End Date');
+        $sheet->setCellValue('D1', 'Superior ID');
+        $sheet->setCellValue('E1', 'Phone Number');
+        $sheet->setCellValue('F1', 'DOB');
+        $sheet->setCellValue('G1', 'Gender');
+        $sheet->setCellValue('H1', 'Email');
+        $sheet->setCellValue('I1', 'Start Date');
+        $sheet->setCellValue('J1', 'End Date');
 
         $sheet->setCellValue('A2', 'A16000');
         $sheet->setCellValue('B2', 'Ali');
         $sheet->setCellValue('C2', 'student');
-        $sheet->setCellValue('D2', '0130000111');
-        $sheet->setCellValue('E2', '01/02/1997');
-        $sheet->setCellValue('F2', 'm');
-        $sheet->setCellValue('G2', 'a160000@siswa.ukm.edu.my');
-        $sheet->setCellValue('H2', '01/01/2020');
-        $sheet->setCellValue('I2', '31/12/2024');
+        $sheet->setCellValue('D2', 'K0001');
+        $sheet->setCellValue('E2', '0130000111');
+        $sheet->setCellValue('F2', '01/02/1997');
+        $sheet->setCellValue('G2', 'm');
+        $sheet->setCellValue('H2', 'a160000@siswa.ukm.edu.my');
+        $sheet->setCellValue('I2', '01/01/2020');
+        $sheet->setCellValue('J2', '31/12/2024');
 
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');

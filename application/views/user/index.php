@@ -48,7 +48,6 @@
                         <td>User type</td>
                         <td>Status</td>
                         <td></td>
-                        <td></td>
                     </tr>
                 </tfoot>
             </table>
