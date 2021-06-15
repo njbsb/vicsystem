@@ -5,13 +5,9 @@
     <meta charset="utf-8">
     <title>VIC System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css" integrity="sha384-enpDwFISL6M3ZGZ50Tjo8m65q06uLVnyvkFO3rsoW0UC15ATBFz3QEhr3hmxpYsn"
-        crossorigin="anonymous"> -->
-    <!-- <link rel="stylesheet" href="<?= base_url('assets/css/quartz.bootstrap.min.css') ?>"> -->
     <link rel="stylesheet" href="<?= base_url('assets/css/flatly.bootstrap.min.css') ?>">
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap5.min.css">
-    <!-- <link rel="stylesheet" href="<?= base_url('assets/css/sigcustom.css') ?>"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-okaidia.min.css"
         integrity="sha512-mIs9kKbaw6JZFfSuo+MovjU+Ntggfoj8RwAmJbVXQ5mkAX5LlgETQEweFPI18humSPHymTb5iikEOKWF7I8ncQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -106,8 +102,10 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">Score</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="<?= site_url('scoreboard') ?>"><i class='fas fa-star'></i> Score Board</a>
+                            <a class="dropdown-item" href="<?= site_url('scoreboard') ?>">Score Board</a>
+                            <a class="dropdown-item" href="<?= site_url('badgeboard') ?>">Badge Board</a>
                             <?php if ($usertype != 'student') : ?>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="<?= site_url('scoreplan') ?>">Score Plan</a>
                             <a class="dropdown-item" href="<?= site_url('score') ?>">Submit Score</a>
                             <?php endif ?>
