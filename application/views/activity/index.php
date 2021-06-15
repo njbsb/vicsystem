@@ -33,6 +33,7 @@
                     </tr>
                 </thead>
                 <tbody class="list table-active">
+                    <?php array_multisort(array_column($activities, 'datetime_start'), SORT_DESC, $activities); ?>
                     <?php foreach ($activities as $activity) : ?>
                     <tr>
                         <td class="Activity"><a class="text-dark" href="<?= site_url('/activity/' . $activity['slug']) ?>"><?= $activity['title'] ?></a></t>
