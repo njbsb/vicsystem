@@ -20,6 +20,7 @@
                 </thead>
                 <tbody class="table-light">
                     <?php if ($users) : ?>
+                    <?php array_multisort(array_column($users, 'createdat'), SORT_DESC, $users) ?>
                     <?php foreach ($users as $user) : ?>
                     <?php $statusclass = ($user['validated']) ? 'text-success' : 'text-warning' ?>
                     <?php $profileclass = ($user['profileexist']) ? 'text-success' : 'text-danger' ?>
@@ -120,7 +121,8 @@ $(document).ready(function() {
                     select.append("<option value='" + d + "'>" + d + "</option>")
                 });
             });
-        }
+        },
+        order: []
     });
 });
 var confirmtext = document.getElementById('confirmtext');

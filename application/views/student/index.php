@@ -15,7 +15,7 @@
     <div class="row justify-content-center">
         <?php foreach ($students as $student) : ?>
         <div class="col-sm-12 col-md-3 col-lg-2">
-            <div class="card mb2 text-center">
+            <div class="card mb2 text-center" style="margin-bottom:10px;">
                 <div class="container d-flex flex-column align-items-center" style="margin-bottom:10px;">
                     <img data-toggle="tooltip" data-title="<?= $student['name'] ?>" class="rounded-circle img-circle" src="<?= $student['userphoto'] ?>" alt="" width="130" height="130">
                 </div>

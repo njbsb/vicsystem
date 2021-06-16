@@ -14,7 +14,7 @@
     <?php endforeach ?>
     <?php endif ?>
 </div> -->
-<div class="card">
+<!-- <div class="card">
     <div class="card-body">
         <button data-toggle="modal" data-target="#createbadge" class="btn btn-dark"><i class='fab fa-edge'></i> New</button>
         <br>
@@ -44,7 +44,26 @@
             </tbody>
         </table>
     </div>
+</div> -->
+
+<div class="row">
+    <?php if ($images) : ?>
+    <?php foreach ($images as $i => $image) : ?>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <img src="<?= $image['photo'] ?>" class="rounded-circle" alt="" width="90" height="90">
+                <h4 style="margin-top:10px;"><?= $image['title'] ?></h4>
+                <button data-toggle="modal" data-id="<?= $image['id'] ?>" data-target="#updatebadge" data-name="<?= $image['title'] ?>" data-photo="<?= $image['photo'] ?>"
+                    class="btn btn-sm btn-outline-dark"><i class='fas fa-pen'></i></button>
+            </div>
+        </div>
+    </div>
+    <?php endforeach ?>
+    <?php endif ?>
 </div>
+
+<small>Edit your badge look here!</small>
 
 <div id="createbadge" class="modal fade card">
     <div class="modal-dialog" role="document">
