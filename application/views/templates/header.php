@@ -31,30 +31,9 @@
     </script>
     <script src="<?= base_url('assets/js/paging.js') ?>"></script>
 
-
     <!-- Datatable JS -->
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
-
-    <!-- <link rel="stylesheet" href="<?= base_url() ?>assets/css/custom.min.css"> -->
-    <!-- <link rel="stylesheet" href="<?= base_url('assets/css/jquery.dataTables.css') ?>"> -->
-    <!-- <link rel="stylesheet" href="<?= base_url('assets/css/dataTables.bootstrap.css') ?>"> -->
-    <!-- <link rel="stylesheet" href="<?= base_url('assets/css/sticky-footer.css') ?>"> -->
-    <!-- <script src="<?= base_url('assets/js/custom.js') ?>"></script> -->
-    <!-- <script src="<?= base_url('assets/js/jquery.min.js') ?>"></script> -->
-    <style>
-    p.home-text {
-        font-size: 20px;
-        line-height: 100%;
-    }
-
-    .home-title {
-        /* font: 48px Montserrat, sans-serif; */
-        font-weight: bolder;
-        font-family: Montserrat, sans-serif;
-        color: #c7286f !important;
-    }
-    </style>
 
 </head>
 
@@ -72,9 +51,6 @@
             <?php if ($this->session->userdata('logged_in')) : ?>
             <div class="collapse navbar-collapse" id="navbarColor03">
                 <ul class="navbar-nav mr-auto">
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url('profile') ?>">Profile <span class="sr-only">(current)</span></a>
-                    </li> -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">SIG</a>
                         <div class="dropdown-menu">

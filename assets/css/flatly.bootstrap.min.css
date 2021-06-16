@@ -141,6 +141,19 @@ p.activitydesc {
 	display: block;
 }
 
+p.home-text {
+	font-size: 16px;
+	line-height: 100%;
+}
+
+.home-title {
+	/* font: 48px Montserrat, sans-serif; */
+	font-weight: bolder;
+	font-family: Montserrat, sans-serif;
+	/* color: #212529 !important; */
+	color: #c7286f !important;
+}
+
 .margin {
 	margin-bottom: 35px;
 }

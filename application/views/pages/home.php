@@ -20,35 +20,19 @@
     </figure>
 </div>
 
-<div class="row container-fluid">
-    <div class="col-sm">
-        <img class="img-fluid" style="" src="<?= base_url('assets/images/filelink.png') ?>" alt="">
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 border-right text-center">
+        <div class="text-center">
+            <img class="img-fluid" style="padding:40px; width:500px; height:500px; object-fit:cover;" src="<?= base_url('assets/images/filelink.png') ?>" alt="">
+        </div>
+        <h3 class="home-title">Activity Planner</h3>
+        <p class="home-text">Plan your activities and track them easily</p>
     </div>
-    <div class="col-sm">
-        <h1 class="home-title">Activity Planner</h1>
-        <br>
-        <p class="home-text">Plan your activity and academic plan and track them from time to time</p>
-    </div>
-</div>
-<hr>
-<div class="row container-fluid">
-    <div class="col-sm">
-        <h1 class="home-title">Score System</h1>
-        <br>
-        <p class="home-text">Manage students score in club's activities through the gamification concept</p>
-    </div>
-    <div class="col-sm">
-        <img class="img-fluid" style="float: right;" src="<?= base_url('assets/images/data.png') ?>" alt="">
-    </div>
-</div>
-<hr>
-<div class="row container-fluid">
-    <div class="col-sm">
-        <img class="img-fluid" style="" src="<?= base_url('assets/images/developer.png') ?>" alt="">
-    </div>
-    <div class="col-sm">
-        <h1 class="home-title">Developed Internally</h1>
-        <br>
-        <p class="home-text">Proudly developed by alumni of VIC</p>
+    <div class="col-lg-6 col-md-6 col-sm-12 text-center">
+        <div class="text-center">
+            <img class="img-fluid img-rounded" style="padding:40px; width:500px; height:500px; object-fit:cover;" src="<?= base_url('assets/images/data.png') ?>" alt="">
+        </div>
+        <h3 class="home-title">Score System</h3>
+        <p class="home-text">Simplified gamification-based system for scoring</p>
     </div>
 </div>
