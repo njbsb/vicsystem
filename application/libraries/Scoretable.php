@@ -58,11 +58,18 @@ class Scoretable
             $target = $plan['gpa_target'];
             $achieved = $plan['gpa_achieved'];
             $difference = $achieved - $target;
-            if (is_numeric($target) and is_numeric($achieved) and $difference >= 0) {
-                $badgecount += 1;
-            }
-            if ($achieved >= 3.67) {
-                $badgecount += 1;
+            $previousgpa = $this->CI->academic_model->get_previous_semester_gpa($student_id, $plan['acadsession_id']);
+            $difference2 = $achieved - $previousgpa;
+            if (is_numeric($achieved)) { # check if achieved exists and is number
+                if (is_numeric($target) and $difference >= 0) {
+                    $badgecount += 1;
+                }
+                if ($difference2 > 0 and $previousgpa > 0) {
+                    $badgecount += 1;
+                }
+                if ($achieved > 3.67) {
+                    $badgecount += 1;
+                }
             }
         }
         return $badgecount;

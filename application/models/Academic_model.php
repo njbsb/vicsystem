@@ -148,7 +148,7 @@ class Academic_model extends CI_Model
                     $query = $this->db->get();
                     return $query->row_array();
                 } else {
-                    $this->db->select("acp.*, std.name, acy.acadyear, acs.semester, 
+                    $this->db->select("acp.*, std.name, acy.acadyear, acs.semester, acs.startdate,
                 concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
                         ->from('academicplan as acp')
                         ->where(array('acp.student_id' => $student_id))
@@ -170,6 +170,32 @@ class Academic_model extends CI_Model
                 return $query->result_array();
             }
         }
+    }
+
+    public function get_previous_semester_gpa($student_id, $acadsession_id)
+    {
+        $academicsession = $this->get_academicsession($acadsession_id);
+        $academicplans = $this->get_academicplan($student_id);
+        array_multisort(array_column($academicplans, 'startdate'), SORT_DESC, $academicplans);
+        $targetindex = null;
+        $index = 0;
+        while ($targetindex == null) {
+            $plan = $academicplans[$index];
+            if ($plan['acadsession_id'] == $acadsession_id) {
+                $targetindex = $index + 1;
+            }
+            $index++;
+        }
+        if (isset($academicplans[$targetindex])) {
+            return $academicplans[$targetindex]['gpa_achieved'];
+        } else {
+            return 0;
+        }
+    }
+
+    public function get_acadyear_id($acadyear_string)
+    {
+        return true;
     }
 
     public function get_this_academicplan($student_id, $acadsession_id)

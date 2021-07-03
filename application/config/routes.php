@@ -74,7 +74,7 @@ $route['score/download_scoreboard/(:any)'] = 'score/download_scoreboard/$1';
 $route['scoreplan'] = 'score/scoreplan';
 $route['scoreboard'] = 'score/scoreboard';
 $route['badgeboard'] = 'score/badgeboard';
-$route['scoreboard/(:any)'] = 'score/scoreboard/$1';
+$route['badgeboard/(:any)'] = 'score/badgeboard/$1';
 $route['scoreplan/(:any)'] = 'score/scoreplan/$1';
 $route['score/addscore'] = 'score/addscore';
 

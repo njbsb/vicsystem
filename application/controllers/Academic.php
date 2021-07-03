@@ -171,26 +171,24 @@ class Academic extends CI_Controller
             $academicplans = $this->academic_model->get_academicplan(FALSE, $activesession['id']);
             foreach ($academicplans as $i => $acp) {
                 if (is_numeric($acp['gpa_achieved']) and is_numeric($acp['gpa_target'])) {
+                    $student_id = $acp['student_id'];
+                    $previousgpa = $this->academic_model->get_previous_semester_gpa($student_id, $acp['acadsession_id']);
                     $diff = $acp['gpa_achieved'] - $acp['gpa_target'];
                     if ($diff > 0) {
                         $status = 'Passed';
-                        $textclass = 'text-success';
                     } elseif ($diff < 0) {
                         $status = 'Not Pass';
-                        $textclass = 'text-warning';
                     } else {
                         $status = 'Constant';
-                        $textclass = '';
                     }
                 } else {
                     $status = '';
-                    $textclass = '';
                     $diff = '';
+                    $previousgpa = '';
                 }
-
+                $academicplans[$i]['previousgpa'] = $previousgpa;
                 $academicplans[$i]['difference'] = $diff;
                 $academicplans[$i]['status'] = $status;
-                $academicplans[$i]['textclass'] = $textclass;
             }
             $examdate = date('Y-m-d', strtotime("+4 months", strtotime($activesession['startdate'])));
         } else {

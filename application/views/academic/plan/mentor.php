@@ -79,7 +79,6 @@
     </div>
 </div>
 <hr>
-
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
@@ -88,10 +87,11 @@
                     <tr>
                         <th>Matric</th>
                         <th>Name</th>
-                        <th>GPA Target</th>
-                        <th>GPA Achieved</th>
-                        <th>Status</th>
-                        <th>Increment</th>
+                        <th>Target GPA</th>
+                        <th>Achieved GPA</th>
+                        <th>Previous GPA</th>
+                        <th>Current Increment</th>
+                        <th>Previous Increment</th>
                     </tr>
                 </thead>
                 <tbody class="table-light">
@@ -103,12 +103,27 @@
                         <td><?= $acp['name'] ?></td>
                         <td><?= $acp['gpa_target'] ?></td>
                         <td class="<?= $resultclass ?>"><?= $acp['gpa_achieved'] ?></td>
-                        <td class="<?= $acp['textclass'] ?>"><?= $acp['status'] ?></td>
-                        <td class="<?= $acp['textclass'] ?>"><?= $acp['difference'] ?></td>
+                        <td><?= $acp['previousgpa'] ?></td>
+                        <?php $diff1 = $acp['gpa_achieved'] - $acp['gpa_target'];
+                                if ($diff1 > 0) {
+                                    $diff1textclass = 'text-success';
+                                } elseif ($diff1 < 0) {
+                                    $diff1textclass = 'text-warning';
+                                }
+                                ?>
+                        <td class="<?= $diff1textclass ?>"><?= $diff1 ?></td>
+                        <?php
+                                $diff2 = $acp['gpa_achieved'] - $acp['previousgpa'];
+                                if ($diff2 > 0) {
+                                    $diff2textclass = 'text-success';
+                                } elseif ($diff2 < 0) {
+                                    $diff2textclass = 'text-warning';
+                                }
+                                ?>
+                        <td class="<?= $diff2textclass ?>"><?= $diff2 ?></td>
                     </tr>
                     <?php endforeach ?>
                     <?php endif ?>
-
                 </tbody>
             </table>
         </div>

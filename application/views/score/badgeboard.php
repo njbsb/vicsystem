@@ -49,7 +49,7 @@
                         <td><?= $student['activitybadge'] ?></td>
                         <td><?= $student['externalbadge'] ?></td>
                         <td><?= $student['totalbadge'] ?></td>
-                        <td><a class="btn btn-outline-dark btn-sm" href="<?= site_url('scoreboard/' . $student['id']) ?>"><i class='fas fa-search'></i></a></td>
+                        <td><a class="btn btn-outline-dark btn-sm" href="<?= site_url('badgeboard/' . $student['id']) ?>"><i class='fas fa-search'></i></a></td>
                     </tr>
                     <?php endforeach ?>
                     <?php endif ?>

@@ -200,7 +200,33 @@ class Score extends CI_Controller
             $this->load->view('score/scoreboard', $data);
             $this->load->view('templates/footer');
         } else {
-            # specific to student
+        }
+    }
+
+    public function badgeboard($student_id = NULL)
+    {
+        if ($student_id == FALSE) {
+            $academicsession = $this->academic_model->get_activeacademicsession();
+            $students = $this->student_model->get_activestudents();
+            # for cumulative badge
+            foreach ($students as $i => $student) {
+                $academicbadge = $this->scoretable->calculate_academicbadge($student['id']);
+                $activitybadge = $this->scoretable->calculate_activitybadge($student['id']);
+                $externalbadge = $this->scoretable->calculate_externalbadge($student['id']);
+                $students[$i]['academicbadge'] = $academicbadge;
+                $students[$i]['activitybadge'] = $activitybadge;
+                $students[$i]['externalbadge'] = $externalbadge;
+                $students[$i]['totalbadge'] = $academicbadge + $activitybadge + $externalbadge;
+            }
+            $data = array(
+                'usertype' => $this->session->userdata('user_type'),
+                'thisacademicsession' => $academicsession,
+                'students' => $students
+            );
+            $this->load->view('templates/header');
+            $this->load->view('score/badgeboard', $data);
+            $this->load->view('templates/footer');
+        } else {
             $student = $this->student_model->get_student($student_id);
             $academicplans = $this->academic_model->get_academicplan($student_id);
 
@@ -211,20 +237,28 @@ class Score extends CI_Controller
 
             foreach ($academicplans as $i => $plan) {
                 # academic
+                $target = $plan['gpa_target'];
+                $achieved = $plan['gpa_achieved'];
+                $previousgpa = $this->academic_model->get_previous_semester_gpa($plan['student_id'], $plan['acadsession_id']);
                 $badgecount = 0;
                 $academicdesc = array();
-                if ($plan['gpa_achieved'] > 3.67) {
-                    $string = sprintf("Achieved Dean's List (%s)", $plan['gpa_achieved']);
+                if ($achieved > 3.67) {
+                    $string = sprintf("Achieved Dean's List (%s)", $achieved);
                     array_push($academicdesc, $string);
                     $badgecount += 1;
                 }
-                if (is_numeric($plan['gpa_achieved']) and is_numeric($plan['gpa_target']) and $plan['gpa_achieved'] >= $plan['gpa_target']) {
-                    $diff = $plan['gpa_achieved'] - $plan['gpa_target'];
-                    $string = sprintf("Achieved academic target with increment of +%s (%s)", $diff, $plan['gpa_target']);
+                if (is_numeric($achieved) and is_numeric($target) and $achieved >= $target) {
+                    $diff = $achieved - $target;
+                    $string = sprintf("Achieved academic target with increment of +%s (%s)", $diff, $target);
                     array_push($academicdesc, $string);
                     $badgecount += 1;
                 }
-
+                if ($achieved > $previousgpa and $previousgpa > 0) {
+                    $diff2 = $achieved - $previousgpa;
+                    $string = sprintf("Scored higher than previous semester's GPA (%s, increment %s)", $previousgpa, $diff2);
+                    array_push($academicdesc, $string);
+                    $badgecount += 1;
+                }
                 # activity
                 $scorelevels = $this->score_model->get_scorelevels_bystudentacadsession_a($student['id'],  $plan['acadsession_id']);
                 $activitydesc = array();
@@ -263,35 +297,8 @@ class Score extends CI_Controller
                 'externalbadge' => $this->file_model->get_externalbadge()
             );
             $this->load->view('templates/header');
-            $this->load->view('score/scoreboardview', $data);
+            $this->load->view('score/badgeboardview', $data);
             $this->load->view('templates/footer');
-        }
-    }
-
-    public function badgeboard($student_id = NULL)
-    {
-        if ($student_id == FALSE) {
-            $academicsession = $this->academic_model->get_activeacademicsession();
-            $students = $this->student_model->get_activestudents();
-            # for cumulative badge
-            foreach ($students as $i => $student) {
-                $academicbadge = $this->scoretable->calculate_academicbadge($student['id']);
-                $activitybadge = $this->scoretable->calculate_activitybadge($student['id']);
-                $externalbadge = $this->scoretable->calculate_externalbadge($student['id']);
-                $students[$i]['academicbadge'] = $academicbadge;
-                $students[$i]['activitybadge'] = $activitybadge;
-                $students[$i]['externalbadge'] = $externalbadge;
-                $students[$i]['totalbadge'] = $academicbadge + $activitybadge + $externalbadge;
-            }
-            $data = array(
-                'usertype' => $this->session->userdata('user_type'),
-                'thisacademicsession' => $academicsession,
-                'students' => $students
-            );
-            $this->load->view('templates/header');
-            $this->load->view('score/badgeboard', $data);
-            $this->load->view('templates/footer');
-        } else {
         }
     }
 
