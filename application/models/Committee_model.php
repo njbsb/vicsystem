@@ -11,12 +11,13 @@ class Committee_model extends CI_Model
         # to get highcom using position string
         $this->db->select("orgcom.*, user.name, user.email, user.userphoto, role.role, (year(CURDATE()) - year(user.startdate) + 1 ) as year")
             ->from('committee_organization as orgcom')
-            ->join('user', 'user.id = orgcom.student_id')
-            ->join('role_organization as role', 'role.id = orgcom.role_id')
-            ->join('academicyear as acy', 'acy.id = orgcom.acadyear_id')
+            ->join('user', 'user.id = orgcom.student_id', 'left')
+            ->join('role_organization as role', 'role.id = orgcom.role_id', 'left')
+            ->join('academicyear as acy', 'acy.id = orgcom.acadyear_id', 'left')
             ->where(array(
                 'acy.id' => $acadyear_id,
-                'role.role' => $position
+                'role.role' => $position,
+                'orgcom.student_id !=' => NULL
             ));
         $query = $this->db->get();
         return $query->row_array();

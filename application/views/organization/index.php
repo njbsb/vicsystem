@@ -26,7 +26,9 @@
                     <a href="<?= site_url('/student/' . $president['student_id']) ?>"><?= $president['name'] ?></a>
                     <?php endif ?>
                 </h5>
+                <?php if (isset($president['year'])) : ?>
                 <p class="card-subtitle text-white">Year <?= $president['year'] ?></p>
+                <?php endif ?>
             </div>
         </div>
     </div>
@@ -53,7 +55,7 @@
                     <?php endif ?>
                 </h5>
                 <?php if ($rows['year'] != '') : ?>
-                <p class="card-subtitle text-white">Year <?= $rows['year']; ?></p>
+                <p class="card-subtitle text-white">Year <?= $rows['year'] ?></p>
                 <?php endif ?>
             </div>
         </div>
