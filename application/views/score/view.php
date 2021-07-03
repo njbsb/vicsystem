@@ -47,8 +47,8 @@
                 <hr>
                 <div class="form-group">
                     <!-- <h6>Total:</h6> -->
-                    <?php $textclass = (array_sum($scoreplan['scores']) > 18) ? 'text-info' : '' ?>
-                    <?php $scpbadge = (array_sum($scoreplan['scores']) > 18 and $scoreplan['activitycategory_id'] == 'A') ? '<i class="fas fa-award" style="color: #3498db;"></i>' : '' ?>
+                    <?php $textclass = (array_sum($scoreplan['scores']) > 18) ? 'text-primary' : '' ?>
+                    <?php $scpbadge = (array_sum($scoreplan['scores']) > 18 and $scoreplan['activitycategory_id'] == 'A') ? '<i class="fas fa-award" style="color: #464F64;"></i>' : '' ?>
                     <h3 class="<?= $textclass ?> text-center"><?= array_sum($scoreplan['scores']) ?>/<?= $scoreleveltotal ?> <?= $scpbadge ?></h3>
                 </div>
                 <div class="form-group">
@@ -70,7 +70,7 @@
                     </div>
                     <?php endforeach ?>
                     <div class="col">
-                        <button data-toggle="modal" data-target="#edit<?= $scoreplan['label'] ?>" class="btn btn-outline-info">Edit Score</button>
+                        <button data-toggle="modal" data-target="#edit<?= $scoreplan['label'] ?>" class="btn btn-outline-dark">Edit Score</button>
                     </div>
                     <?php else : ?>
                     <div class="col">
@@ -200,7 +200,7 @@
                     </div>
                     <?php endforeach ?>
                     <div class="col">
-                        <button data-toggle="modal" data-target="#editcomp" class="btn btn-outline-info">Edit Score</button>
+                        <button data-toggle="modal" data-target="#editcomp" class="btn btn-outline-dark">Edit Score</button>
                     </div>
                     <?php else : ?>
                     <div class="col">
