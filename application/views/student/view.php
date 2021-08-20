@@ -38,13 +38,13 @@
         <?php if ($this->session->userdata('user_type') == 'mentor') : ?>
         <div class="row">
             <div class="col-sm-3">
-                <h6><b>Parent Contact 1</b></h6>
-                <h6><b>Parent Contact 2</b></h6>
+                <h6><b>Parent 1 Contact</b></h6>
+                <h6><b>Parent 2 Contact</b></h6>
                 <h6><b>Address</b></h6>
             </div>
             <div class="col-sm-9">
-                <h6><?= $student['parent_num1'] ?></h6>
-                <h6><?= $student['parent_num2'] ?></h6>
+                <h6><?= $student['parent_num1'] ?> (Father)</h6>
+                <h6><?= $student['parent_num2'] ?> (Mother)</h6>
                 <h6><?= $student['address'] ?></h6>
             </div>
         </div>
@@ -80,7 +80,7 @@
                 </thead>
                 <tbody class="table-active">
                     <?php foreach ($activity_roles as $actrole) : ?>
-                    <?php $desc = (isset($actrole['description'])) ? sprintf(' (%s)', $actrole['description']) : '' ?>
+                    <?php $desc = ($actrole['description'] != '' or $actrole['description'] != null) ? sprintf(' (%s)', $actrole['description']) : '' ?>
                     <tr>
                         <td><?= $actrole['acadyear'] . ' Semester ' . $actrole['semester'] ?></td>
                         <td><?= $actrole['activity_name'] ?></td>

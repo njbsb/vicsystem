@@ -8,7 +8,7 @@
         <?php foreach ($mentors as $mentor) : ?>
         <div class="col-sm-6 col-md-4 col-lg-3">
             <div class="card mb-3">
-                <?php $bg = ($mentor['id'] == $mentor_matric) ? 'text-white' : 'text-dark'; ?>
+                <?php $bg = ($mentor_matric != null and $mentor['id'] == $mentor_matric) ? 'text-white' : 'text-dark'; ?>
                 <h4 class="card-header <?= $bg ?>">
                     <?= ($mentor['id'] == $mentor_matric) ? 'My Mentor' : 'Mentor' ?>
                 </h4>

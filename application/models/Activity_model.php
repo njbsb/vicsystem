@@ -97,16 +97,19 @@ class Activity_model extends CI_Model
         }
     }
 
-    public function get_externalactivity_bystudentsession($student_id, $acadsession_id)
+    public function get_externalactivity_bystudentsession($student_id, $acadsession_id = null)
     {
         $this->db->select('actext.*, actlevel.level')
             ->from('score_external as sext')
             ->join('activityexternal as actext', 'actext.id = sext.activityexternal_id', 'left')
             ->join('activitylevel as actlevel', 'actlevel.id = actext.activitylevel_id', 'left')
             ->where(array(
-                'sext.student_id' => $student_id,
-                'actext.acadsession_id' => $acadsession_id
+                'sext.student_id' => $student_id
+                // , 'actext.acadsession_id' => $acadsession_id
             ));
+        if ($acadsession_id) {
+            $this->db->where('actext.acadsession_id', $acadsession_id);
+        }
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -328,5 +331,48 @@ class Activity_model extends CI_Model
             'activity_id' => $activity_id
         ));
         return $query->row_array();
+    }
+
+    public function get_externalact_acadsessionid($student_id)
+    {
+        $query = $this->db->select('actext.acadsession_id')
+            ->from('score_external as sext')
+            ->where('sext.student_id', $student_id)
+            ->join('activityexternal as actext', 'actext.id = activityexternal_id', 'left')
+            ->get()->result_array();
+        $idlist = array();
+        foreach ($query as $index => $q) {
+            $idlist[$index] = $q['acadsession_id'];
+        }
+        return $idlist;
+    }
+
+    public function get_activity_acadsessionid($student_id)
+    {
+        $query = $this->db->select('scp.acadsession_id')
+            ->from('score_level')
+            ->join('score_plan as scp', 'scp.id = score_level.scoreplan_id')
+            ->where('score_level.student_id', $student_id)
+            ->distinct()
+            ->get()->result_array();
+        $idlist = array();
+        foreach ($query as $index => $q) {
+            $idlist[$index] = $q['acadsession_id'];
+        }
+        return $idlist;
+    }
+
+    public function get_academic_acadsessionid($student_id)
+    {
+        $query = $this->db->select('acadsession_id')
+            ->from('academicplan')
+            ->where('student_id', $student_id)
+            ->distinct()
+            ->get()->result_array();
+        $idlist = array();
+        foreach ($query as $index => $q) {
+            $idlist[$index] = $q['acadsession_id'];
+        }
+        return $idlist;
     }
 }

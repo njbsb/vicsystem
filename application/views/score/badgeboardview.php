@@ -4,8 +4,8 @@
     <li class="breadcrumb-item active"><?= $student['id'] ?></li>
 </ol>
 <h3 class="text-dark"><?= sprintf("Badge Board: %s", $student['name']) ?></h3>
-<?php if ($academicplans) : ?>
-<?php foreach ($academicplans as $plan) : ?>
+<?php if (isset($allsessions)) : ?>
+<?php foreach ($allsessions as $plan) : ?>
 <hr>
 <div class="card">
     <div class="card-body">

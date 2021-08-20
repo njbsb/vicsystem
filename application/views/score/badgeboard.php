@@ -33,7 +33,8 @@
                         <th>Academic Badge</th>
                         <th>Activity Badge</th>
                         <th>External Badge</th>
-                        <th>Total</th>
+                        <th>Total (Current)</th>
+                        <th>Total Cumulative</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -49,6 +50,7 @@
                         <td><?= $student['activitybadge'] ?></td>
                         <td><?= $student['externalbadge'] ?></td>
                         <td><?= $student['totalbadge'] ?></td>
+                        <td></td>
                         <td><a class="btn btn-outline-dark btn-sm" href="<?= site_url('badgeboard/' . $student['id']) ?>"><i class='fas fa-search'></i></a></td>
                     </tr>
                     <?php endforeach ?>

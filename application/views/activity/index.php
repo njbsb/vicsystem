@@ -7,19 +7,20 @@
 <br>
 <button class="btn btn-dark" data-toggle="modal" data-target="#activity_type"><i class='far fa-calendar-plus'></i> New Activity</button>
 <button class="btn btn-outline-dark" data-toggle="modal" data-target="#search"><i class='fas fa-search'></i> Search</button>
-<!-- <a class="btn btn-dark" href="<?= site_url('activity/external') ?>">External</a> -->
+<br>
+<small>This page will only show activity within the current academic year.</small>
 <?php endif ?>
 
 <?php if ($this->session->userdata('user_type') != 'student') : ?>
 <hr>
-<div class="text-center">
+<!-- <div class="text-center">
     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
         <label class="btn btn-outline-dark" for="btnradio1">
             <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked=""> Table</label>
         <label class="btn btn-outline-dark" for="btnradio2">
             <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked=""> Posts</label>
     </div>
-</div>
+</div> -->
 <div id="tableview" class="card">
     <div class="card-body">
         <div class="table-responsive">

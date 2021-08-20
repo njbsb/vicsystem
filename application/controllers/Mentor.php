@@ -12,6 +12,8 @@ class Mentor extends CI_Controller
         if ($this->session->userdata('user_type') == 'student') {
             $mentor_matric = $this->student_model->get_mentor_matric($this->session->userdata('username'));
             $data['mentor_matric'] = $mentor_matric;
+        } else {
+            $data['mentor_matric'] = null;
         }
         $this->load->view('templates/header');
         $this->load->view('mentor/index', $data);

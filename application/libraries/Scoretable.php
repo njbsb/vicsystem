@@ -29,7 +29,6 @@ class Scoretable
             $acparray = array(
                 'acadsession_id' => $acp['acadsession_id'],
                 'academicsession' => $acp['academicsession'],
-                // 'citra_reg' => $citrastring,
                 'gpa_target' => $acp['gpa_target'],
                 'gpa_achieved' => $gpa_achieved,
                 'difference' => $difference
@@ -67,7 +66,7 @@ class Scoretable
                 if ($difference2 > 0 and $previousgpa > 0) {
                     $badgecount += 1;
                 }
-                if ($achieved > 3.67) {
+                if ($achieved >= 3.67) {
                     $badgecount += 1;
                 }
             }

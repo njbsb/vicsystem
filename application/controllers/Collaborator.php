@@ -44,7 +44,7 @@ class Collaborator extends CI_Controller
 
             $collabdata = array(
                 'name' => $this->input->post('name'),
-                'background' => $this->input->post('background'),
+                'description' => $this->input->post('background'),
                 'logo' => $logo
             );
             $this->collaborator_model->create_collaborator($collabdata);

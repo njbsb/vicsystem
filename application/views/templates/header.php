@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <link rel="icon" href="<?= base_url('assets/images/vicicon.ico') ?>" type="image/ico">
     <meta charset="utf-8">
     <title>VIC System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,8 +56,8 @@
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">SIG</a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="<?= site_url('organization') ?>">Organization</a>
-                            <?php if ($usertype == 'student') : ?>
                             <a class="dropdown-item" href="<?= site_url('mentor') ?>">Mentors</a>
+                            <?php if ($usertype == 'student') : ?>
                             <?php else : ?>
                             <a class="dropdown-item" href="<?= site_url('student') ?>">Students</a>
                             <?php endif ?>

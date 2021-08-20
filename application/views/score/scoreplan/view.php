@@ -67,12 +67,17 @@
                     <tr>
                         <th>Total</th>
                         <td></td>
-                        <th><?= $totalpercent + 15 ?> %</th>
+                        <th class="<?php if ($totalpercent + 15 > 55) {
+                                        echo 'text-danger';
+                                    } ?>"><?= $totalpercent + 15 ?> %</th>
                         <th></th>
                     </tr>
                 </tfoot>
             </table>
         </div>
+        <?php if ($totalpercent + 15 > 55) : ?>
+        <small>Total percent of score plan has exceeded 55%. Please adjust the score plan to be equal to 55%.</small>
+        <?php endif ?>
     </div>
 </div>
 
@@ -198,6 +203,10 @@
 </div>
 
 <script>
+var totalpercent = <?= $totalpercent ?>;
+if (totalpercent + 15 > 55) {
+    alert('Total percent of score plan has exceeded 55%!');
+}
 $('#editscoreplan').on('show.bs.modal', function(e) {
     var scoreplanid = $(e.relatedTarget).data('id');
     var activityid = $(e.relatedTarget).data('activityid');

@@ -9,7 +9,7 @@
         <div class="col-lg-4 col-md-6 col-sm-12">
             <div class="card border-dark mb-3 text-center" style="max-width: 20rem;">
                 <img style="max-height:300px; display: block; object-fit:cover; padding:10px;" src="<?= $mentor['userphoto'] ?>">
-                <div class="card-footer text-muted">
+                <div class="card-footer text-light">
                     <?= $mentor['id'] ?>
                 </div>
             </div>
@@ -43,7 +43,7 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <h4 class="text-secondary text-center"><b>Activity Level</b></h4>
+            <h4 class="text-light text-center"><b>Activity Level</b></h4>
             <?php if ($activity_roles) : ?>
             <div class="table-responsive">
                 <table id="acttable" class="table">

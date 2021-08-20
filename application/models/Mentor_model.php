@@ -65,12 +65,15 @@ class Mentor_model extends CI_Model
 
     public function update_mentor($id, $mentordata)
     {
-        $this->db->where('matric', $id)
-            ->set($mentordata);
-        if ($this->db->get_where('mentor', array('matric' => $id))->num_rows() > 0) {
-            return $this->db->update('mentor');
+        $firstquery = $this->db->get_where('mentor', array('matric' => $id));
+        if ($firstquery->num_rows() > 0) {
+            unset($mentordata['matric']);
+            return $this->db->where('matric', $id)
+                ->update('mentor', $mentordata);
         } else {
-            return $this->db->insert('mentor');
+            return $this->db->where('matric', $id)
+                ->set($mentordata)
+                ->insert('mentor');
         }
     }
 

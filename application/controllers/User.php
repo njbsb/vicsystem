@@ -218,10 +218,17 @@ class User extends CI_Controller
     {
         # user = user to be validated
         $user = $this->user_model->get_user($id);
+        if ($user['usertype'] = 'mentor') {
+            $mentordata = $this->mentor_model->get_mentor($user['id']);
+            $roomno = $mentordata['roomnum'];
+        } else {
+            $roomno = null;
+        }
         $user['status'] = ($user['validated']) ? 'Validated' : 'Pending';
         $data = array(
             'title' => 'Validate: ' . $id,
             'user' => $user,
+            'roomno' => $roomno,
             'mentors' => $this->mentor_model->get_mentor(),
             'superior' => $this->user_model->get_user_superior($id)
         );
@@ -233,7 +240,10 @@ class User extends CI_Controller
         $this->form_validation->set_rules('phonenum', 'phone number', 'required');
         $this->form_validation->set_rules('gender', 'gender', 'required');
         $this->form_validation->set_rules('startdate', 'join date', 'required');
-        $this->form_validation->set_rules('enddate', 'leave date', 'required');
+        if ($user['usertype'] != 'mentor') {
+            $this->form_validation->set_rules('enddate', 'leave date', 'required');
+        }
+
 
         if ($this->form_validation->run() === FALSE) {
             # load validation page
@@ -260,6 +270,12 @@ class User extends CI_Controller
                 'validated' => $validated
             );
             $this->user_model->update_user($id, $userdata);
+            if ($user['usertype'] = 'mentor') {
+                $mentordata = array('roomnum' => $this->input->post('roomno'));
+                if ($this->input->post('roomno') != null) {
+                    $this->mentor_model->update_mentor($id, $mentordata);
+                }
+            }
             redirect('user');
         }
     }
@@ -462,6 +478,7 @@ class User extends CI_Controller
                 if ($role_id and $roomnum and $position) {
                 }
                 $mentordata = array(
+                    'matric' => $user_id,
                     'role_id' => $this->input->post('role_id'),
                     'roomnum' => $this->input->post('roomnum'),
                     'position' => $this->input->post('position'),
@@ -628,8 +645,12 @@ class User extends CI_Controller
                 $dob = date('Y-m-d', strtotime($sheetdata[$i][5])); #F
                 $gender = $sheetdata[$i][6]; #G
                 $email = $sheetdata[$i][7]; #H
-                $startdate =  date('Y-m-d', strtotime($sheetdata[$i][8])); #I
-                $enddate = date('Y-m-d', strtotime($sheetdata[$i][9])); #J
+                // $startdate =  date('Y-m-d', strtotime($sheetdata[$i][8])); #I
+                // $enddate = date('Y-m-d', strtotime($sheetdata[$i][9])); #J
+                $sdate = DateTime::createFromFormat('j/n/Y', $sheetdata[$i][8]);
+                $startdate2 = $sdate->format('Y-m-d');
+                $edate = DateTime::createFromFormat('j/n/Y', $sheetdata[$i][9]);
+                $enddate2 = $edate->format('Y-m-d');
                 $password = md5($id);
                 $data[] = array(
                     'id' => $id,
@@ -641,8 +662,8 @@ class User extends CI_Controller
                     'gender' => $gender,
                     'email' => $email,
                     'password' => $password,
-                    'startdate' => $startdate,
-                    'enddate' => $enddate,
+                    'startdate' => $startdate2,
+                    'enddate' => $enddate2,
                     'validated' => true
                 );
             }

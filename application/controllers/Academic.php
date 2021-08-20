@@ -184,7 +184,7 @@ class Academic extends CI_Controller
                 } else {
                     $status = '';
                     $diff = '';
-                    $previousgpa = '';
+                    $previousgpa = 0;
                 }
                 $academicplans[$i]['previousgpa'] = $previousgpa;
                 $academicplans[$i]['difference'] = $diff;
@@ -595,5 +595,15 @@ class Academic extends CI_Controller
             }
             redirect(site_url('academic'));
         }
+    }
+
+    public function submitresult()
+    {
+        $acadsession_id = $this->input->post('acadsession_id');
+        $student_id = $this->input->post('student_id');
+        $submittedresult = $this->input->post('gparesult');
+        $where = array('acadsession_id' => $acadsession_id, 'student_id' => $student_id);
+        $this->academic_model->submitresult($where, $submittedresult);
+        redirect('academic');
     }
 }

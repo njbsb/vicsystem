@@ -58,10 +58,17 @@
                         <td><?= $acp['gpa_target'] ?></td>
                         <td><?= $acp['gpa_achieved'] ?></td>
                         <td class="<?= $textclass ?>"><?= $sign ?><?= $acp['difference'] ?></td>
-                        <?php $hidden = array('student_id' => $student['id'], 'acadsession_id' => $acp['acadsession_id']) ?>
-                        <?= form_open('academic/record', '', $hidden) ?>
-                        <td><button type="submit" class="btn btn-sm btn-dark"><i class='fas fa-search'></i> Score</button></td>
-                        <?= form_close() ?>
+                        <td>
+                            <?php $hidden = array('student_id' => $student['id'], 'acadsession_id' => $acp['acadsession_id']) ?>
+                            <?= form_open('academic/record', '', $hidden) ?>
+                            <button type="submit" class="btn btn-sm btn-dark"><i class='fas fa-search'></i> Score</button>&nbsp;
+                            <?php $limitdate = date('Y-m-d', strtotime("+2 weeks", strtotime($activesession['startdate']))); ?>
+                            <?php if ($acp['gpa_achieved'] == '' or time() < $limitdate) : ?>
+                            <a class="btn btn-sm btn-dark" data-selectedsession="<?= $acp['academicsession'] ?>" data-toggle="modal" data-target="#submitResult">Submit</a>
+                            <?php endif ?>
+
+                            <?= form_close() ?>
+                        </td>
                     </tr>
                     <?php endforeach ?>
                     <?php endif ?>
@@ -107,6 +114,33 @@
     </div>
 </div>
 
+<div id="submitResult" class="modal fade card">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="submitTitle">Submit Result</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?php $hidden = array('student_id' => $student_id, 'acadsession_id' => $activesession['id']) ?>
+            <?= form_open('academic/submitresult', '', $hidden) ?>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="">Result</label>
+                    <input type="number" name="gparesult" id="gparesult" class="form-control">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button disabled id="submitresultbtn" class="btn btn-dark" type="submit">Submit</button>
+            </div>
+            <?= form_close() ?>
+        </div>
+    </div>
+</div>
+
 <script>
 $(document).ready(function() {
     $('#tableacademicplan').DataTable({
@@ -114,6 +148,13 @@ $(document).ready(function() {
     });
     var gpainput = document.getElementById("gpa_target");
     var submitgpa = document.getElementById("submitgpa");
+    var submitresultbtn = document.getElementById("submitresultbtn");
+    var submitTitle = document.getElementById("submitTitle");
+    $('#submitResult').on('show.bs.modal', function(e) {
+        var selectedSession = $(e.relatedTarget).data('selectedsession');
+        // alert(selectedSession);
+        submitTitle.innerHTML = "Submit Result (" + selectedSession + ")";
+    });
 
     function checkGPA() {
         var gpa = $('#gpa_target').val();
@@ -124,7 +165,15 @@ $(document).ready(function() {
         }
     }
 
-
+    function checkgparesult() {
+        var result = $('#gparesult').val();
+        if (result > 0) {
+            submitresultbtn.disabled = false;
+        } else {
+            submitresultbtn.disabled = true;
+        }
+    }
     $("#gpa_target").keyup(checkGPA);
+    $("#gparesult").keyup(checkgparesult);
 });
 </script>

@@ -129,7 +129,8 @@ class Academic_model extends CI_Model
                 ->from('academicplan as acp')
                 ->join('academicsession as acs', 'acs.id = acp.acadsession_id')
                 ->join('academicyear as acy', 'acy.id = acs.acadyear_id')
-                ->join('user as std', 'std.id = acp.student_id');
+                ->join('user as std', 'std.id = acp.student_id')
+                ->order_by('std.startdate', 'DESC');
             $query = $this->db->get();
             return $query->result_array();
         } else {
@@ -154,7 +155,8 @@ class Academic_model extends CI_Model
                         ->where(array('acp.student_id' => $student_id))
                         ->join('academicsession as acs', 'acs.id = acp.acadsession_id', 'left')
                         ->join('academicyear as acy', 'acy.id = acs.acadyear_id', 'left')
-                        ->join('user as std', 'std.id = acp.student_id', 'left');
+                        ->join('user as std', 'std.id = acp.student_id', 'left')
+                        ->order_by('acs.startdate', 'DESC');
                     $query = $this->db->get();
                     return $query->result_array();
                 }
@@ -176,7 +178,7 @@ class Academic_model extends CI_Model
     {
         $academicsession = $this->get_academicsession($acadsession_id);
         $academicplans = $this->get_academicplan($student_id);
-        array_multisort(array_column($academicplans, 'startdate'), SORT_DESC, $academicplans);
+        // array_multisort(array_column($academicplans, 'startdate'), SORT_DESC, $academicplans);
         $targetindex = null;
         $index = 0;
         while ($targetindex == null) {
@@ -310,5 +312,11 @@ class Academic_model extends CI_Model
         } else {
             return false;
         }
+    }
+
+    public function submitresult($where, $gparesult)
+    {
+        $this->db->where($where)
+            ->update('academicplan', array('gpa_achieved' => $gparesult));
     }
 }

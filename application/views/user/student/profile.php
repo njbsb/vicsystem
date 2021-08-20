@@ -78,7 +78,8 @@
                     </thead>
                     <tbody class="table-active">
                         <?php foreach ($activity_roles as $actrole) : ?>
-                        <?php $desc = (isset($actrole['description'])) ? sprintf(' (%s)', $actrole['description']) : '' ?>
+                        <?php $desc = ($actrole['description'] != null or $actrole['description'] != '') ? sprintf(' (%s)', $actrole['description']) : '' ?>
+                        <!-- <?php $desc = ($actrole['role'] == 'Committee Member') ? sprintf(' (%s)', $actrole['description']) : '' ?> -->
                         <tr>
                             <td><?= $actrole['acadyear'] . ' Semester ' . $actrole['semester'] ?></td>
                             <td><?= $actrole['activity_name'] ?></td>

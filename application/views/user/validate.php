@@ -108,6 +108,15 @@
                             <?php endif ?>
                         </div>
                     </div>
+                    <?php if ($user['usertype'] == 'mentor' and $roomno != null) : ?>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="">Room No (Mentor)</label>
+                            <input value="<?= $roomno ?>" type="text" name="roomno" id="roomno" class="form-control">
+                        </div>
+                    </div>
+                    <?php endif ?>
+
                 </div>
                 <div class="form-group">
                     <?php $checked = ($user['validated']) ? 'checked' : '' ?>

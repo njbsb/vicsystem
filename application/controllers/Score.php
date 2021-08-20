@@ -230,37 +230,45 @@ class Score extends CI_Controller
             $student = $this->student_model->get_student($student_id);
             $academicplans = $this->academic_model->get_academicplan($student_id);
 
-            $academicbadge = $this->scoretable->calculate_academicbadge($student['id']);
-            $activitybadge = $this->scoretable->calculate_activitybadge($student['id']);
-            $externalbadge = $this->scoretable->calculate_externalbadge($student['id']);
+            $academicbadge = $this->scoretable->calculate_academicbadge($student_id);
+            $activitybadge = $this->scoretable->calculate_activitybadge($student_id);
+            $externalbadge = $this->scoretable->calculate_externalbadge($student_id);
 
+            $academic_sessionid = $this->activity_model->get_academic_acadsessionid($student_id);
+            $external_sessionid = $this->activity_model->get_externalact_acadsessionid($student_id);
+            $activity_sessionid = $this->activity_model->get_activity_acadsessionid($student_id);
+            $allsessions = $academic_sessionid  + $external_sessionid + $activity_sessionid;
 
-            foreach ($academicplans as $i => $plan) {
-                # academic
-                $target = $plan['gpa_target'];
-                $achieved = $plan['gpa_achieved'];
-                $previousgpa = $this->academic_model->get_previous_semester_gpa($plan['student_id'], $plan['acadsession_id']);
-                $badgecount = 0;
+            $allSessions = array();
+            foreach ($allsessions as $i => $session_id) {
+                $session = $this->academic_model->get_academicsession($session_id);
+                $academicplan = $this->academic_model->get_academicplan($student_id, $session_id);
                 $academicdesc = array();
-                if ($achieved > 3.67) {
-                    $string = sprintf("Achieved Dean's List (%s)", $achieved);
-                    array_push($academicdesc, $string);
-                    $badgecount += 1;
+                $badgecount = 0;
+                if (isset($academicplan)) {
+                    $target = $academicplan['gpa_target'];
+                    $achieved = $academicplan['gpa_achieved'];
+                    $previousgpa = $this->academic_model->get_previous_semester_gpa($student_id, $session_id);
+                    if ($achieved >= 3.67) {
+                        $string = sprintf("Achieved Dean's List (%s)", $achieved);
+                        array_push($academicdesc, $string);
+                        $badgecount += 1;
+                    }
+                    if (is_numeric($achieved) and is_numeric($target) and $achieved >= $target) {
+                        $diff = $achieved - $target;
+                        $string = sprintf("Achieved academic target with increment of +%s (%s)", $diff, $target);
+                        array_push($academicdesc, $string);
+                        $badgecount += 1;
+                    }
+                    if ($achieved > $previousgpa and $previousgpa > 0) {
+                        $diff2 = $achieved - $previousgpa;
+                        $string = sprintf("Scored higher than previous semester's GPA (%s, increment %s)", $previousgpa, $diff2);
+                        array_push($academicdesc, $string);
+                        $badgecount += 1;
+                    }
                 }
-                if (is_numeric($achieved) and is_numeric($target) and $achieved >= $target) {
-                    $diff = $achieved - $target;
-                    $string = sprintf("Achieved academic target with increment of +%s (%s)", $diff, $target);
-                    array_push($academicdesc, $string);
-                    $badgecount += 1;
-                }
-                if ($achieved > $previousgpa and $previousgpa > 0) {
-                    $diff2 = $achieved - $previousgpa;
-                    $string = sprintf("Scored higher than previous semester's GPA (%s, increment %s)", $previousgpa, $diff2);
-                    array_push($academicdesc, $string);
-                    $badgecount += 1;
-                }
-                # activity
-                $scorelevels = $this->score_model->get_scorelevels_bystudentacadsession_a($student['id'],  $plan['acadsession_id']);
+                $session['academicdesc'] = $academicdesc;
+                $scorelevels = $this->score_model->get_scorelevels_bystudentacadsession_a($student_id, $session_id);
                 $activitydesc = array();
                 foreach ($scorelevels as $level) {
                     if ($level['totalscore'] >= 18) {
@@ -269,19 +277,17 @@ class Score extends CI_Controller
                         $badgecount += 1;
                     }
                 }
-
-                # external activity
+                $session['activitydesc'] = $activitydesc;
                 $externaldesc = array();
-                $externalsjoined = $this->activity_model->get_externalactivity_bystudentsession($student['id'], $plan['acadsession_id']);
+                $externalsjoined = $this->activity_model->get_externalactivity_bystudentsession($student_id, $session_id);
                 foreach ($externalsjoined as $ext) {
                     $string = sprintf("Joined %s on %s level", $ext['title'], $ext['level']);
                     array_push($externaldesc, $string);
                     $badgecount += 1;
                 }
-                $academicplans[$i]['academicdesc'] = $academicdesc;
-                $academicplans[$i]['activitydesc'] = $activitydesc;
-                $academicplans[$i]['externaldesc'] = $externaldesc;
-                $academicplans[$i]['badgecount'] = $badgecount;
+                $session['externaldesc'] = $externaldesc;
+                $session['badgecount'] = $badgecount;
+                array_push($allSessions, $session);
             }
 
             $student['academicbadge'] = $academicbadge;
@@ -291,7 +297,7 @@ class Score extends CI_Controller
             krsort($academicplans);
             $data = array(
                 'student' => $student,
-                'academicplans' => $academicplans,
+                'allsessions' => $allSessions,
                 'academicbadge' => $this->file_model->get_academicbadge(),
                 'activitybadge' => $this->file_model->get_activitybadge(),
                 'externalbadge' => $this->file_model->get_externalbadge()
