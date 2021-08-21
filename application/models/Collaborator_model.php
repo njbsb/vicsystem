@@ -20,4 +20,10 @@ class Collaborator_model extends CI_Model
         $query = $this->db->get_where('collaborator', array('id' => $collab_id));
         return $query->row_array();
     }
+
+    public function update($id, $collabdata)
+    {
+        return $this->db->where('id', $id)
+            ->update('collaborator', $collabdata);
+    }
 }

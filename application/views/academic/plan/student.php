@@ -63,10 +63,10 @@
                             <?= form_open('academic/record', '', $hidden) ?>
                             <button type="submit" class="btn btn-sm btn-dark"><i class='fas fa-search'></i> Score</button>&nbsp;
                             <?php $limitdate = date('Y-m-d', strtotime("+2 weeks", strtotime($activesession['startdate']))); ?>
-                            <?php if ($acp['gpa_achieved'] == '' or time() < $limitdate) : ?>
-                            <a class="btn btn-sm btn-dark" data-selectedsession="<?= $acp['academicsession'] ?>" data-toggle="modal" data-target="#submitResult">Submit</a>
+                            <?php if ($acp['gpa_achieved'] == '' and $daydiff < 14) : ?>
+                            <a class="btn btn-sm btn-dark" data-gparesult="<?= $acp['gpa_achieved'] ?>" data-selectedsession="<?= $acp['academicsession'] ?>" data-toggle="modal"
+                                data-target="#submitResult">Submit</a>
                             <?php endif ?>
-
                             <?= form_close() ?>
                         </td>
                     </tr>
@@ -152,7 +152,8 @@ $(document).ready(function() {
     var submitTitle = document.getElementById("submitTitle");
     $('#submitResult').on('show.bs.modal', function(e) {
         var selectedSession = $(e.relatedTarget).data('selectedsession');
-        // alert(selectedSession);
+        var gparesult = $(e.relatedTarget).data('gparesult');
+        $(e.currentTarget).find('input[name="gparesult"]').val(gparesult);
         submitTitle.innerHTML = "Submit Result (" + selectedSession + ")";
     });
 

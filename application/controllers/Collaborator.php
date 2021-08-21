@@ -24,31 +24,45 @@ class Collaborator extends CI_Controller
             $this->load->view('collaborator/create', $data);
             $this->load->view('templates/footer');
         } else {
-            $config = array(
-                'upload_path' => './assets/images/collaborator',
-                'allowed_types' => 'gif|jpg|png',
-                'max_size' => 1000,
-                'max_width' => 2048,
-                'max_height' => 1024,
-                'file_name' => url_title($this->input->post('name')) . '-' . substr(md5(rand()), 0, 10)
-            );
-            $this->load->library('upload', $config);
-
-            if (@$_FILES['logo']['name'] != NULL) {
-                if ($this->upload->do_upload('logo')) {
-                    $logo = $this->upload->data('file_name');
-                } else {
-                    $logo = 'default.jpg';
-                }
+            $upload_file = $_FILES['logo']['tmp_name'];
+            if ($upload_file) {
+                $data = file_get_contents($upload_file);
+                $type = pathinfo($_FILES["logo"]["name"], PATHINFO_EXTENSION);
+                $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                $collablogo = $base64;
             }
 
             $collabdata = array(
                 'name' => $this->input->post('name'),
                 'description' => $this->input->post('background'),
-                'logo' => $logo
+                'logo' => $collablogo
             );
             $this->collaborator_model->create_collaborator($collabdata);
             redirect('collaborator');
         }
+    }
+
+    public function update()
+    {
+        $this->form_validation->set_rules('collab_name', 'collaborator name', 'required');
+        $this->form_validation->set_rules('collab_desc', 'collaborator background', 'required');
+        if ($this->form_validation->run() == TRUE) {
+            $id = $this->input->post('collab_id');
+            $name = $this->input->post('collab_name');
+            $desc = $this->input->post('collab_desc');
+            $updatearray = array(
+                'name' => $name,
+                'description' =>  $desc
+            );
+            $upload_file = $_FILES['collab_logo']['tmp_name'];
+            if ($upload_file) {
+                $data = file_get_contents($upload_file);
+                $type = pathinfo($_FILES["collab_logo"]["name"], PATHINFO_EXTENSION);
+                $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                $updatearray['logo'] = $base64;
+            }
+            $this->collaborator_model->update($id, $updatearray);
+        }
+        redirect('collaborator');
     }
 }

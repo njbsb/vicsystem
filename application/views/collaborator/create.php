@@ -1,12 +1,16 @@
 <h2><?= $title ?></h2>
-
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?= site_url() ?>">Home</a></li>
+    <li class="breadcrumb-item"><a href="<?= site_url('collaborator') ?>">Collaborator</a></li>
+    <li class="breadcrumb-item active">Create</li>
+</ol>
 <?php if (validation_errors()) : ?>
-    <div class="alert alert-dismissible alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <h4 class="alert-heading">Warning!</h4>
-        <p class="mb-0"><?= validation_errors() ?></p>
-        <p class="mb-0"><?= $error  ?></p>
-    </div>
+<div class="alert alert-dismissible alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h4 class="alert-heading">Warning!</h4>
+    <p class="mb-0"><?= validation_errors() ?></p>
+    <p class="mb-0"><?= $error  ?></p>
+</div>
 <?php endif ?>
 
 <?= form_open_multipart('collaborator/create') ?>

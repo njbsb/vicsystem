@@ -140,6 +140,9 @@ class Academic extends CI_Controller
             $currentacademicplan = array();
             $examdate = null;
         }
+        $sessionstartdate = strtotime($activesession['startdate']);
+        $datediff = time() - $sessionstartdate;
+        $daydiff = round($datediff / (60 * 60 * 24));
         $data = array(
             'student_id' => $student_id,
             'student' => $student,
@@ -153,7 +156,8 @@ class Academic extends CI_Controller
             ),
             'activesession' => $activesession,
             'today' => time(),
-            'examdate' => $examdate
+            'examdate' => $examdate,
+            'daydiff' => $daydiff
         );
         $this->load->view('templates/header');
         $this->load->view('academic/plan/student', $data);
