@@ -49,24 +49,61 @@ class Scoretable
         return $levelrubrics;
     }
 
-    public function calculate_academicbadge($student_id)
+    public function calculate_academicbadge($student_id, $acadsession_id = NULL)
     {
-        $academicplans = $this->CI->academic_model->get_academicplan($student_id, FALSE);
+        $academicplans = $this->CI->academic_model->get_academicplan($student_id, $acadsession_id);
         $badgecount = 0;
-        foreach ($academicplans as $plan) {
-            $target = $plan['gpa_target'];
-            $achieved = $plan['gpa_achieved'];
-            $difference = $achieved - $target;
-            $previousgpa = $this->CI->academic_model->get_previous_semester_gpa($student_id, $plan['acadsession_id']);
-            $difference2 = $achieved - $previousgpa;
-            if (is_numeric($achieved)) { # check if achieved exists and is number
-                if (is_numeric($target) and $difference >= 0) {
-                    $badgecount += 1;
+        if ($academicplans) {
+            if ($acadsession_id != null) {
+                # academicplans will return a row
+                $target = $academicplans['gpa_target'];
+                $achieved = $academicplans['gpa_achieved'];
+                $difference = $achieved - $target;
+                $previousgpa = $this->CI->academic_model->get_previous_semester_gpa($student_id, $academicplans['acadsession_id']);
+                $difference2 = $achieved - $previousgpa;
+                if (is_numeric($achieved)) { # check if achieved exists and is number
+                    if (is_numeric($target) and $difference >= 0) {
+                        $badgecount += 1;
+                    }
+                    if ($difference2 > 0 and $previousgpa > 0) {
+                        $badgecount += 1;
+                    }
+                    if ($achieved >= 3.67) {
+                        $badgecount += 1;
+                    }
                 }
-                if ($difference2 > 0 and $previousgpa > 0) {
-                    $badgecount += 1;
+            } else {
+                foreach ($academicplans as $plan) {
+                    $target = $plan['gpa_target'];
+                    $achieved = $plan['gpa_achieved'];
+                    $difference = $achieved - $target;
+                    $previousgpa = $this->CI->academic_model->get_previous_semester_gpa($student_id, $plan['acadsession_id']);
+                    $difference2 = $achieved - $previousgpa;
+                    if (is_numeric($achieved)) { # check if achieved exists and is number
+                        if (is_numeric($target) and $difference >= 0) {
+                            $badgecount += 1;
+                        }
+                        if ($difference2 > 0 and $previousgpa > 0) {
+                            $badgecount += 1;
+                        }
+                        if ($achieved >= 3.67) {
+                            $badgecount += 1;
+                        }
+                    }
                 }
-                if ($achieved >= 3.67) {
+            }
+        }
+        return $badgecount;
+    }
+
+    public function calculate_activitybadge($student_id, $acadsession_id = NULL)
+    {
+        $badgecount = 0;
+        $activityscores = $this->CI->score_model->get_scoreplan_scorelevel($student_id, FALSE, $acadsession_id);
+        if ($activityscores) {
+            foreach ($activityscores as $score) {
+                $sum = array_sum($score);
+                if ($sum >= 18) {
                     $badgecount += 1;
                 }
             }
@@ -74,22 +111,9 @@ class Scoretable
         return $badgecount;
     }
 
-    public function calculate_activitybadge($student_id)
+    public function calculate_externalbadge($student_id, $acadsession_id = NULL)
     {
-        $badgecount = 0;
-        $activityscores = $this->CI->score_model->get_scoreplan_scorelevel($student_id);
-        foreach ($activityscores as $score) {
-            $sum = array_sum($score);
-            if ($sum >= 18) {
-                $badgecount += 1;
-            }
-        }
-        return $badgecount;
-    }
-
-    public function calculate_externalbadge($student_id)
-    {
-        $score_externals = $this->CI->score_model->get_student_scoreexternal($student_id);
+        $score_externals = $this->CI->score_model->get_student_scoreexternal($student_id, $acadsession_id);
         return count($score_externals);
     }
 

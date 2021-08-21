@@ -31,7 +31,7 @@ class Score_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_scoreplan_scorelevel($student_id, $scoreplan_id = FALSE)
+    public function get_scoreplan_scorelevel($student_id, $scoreplan_id = FALSE, $acadsession_id = FALSE)
     {
         if ($scoreplan_id === FALSE) {
             $this->db->select('position.score as position, meeting.score as meeting, attendance.score as attendance, involvement.score as involvement')
@@ -48,6 +48,22 @@ class Score_model extends CI_Model
                 ->join('level_involvement as involvement', 'involvement.id = sc.involvement');
             $query = $this->db->get();
             return $query->result_array();
+        } elseif ($student_id and $acadsession_id) {
+            $this->db->select('position.score as position, meeting.score as meeting, attendance.score as attendance, involvement.score as involvement')
+                ->from('score_level as sc')
+                ->where(array(
+                    'student_id' => $student_id,
+                    'scp.acadsession_id' => $acadsession_id
+                ))
+                ->join('score_plan as scp', 'scp.id = sc.scoreplan_id')
+                ->join('level_position as position', 'position.id = sc.position')
+                ->join('level_meeting as meeting', 'meeting.id = sc.meeting')
+                ->join('level_attendance as attendance', 'attendance.id = sc.attendance')
+                ->join('level_involvement as involvement', 'involvement.id = sc.involvement');
+            $query = $this->db->get();
+            if ($query->num_rows() > 0) {
+                return $query->result_array();
+            }
         } elseif ($student_id and $scoreplan_id) {
             $this->db->select('position.score as position, meeting.score as meeting, attendance.score as attendance, involvement.score as involvement')
                 ->from('score_level as sc')
@@ -121,9 +137,17 @@ class Score_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_student_scoreexternal($student_id)
+    public function get_student_scoreexternal($student_id, $acadsession_id = NULL)
     {
-        $query = $this->db->get_where('score_external', array('student_id' => $student_id));
+        $this->db->select('scext.*')
+            ->from('score_external as scext')
+            ->where('student_id', $student_id);
+        if ($acadsession_id != NULL) {
+            $this->db->join('activityexternal as actex', 'actex.id = scext.activityexternal_id')
+                ->where('actex.acadsession_id', $acadsession_id);
+        }
+        $query = $this->db->get();
+        // $query = $this->db->get_where('score_external', array('student_id' => $student_id));
         return $query->result_array();
     }
 

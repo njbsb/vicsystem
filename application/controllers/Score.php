@@ -207,16 +207,18 @@ class Score extends CI_Controller
     {
         if ($student_id == FALSE) {
             $academicsession = $this->academic_model->get_activeacademicsession();
+            // print_r($academicsession);
             $students = $this->student_model->get_activestudents();
             # for cumulative badge
             foreach ($students as $i => $student) {
-                $academicbadge = $this->scoretable->calculate_academicbadge($student['id']);
-                $activitybadge = $this->scoretable->calculate_activitybadge($student['id']);
-                $externalbadge = $this->scoretable->calculate_externalbadge($student['id']);
+                $academicbadge = $this->scoretable->calculate_academicbadge($student['id'], $academicsession['id']);
+                $activitybadge = $this->scoretable->calculate_activitybadge($student['id'], $academicsession['id']);
+                $externalbadge = $this->scoretable->calculate_externalbadge($student['id'], $academicsession['id']);
                 $students[$i]['academicbadge'] = $academicbadge;
                 $students[$i]['activitybadge'] = $activitybadge;
                 $students[$i]['externalbadge'] = $externalbadge;
-                $students[$i]['totalbadge'] = $academicbadge + $activitybadge + $externalbadge;
+                $students[$i]['totalcurrent'] = $academicbadge + $activitybadge + $externalbadge;
+                $students[$i]['totalbadge'] = $this->scoretable->calculate_academicbadge($student['id']) + $this->scoretable->calculate_activitybadge($student['id']) + $this->scoretable->calculate_externalbadge($student['id']);
             }
             $data = array(
                 'usertype' => $this->session->userdata('user_type'),
@@ -237,8 +239,7 @@ class Score extends CI_Controller
             $academic_sessionid = $this->activity_model->get_academic_acadsessionid($student_id);
             $external_sessionid = $this->activity_model->get_externalact_acadsessionid($student_id);
             $activity_sessionid = $this->activity_model->get_activity_acadsessionid($student_id);
-            $allsessions = $academic_sessionid  + $external_sessionid + $activity_sessionid;
-
+            $allsessions = array_unique(array_merge($academic_sessionid, $external_sessionid, $activity_sessionid));
             $allSessions = array();
             foreach ($allsessions as $i => $session_id) {
                 $session = $this->academic_model->get_academicsession($session_id);

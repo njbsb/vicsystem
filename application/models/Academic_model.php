@@ -147,7 +147,11 @@ class Academic_model extends CI_Model
                         ->join('academicyear as acy', 'acy.id = acs.acadyear_id')
                         ->join('user as std', 'std.id = acp.student_id');
                     $query = $this->db->get();
-                    return $query->row_array();
+                    if ($query->num_rows() > 0) {
+                        return $query->row_array();
+                    } else {
+                        return null;
+                    }
                 } else {
                     $this->db->select("acp.*, std.name, acy.acadyear, acs.semester, acs.startdate,
                 concat(acy.acadyear, ' Sem ', acs.semester) as academicsession")
@@ -158,7 +162,9 @@ class Academic_model extends CI_Model
                         ->join('user as std', 'std.id = acp.student_id', 'left')
                         ->order_by('acs.startdate', 'DESC');
                     $query = $this->db->get();
-                    return $query->result_array();
+                    if ($query->num_rows() > 0) {
+                        return $query->result_array();
+                    }
                 }
             } else {
                 $this->db->select("acp.*, std.name, acy.acadyear, acs.semester, 
