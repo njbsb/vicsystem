@@ -33,7 +33,6 @@
         </table>
     </div>
 </div>
-<small>This feature has not been made available yet.</small>
 
 <div id="editCollab" class="modal fade card">
     <div class="modal-dialog" role="document">

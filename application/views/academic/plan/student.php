@@ -27,7 +27,7 @@
 <h6>You have registered this session's GPA target!</h6>
 <div style="line-height:100%">
     <?php if ($today >= strtotime($examdate) and $examdate) : ?>
-    <small>It's end of academic session. Your result will soon be updated by your mentor</small><br>
+    <small>It's end of academic session.</small><br>
     <?php else : ?>
     <small>Study week on going.</small>
     <?php endif ?>
@@ -78,6 +78,9 @@
         <small>Click <i class='fas fa-search'></i> Score to view your score</small>
     </div>
 </div>
+<?php if ($acp['gpa_achieved'] == '' and $daydiff < 14) : ?>
+<small>You have 2 weeks to submit your latest gpa.</small>
+<?php endif ?>
 
 <div id="setGPA" class="modal fade card">
     <div class="modal-dialog" role="document">
