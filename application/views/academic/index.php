@@ -25,6 +25,7 @@
     <table id="acs_table" class="table table-hover">
         <thead>
             <tr class="table-dark">
+                <th>ID</th>
                 <th>Academic Year</th>
                 <th>Semester</th>
                 <th>Start Date</th>
@@ -39,6 +40,7 @@
                 <?php $textclass = ($acs['status'] == 'active') ? 'text-success' : 'text-muted' ?>
                 <?php $btnclass = ($acs['status'] == 'active') ? 'btn btn-outline-success btn-sm' : 'btn btn-outline-info btn-sm' ?>
                 <tr class="table-light">
+                    <td><?= $acs['id'] ?></td>
                     <td><?= $acs['academicyear'] ?></td>
                     <td><?= $acs['semester'] ?></td>
                     <td><?= date("d-m-Y", strtotime($acs['startdate'])) ?></td>
@@ -79,6 +81,7 @@
     <table id="acy_table" class="table table-hover">
         <thead class="table-dark">
             <tr>
+                <th>ID</th>
                 <th>Academic Year</th>
                 <th>Start Date</th>
                 <th>End Date</th>
@@ -90,6 +93,7 @@
             <?php foreach ($academicyear as $acy) : ?>
                 <?php $textclass = ($acy['status'] == 'active') ? 'text-success' : 'text-muted' ?>
                 <tr>
+                    <td><?= $acy['id'] ?></td>
                     <td><?= $acy['acadyear'] ?></td>
                     <td><?= date("d-m-Y", strtotime($acy['startdate'])) ?></td>
                     <td><?= date("d-m-Y", strtotime($acy['enddate'])) ?></td>

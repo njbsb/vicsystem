@@ -90,8 +90,8 @@
                         <th>Target GPA</th>
                         <th>Achieved GPA</th>
                         <th>Previous GPA</th>
-                        <th>Current Increment</th>
-                        <th>Previous Increment</th>
+                        <th data-toggle="tooltip" title="GPA Achieved - GPA Target">Current Target Increment</th>
+                        <th data-toggle="tooltip" title="Current GPA - Previous GPA">Previous Semester Increment</th>
                     </tr>
                 </thead>
                 <tbody class="table-light">
@@ -104,11 +104,13 @@
                         <td><?= $acp['gpa_target'] ?></td>
                         <td class="<?= $resultclass ?>"><?= $acp['gpa_achieved'] ?></td>
                         <td><?= $acp['previousgpa'] ?></td>
-                        <?php $diff1 = $acp['gpa_achieved'] - $acp['gpa_target'];
+                        <?php $diff1 = ($acp['gpa_achieved'] != null and $acp['gpa_target'] != null) ? $acp['gpa_achieved'] - $acp['gpa_target'] : null;
                                 if ($diff1 > 0) {
                                     $diff1textclass = 'text-success';
                                 } elseif ($diff1 < 0) {
                                     $diff1textclass = 'text-warning';
+                                } else {
+                                    $diff1textclass = 'text-dark';
                                 }
                                 ?>
                         <td class="<?= $diff1textclass ?>"><?= $diff1 ?></td>
@@ -118,6 +120,9 @@
                                     $diff2textclass = 'text-success';
                                 } elseif ($diff2 < 0) {
                                     $diff2textclass = 'text-warning';
+                                } else {
+                                    $diff2 = null;
+                                    $diff2textclass = 'text-dark';
                                 }
                                 ?>
                         <td class="<?= $diff2textclass ?>"><?= $diff2 ?></td>

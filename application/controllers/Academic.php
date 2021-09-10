@@ -188,7 +188,7 @@ class Academic extends CI_Controller
                 } else {
                     $status = '';
                     $diff = '';
-                    $previousgpa = 0;
+                    $previousgpa = null;
                 }
                 $academicplans[$i]['previousgpa'] = $previousgpa;
                 $academicplans[$i]['difference'] = $diff;
@@ -403,6 +403,7 @@ class Academic extends CI_Controller
         );
         $this->academic_model->update_academicplan($where, $plandata);
         $this->alterplan();
+        // redirect('academic/alterplan/' . $acadsession_id);
     }
 
     # controller functions
@@ -585,6 +586,7 @@ class Academic extends CI_Controller
                 $acadsession_id = $sheetdata[$i][0];
                 $student_id = $sheetdata[$i][1];
                 $gpa_achieved = $sheetdata[$i][2];
+                $gpa_target = $sheetdata[$i][3];
                 $data[] = array(
                     'acadsession_id' => $acadsession_id,
                     'student_id' => $student_id,
